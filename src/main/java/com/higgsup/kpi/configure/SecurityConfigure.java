@@ -1,5 +1,6 @@
 package com.higgsup.kpi.configure;
 
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -39,18 +40,16 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter  {
 	@Value("${ldap.userSearchBase}")
 	private String userSearchBase;
 	
-	@Value("${api.baseUrl}")
-	private String apiUrl;
-	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable().authorizeRequests()
-			.antMatchers("/login**").permitAll()
-			.antMatchers("/").permitAll()
-			.antMatchers(HttpMethod.POST, apiUrl+"/login").permitAll()
+		http.csrf().disable().cors()
+		.and()	
+			.authorizeRequests()
+			.antMatchers(HttpMethod.POST, BaseConfiguration.BASE_API_URL+"/login").permitAll()
+			.antMatchers(BaseConfiguration.BASE_API_URL+"/**").fullyAuthenticated()
 			.anyRequest().fullyAuthenticated()
 		.and()
-			.addFilterBefore(new JWTLoginFilter(apiUrl+"/login", authenticationManager()),
+			.addFilterBefore(new JWTLoginFilter(BaseConfiguration.BASE_API_URL+"/login", authenticationManager()),
 	                UsernamePasswordAuthenticationFilter.class)
 	        .addFilterBefore(new JWTAuthenticateFilter(),
 	                UsernamePasswordAuthenticationFilter.class)
