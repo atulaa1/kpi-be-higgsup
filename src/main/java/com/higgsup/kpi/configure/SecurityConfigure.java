@@ -26,7 +26,6 @@ import com.higgsup.kpi.configure.jwt.JWTLoginFilter;
 @EnableWebSecurity
 public class SecurityConfigure extends WebSecurityConfigurerAdapter  {
 	
-	
 	//Get Config Value
 	@Value("${ldap.baseUrl}")
 	private String baseUrl;
@@ -53,7 +52,7 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter  {
 		configuration.setAllowedMethods(Arrays.asList("GET","POST", "PUT", "DELETE"));
 		configuration.setAllowCredentials(true);
 		configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-type"));
-		configuration.setExposedHeaders(Arrays.asList("Authorization", "Content-type"));
+		configuration.setExposedHeaders(Arrays.asList("Authorization", "Content-type", "Cache-Control"));
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);
 		return source;
