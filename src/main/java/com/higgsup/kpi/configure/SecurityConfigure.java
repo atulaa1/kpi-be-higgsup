@@ -3,6 +3,7 @@ package com.higgsup.kpi.configure;
 
 import java.util.Arrays;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +15,7 @@ import org.springframework.security.config.annotation.authentication.configurers
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -25,6 +27,10 @@ import com.higgsup.kpi.configure.jwt.JWTLoginFilter;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfigure extends WebSecurityConfigurerAdapter  {
+	
+	@Autowired
+	private UserDetailsService userDetailsService;
+	
 	
 	//Get Config Value
 	@Value("${ldap.baseUrl}")
@@ -94,8 +100,8 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter  {
             ldapAuthenticationProviderConfigurer
             	.userSearchBase(searchBase)
                 .userSearchFilter(userSearchBase)
-                .contextSource(contextSource);
-//            .and().userDetailsService(userDetailsService);
+                .contextSource(contextSource)
+            .and().userDetailsService(userDetailsService);
         }
     }
 }

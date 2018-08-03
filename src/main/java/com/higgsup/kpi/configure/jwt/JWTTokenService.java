@@ -16,6 +16,7 @@ import com.higgsup.kpi.configure.BaseConfiguration;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.SignatureException;
 
 public class JWTTokenService {
 
@@ -23,21 +24,26 @@ public class JWTTokenService {
 	static final String TOKEN_PREFIX = "Bearer";
 	static final String HEADER_STRING = "Authorization";
 
-	static void addAuthentication(HttpServletResponse res, String uid) throws IOException {
-		String JWT = Jwts.builder().setSubject(uid).setExpiration(new Date(System.currentTimeMillis() + EXPIRATIONTIME))
+	static void addAuthentication(HttpServletResponse res, String username) throws IOException {
+		String JWT = Jwts.builder().setSubject(username).setExpiration(new Date(System.currentTimeMillis() + EXPIRATIONTIME))
 				.signWith(SignatureAlgorithm.HS512, BaseConfiguration.BASE_SECRET_VALUE_TOKEN).compact();
 		res.addHeader(HEADER_STRING, TOKEN_PREFIX + " " + JWT);
 	}
 
-	static Authentication getAuthentication(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	static Authentication getAuthentication(HttpServletRequest request, HttpServletResponse response)
+			throws IOException {
 		String token = request.getHeader(HEADER_STRING);
 		if (token != null) {
-			String user = "";
+			String user = null;
 			try {
 				user = Jwts.parser().setSigningKey(BaseConfiguration.BASE_SECRET_VALUE_TOKEN)
 						.parseClaimsJws(token.replace(TOKEN_PREFIX, "")).getBody().getSubject();
-			} catch (ExpiredJwtException ex) {
-				response.sendError(HttpServletResponse.SC_UNAUTHORIZED, ex.getMessage());
+			} catch (IllegalArgumentException e) {
+				response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
+			} catch (ExpiredJwtException e1) {
+				response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e1.getMessage());
+			} catch (SignatureException e2) {
+				response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e2.getMessage());
 			}
 			return user != null ? new UsernamePasswordAuthenticationToken(user, null, emptyList()) : null;
 		}

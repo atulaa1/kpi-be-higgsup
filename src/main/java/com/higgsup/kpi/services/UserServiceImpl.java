@@ -10,9 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ldap.core.AttributesMapper;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.query.LdapQuery;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import com.higgsup.kpi.entity.UserDTO;
 
 import static org.springframework.ldap.query.LdapQueryBuilder.query;
 
@@ -23,26 +23,35 @@ public class UserServiceImpl implements UserService {
 	private LdapTemplate ldapTemplate;
 
 	@Override
-	public List<String> getUserRole(String username) {
-		List<String> result = new ArrayList<String>();
-
+	public List<UserDTO> getUserDetail(String username) {
+		List<UserDTO> result = new ArrayList<UserDTO>();
 		LdapQuery query = query().where("objectclass").is("user").and("sAMAccountName").is(username);
 		try {
-			result = ldapTemplate.search(query, new AttributesMapper<String>() {
-				public String mapFromAttributes(Attributes attrs) throws NamingException {
-					return (String) attrs.get("roleForKPI").get();
-				}
-			});
+			result = ldapTemplate.search(query, new UserAttributesMapper());
 		} catch (NullPointerException ex) {
 			
 		}
 		return result;
 	}
 
-	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+	// map data ldap to user properties
+	private class UserAttributesMapper implements AttributesMapper<UserDTO> {
+
+		public UserDTO mapFromAttributes(Attributes attrs) throws NamingException {
+			UserDTO user = new UserDTO();
+			user.setUsername(String.valueOf(attrs.get("sAMAccountName").get()));
+			String role = String.valueOf(attrs.get("roleForKPI").get());
+			if (role != null && !role.isEmpty()) {
+				String[] userRoleTmpArr = role.split(",");
+				List<String> listUserRole = new ArrayList<String>();
+				for(String elm : userRoleTmpArr) {
+					listUserRole.add(("ROLE_" + elm).toUpperCase());
+				}
+				user.setUserRole(listUserRole);
+			}
+			return user;
+		}
+		
 	}
 
 }

@@ -2,11 +2,11 @@ package com.higgsup.kpi.services;
 
 import java.util.List;
 
-import org.springframework.security.core.userdetails.UserDetailsService;
 
-public interface UserService extends UserDetailsService{
+import com.higgsup.kpi.entity.UserDTO;
+
+public interface UserService{
 	
-	public List<String> getUserRole(String username);
-	
+	public List<UserDTO> getUserDetail(String username);
 	
 }
