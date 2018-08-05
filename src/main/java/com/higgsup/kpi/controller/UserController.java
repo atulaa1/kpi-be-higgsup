@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.higgsup.kpi.configure.BaseConfiguration;
 import com.higgsup.kpi.entity.UserDTO;
-import com.higgsup.kpi.services.UserService;
+import com.higgsup.kpi.service.UserService;
 
 @RestController
 @CrossOrigin("*")

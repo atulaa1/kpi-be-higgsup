@@ -1,4 +1,4 @@
-package com.higgsup.kpi.services;
+package com.higgsup.kpi.service;
 
 import java.util.ArrayList;
 import java.util.List;

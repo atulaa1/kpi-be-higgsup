@@ -1,4 +1,4 @@
-package com.higgsup.kpi.services;
+package com.higgsup.kpi.service;
 
 import java.util.HashSet;
 import java.util.List;
@@ -37,7 +37,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		return null;
 	}
 	
-	private Set getAuthority(UserDTO user) {
+	@SuppressWarnings("unused")
+	private Set<Object> getAuthority(UserDTO user) {
         HashSet<Object> authorities = new HashSet<>();
 		user.getUserRole().forEach(role -> {
             authorities.add(new SimpleGrantedAuthority(role));

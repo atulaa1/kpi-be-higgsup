@@ -1,4 +1,4 @@
-package com.higgsup.kpi.configure.jwt;
+package com.higgsup.kpi.security.jwt;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
@@ -17,7 +17,7 @@ public class JWTAuthenticateFilter extends GenericFilterBean {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain)
 			throws IOException, ServletException {
-		Authentication authentication = JWTTokenService.getAuthentication((HttpServletRequest) request, (HttpServletResponse) response);
+		Authentication authentication = JWTTokenProvider.getAuthentication((HttpServletRequest) request, (HttpServletResponse) response);
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		

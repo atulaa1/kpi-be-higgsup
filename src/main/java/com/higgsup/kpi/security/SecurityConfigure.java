@@ -1,4 +1,4 @@
-package com.higgsup.kpi.configure;
+package com.higgsup.kpi.security;
 
 
 import java.util.Arrays;
@@ -21,8 +21,9 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import com.higgsup.kpi.configure.jwt.JWTAuthenticateFilter;
-import com.higgsup.kpi.configure.jwt.JWTLoginFilter;
+import com.higgsup.kpi.configure.BaseConfiguration;
+import com.higgsup.kpi.security.jwt.JWTAuthenticateFilter;
+import com.higgsup.kpi.security.jwt.JWTLoginFilter;
 
 @Configuration
 @EnableWebSecurity
