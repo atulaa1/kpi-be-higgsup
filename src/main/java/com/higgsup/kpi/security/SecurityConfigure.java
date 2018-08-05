@@ -2,12 +2,15 @@ package com.higgsup.kpi.security;
 
 
 import java.util.Arrays;
+import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.ldap.core.DirContextAdapter;
+import org.springframework.ldap.core.DirContextOperations;
 import org.springframework.ldap.core.support.LdapContextSource;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.GlobalAuthenticationConfigurerAdapter;
@@ -15,7 +18,10 @@ import org.springframework.security.config.annotation.authentication.configurers
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.ldap.userdetails.UserDetailsContextMapper;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -51,6 +57,25 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter  {
 	
 	@Value("${ldap.userSearchBase}")
 	private String userSearchBase;
+	
+	
+	
+	@Bean
+	public UserDetailsContextMapper userDetailsContextMapper() {
+		return new UserDetailsContextMapper() {
+
+			@Override
+			public void mapUserToContext(UserDetails user, DirContextAdapter ctx) {				
+			}
+
+			@Override
+			public UserDetails mapUserFromContext(DirContextOperations ctx, String username,
+					Collection<? extends GrantedAuthority> authorities) {
+				UserDetails userDetail = userDetailsService.loadUserByUsername(username);
+				return userDetail;
+			}
+		};
+	}
 	
 	@Bean
 	CorsConfigurationSource corsConfigurationSource() {
@@ -102,7 +127,8 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter  {
             	.userSearchBase(searchBase)
                 .userSearchFilter(userSearchBase)
                 .contextSource(contextSource)
-            .and().userDetailsService(userDetailsService);
+                .userDetailsContextMapper(userDetailsContextMapper());
+//            .and().userDetailsService(userDetailsService);
         }
     }
 }
