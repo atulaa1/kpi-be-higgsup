@@ -2,9 +2,10 @@ package com.higgsup.kpi.security.jwt;
 
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,29 +34,34 @@ public class JWTTokenProvider {
 		Claims claims = Jwts.claims().setSubject(username);
 
 		if (username != null && username.length() > 0) {
-			claims.put("roles", auth.getAuthorities());
+			claims.put("authorities", auth.getAuthorities().stream().map(s -> s.toString()).collect(Collectors.toSet()));
 		}
-
 		String JWT = Jwts.builder().setClaims(claims)
 				.setExpiration(new Date(System.currentTimeMillis() + EXPIRATIONTIME))
 				.signWith(SignatureAlgorithm.HS512, BaseConfiguration.BASE_SECRET_VALUE_TOKEN).compact();
+				
 		res.addHeader(HEADER_STRING, TOKEN_PREFIX + " " + JWT);
 	}
 
+	@SuppressWarnings("unchecked")
 	static Authentication getAuthentication(HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 		String token = request.getHeader(HEADER_STRING);
 		if (token != null) {
 			String user = null;
-			Collection<? extends GrantedAuthority> authorities = null;
+			Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
 			try {
 				Claims claims = Jwts.parser().setSigningKey(BaseConfiguration.BASE_SECRET_VALUE_TOKEN)
 						.parseClaimsJws(token.replace(TOKEN_PREFIX, "")).getBody();
 				user = claims.getSubject();
 				
-				authorities = Arrays
-						.asList(claims.get("roles").toString().split(",")).stream()
-						.map(authority -> new SimpleGrantedAuthority(authority)).collect(Collectors.toList());
+			
+				List<String> tmpAuthorities = (List<String>) claims.get("authorities");
+				System.out.println(claims.get("authorities").toString());
+				for(String item : tmpAuthorities) {
+					grantedAuthorities.add(new SimpleGrantedAuthority(item));
+				}
+				
 				
 			} catch (IllegalArgumentException e) {
 				response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
@@ -64,7 +70,7 @@ public class JWTTokenProvider {
 			} catch (SignatureException e2) {
 				response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e2.getMessage());
 			}
-			return user != null ? new UsernamePasswordAuthenticationToken(user, null, authorities) : null;
+			return user != null ? new UsernamePasswordAuthenticationToken(user, null, grantedAuthorities) : null;
 		}
 		return null;
 	}
