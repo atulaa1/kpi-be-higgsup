@@ -15,6 +15,7 @@ import org.springframework.ldap.core.support.LdapContextSource;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.GlobalAuthenticationConfigurerAdapter;
 import org.springframework.security.config.annotation.authentication.configurers.ldap.LdapAuthenticationProviderConfigurer;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -33,6 +34,7 @@ import com.higgsup.kpi.security.jwt.JWTLoginFilter;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true) 
 public class SecurityConfigure extends WebSecurityConfigurerAdapter  {
 	
 	@Autowired
@@ -71,6 +73,7 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter  {
 			@Override
 			public UserDetails mapUserFromContext(DirContextOperations ctx, String username,
 					Collection<? extends GrantedAuthority> authorities) {
+				
 				UserDetails userDetail = userDetailsService.loadUserByUsername(username);
 				return userDetail;
 			}
@@ -128,7 +131,6 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter  {
                 .userSearchFilter(userSearchBase)
                 .contextSource(contextSource)
                 .userDetailsContextMapper(userDetailsContextMapper());
-//            .and().userDetailsService(userDetailsService);
         }
     }
 }

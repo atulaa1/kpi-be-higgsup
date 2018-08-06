@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import com.higgsup.kpi.entity.UserDTO;
+import com.higgsup.kpi.model.UserDTO;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -32,7 +32,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			for (String role : user.getUserRole()) {
 				grantedAuthorities.add(new SimpleGrantedAuthority(role));
 			}
-			return new org.springframework.security.core.userdetails.User(user.getUsername(), null, grantedAuthorities);
+			return new org.springframework.security.core.userdetails.User(user.getUsername(), "", grantedAuthorities);
 		}
 		return null;
 	}

@@ -1,15 +1,19 @@
 package com.higgsup.kpi.security.jwt;
 
-import static java.util.Collections.emptyList;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import com.higgsup.kpi.configure.BaseConfiguration;
 
@@ -21,18 +25,19 @@ import io.jsonwebtoken.SignatureException;
 
 public class JWTTokenProvider {
 
-	static final long EXPIRATIONTIME = BaseConfiguration.BASE_TIMEOUT_TOKEN*30; // base time out is 6000ms 1 minute
+	static final long EXPIRATIONTIME = BaseConfiguration.BASE_TIMEOUT_TOKEN * 30; // base time out is 6000ms 1 minute
 	static final String TOKEN_PREFIX = "Bearer";
 	static final String HEADER_STRING = "Authorization";
 
 	static void addAuthentication(HttpServletResponse res, String username, Authentication auth) throws IOException {
-		Claims claim = Jwts.claims().setSubject(username);
-		
-		if ( username != null && username.length() > 0 ) {
-		    claim.put("roles", auth.getAuthorities());
+		Claims claims = Jwts.claims().setSubject(username);
+
+		if (username != null && username.length() > 0) {
+			claims.put("roles", auth.getAuthorities());
 		}
-		
-		String JWT = Jwts.builder().setClaims(claim).setExpiration(new Date(System.currentTimeMillis() + EXPIRATIONTIME))
+
+		String JWT = Jwts.builder().setClaims(claims)
+				.setExpiration(new Date(System.currentTimeMillis() + EXPIRATIONTIME))
 				.signWith(SignatureAlgorithm.HS512, BaseConfiguration.BASE_SECRET_VALUE_TOKEN).compact();
 		res.addHeader(HEADER_STRING, TOKEN_PREFIX + " " + JWT);
 	}
@@ -42,9 +47,16 @@ public class JWTTokenProvider {
 		String token = request.getHeader(HEADER_STRING);
 		if (token != null) {
 			String user = null;
+			Collection<? extends GrantedAuthority> authorities = null;
 			try {
-				user = Jwts.parser().setSigningKey(BaseConfiguration.BASE_SECRET_VALUE_TOKEN)
-						.parseClaimsJws(token.replace(TOKEN_PREFIX, "")).getBody().getSubject();
+				Claims claims = Jwts.parser().setSigningKey(BaseConfiguration.BASE_SECRET_VALUE_TOKEN)
+						.parseClaimsJws(token.replace(TOKEN_PREFIX, "")).getBody();
+				user = claims.getSubject();
+				
+				authorities = Arrays
+						.asList(claims.get("roles").toString().split(",")).stream()
+						.map(authority -> new SimpleGrantedAuthority(authority)).collect(Collectors.toList());
+				
 			} catch (IllegalArgumentException e) {
 				response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
 			} catch (ExpiredJwtException e1) {
@@ -52,7 +64,7 @@ public class JWTTokenProvider {
 			} catch (SignatureException e2) {
 				response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e2.getMessage());
 			}
-			return user != null ? new UsernamePasswordAuthenticationToken(user, null, emptyList()) : null;
+			return user != null ? new UsernamePasswordAuthenticationToken(user, null, authorities) : null;
 		}
 		return null;
 	}

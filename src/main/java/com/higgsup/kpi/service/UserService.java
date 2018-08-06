@@ -3,7 +3,7 @@ package com.higgsup.kpi.service;
 import java.util.List;
 
 
-import com.higgsup.kpi.entity.UserDTO;
+import com.higgsup.kpi.model.UserDTO;
 
 public interface UserService{
 	

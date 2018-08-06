@@ -12,7 +12,7 @@ import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.query.LdapQuery;
 import org.springframework.stereotype.Service;
 
-import com.higgsup.kpi.entity.UserDTO;
+import com.higgsup.kpi.model.UserDTO;
 
 import static org.springframework.ldap.query.LdapQueryBuilder.query;
 

@@ -13,7 +13,7 @@ import com.higgsup.kpi.configure.BaseConfiguration;
 public class UserController {
 
 	
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping(BaseConfiguration.BASE_API_URL + "/getUser")
 	public String getTestUser() {
 		return "Test";
