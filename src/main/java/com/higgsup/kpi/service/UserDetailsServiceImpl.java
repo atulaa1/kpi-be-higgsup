@@ -1,7 +1,6 @@
 package com.higgsup.kpi.service;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +21,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		List<UserDTO> listUsers = userService.getUserDetail(username);
-		if (!listUsers.isEmpty()) {
-			UserDTO user = listUsers.get(0);
+		UserDTO user = userService.getUserDetail(username);
 			if(user == null){
 				throw new UsernameNotFoundException("Invalid username or password.");
 			}
@@ -34,9 +31,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			}
 			return new org.springframework.security.core.userdetails.User(user.getUsername(), "", grantedAuthorities);
 		}
-		return null;
-	}
-	
+
+
 	@SuppressWarnings("unused")
 	private Set<Object> getAuthority(UserDTO user) {
         HashSet<Object> authorities = new HashSet<>();

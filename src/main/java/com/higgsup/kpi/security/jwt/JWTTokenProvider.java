@@ -54,15 +54,10 @@ public class JWTTokenProvider {
 				Claims claims = Jwts.parser().setSigningKey(BaseConfiguration.BASE_SECRET_VALUE_TOKEN)
 						.parseClaimsJws(token.replace(TOKEN_PREFIX, "")).getBody();
 				user = claims.getSubject();
-				
-			
 				List<String> tmpAuthorities = (List<String>) claims.get("authorities");
-				System.out.println(claims.get("authorities").toString());
 				for(String item : tmpAuthorities) {
 					grantedAuthorities.add(new SimpleGrantedAuthority(item));
 				}
-				
-				
 			} catch (IllegalArgumentException e) {
 				response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
 			} catch (ExpiredJwtException e1) {
