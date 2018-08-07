@@ -27,7 +27,7 @@ public class UserController {
 	private UserService userService;
 	
 	@PreAuthorize("hasRole('EMPLOYEE')")
-	@GetMapping(BaseConfiguration.BASE_API_URL + "/getUserInfo")
+	@GetMapping(BaseConfiguration.BASE_API_URL + "/user-info")
 	public @ResponseBody Map<String, Object> getUserInfo() {
 		Map<String, Object> result = new HashMap<String, Object>();
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -44,7 +44,7 @@ public class UserController {
 	}
 	
 	@PreAuthorize("hasRole('ADMIN')")
-	@GetMapping(BaseConfiguration.BASE_API_URL + "/getListUsers")
+	@GetMapping(BaseConfiguration.BASE_API_URL + "/users")
 	public @ResponseBody List<Map<String, Object>> getListUsers() {
 		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
 		List<UserDTO> listUsers = userService.getAllUsers();
@@ -60,7 +60,7 @@ public class UserController {
 	}
 	
 	@PreAuthorize("hasRole('ADMIN')")
-	@PutMapping(BaseConfiguration.BASE_API_URL + "/updateUserRole")
+	@PutMapping(BaseConfiguration.BASE_API_URL + "/update-user-role")
 	public @ResponseBody List<Map<String, Object>> updateUserRole(@RequestBody Map<String, Object> context) {
 		String username = (String) context.get("username");
 		return null;
