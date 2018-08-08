@@ -27,8 +27,6 @@ import io.jsonwebtoken.SignatureException;
 public class JWTTokenProvider {
 
 	static final long EXPIRATIONTIME = BaseConfiguration.BASE_TIMEOUT_TOKEN * 30; // base time out is 6000ms 1 minute
-	static final String TOKEN_PREFIX = "Bearer";
-	static final String HEADER_STRING = "Authorization";
 
 	static void addAuthentication(HttpServletResponse res, String username, Authentication auth) throws IOException {
 		Claims claims = Jwts.claims().setSubject(username);
@@ -40,19 +38,19 @@ public class JWTTokenProvider {
 				.setExpiration(new Date(System.currentTimeMillis() + EXPIRATIONTIME))
 				.signWith(SignatureAlgorithm.HS512, BaseConfiguration.BASE_SECRET_VALUE_TOKEN).compact();
 				
-		res.addHeader(HEADER_STRING, TOKEN_PREFIX + " " + JWT);
+		res.addHeader(BaseConfiguration.HEADER_STRING_AUTHORIZATION, BaseConfiguration.TOKEN_PREFIX + " " + JWT);
 	}
 
 	@SuppressWarnings("unchecked")
 	static Authentication getAuthentication(HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
-		String token = request.getHeader(HEADER_STRING);
+		String token = request.getHeader(BaseConfiguration.HEADER_STRING_AUTHORIZATION);
 		if (token != null) {
 			String user = null;
 			Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
 			try {
 				Claims claims = Jwts.parser().setSigningKey(BaseConfiguration.BASE_SECRET_VALUE_TOKEN)
-						.parseClaimsJws(token.replace(TOKEN_PREFIX, "")).getBody();
+						.parseClaimsJws(token.replace(BaseConfiguration.TOKEN_PREFIX, "")).getBody();
 				user = claims.getSubject();
 				List<String> tmpAuthorities = (List<String>) claims.get("authorities");
 				for(String item : tmpAuthorities) {

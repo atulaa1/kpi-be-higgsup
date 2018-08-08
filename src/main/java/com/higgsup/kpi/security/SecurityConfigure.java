@@ -5,9 +5,11 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.ldap.core.DirContextAdapter;
 import org.springframework.ldap.core.DirContextOperations;
@@ -34,34 +36,17 @@ import com.higgsup.kpi.security.jwt.JWTLoginFilter;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true) 
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfigure extends WebSecurityConfigurerAdapter  {
-	
+
 	@Autowired
+	@Qualifier("UserDetailsServiceImpl")
 	private UserDetailsService userDetailsService;
-	
-	
-	//Get Config Value
-	@Value("${ldap.baseUrl}")
-	private String baseUrl;
-	
-	@Value("${ldap.baseDN}")
-	private String baseDN;
-	
-	@Value("${ldap.baseUserDN}")
-	private String baseUserDN;
-	
-	@Value("${ldap.password}")
-	private String password;
-	
-	@Value("${ldap.searchBase}")
-	private String searchBase;
-	
-	@Value("${ldap.userSearchBase}")
-	private String userSearchBase;
-	
-	
-	
+
+	@Autowired
+	private Environment env;
+
+
 	@Bean
 	public UserDetailsContextMapper userDetailsContextMapper() {
 		return new UserDetailsContextMapper() {
@@ -86,8 +71,8 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter  {
 		configuration.addAllowedOrigin("*");
 		configuration.setAllowedMethods(Arrays.asList("GET","POST", "PUT", "DELETE"));
 		configuration.setAllowCredentials(true);
-		configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-type"));
-		configuration.setExposedHeaders(Arrays.asList("Authorization", "Content-type", "Cache-Control"));
+		configuration.setAllowedHeaders(Arrays.asList(BaseConfiguration.HEADER_STRING_AUTHORIZATION, "Content-type"));
+		configuration.setExposedHeaders(Arrays.asList(BaseConfiguration.HEADER_STRING_AUTHORIZATION, "Content-type", "Cache-Control"));
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);
 		return source;
@@ -115,20 +100,20 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter  {
 	@Configuration
     protected class AuthenticationConfiguration extends GlobalAuthenticationConfigurerAdapter {
         @Override
-        public void init(AuthenticationManagerBuilder auth) throws Exception {              
+        public void init(AuthenticationManagerBuilder auth) throws Exception {
         	LdapContextSource contextSource = new LdapContextSource();
-        	contextSource.setUrl(baseUrl);
-            contextSource.setBase(baseDN);
-            contextSource.setUserDn(baseUserDN);
-            contextSource.setPassword(password);
-            contextSource.setReferral("follow"); 
-            contextSource.afterPropertiesSet();
+			contextSource.setUrl(env.getProperty("ldap.baseUrl"));
+			contextSource.setBase(env.getProperty("ldap.baseDN"));
+			contextSource.setUserDn(env.getProperty("ldap.baseUserDN"));
+			contextSource.setPassword(env.getProperty("ldap.password"));
+			contextSource.setReferral("follow");
+			contextSource.afterPropertiesSet();
 
             LdapAuthenticationProviderConfigurer<AuthenticationManagerBuilder> ldapAuthenticationProviderConfigurer = auth.ldapAuthentication();
 
             ldapAuthenticationProviderConfigurer
-            	.userSearchBase(searchBase)
-                .userSearchFilter(userSearchBase)
+            	.userSearchBase(env.getProperty("ldap.searchBase"))
+                .userSearchFilter(env.getProperty("ldap.userSearchBase"))
                 .contextSource(contextSource)
                 .userDetailsContextMapper(userDetailsContextMapper());
         }

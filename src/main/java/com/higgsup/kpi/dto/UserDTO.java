@@ -1,11 +1,13 @@
 package com.higgsup.kpi.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.util.List;
 
 public class UserDTO {
 	
 	private String username;
-	
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private String password;
 	
 	private String lastName;

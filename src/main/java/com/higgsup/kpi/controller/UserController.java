@@ -1,12 +1,12 @@
 package com.higgsup.kpi.controller;
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import com.higgsup.kpi.dto.Response;
+import com.higgsup.kpi.glossary.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,47 +26,40 @@ public class UserController {
 	
 	@Autowired
 	private UserService userService;
-	
-	@PreAuthorize("hasRole('EMPLOYEE')")
+
+	@PreAuthorize("hasAnyRole('EMPLOYEE','ADMIN','MAN')")
 	@GetMapping(BaseConfiguration.BASE_API_URL + "/user-info")
-	public @ResponseBody Map<String, Object> getUserInfo() {
-		Map<String, Object> result = new HashMap<String, Object>();
+	public Response getUserInfo() {
+		Response response = new Response(200);
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String username = auth.getName();
-		UserDTO user = userService.getUserDetail(username);
-		result.put("username", user.getUsername());
-		result.put("fullName", user.getFullName());
-		result.put("lastName", user.getLastName());
-		result.put("firstName", user.getFirstName());
-		result.put("email", user.getEmail());
-		result.put("role", user.getUserRole());
-		result.put("timestamp", System.currentTimeMillis());
-		return result;
+		if (Objects.nonNull(username)) {
+			UserDTO user = userService.getUserDetail(username);
+			response.setData(user);
+		} else {
+			response.setMessage(ErrorCode.NOT_FIND_USER.getContent());
+			response.setStatus(ErrorCode.NOT_FIND_USER.getValue());
+		}
+		return response;
 	}
-	
+
 	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping(BaseConfiguration.BASE_API_URL + "/users")
-	public @ResponseBody List<Map<String, Object>> getListUsers() {
-		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+	public Response getListUsers() {
+		Response response = new Response(200);
 		List<UserDTO> listUsers = userService.getAllUsers();
-		for(UserDTO user : listUsers) {
-			Map<String, Object> userValue = new HashMap<String, Object>();
-			userValue.put("fullName", user.getFullName());
-			userValue.put("email", user.getEmail());
-			userValue.put("username", user.getUsername());
-			userValue.put("role", user.getUserRole());
-			result.add(userValue);
-		}
-		return result;
+		response.setData(listUsers);
+		response.setMessage(HttpStatus.OK.getReasonPhrase());
+		return response;
 	}
-	
+
 	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping(BaseConfiguration.BASE_API_URL + "/user-role/{username}")
 	public @ResponseBody List<Map<String, Object>> updateUserRole(@RequestBody Map<String, Object> context) {
 		String username = (String) context.get("username");
 		return null;
 	}
-	
+
 	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping(BaseConfiguration.BASE_API_URL + "/user-role/{username}/{}")
 	public @ResponseBody Map<String, Object> getRole(@PathVariable String username) {

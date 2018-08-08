@@ -1,8 +1,9 @@
-package com.higgsup.kpi.service;
+package com.higgsup.kpi.service.impl;
 
 import java.util.HashSet;
 import java.util.Set;
 
+import com.higgsup.kpi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,7 +15,7 @@ import com.higgsup.kpi.dto.UserDTO;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-@Service
+@Service("UserDetailsServiceImpl")
 public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Autowired
