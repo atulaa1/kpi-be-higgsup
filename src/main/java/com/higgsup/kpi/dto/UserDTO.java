@@ -1,4 +1,4 @@
-package com.higgsup.kpi.model;
+package com.higgsup.kpi.dto;
 
 import java.util.List;
 

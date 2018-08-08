@@ -12,7 +12,7 @@ import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.query.LdapQuery;
 import org.springframework.stereotype.Service;
 
-import com.higgsup.kpi.model.UserDTO;
+import com.higgsup.kpi.dto.UserDTO;
 import com.higgsup.kpi.util.UserAttributesMapper;
 import com.higgsup.kpi.util.UtilsLdap;
 
@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserDTO updateUserRole(String username, String role) {
+	public UserDTO updateUserRole(String username, List<String> role) {
 		UserDTO user = getUserDetail(username);
 		Name dn = UtilsLdap.buildDn(user, baseDN);
 		DirContextOperations context = ldapTemplate.lookupContext(dn);

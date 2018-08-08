@@ -16,7 +16,7 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.higgsup.kpi.model.UserDTO;
+import com.higgsup.kpi.dto.UserDTO;
 
 public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 	

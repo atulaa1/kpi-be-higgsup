@@ -2,8 +2,7 @@ package com.higgsup.kpi.service;
 
 import java.util.List;
 
-
-import com.higgsup.kpi.model.UserDTO;
+import com.higgsup.kpi.dto.UserDTO;
 
 public interface UserService{
 	
@@ -11,6 +10,6 @@ public interface UserService{
 	
 	public List<UserDTO> getAllUsers();
 	
-	public UserDTO updateUserRole(String username, String role);
+	public UserDTO updateUserRole(String username, List<String> role);
 	
 }

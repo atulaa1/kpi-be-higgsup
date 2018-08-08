@@ -8,10 +8,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import com.higgsup.kpi.dto.UserDTO;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-
-import com.higgsup.kpi.model.UserDTO;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {

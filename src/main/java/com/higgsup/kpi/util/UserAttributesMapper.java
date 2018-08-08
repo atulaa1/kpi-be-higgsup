@@ -8,7 +8,7 @@ import javax.naming.directory.Attributes;
 
 import org.springframework.ldap.core.AttributesMapper;
 
-import com.higgsup.kpi.model.UserDTO;
+import com.higgsup.kpi.dto.UserDTO;
 
 public class UserAttributesMapper implements AttributesMapper<UserDTO> {
 
