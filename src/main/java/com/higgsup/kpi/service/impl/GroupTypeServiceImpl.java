@@ -4,6 +4,7 @@ import com.higgsup.kpi.dto.GroupTypeDTO;
 import com.higgsup.kpi.entity.KpiGroupType;
 import com.higgsup.kpi.repository.KpiEventUserRepo;
 import com.higgsup.kpi.repository.KpiGroupRepo;
+import com.higgsup.kpi.repository.KpiGroupTypeRepo;
 import com.higgsup.kpi.service.GroupTypeService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import java.util.List;
 @Service
 public class GroupTypeServiceImpl implements GroupTypeService {
     @Autowired
-    KpiGroupRepo kpiGroupRepo;
+    KpiGroupTypeRepo kpiGroupRepo;
     @Autowired
     KpiEventUserRepo kpiEventUserRepo;
 
@@ -37,7 +38,6 @@ public class GroupTypeServiceImpl implements GroupTypeService {
                 groupTypeDTOS.add(groupTypeDTO);
             }
         }
-
         return groupTypeDTOS;
     }
 }
