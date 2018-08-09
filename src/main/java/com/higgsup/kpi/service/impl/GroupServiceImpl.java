@@ -14,17 +14,16 @@ import org.springframework.stereotype.Service;
 public class GroupServiceImpl implements GroupService {
     @Autowired
     KpiGroupRepo kpiGroupRepo;
-
     @Override
-    public void createSeminar(GroupDTO groupDTO) {
-        if (kpiGroupRepo.findByName(groupDTO.getName()) == null) {
+    public void updateSeminar(GroupDTO groupDTO) {
+        Integer id = groupDTO.getId();
+        if (kpiGroupRepo.findById(id) == null){
+            throw new ResourceNotFoundException(String.format("Seminar with id = %d does not exist!", id));
+        }else {
             KpiGroup kpiGroup = new KpiGroup();
             BeanUtils.copyProperties( groupDTO,kpiGroup);
             kpiGroupRepo.save(kpiGroup);
-        }else {
-            throw new ServiceException(String.format("Author with id = %d does not exist!"));
         }
     }
-
 
 }

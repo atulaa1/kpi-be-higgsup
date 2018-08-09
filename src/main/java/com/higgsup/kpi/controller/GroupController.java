@@ -16,10 +16,10 @@ public class GroupController {
     GroupService groupService;
     @RequestMapping("/groupsSeminar")
     @PreAuthorize("hasRole('EMPLOYEE')")
-    @PostMapping
-    public Response createSeminar(@RequestBody GroupDTO groupDTO ) {
+    @PutMapping
+    public Response updateGroup(@RequestBody GroupDTO groupDTO){
         Response response = new Response(HttpStatus.OK.value());
-        groupService.createSeminar(groupDTO);
+        groupService.updateSeminar(groupDTO);
         return response;
     }
 }
