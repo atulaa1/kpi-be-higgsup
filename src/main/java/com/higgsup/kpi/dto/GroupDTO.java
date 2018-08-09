@@ -1,37 +1,13 @@
-package com.higgsup.kpi.entity;
+package com.higgsup.kpi.dto;
 
-import javax.persistence.*;
-import java.io.Serializable;
 import java.sql.Timestamp;
 
-@Entity
-@Table(name = "kpi_group")
-public class KpiGroup implements Serializable {
-    private static final long serialVersionUID = 1L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", unique = true, nullable = false)
+public class GroupDTO {
     private Integer id;
-
-    @Basic
-    @Column(name = "name")
     private String name;
-
-    @Basic
-    @Column(name = "description")
     private String description;
-
-    @JoinColumn(name = "group_type_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private KpiGroupType groupTypeId;
-
-    @Basic
-    @Column(name = "created_date")
+    private GroupTypeDTO groupTypeId;
     private Timestamp createdDate;
-
-    @Basic
-    @Column(name = "additional_config")
     private String additionalConfig;
 
     public Integer getId() {
@@ -58,11 +34,11 @@ public class KpiGroup implements Serializable {
         this.description = description;
     }
 
-    public KpiGroupType getGroupTypeId() {
+    public GroupTypeDTO getGroupTypeId() {
         return groupTypeId;
     }
 
-    public void setGroupTypeId(KpiGroupType groupTypeId) {
+    public void setGroupTypeId(GroupTypeDTO groupTypeId) {
         this.groupTypeId = groupTypeId;
     }
 

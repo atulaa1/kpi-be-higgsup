@@ -9,10 +9,12 @@ import java.util.List;
 @Table(name = "kpi_event")
 public class KpiEvent implements Serializable {
     private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
+
     @Basic
     @Column(name = "name")
     private String name;
@@ -25,11 +27,9 @@ public class KpiEvent implements Serializable {
     @Column(name = "status")
     private String status;
 
-
     @Basic
     @Column(name = "begin_date")
     private Timestamp beginDate;
-
 
     @Basic
     @Column(name = "end_date")
@@ -38,6 +38,7 @@ public class KpiEvent implements Serializable {
     @JoinColumn(name = "group_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
     private KpiGroup groupId;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "kpiEvent", fetch = FetchType.LAZY)
     private List<KpiEventUser> kpiEventUserList;
 
