@@ -1,7 +1,7 @@
 package com.higgsup.kpi.service.impl;
 
 import com.higgsup.kpi.dto.GroupTypeDTO;
-import com.higgsup.kpi.entity.KpiGroupType;
+import com.higgsup.kpi.entity.KpiGroup;
 import com.higgsup.kpi.repository.KpiEventUserRepo;
 import com.higgsup.kpi.repository.KpiGroupRepo;
 import com.higgsup.kpi.service.GroupTypeService;
@@ -23,17 +23,17 @@ public class GroupTypeServiceImpl implements GroupTypeService {
     @Override
     public List<GroupTypeDTO> getAllGroupType() {
         List<GroupTypeDTO> groupTypeDTOS = null;
-        List<KpiGroupType> kpiGroupTypeEntities = (List<KpiGroupType>) kpiGroupRepo.findAll();
+        List<KpiGroup> kpiGroupTypeEntities = (List<KpiGroup>) kpiGroupRepo.findAll();
         groupTypeDTOS = convertKpiGroupTypeEntityToDTO(kpiGroupTypeEntities);
         return groupTypeDTOS;
     }
 
-    private List<GroupTypeDTO> convertKpiGroupTypeEntityToDTO(List<KpiGroupType> kpiGroupTypeEntities) {
+    private List<GroupTypeDTO> convertKpiGroupTypeEntityToDTO(List<KpiGroup> kpiGroupTypeEntities) {
         List<GroupTypeDTO> groupTypeDTOS = new ArrayList<>();
         if (!CollectionUtils.isEmpty(kpiGroupTypeEntities)) {
-            for (KpiGroupType kpiGroupType : kpiGroupTypeEntities) {
+            for (KpiGroup kpiGroup : kpiGroupTypeEntities) {
                 GroupTypeDTO groupTypeDTO = new GroupTypeDTO();
-                BeanUtils.copyProperties(kpiGroupType, groupTypeDTO);
+                BeanUtils.copyProperties(kpiGroup, groupTypeDTO);
                 groupTypeDTOS.add(groupTypeDTO);
             }
         }
