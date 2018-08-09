@@ -11,11 +11,11 @@ import com.higgsup.kpi.dto.UserDTO;
 public class UtilsLdap {
 
 	public static Name buildDn(UserDTO user, final String BASEDN) {
-		return LdapNameBuilder.newInstance(BASEDN).add("cn", user.getFullName()).add("cn", "Users").build();
+		return LdapNameBuilder.newInstance(BASEDN).add("cn", "Users").add("cn", user.getFullName()).build();
 	}
 
 	public static String convertRole(List<String> listRole) {
-		String result = null;
+		String result = "";
 		if (!listRole.isEmpty()) {
 			for (String item : listRole) {
 				String role = item.replace("ROLE_", "").toLowerCase();

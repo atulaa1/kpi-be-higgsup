@@ -27,7 +27,7 @@ public class UserController {
 	@Autowired
 	private LdapUserService ldapUserService;
 
-	@PreAuthorize("hasAnyRole('EMPLOYEE')")
+	@PreAuthorize("hasAnyRole('EMPLOYEE', 'ADMIN', 'MAN')")
 	@GetMapping(BaseConfiguration.BASE_API_URL + "/user-info")
 	public @ResponseBody Response getUserInfo() {
 		Response response = new Response(200);
@@ -62,20 +62,26 @@ public class UserController {
 		return response;
 	}
 
+	@SuppressWarnings("unchecked")
 	@PreAuthorize("hasRole('ADMIN')")
-	@PutMapping(BaseConfiguration.BASE_API_URL + "/user-role/{username}")
-	public @ResponseBody List<Map<String, Object>> updateUserRole(@RequestBody Map<String, Object> context) {
-		String newRole = (String) context.get("role");
-		return null;
+	@PutMapping(BaseConfiguration.BASE_API_URL + "/users-role/{username}")
+	public @ResponseBody Response updateUserRole(@PathVariable String username,  @RequestBody Map<String, Object> context) {
+		Response response = new Response(200);
+		List<String> newListRoles = (List<String>) context.get("listRoles");
+		if(!newListRoles.isEmpty()) {
+			ldapUserService.updateUserRole(username, newListRoles);
+		}
+		return response;
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")
-	@GetMapping(BaseConfiguration.BASE_API_URL + "/user-role/{username}")
-	public @ResponseBody Map<String, Object> getRole(@PathVariable String username) {
+	@GetMapping(BaseConfiguration.BASE_API_URL + "/users-role/{username}")
+	public @ResponseBody Response getRole(@PathVariable String username) {
+		Response response = new Response(200);
 		Map<String, Object> result = new HashMap<String, Object>();
 		UserDTO user = ldapUserService.getUserDetail(username);
 		result.put("role", user.getUserRole());
-		return result;
+		return response;
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")
