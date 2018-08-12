@@ -20,11 +20,11 @@ public class GroupController {
 
     @RequestMapping("/groups")
     @PreAuthorize("hasRole('EMPLOYEE')")
-    @PostMapping
-    public ResponseEntity<GenericResponseDTO> createGroup(@RequestBody GroupDTO groupDTO) {
-        groupService.createClub(groupDTO);
+    @PutMapping
+    public ResponseEntity<GenericResponseDTO> updateGroup(@RequestBody GroupDTO groupDTO) {
+        groupService.updateClub(groupDTO);
         return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(GenericResponseDTO.created());
+                .status(HttpStatus.OK)
+                .body(GenericResponseDTO.updated());
     }
 }
