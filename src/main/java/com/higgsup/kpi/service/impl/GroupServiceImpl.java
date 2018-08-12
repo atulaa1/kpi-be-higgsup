@@ -25,18 +25,6 @@ public class GroupServiceImpl implements GroupService {
         }else{
             throw new ServiceException(String.format("Club with name = %s already exists!", name));
         }
-
     }
 
-    @Override
-    public void updateClub(GroupDTO groupDTO) {
-        Integer id = groupDTO.getId();
-        if (kpiGroupRepo.findById(id) == null){
-            throw new ServiceException(String.format("Club with id = %d does not exist!", id));
-        }else{
-            KpiGroup kpiGroup = new KpiGroup();
-            BeanUtils.copyProperties(groupDTO, kpiGroup);
-            kpiGroupRepo.save(kpiGroup);
-        }
-    }
 }
