@@ -4,5 +4,4 @@ import com.higgsup.kpi.dto.GroupDTO;
 
 public interface GroupService {
     void createClub(GroupDTO groupDTO);
-    void updateClub(GroupDTO groupDTO);
 }
