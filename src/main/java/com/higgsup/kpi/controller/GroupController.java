@@ -27,14 +27,4 @@ public class GroupController {
                 .status(HttpStatus.CREATED)
                 .body(GenericResponseDTO.created());
     }
-
-    @RequestMapping("/groups")
-    @PreAuthorize("hasRole('EMPLOYEE')")
-    @PutMapping
-    public ResponseEntity<GenericResponseDTO> updateGroup(@RequestBody GroupDTO groupDTO) {
-        groupService.updateClub(groupDTO);
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(GenericResponseDTO.updated());
-    }
 }
