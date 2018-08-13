@@ -24,6 +24,7 @@ public class GroupServiceImpl implements GroupService {
             kpiGroupRepo.save(kpiGroup);
         }else{
             throw new ServiceException(String.format("Club with name = %s already exists!", name));
+
         }
     }
 
