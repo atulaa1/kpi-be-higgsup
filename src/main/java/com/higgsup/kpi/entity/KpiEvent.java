@@ -1,7 +1,5 @@
 package com.higgsup.kpi.entity;
 
-import com.higgsup.kpi.dto.KpiGroup;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -39,7 +37,7 @@ public class KpiEvent implements Serializable {
 
     @JoinColumn(name = "group_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
-    private com.higgsup.kpi.dto.KpiGroup groupId;
+    private KpiGroup groupId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "kpiEvent", fetch = FetchType.LAZY)
     private List<KpiEventUser> kpiEventUserList;
 
@@ -67,7 +65,7 @@ public class KpiEvent implements Serializable {
         this.description = description;
     }
 
-    public com.higgsup.kpi.dto.KpiGroup getGroupId() {
+    public KpiGroup getGroupId() {
         return groupId;
     }
 
