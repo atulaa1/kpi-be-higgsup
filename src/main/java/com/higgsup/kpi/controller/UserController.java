@@ -23,13 +23,10 @@ public class UserController {
     @Autowired
     private LdapUserService ldapUserService;
 
-    @PreAuthorize("hasAnyRole('EMPLOYEE')")
-    @GetMapping(BaseConfiguration.BASE_API_URL + "/user-info")
-    public @ResponseBody
-    Response getUserInfo() {
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @GetMapping(BaseConfiguration.BASE_API_URL + "/users/{username}")
+    public @ResponseBody Response getUserInfo(@PathVariable String username) {
         Response response = new Response(200);
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName();
         if (username != null && !username.equals("")) {
             if (!UtilsValidate.containRegex(username)) {
                 UserDTO user = ldapUserService.getUserDetail(username);
