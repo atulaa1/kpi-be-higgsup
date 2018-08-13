@@ -2,8 +2,8 @@ package com.higgsup.kpi.controller;
 
 
 import com.higgsup.kpi.configure.BaseConfiguration;
-import com.higgsup.kpi.dto.GenericResponseDTO;
 import com.higgsup.kpi.dto.GroupDTO;
+import com.higgsup.kpi.dto.Response;
 import com.higgsup.kpi.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,10 +21,11 @@ public class GroupController {
     @RequestMapping("/groups")
     @PreAuthorize("hasRole('EMPLOYEE')")
     @PostMapping
-    public ResponseEntity<GenericResponseDTO> createGroup(@RequestBody GroupDTO groupDTO) {
+    public Response createGroup(@RequestBody GroupDTO groupDTO) {
+        Response response = new Response(HttpStatus.OK.value());
         groupService.createClub(groupDTO);
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(GenericResponseDTO.created());
+        response.setMessage("CREATED");
+        return response;
     }
+
 }
