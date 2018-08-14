@@ -22,9 +22,10 @@ public class UserController {
     @Autowired
     private LdapUserService ldapUserService;
 
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('EMPLOYEE')")
     @GetMapping(BaseConfiguration.BASE_API_URL + "/users/{username}")
-    public @ResponseBody Response getUserInfo(@PathVariable String username) {
+    public @ResponseBody
+    Response getUserInfo(@PathVariable String username) {
         Response response = new Response(HttpStatus.OK.value());
         if (username != null && !username.equals("")) {
             if (!UtilsValidate.containRegex(username)) {
@@ -44,7 +45,7 @@ public class UserController {
     @GetMapping(BaseConfiguration.BASE_API_URL + "/users")
     public Response getListUsers(@RequestParam(value = "name", required = false) String name) {
         Response response = new Response(HttpStatus.OK.value());
-
+        // search by name
         if (Objects.nonNull(name)) {
             if (!UtilsValidate.containRegex(name)) {
                 List<UserDTO> listUsersByName = ldapUserService.findUsersByName(name);
@@ -60,18 +61,20 @@ public class UserController {
                 response.setStatus(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
             }
             return response;
+        } else {
+            //get all user
+            List<UserDTO> listUsers = ldapUserService.getAllUsers();
+            if (!listUsers.isEmpty()) {
+                response.setData(listUsers);
+                response.setMessage(HttpStatus.OK.getReasonPhrase());
+            } else {
+                response.setMessage(ErrorMessage.NOT_FIND_USER);
+                response.setStatus(ErrorCode.NOT_FIND.getValue());
+            }
+            return response;
         }
 
-        List<UserDTO> listUsers = ldapUserService.getAllUsers();
-        if (!listUsers.isEmpty()) {
-            response.setData(listUsers);
-            response.setMessage(HttpStatus.OK.getReasonPhrase());
-            return response;
-        } else {
-            response.setMessage(ErrorMessage.NOT_FIND_USER);
-            response.setStatus(ErrorCode.NOT_FIND.getValue());
-            return response;
-        }
+
     }
 
     @PreAuthorize("hasRole('ADMIN')")
