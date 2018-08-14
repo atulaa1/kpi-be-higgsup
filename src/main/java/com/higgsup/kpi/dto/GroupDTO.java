@@ -1,17 +1,14 @@
 package com.higgsup.kpi.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.sql.Timestamp;
 
-public class GroupDTO {
+public class GroupDTO<T> extends BaseDTO {
     private Integer id;
     private String name;
     private String description;
-    private Integer groupTypeId;
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss.SSS")
-    private Timestamp createdDate;
-    private String additionalConfig;
+    private GroupTypeDTO groupTypeId;
+    private Timestamp createdData;
+    private T additionalConfig;
 
     public Integer getId() {
         return id;
@@ -37,27 +34,27 @@ public class GroupDTO {
         this.description = description;
     }
 
-    public Integer getGroupTypeId() {
+    public GroupTypeDTO getGroupTypeId() {
         return groupTypeId;
     }
 
-    public void setGroupTypeId(Integer groupTypeId) {
+    public void setGroupTypeId(GroupTypeDTO groupTypeId) {
         this.groupTypeId = groupTypeId;
     }
 
-    public Timestamp getCreatedDate() {
-        return createdDate;
+    public Timestamp getCreatedData() {
+        return createdData;
     }
 
-    public void setCreatedDate(Timestamp createdDate) {
-        this.createdDate = createdDate;
+    public void setCreatedData(Timestamp createdData) {
+        this.createdData = createdData;
     }
 
-    public String getAdditionalConfig() {
+    public T getAdditionalConfig() {
         return additionalConfig;
     }
 
-    public void setAdditionalConfig(String additionalConfig) {
+    public void setAdditionalConfig(T additionalConfig) {
         this.additionalConfig = additionalConfig;
     }
 }

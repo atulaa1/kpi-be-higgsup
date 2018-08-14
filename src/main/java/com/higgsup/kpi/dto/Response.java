@@ -5,8 +5,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 
 public class Response<T> {
-    @JsonProperty("status_code")
     private Integer status;
+    @JsonProperty("error_code")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String errorCode;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private T data;
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -25,6 +27,14 @@ public class Response<T> {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public String getErrorCode() {
+        return errorCode;
+    }
+
+    public void setErrorCode(String errorCode) {
+        this.errorCode = errorCode;
     }
 
     public T getData() {
