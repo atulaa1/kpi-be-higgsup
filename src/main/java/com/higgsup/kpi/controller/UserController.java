@@ -57,13 +57,11 @@ public class UserController {
                     response.setErrorCode(ErrorCode.NOT_FIND_USER.getValue());
                     response.setMessage(ErrorCode.NOT_FIND_USER.getContent());
                     response.setStatus(ResponseStatus.FALSE.getValue());
-
                 }
             } else {
                 response.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
                 response.setMessage(ErrorCode.PARAMETERS_IS_NOT_VALID.getContent());
                 response.setStatus(ResponseStatus.FALSE.getValue());
-
             }
             return response;
         } else {
@@ -77,8 +75,6 @@ public class UserController {
             }
             return response;
         }
-
-
     }
 
     @PreAuthorize("hasRole('ADMIN')")
