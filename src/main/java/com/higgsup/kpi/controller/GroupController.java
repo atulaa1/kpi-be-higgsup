@@ -20,7 +20,7 @@ public class GroupController {
     @RequestMapping("/clubs")
     @PreAuthorize("hasRole('EMPLOYEE')")
     @PostMapping
-    public Response createGroup(@RequestBody GroupDTO groupDTO) {
+    public Response createClubActivity(@RequestBody GroupDTO groupDTO) {
         Response response = new Response(HttpStatus.OK.value());
         groupService.createClub(groupDTO);
         response.setMessage("CREATED");
