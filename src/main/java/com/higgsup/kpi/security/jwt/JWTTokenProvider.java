@@ -2,15 +2,15 @@ package com.higgsup.kpi.security.jwt;
 
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -39,6 +39,15 @@ public class JWTTokenProvider {
 				.signWith(SignatureAlgorithm.HS512, BaseConfiguration.BASE_SECRET_VALUE_TOKEN).compact();
 				
 		res.addHeader(BaseConfiguration.HEADER_STRING_AUTHORIZATION, BaseConfiguration.TOKEN_PREFIX + " " + JWT);
+
+		ObjectMapper mapper = new ObjectMapper();
+
+		Map<String, String> tokenMap = new HashMap<>();
+		tokenMap.put("username", username);
+		res.setContentType(MediaType.APPLICATION_JSON_VALUE);
+
+		mapper.writeValue(res.getWriter(), tokenMap);
+
 	}
 
 	@SuppressWarnings("unchecked")

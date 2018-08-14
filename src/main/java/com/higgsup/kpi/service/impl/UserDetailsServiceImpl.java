@@ -3,7 +3,7 @@ package com.higgsup.kpi.service.impl;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.higgsup.kpi.service.UserService;
+import com.higgsup.kpi.service.LdapUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,11 +19,11 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Autowired
-	private UserService userService;
+	private LdapUserService ldapUserService;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		UserDTO user = userService.getUserDetail(username);
+		UserDTO user = ldapUserService.getUserDetail(username);
 			if(user == null){
 				throw new UsernameNotFoundException("Invalid username or password.");
 			}
