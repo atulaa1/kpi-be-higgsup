@@ -1,7 +1,7 @@
 package com.higgsup.kpi.glossary;
 
 public enum ErrorCode {
-    NOT_FIND_USER(900, "not find user"),;
+    NOT_FIND_USER(900, "Invalidate  data"),;
 
     private Integer value;
     private String content;

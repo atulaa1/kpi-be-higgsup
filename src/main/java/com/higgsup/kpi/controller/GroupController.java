@@ -1,9 +1,10 @@
 package com.higgsup.kpi.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.higgsup.kpi.configure.BaseConfiguration;
 import com.higgsup.kpi.dto.GroupDTO;
 import com.higgsup.kpi.dto.Response;
-import com.higgsup.kpi.entity.KpiGroup;
+import com.higgsup.kpi.dto.TeamBuildingDTO;
 import com.higgsup.kpi.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,7 +24,7 @@ public class GroupController {
 
     @PreAuthorize("hasAnyRole('EMPLOYEE','MAN')")
     @PostMapping
-    public Response create(@RequestBody GroupDTO groupDTO) {
+    public Response create(@RequestBody GroupDTO<TeamBuildingDTO> groupDTO) throws JsonProcessingException {
         Response response = new Response(HttpStatus.OK.value());
         groupService.create(groupDTO);
         return response;
