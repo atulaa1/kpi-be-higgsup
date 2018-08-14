@@ -10,8 +10,8 @@ import com.higgsup.kpi.dto.UserDTO;
 
 public class UtilsLdap {
 
-	public static Name buildDn(UserDTO user, final String BASEDN) {
-		return LdapNameBuilder.newInstance(BASEDN).add("cn", user.getFullName()).add("cn", "Users").build();
+	public static Name buildDn(UserDTO user) {
+		return LdapNameBuilder.newInstance().add("cn","Users").add("cn", user.getFullName()).build();
 	}
 
 	public static String convertRole(List<String> listRole) {

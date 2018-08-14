@@ -10,10 +10,10 @@ import com.higgsup.kpi.util.UtilsValidate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 @RestController
@@ -79,10 +79,21 @@ public class UserController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping(BaseConfiguration.BASE_API_URL + "/users/{username}/roles")
-    public @ResponseBody
-    List<Map<String, Object>> updateUserRole(@RequestBody Map<String, Object> context) {
-        String newRole = (String) context.get("role");
-        return null;
+    public Response updateUserRole(@PathVariable String username, @RequestBody List<String> roles) {
+        Response response = new Response(HttpStatus.OK.value());
+        if (!CollectionUtils.isEmpty(roles)) {
+            UserDTO userDTO = ldapUserService.updateUserRole(username, roles);
+            if (Objects.nonNull(userDTO.getErrorCode())) {
+                response.setStatus(userDTO.getErrorCode());
+                response.setMessage(userDTO.getMessage());
+            }else {
+                response.setData(userDTO);
+            }
+        } else {
+            response.setStatus(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+            response.setMessage(ErrorMessage.PARAMETERS_ROLES_IS_EMPTY);
+        }
+        return response;
     }
 
 }
