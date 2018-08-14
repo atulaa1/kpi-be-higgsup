@@ -17,10 +17,10 @@ public class GroupController {
     @Autowired
     GroupService groupService;
 
-    @RequestMapping("/groups")
+    @RequestMapping("/clubs")
     @PreAuthorize("hasRole('EMPLOYEE')")
     @PutMapping
-    public Response updateGroup(@RequestBody GroupDTO groupDTO) {
+    public Response updateClubActivity(@RequestBody GroupDTO groupDTO) {
         Response response = new Response(HttpStatus.OK.value());
         groupService.updateClub(groupDTO);
         response.setMessage("UPDATED");
