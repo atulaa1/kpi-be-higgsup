@@ -1,6 +1,7 @@
 package com.higgsup.kpi.controller;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.higgsup.kpi.configure.BaseConfiguration;
 import com.higgsup.kpi.dto.GroupDTO;
 import com.higgsup.kpi.dto.Response;
@@ -20,10 +21,10 @@ public class GroupController {
     @RequestMapping("/clubs")
     @PreAuthorize("hasRole('EMPLOYEE')")
     @PutMapping
-    public Response updateClubActivity(@RequestBody GroupDTO groupDTO) {
+    public Response updateClubActivity(@RequestBody GroupDTO groupDTO) throws JsonProcessingException {
         Response response = new Response(HttpStatus.OK.value());
-        groupService.updateClub(groupDTO);
-        response.setMessage("UPDATED");
+        GroupDTO groupDTO1 = groupService.updateClub(groupDTO);
+        response.setData(groupDTO1);
         return response;
     }
 }
