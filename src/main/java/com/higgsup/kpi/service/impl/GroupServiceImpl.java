@@ -17,8 +17,10 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
+import static com.higgsup.kpi.util.UtilsValidate.minNumberOfSessionsValidation;
+import static com.higgsup.kpi.util.UtilsValidate.nameValidation;
+import static com.higgsup.kpi.util.UtilsValidate.pointValidation;
 
 @Service
 public class GroupServiceImpl implements GroupService {
@@ -30,24 +32,25 @@ public class GroupServiceImpl implements GroupService {
     KpiGroupTypeRepo kpiGroupTypeRepo;
 
     @Override
-    public void createClub(GroupDTO<GroupClubDetail> groupDTO) throws JsonProcessingException {
+    public GroupDTO createClub(GroupDTO<GroupClubDetail> groupDTO) throws JsonProcessingException {
+        GroupDTO groupDTO1 = new GroupDTO();
         if (kpiGroupRepo.findByName(groupDTO.getName()) == null) {
             KpiGroup kpiGroup = new KpiGroup();
             ObjectMapper mapper = new ObjectMapper();
 
             if (!nameValidation(groupDTO.getAdditionalConfig().getName()) || !nameValidation(groupDTO.getAdditionalConfig().getHost())) {
-                groupDTO.setMessage(ErrorMessage.PARAMETERS_NAME_IS_NOT_VALID);
-                groupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+                groupDTO1.setMessage(ErrorMessage.PARAMETERS_NAME_IS_NOT_VALID);
+                groupDTO1.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
             }
 
             if (!minNumberOfSessionsValidation(groupDTO.getAdditionalConfig().getMinNumberOfSessions())) {
-                groupDTO.setMessage(ErrorMessage.PARAMETERS_MIN_NUMBER_OF_SESSIONS_IS_NOT_VALID);
-                groupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+                groupDTO1.setMessage(ErrorMessage.PARAMETERS_MIN_NUMBER_OF_SESSIONS_IS_NOT_VALID);
+                groupDTO1.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
             }
 
             if (!pointValidation(groupDTO.getAdditionalConfig().getEffectivePoint()) && !pointValidation(groupDTO.getAdditionalConfig().getParticipationPoint())) {
-                groupDTO.setMessage(ErrorMessage.PARAMETERS_POINT_IS_NOT_VALID);
-                groupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+                groupDTO1.setMessage(ErrorMessage.PARAMETERS_POINT_IS_NOT_VALID);
+                groupDTO1.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
             }
             String clubJson = mapper.writeValueAsString(groupDTO.getAdditionalConfig());
             BeanUtils.copyProperties(groupDTO, kpiGroup);
@@ -59,41 +62,14 @@ public class GroupServiceImpl implements GroupService {
                 kpiGroup.setGroupTypeId(kpiGroupType.get());
                 kpiGroupRepo.save(kpiGroup);
             } else {
-                groupDTO.setMessage(ErrorMessage.NOT_FIND_GROUP_TYPE);
-                groupDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
+                groupDTO1.setMessage(ErrorMessage.NOT_FIND_GROUP_TYPE);
+                groupDTO1.setErrorCode(ErrorCode.NOT_FIND.getValue());
             }
         } else {
-            groupDTO.setMessage(ErrorMessage.GROUP_ALREADY_EXISTS);
-            groupDTO.setErrorCode(ErrorCode.PARAMETERS_ALREADY_EXIST.getValue());
+            groupDTO1.setMessage(ErrorMessage.GROUP_ALREADY_EXISTS);
+            groupDTO1.setErrorCode(ErrorCode.PARAMETERS_ALREADY_EXIST.getValue());
         }
+        return groupDTO1;
     }
-
-    @Override
-    public Boolean nameValidation(String name) {
-        String patternvalidation = "[A-Z][a-z]+( [A-Z][a-z]+)";
-        Pattern pattern = Pattern.compile(patternvalidation);
-        Matcher matcher = pattern.matcher(name);
-        if (matcher.matches()) {
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public Boolean minNumberOfSessionsValidation(Integer minNumberOfSessions) {
-        if (minNumberOfSessions == (int) minNumberOfSessions && String.valueOf(minNumberOfSessions).length() < 3) {
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public Boolean pointValidation(Float point) {
-        if (point == (float) point && String.valueOf(point).substring(1).length() == 2) {
-            return true;
-        }
-        return false;
-    }
-
 }
 

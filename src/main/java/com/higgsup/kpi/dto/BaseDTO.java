@@ -26,11 +26,4 @@ public abstract class BaseDTO {
         this.message = message;
     }
 
-    public boolean isError() {
-        if (Objects.nonNull(this.errorCode)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
 }

@@ -15,7 +15,7 @@ public class UtilsValidate {
 	}
 	
 	public static Boolean isValidPhoneNumber(String str) {
-		Pattern pattern = Pattern.compile("^[0-9]{0, 11}$");
+		Pattern pattern = Pattern.compile("^[0-9]{0,11}$");
 		Matcher matcher = pattern.matcher(str);
 		if (!matcher.matches()) {
 			return false;
@@ -30,5 +30,28 @@ public class UtilsValidate {
 			return false;
 		}		
 		return true;
+	}
+	public static Boolean nameValidation(String name) {
+		String patternValidation = "[A-Z][a-z]+( [A-Z][a-z]+)";
+		Pattern pattern = Pattern.compile(patternValidation);
+		Matcher matcher = pattern.matcher(name);
+		if (matcher.matches()) {
+			return true;
+		}
+		return false;
+	}
+
+	public static Boolean minNumberOfSessionsValidation(Integer minNumberOfSessions) {
+		if (minNumberOfSessions == (int) minNumberOfSessions && String.valueOf(minNumberOfSessions).length() < 3) {
+			return true;
+		}
+		return false;
+	}
+
+	public static Boolean pointValidation(Float point) {
+		if (point == (float) point && String.valueOf(point).substring(1).length() == 2) {
+			return true;
+		}
+		return false;
 	}
 }

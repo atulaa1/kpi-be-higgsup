@@ -24,7 +24,8 @@ public class GroupController {
     @PostMapping
     public Response createClub(@RequestBody GroupDTO<GroupClubDetail> groupDTO) throws JsonProcessingException {
         Response response = new Response(HttpStatus.OK.value());
-        groupService.createClub(groupDTO);
+        GroupDTO groupDTO1 = groupService.createClub(groupDTO);
+        response.setData(groupDTO1);
         return response;
     }
 
