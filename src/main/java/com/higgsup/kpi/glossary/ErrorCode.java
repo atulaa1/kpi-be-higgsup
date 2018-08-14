@@ -1,14 +1,15 @@
 package com.higgsup.kpi.glossary;
 
 public enum ErrorCode {
-    NOT_FIND_USER(900, "not find user"), PARAMETERS_IS_MISSING(901, "parameter is missing"), PARAMETERS_IS_NOT_VALID(902, "parameter is not valid");
+    NOT_FIND(900, "not find"),
+    PARAMETERS_IS_NOT_VALID(901, "parameter is not valid");
 
     private Integer value;
-    private String content;
+    private String description;
 
-    ErrorCode(Integer value, String content) {
+    ErrorCode(Integer value, String description) {
         this.value = value;
-        this.content = content;
+        this.description = description;
     }
 
     public Integer getValue() {
@@ -19,11 +20,11 @@ public enum ErrorCode {
         this.value = value;
     }
 
-    public String getContent() {
-        return content;
+    public String getDescription() {
+        return description;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

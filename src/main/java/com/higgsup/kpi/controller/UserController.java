@@ -4,7 +4,7 @@ import com.higgsup.kpi.configure.BaseConfiguration;
 import com.higgsup.kpi.dto.Response;
 import com.higgsup.kpi.dto.UserDTO;
 import com.higgsup.kpi.glossary.ErrorCode;
-import com.higgsup.kpi.glossary.ResponseStatus;
+import com.higgsup.kpi.glossary.ErrorMessage;
 import com.higgsup.kpi.service.LdapUserService;
 import com.higgsup.kpi.util.UtilsValidate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,19 +24,16 @@ public class UserController {
 
     @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
     @GetMapping(BaseConfiguration.BASE_API_URL + "/users/{username}")
-    public @ResponseBody
-    Response getUserInfo(@PathVariable String username) {
-
-        Response response = new Response(ResponseStatus.SUCCESS.getValue());
+    public @ResponseBody Response getUserInfo(@PathVariable String username) {
+        Response response = new Response(HttpStatus.OK.value());
         if (username != null && !username.equals("")) {
             if (!UtilsValidate.containRegex(username)) {
                 UserDTO user = ldapUserService.getUserDetail(username);
                 if (user != null) {
                     response.setData(user);
                 } else {
-                    response.setStatus(ResponseStatus.FALSE.getValue());
-                    response.setErrorCode(ErrorCode.NOT_FIND_USER.getValue());
-                    response.setMessage(ErrorCode.NOT_FIND_USER.getContent());
+                    response.setMessage(ErrorMessage.NOT_FIND_USER);
+                    response.setStatus(ErrorCode.NOT_FIND.getValue());
                 }
             }
         }
@@ -46,33 +43,33 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(BaseConfiguration.BASE_API_URL + "/users")
     public Response getListUsers(@RequestParam(value = "name", required = false) String name) {
-        Response response = new Response(ResponseStatus.SUCCESS.getValue());
+        Response response = new Response(HttpStatus.OK.value());
 
         if (Objects.nonNull(name)) {
             if (!UtilsValidate.containRegex(name)) {
                 List<UserDTO> listUsersByName = ldapUserService.findUsersByName(name);
                 if (!listUsersByName.isEmpty()) {
                     response.setData(listUsersByName);
+                    response.setMessage(HttpStatus.OK.getReasonPhrase());
                 } else {
-                    response.setErrorCode(ErrorCode.NOT_FIND_USER.getValue());
-                    response.setMessage(ErrorCode.NOT_FIND_USER.getContent());
-                    response.setStatus(ResponseStatus.FALSE.getValue());
+                    response.setMessage(ErrorMessage.NOT_FIND_USER);
+                    response.setStatus(ErrorCode.NOT_FIND.getValue());
                 }
             } else {
-                response.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-                response.setMessage(ErrorCode.PARAMETERS_IS_NOT_VALID.getContent());
-                response.setStatus(ResponseStatus.FALSE.getValue());
+                response.setMessage(ErrorMessage.PARAMETERS_NAME_IS_NOT_VALID);
+                response.setStatus(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
             }
             return response;
+        }
+
+        List<UserDTO> listUsers = ldapUserService.getAllUsers();
+        if (!listUsers.isEmpty()) {
+            response.setData(listUsers);
+            response.setMessage(HttpStatus.OK.getReasonPhrase());
+            return response;
         } else {
-            List<UserDTO> listUsers = ldapUserService.getAllUsers();
-            if (!listUsers.isEmpty()) {
-                response.setData(listUsers);
-            } else {
-                response.setErrorCode(ErrorCode.NOT_FIND_USER.getValue());
-                response.setMessage(ErrorCode.NOT_FIND_USER.getContent());
-                response.setStatus(ResponseStatus.FALSE.getValue());
-            }
+            response.setMessage(ErrorMessage.NOT_FIND_USER);
+            response.setStatus(ErrorCode.NOT_FIND.getValue());
             return response;
         }
     }

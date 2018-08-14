@@ -3,7 +3,6 @@ package com.higgsup.kpi.controller;
 import com.higgsup.kpi.configure.BaseConfiguration;
 import com.higgsup.kpi.dto.GroupTypeDTO;
 import com.higgsup.kpi.dto.Response;
-import com.higgsup.kpi.glossary.ResponseStatus;
 import com.higgsup.kpi.service.GroupTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +21,7 @@ public class GroupTypeController {
     @RequestMapping("/group-types")
     @PreAuthorize("hasRole('ADMIN')")
     public Response getAll() {
-        Response response = new Response(ResponseStatus.SUCCESS.getValue());
+        Response response = new Response(HttpStatus.OK.value());
         List<GroupTypeDTO> groupTypeDTOS = groupTypeService.getAllGroupType();
         response.setData(groupTypeDTOS);
         return response;
