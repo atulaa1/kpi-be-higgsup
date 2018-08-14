@@ -1,7 +1,8 @@
 package com.higgsup.kpi.service;
 
 import com.higgsup.kpi.dto.GroupDTO;
+import com.higgsup.kpi.dto.Response;
 
 public interface GroupService {
-    void createClub(GroupDTO groupDTO);
+    Response createClub(GroupDTO groupDTO);
 }

@@ -1,5 +1,7 @@
 package com.higgsup.kpi.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.sql.Timestamp;
 
 public class GroupDTO {
@@ -7,6 +9,7 @@ public class GroupDTO {
     private String name;
     private String description;
     private Integer groupTypeId;
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss.SSS")
     private Timestamp createdDate;
     private String additionalConfig;
 

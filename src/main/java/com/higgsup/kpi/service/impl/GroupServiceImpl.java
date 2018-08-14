@@ -1,6 +1,7 @@
 package com.higgsup.kpi.service.impl;
 
 import com.higgsup.kpi.dto.GroupDTO;
+import com.higgsup.kpi.dto.Response;
 import com.higgsup.kpi.entity.KpiGroup;
 import com.higgsup.kpi.repository.KpiGroupRepo;
 import com.higgsup.kpi.service.GroupService;
@@ -16,16 +17,18 @@ public class GroupServiceImpl implements GroupService {
     private KpiGroupRepo kpiGroupRepo;
 
     @Override
-    public void createClub(GroupDTO groupDTO) {
+    public Response createClub(GroupDTO groupDTO) {
+        Response response = new Response(200);
         String name = groupDTO.getName();
         if (kpiGroupRepo.findByName(name)== null){
             KpiGroup kpiGroup = new KpiGroup();
             BeanUtils.copyProperties(groupDTO, kpiGroup);
             kpiGroupRepo.save(kpiGroup);
+            response.setMessage("A new club activity is created!");
         }else{
-            throw new ServiceException(String.format("Club with name = %s already exists!", name));
-
+            response.setMessage("Club with name = %s already exists!");
         }
+        return response;
     }
 
 }
