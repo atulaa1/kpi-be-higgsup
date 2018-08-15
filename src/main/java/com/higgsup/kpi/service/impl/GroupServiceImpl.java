@@ -39,7 +39,7 @@ public class GroupServiceImpl implements GroupService {
             groupDTO1.setMessage(ErrorCode.NOT_FIND.getDescription());
             groupDTO1.setErrorCode(ErrorCode.NOT_FIND.getValue());
         } else {
-            if (minNumberOfSessions == (int) minNumberOfSessions && String.valueOf(minNumberOfSessions).length() < 3) {
+            if (minNumberOfSessions != (int) minNumberOfSessions && String.valueOf(minNumberOfSessions).length() > 2) {
                 groupDTO1.setMessage(ErrorMessage.PARAMETERS_MIN_NUMBER_OF_SESSIONS_IS_NOT_VALID);
                 groupDTO1.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
             } else if (participationPoint != (float) participationPoint && String.valueOf(participationPoint).substring(1).length() != 2) {
