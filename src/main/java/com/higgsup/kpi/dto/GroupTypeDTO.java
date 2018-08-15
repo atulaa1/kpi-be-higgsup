@@ -1,6 +1,6 @@
 package com.higgsup.kpi.dto;
 
-public class GroupTypeDTO {
+public class GroupTypeDTO extends BaseDTO {
 
     private Integer id;
     private String name;
