@@ -2,11 +2,11 @@ package com.higgsup.kpi.dto;
 
 import java.sql.Timestamp;
 
-public class GroupDTO<T> {
+public class GroupDTO<T> extends BaseDTO{
     private Integer id;
     private String name;
     private String description;
-    private GroupTypeDTO groupTypeId;
+    private GroupTypeDTO groupType;
     private Timestamp createdDate;
     private T additionalConfig;
 
@@ -34,12 +34,12 @@ public class GroupDTO<T> {
         this.description = description;
     }
 
-    public GroupTypeDTO getGroupTypeId() {
-        return groupTypeId;
+    public GroupTypeDTO getGroupType() {
+        return groupType;
     }
 
-    public void setGroupTypeId(GroupTypeDTO groupTypeId) {
-        this.groupTypeId = groupTypeId;
+    public void setGroupType(GroupTypeDTO groupType) {
+        this.groupType = groupType;
     }
 
     public Timestamp getCreatedDate() {

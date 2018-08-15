@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Objects;
+
 @RestController
 @RequestMapping(BaseConfiguration.BASE_API_URL)
 public class GroupController {
@@ -26,7 +28,11 @@ public class GroupController {
     @PostMapping
     public Response create(@RequestBody GroupDTO<TeamBuildingDTO> groupDTO) throws JsonProcessingException {
         Response response = new Response(HttpStatus.OK.value());
-        groupService.create(groupDTO);
+        GroupDTO groupDTO1 = groupService.create(groupDTO);
+        if(Objects.nonNull(groupDTO1.getErrorCode())){
+            response.setStatus(groupDTO1.getErrorCode());
+            response.setMessage(groupDTO1.getMessage());
+        }
         return response;
     }
 }

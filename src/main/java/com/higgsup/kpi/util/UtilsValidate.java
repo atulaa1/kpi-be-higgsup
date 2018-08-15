@@ -31,4 +31,12 @@ public class UtilsValidate {
 		}		
 		return true;
 	}
+
+	public static Boolean isNumber(String str){
+		String regex = "((-|\\+)?[0-9]+(\\.[0-9]+)?)+";
+		if (str.matches(regex)){
+			return true;
+		}
+		return false;
+	}
 }
