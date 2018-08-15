@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.higgsup.kpi.dto.GroupClubDetail;
 import com.higgsup.kpi.dto.GroupDTO;
-import com.higgsup.kpi.dto.Response;
 import com.higgsup.kpi.entity.KpiGroup;
 import com.higgsup.kpi.entity.KpiGroupType;
 import com.higgsup.kpi.glossary.ErrorCode;
@@ -19,10 +18,6 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.util.Optional;
 
-import static com.higgsup.kpi.util.UtilsValidate.minNumberOfSessionsValidation;
-import static com.higgsup.kpi.util.UtilsValidate.nameValidation;
-import static com.higgsup.kpi.util.UtilsValidate.pointValidation;
-
 @Service
 public class GroupServiceImpl implements GroupService {
 
@@ -36,17 +31,21 @@ public class GroupServiceImpl implements GroupService {
     public GroupDTO updateClub(GroupDTO<GroupClubDetail> groupDTO) throws JsonProcessingException {
         Integer id = groupDTO.getId();
         GroupDTO groupDTO1 = new GroupDTO();
+        Integer minNumberOfSessions = groupDTO.getAdditionalConfig().getMinNumberOfSessions();
+        Float participationPoint = groupDTO.getAdditionalConfig().getParticipationPoint();
+        Float effectivePoint = groupDTO.getAdditionalConfig().getEffectivePoint();
+
         if (kpiGroupRepo.findById(id) == null) {
             groupDTO1.setMessage(ErrorCode.NOT_FIND.getDescription());
             groupDTO1.setErrorCode(ErrorCode.NOT_FIND.getValue());
         } else {
-            if (!nameValidation(groupDTO.getAdditionalConfig().getName()) || !nameValidation(groupDTO.getAdditionalConfig().getHost())) {
-                groupDTO1.setMessage(ErrorMessage.PARAMETERS_NAME_IS_NOT_VALID);
-                groupDTO1.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-            } else if (!minNumberOfSessionsValidation(groupDTO.getAdditionalConfig().getMinNumberOfSessions())) {
+            if (minNumberOfSessions == (int) minNumberOfSessions && String.valueOf(minNumberOfSessions).length() < 3) {
                 groupDTO1.setMessage(ErrorMessage.PARAMETERS_MIN_NUMBER_OF_SESSIONS_IS_NOT_VALID);
                 groupDTO1.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-            } else if (!pointValidation(groupDTO.getAdditionalConfig().getEffectivePoint()) && !pointValidation(groupDTO.getAdditionalConfig().getParticipationPoint())) {
+            } else if (participationPoint != (float) participationPoint && String.valueOf(participationPoint).substring(1).length() != 2) {
+                groupDTO1.setMessage(ErrorMessage.PARAMETERS_POINT_IS_NOT_VALID);
+                groupDTO1.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+            } else if (effectivePoint != (float) effectivePoint && String.valueOf(effectivePoint).substring(1).length() != 2) {
                 groupDTO1.setMessage(ErrorMessage.PARAMETERS_POINT_IS_NOT_VALID);
                 groupDTO1.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
             } else {
