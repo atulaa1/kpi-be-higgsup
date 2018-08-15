@@ -33,29 +33,25 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public GroupDTO createSeminar(GroupDTO<GroupSeminarDetail> groupDTO) throws JsonProcessingException {
-        GroupDTO groupDTO1 = new GroupDTO();
-        if (kpiGroupRepo.findByName(groupDTO.getName()) != null)
-        {
+        if (kpiGroupRepo.findByName(groupDTO.getName()) != null) {
             groupDTO.setErrorCode(ErrorCode.DUPLICATED_ITEM.getValue());
             groupDTO.setMessage(ErrorCode.DUPLICATED_ITEM.getContent());
-        }
-        else if (!UtilsValidate.pointValidate(groupDTO.getAdditionalConfig().getHost()))
-        {
-            groupDTO1.setMessage(ErrorMessage.POINT_HOST_IS_NOT_VALIDATE);
-            groupDTO1.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-        }
-        else if (!UtilsValidate.pointValidate(groupDTO.getAdditionalConfig().getMember()))
-        {
-            groupDTO1.setMessage(ErrorMessage.POINT_MEMBER_IS_NOT_VALIDATE);
-            groupDTO1.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-        }
-        else if (!UtilsValidate.pointValidate(groupDTO.getAdditionalConfig().getMember()))
-        {
-            groupDTO1.setMessage(ErrorMessage.POINT_LISTENER_IS_NOT_VALIDATE);
-            groupDTO1.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-        }
-        else
-        {
+        }else if (!UtilsValidate.pointValidate(groupDTO.getAdditionalConfig().getHost())) {
+            groupDTO.setMessage(ErrorMessage.POINT_HOST_IS_NOT_VALIDATE);
+            groupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+        } else if (!UtilsValidate.pointValidate(groupDTO.getAdditionalConfig().getMember())) {
+            groupDTO.setMessage(ErrorMessage.POINT_MEMBER_IS_NOT_VALIDATE);
+            groupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+        } else if (!UtilsValidate.pointValidate(groupDTO.getAdditionalConfig().getListener())) {
+            groupDTO.setMessage(ErrorMessage.POINT_LISTENER_IS_NOT_VALIDATE);
+            groupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+        } else if (Double.parseDouble(groupDTO.getAdditionalConfig().getHost()) <= Double.parseDouble(groupDTO.getAdditionalConfig().getMember())) {
+            groupDTO.setMessage(ErrorMessage.POINT_HOST_NOT_LARGER_THAN_POINT_MEMBER);
+            groupDTO.setErrorCode(ErrorCode.POINT_HOST_NOT_LARGER_THAN_POINT_MEMBER.getValue());
+        } else if (Double.parseDouble(groupDTO.getAdditionalConfig().getMember()) <= Double.parseDouble(groupDTO.getAdditionalConfig().getListener())) {
+            groupDTO.setMessage(ErrorMessage.POINT_MEMBER_NOT_LARGER_THAN_POINT_LISTENER);
+            groupDTO.setErrorCode(ErrorCode.POINT_MEMBER_NOT_LARGER_THAN_POINT_LISTENER.getValue());
+        } else {
             KpiGroup kpiGroup = new KpiGroup();
             ObjectMapper mapper = new ObjectMapper();
             String jsonConfigSeminar = mapper.writeValueAsString(groupDTO.getAdditionalConfig());

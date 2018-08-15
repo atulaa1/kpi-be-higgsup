@@ -4,7 +4,9 @@ public enum ErrorCode {
     NOT_FIND_USER(980,"Not find user"),
     PARAMETERS_IS_NOT_VALID(901, "parameter is not valid"),
     DUPLICATED_ITEM(930,"duplicated item"),
-    PARAMETERS_ALREADY_EXIST(932,"parameters already exist");
+    PARAMETERS_ALREADY_EXIST(932,"parameters already exist"),
+    POINT_HOST_NOT_LARGER_THAN_POINT_MEMBER(945,"point host not larger than point member"),
+    POINT_MEMBER_NOT_LARGER_THAN_POINT_LISTENER(946,"point member not larger than point listener");
     private Integer value;
     private String content;
 
