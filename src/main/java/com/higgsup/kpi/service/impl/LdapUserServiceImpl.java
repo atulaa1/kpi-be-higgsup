@@ -51,8 +51,7 @@ public class LdapUserServiceImpl implements LdapUserService {
 
     @Override
     public UserDTO updateUserRole(String username, List<String> roles) {
-        String rolesJoin = String.join(",", roles);
-
+        String rolesJoin = UtilsLdap.convertRole(roles);
         UserDTO user = getUserDetail(username);
         if (Objects.isNull(user)) {
             user = new UserDTO();
