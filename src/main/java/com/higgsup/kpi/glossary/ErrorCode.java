@@ -3,7 +3,8 @@ package com.higgsup.kpi.glossary;
 public enum ErrorCode {
     NOT_FIND(900, "not find"),
     PARAMETERS_IS_NOT_VALID(901, "parameter is not valid"),
-    PARAMETERS_ALREADY_EXIST(902,"parameters already exist");
+    PARAMETERS_ALREADY_EXIST(902,"parameters already exist"),
+    NOT_NULL(903, "parameter is not null");
 
     private Integer value;
     private String description;

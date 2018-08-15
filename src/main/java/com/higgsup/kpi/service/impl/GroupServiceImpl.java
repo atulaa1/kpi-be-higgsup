@@ -37,13 +37,16 @@ public class GroupServiceImpl implements GroupService {
             KpiGroup kpiGroup = new KpiGroup();
             ObjectMapper mapper = new ObjectMapper();
 
-            if (minNumberOfSessions != (int) minNumberOfSessions && String.valueOf(minNumberOfSessions).length() > 2) {
+            if(groupDTO.getName().length()== 0 || groupDTO.getAdditionalConfig().getName().length()== 0 || groupDTO.getAdditionalConfig().getHost().length() == 0 ){
+                groupDTO1.setMessage(ErrorMessage.PARAMETERS_NAME_IS_NOT_VALID);
+                groupDTO1.setErrorCode(ErrorCode.NOT_NULL.getValue());
+            } else if (minNumberOfSessions != (int) minNumberOfSessions || String.valueOf(minNumberOfSessions).length() > 2 || String.valueOf(minNumberOfSessions).length()==0) {
                 groupDTO1.setMessage(ErrorMessage.PARAMETERS_MIN_NUMBER_OF_SESSIONS_IS_NOT_VALID);
                 groupDTO1.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-            } else if (participationPoint != (float) participationPoint && String.valueOf(participationPoint).substring(1).length() != 2) {
+            } else if (participationPoint != (float) participationPoint || String.valueOf(participationPoint).substring(1).length() != 2 || String.valueOf(participationPoint).length() == 0) {
                 groupDTO1.setMessage(ErrorMessage.PARAMETERS_POINT_IS_NOT_VALID);
                 groupDTO1.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-            } else if (effectivePoint != (float) effectivePoint && String.valueOf(effectivePoint).substring(1).length() != 2) {
+            } else if (effectivePoint != (float) effectivePoint || String.valueOf(effectivePoint).substring(1).length() != 2 || String.valueOf(effectivePoint).length() == 0) {
                 groupDTO1.setMessage(ErrorMessage.PARAMETERS_POINT_IS_NOT_VALID);
                 groupDTO1.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
             } else {
