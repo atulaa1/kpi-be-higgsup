@@ -18,10 +18,6 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.util.Optional;
 
-import static com.higgsup.kpi.util.UtilsValidate.minNumberOfSessionsValidation;
-import static com.higgsup.kpi.util.UtilsValidate.nameValidation;
-import static com.higgsup.kpi.util.UtilsValidate.pointValidation;
-
 @Service
 public class GroupServiceImpl implements GroupService {
 
@@ -34,20 +30,23 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public GroupDTO createClub(GroupDTO<GroupClubDetail> groupDTO) throws JsonProcessingException {
         GroupDTO groupDTO1 = new GroupDTO();
+        Integer minNumberOfSessions = groupDTO.getAdditionalConfig().getMinNumberOfSessions();
+        Float participationPoint = groupDTO.getAdditionalConfig().getParticipationPoint();
+        Float effectivePoint = groupDTO.getAdditionalConfig().getEffectivePoint();
         if (kpiGroupRepo.findByName(groupDTO.getName()) == null) {
             KpiGroup kpiGroup = new KpiGroup();
             ObjectMapper mapper = new ObjectMapper();
 
-            if (!nameValidation(groupDTO.getAdditionalConfig().getName()) || !nameValidation(groupDTO.getAdditionalConfig().getHost())) {
-                groupDTO1.setMessage(ErrorMessage.PARAMETERS_NAME_IS_NOT_VALID);
-                groupDTO1.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-            } else if (!minNumberOfSessionsValidation(groupDTO.getAdditionalConfig().getMinNumberOfSessions())) {
+            if (minNumberOfSessions == (int) minNumberOfSessions && String.valueOf(minNumberOfSessions).length() < 3) {
                 groupDTO1.setMessage(ErrorMessage.PARAMETERS_MIN_NUMBER_OF_SESSIONS_IS_NOT_VALID);
                 groupDTO1.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-            } else if (!pointValidation(groupDTO.getAdditionalConfig().getEffectivePoint()) && !pointValidation(groupDTO.getAdditionalConfig().getParticipationPoint())) {
+            } else if (participationPoint != (float) participationPoint && String.valueOf(participationPoint).substring(1).length() != 2) {
                 groupDTO1.setMessage(ErrorMessage.PARAMETERS_POINT_IS_NOT_VALID);
                 groupDTO1.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-            }else{
+            } else if (effectivePoint != (float) effectivePoint && String.valueOf(effectivePoint).substring(1).length() != 2) {
+                groupDTO1.setMessage(ErrorMessage.PARAMETERS_POINT_IS_NOT_VALID);
+                groupDTO1.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+            } else {
                 String clubJson = mapper.writeValueAsString(groupDTO.getAdditionalConfig());
                 BeanUtils.copyProperties(groupDTO, kpiGroup);
                 kpiGroup.setAdditionalConfig(clubJson);

@@ -92,7 +92,7 @@
 			<properties>
 				<datasource.url>jdbc:mysql://localhost:3306/higgsup_kpi?useSSL=false</datasource.url>
 				<datasource.username>root</datasource.username>
-				<datasource.password>123456789</datasource.password>
+				<datasource.password>123456</datasource.password>
 				<server.port>8080</server.port>
 			</properties>
 
@@ -103,7 +103,7 @@
 			<properties>
 				<datasource.url>jdbc:mysql://localhost:3306/higgsup_kpi?useSSL=false</datasource.url>
 				<datasource.username>root</datasource.username>
-				<datasource.password>123456789</datasource.password>
+				<datasource.password>123qweasd</datasource.password>
 				<server.port>8080</server.port>
 			</properties>
 
