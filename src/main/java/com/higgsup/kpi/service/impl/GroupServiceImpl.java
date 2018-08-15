@@ -49,8 +49,8 @@ public class GroupServiceImpl implements GroupService {
                     groupDTO.setMessage(ErrorMessage.NOT_FIND_GROUP_TYPE);
                 }
             } else {
-                groupDTO.setErrorCode(ErrorCode.NULL.getValue());
-                groupDTO.setMessage(ErrorMessage.NULL);
+                groupDTO.setErrorCode(ErrorCode.NOT_FILLING_ALL_INFORMATION.getValue());
+                groupDTO.setMessage(ErrorMessage.NOT_FILLING_ALL_INFORMATION);
             }
         }
         return groupDTO;
