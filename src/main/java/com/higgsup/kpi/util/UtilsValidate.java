@@ -33,7 +33,7 @@ public class UtilsValidate {
 	}
 
 	public static Boolean nameValidation(String name) {
-		String patternValidation = "[A-Z][a-z]+( [A-Z][a-z]+)";
+		String patternValidation = "[a-zA-Z][a-zA-Z ]*";
 		Pattern pattern = Pattern.compile(patternValidation);
 		Matcher matcher = pattern.matcher(name);
 		if (matcher.matches()) {
