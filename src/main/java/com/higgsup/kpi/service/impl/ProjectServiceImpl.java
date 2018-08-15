@@ -22,11 +22,11 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public List<ProjectDTO> getAllProject() {
         List<KpiProject> kpiProjects = (List<KpiProject>) kpiProjectRepo.findAll();
-        List<ProjectDTO> projectDTOS = convertKpiGroupTypeEntityToDTO(kpiProjects);
+        List<ProjectDTO> projectDTOS = convertKpiProjectEntityToDTO(kpiProjects);
         return projectDTOS;
     }
 
-    private List<ProjectDTO> convertKpiGroupTypeEntityToDTO(List<KpiProject> kpiProjects) {
+    private List<ProjectDTO> convertKpiProjectEntityToDTO(List<KpiProject> kpiProjects) {
         List<ProjectDTO> projectDTOS = new ArrayList<>();
         if (!CollectionUtils.isEmpty(kpiProjects)) {
             for (KpiProject kpiProject : kpiProjects) {
