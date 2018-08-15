@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
+
 @RestController
 @RequestMapping(BaseConfiguration.BASE_API_URL)
 public class GroupController {
@@ -25,7 +27,10 @@ public class GroupController {
     public Response createClub(@RequestBody GroupDTO<GroupClubDetail> groupDTO) throws JsonProcessingException {
         Response response = new Response(HttpStatus.OK.value());
         GroupDTO groupDTO1 = groupService.createClub(groupDTO);
-        response.setData(groupDTO1);
+        if(Objects.nonNull(groupDTO1.getErrorCode())){
+            response.setStatus(groupDTO1.getErrorCode());
+            response.setMessage(groupDTO1.getMessage());
+        }
         return response;
     }
 
