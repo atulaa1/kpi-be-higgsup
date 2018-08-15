@@ -3,9 +3,11 @@ package com.higgsup.kpi.controller;
 import com.higgsup.kpi.configure.BaseConfiguration;
 import com.higgsup.kpi.dto.Response;
 import com.higgsup.kpi.dto.UserDTO;
+import com.higgsup.kpi.entity.KpiUser;
 import com.higgsup.kpi.glossary.ErrorCode;
 import com.higgsup.kpi.glossary.ErrorMessage;
 import com.higgsup.kpi.service.LdapUserService;
+import com.higgsup.kpi.service.UserService;
 import com.higgsup.kpi.util.UtilsValidate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +23,8 @@ public class UserController {
 
     @Autowired
     private LdapUserService ldapUserService;
+    @Autowired
+    private UserService userService;
 
     @PreAuthorize("hasAnyRole('EMPLOYEE')")
     @GetMapping(BaseConfiguration.BASE_API_URL + "/users/{username}")
@@ -29,7 +33,7 @@ public class UserController {
         Response response = new Response(HttpStatus.OK.value());
         if (username != null && !username.equals("")) {
             if (!UtilsValidate.containRegex(username)) {
-                UserDTO user = ldapUserService.getUserDetail(username);
+                UserDTO user = userService.getUserDetails(username);
                 if (user != null) {
                     response.setData(user);
                 } else {
@@ -85,4 +89,15 @@ public class UserController {
         return null;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping(BaseConfiguration.BASE_API_URL + "/users/{username}")
+    public Response updateInfo(@PathVariable String username, @RequestBody UserDTO userDTO) {
+        Response response = new Response(HttpStatus.OK.value());
+        UserDTO userDTOUpdate = userService.updateInfoUser(username, userDTO);
+        if (Objects.nonNull(userDTOUpdate.getErrorCode())) {
+            response.setMessage(userDTOUpdate.getMessage());
+            response.setStatus(userDTOUpdate.getErrorCode());
+        }
+        return response;
+    }
 }
