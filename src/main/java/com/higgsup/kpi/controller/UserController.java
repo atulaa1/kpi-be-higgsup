@@ -3,7 +3,6 @@ package com.higgsup.kpi.controller;
 import com.higgsup.kpi.configure.BaseConfiguration;
 import com.higgsup.kpi.dto.Response;
 import com.higgsup.kpi.dto.UserDTO;
-import com.higgsup.kpi.entity.KpiUser;
 import com.higgsup.kpi.glossary.ErrorCode;
 import com.higgsup.kpi.glossary.ErrorMessage;
 import com.higgsup.kpi.service.LdapUserService;
@@ -12,6 +11,8 @@ import com.higgsup.kpi.util.UtilsValidate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -89,15 +90,23 @@ public class UserController {
         return null;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('EMPLOYEE')")
     @PutMapping(BaseConfiguration.BASE_API_URL + "/users/{username}")
     public Response updateInfo(@PathVariable String username, @RequestBody UserDTO userDTO) {
         Response response = new Response(HttpStatus.OK.value());
-        UserDTO userDTOUpdate = userService.updateInfoUser(username, userDTO);
-        if (Objects.nonNull(userDTOUpdate.getErrorCode())) {
-            response.setMessage(userDTOUpdate.getMessage());
-            response.setStatus(userDTOUpdate.getErrorCode());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        //check if token of user
+        if (authentication.getPrincipal().equals(username)) {
+            UserDTO userDTOUpdate = userService.updateInfoUser(username, userDTO);
+            if (Objects.nonNull(userDTOUpdate.getErrorCode())) {
+                response.setMessage(userDTOUpdate.getMessage());
+                response.setStatus(userDTOUpdate.getErrorCode());
+            }
+        } else {
+            response.setStatus(HttpStatus.FORBIDDEN.value());
+            response.setMessage(HttpStatus.FORBIDDEN.getReasonPhrase());
         }
+
         return response;
     }
 }
