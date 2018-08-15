@@ -9,10 +9,7 @@ import com.higgsup.kpi.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
 
@@ -25,10 +22,10 @@ public class GroupController {
     @RequestMapping("/groups")
 
     @PreAuthorize("hasAnyRole('EMPLOYEE','MAN')")
-    @PostMapping
-    public Response create(@RequestBody GroupDTO<TeamBuildingDTO> groupDTO) throws JsonProcessingException {
+    @PutMapping
+    public Response updateTeamBuildingActivity(@RequestBody GroupDTO<TeamBuildingDTO> groupDTO) throws JsonProcessingException {
         Response response = new Response(HttpStatus.OK.value());
-        GroupDTO groupDTO1 = groupService.create(groupDTO);
+        GroupDTO groupDTO1 = groupService.updateTeamBuildingActivity(groupDTO);
         if(Objects.nonNull(groupDTO1.getErrorCode())){
             response.setStatus(groupDTO1.getErrorCode());
             response.setMessage(groupDTO1.getMessage());
