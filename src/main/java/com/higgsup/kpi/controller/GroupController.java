@@ -20,11 +20,11 @@ public class GroupController{
     @Autowired
     GroupService groupService;
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/group-support")
-    public Response createSupport(@RequestBody GroupDTO<GroupSupportDetail> groupDTO) throws JsonProcessingException
+    @PutMapping("/group-support")
+    public Response updateSupport(@RequestBody GroupDTO<GroupSupportDetail> groupDTO) throws JsonProcessingException
     {
         Response response = new Response(HttpStatus.OK.value());
-        GroupDTO group = groupService.createSupport(groupDTO);
+        GroupDTO group = groupService.updateSupport(groupDTO);
         if(Objects.nonNull(group.getErrorCode()))
         {
             response.setStatus(groupDTO.getErrorCode());
