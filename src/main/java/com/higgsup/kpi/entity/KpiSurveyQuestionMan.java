@@ -4,8 +4,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "kpi_survey_question")
-public class KpiSurveyQuestion implements Serializable {
+@Table(name = "kpi_survey_question_man")
+public class KpiSurveyQuestionMan implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -14,12 +14,12 @@ public class KpiSurveyQuestion implements Serializable {
     private Integer id;
 
     @Basic
-    @Column(name = "question")
-    private String question;
+    @Column(name = "number")
+    private Integer number;
 
     @Basic
-    @Column(name = "rating")
-    private Double rating;
+    @Column(name = "question")
+    private String question;
 
     public Integer getId() {
         return id;
@@ -37,11 +37,11 @@ public class KpiSurveyQuestion implements Serializable {
         this.question = question;
     }
 
-    public Double getRating() {
-        return rating;
+    public Integer getNumber() {
+        return number;
     }
 
-    public void setRating(Double rating) {
-        this.rating = rating;
+    public void setNumber(Integer number) {
+        this.number = number;
     }
 }
