@@ -1,5 +1,7 @@
 package com.higgsup.kpi.repository;
 
-public interface UserRepository {
+import com.higgsup.kpi.entity.KpiUser;
 
+public interface UserRepository {
+    public KpiUser findByUserName(String username);
 }

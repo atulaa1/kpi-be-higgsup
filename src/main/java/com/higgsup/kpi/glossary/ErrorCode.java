@@ -1,8 +1,10 @@
 package com.higgsup.kpi.glossary;
-
 public enum ErrorCode {
-    NOT_FIND_USER(900, "not find user"),;
-
+    NOT_FIND(900, "not find"),
+    NOT_FIND_USER(980,"Not find user"),
+    PARAMETERS_IS_NOT_VALID(901, "parameter is not valid"),
+    DUPLICATED_ITEM(930,"duplicated item"),
+    PARAMETERS_ALREADY_EXIST(932,"parameters already exist");
     private Integer value;
     private String content;
 
