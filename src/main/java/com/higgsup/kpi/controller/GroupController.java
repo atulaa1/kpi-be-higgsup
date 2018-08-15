@@ -21,9 +21,8 @@ public class GroupController {
     @Autowired
     GroupService groupService;
 
-    @RequestMapping("/clubs")
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping
+    @PutMapping("/clubs")
     public Response updateClubActivity(@RequestBody GroupDTO<GroupClubDetail> groupDTO) throws JsonProcessingException {
         Response response = new Response(HttpStatus.OK.value());
         GroupDTO groupDTO1 = groupService.updateClub(groupDTO);
