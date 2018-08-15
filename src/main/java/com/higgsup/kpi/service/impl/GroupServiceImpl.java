@@ -6,6 +6,7 @@ import com.higgsup.kpi.dto.GroupDTO;
 import com.higgsup.kpi.dto.GroupSupportDetail;
 import com.higgsup.kpi.entity.KpiGroup;
 import com.higgsup.kpi.entity.KpiGroupType;
+import com.higgsup.kpi.glossary.ErrorCode;
 import com.higgsup.kpi.glossary.ErrorMessage;
 import com.higgsup.kpi.repository.KpiGroupRepo;
 import com.higgsup.kpi.repository.KpiGroupTypeRepo;
@@ -26,8 +27,8 @@ public class GroupServiceImpl implements GroupService {
     KpiGroupTypeRepo kpiGroupTypeRepo;
 
     @Override
-    public String createSupport(GroupDTO<GroupSupportDetail> groupDTO) throws JsonProcessingException {
-        if(validateInfo(groupDTO)) {
+    public GroupDTO createSupport(GroupDTO<GroupSupportDetail> groupDTO) throws JsonProcessingException {
+        if(!validateInfo(groupDTO)) {
             KpiGroup kpiGroup = new KpiGroup();
             ObjectMapper mapper = new ObjectMapper();
             String jsonConfigSeminar = mapper.writeValueAsString(groupDTO.getAdditionalConfig());
@@ -35,13 +36,18 @@ public class GroupServiceImpl implements GroupService {
             kpiGroup.setAdditionalConfig(jsonConfigSeminar);
             kpiGroup.setCreatedDate(new Timestamp(System.currentTimeMillis()));
             Optional<KpiGroupType> kpiGroupType = kpiGroupTypeRepo.findById(groupDTO.getGroupTypeId().getId());
-            if(kpiGroupType.isPresent())
+            if(kpiGroupType.isPresent()) {
                 kpiGroup.setGroupTypeId(kpiGroupType.get());
-            kpiGroupRepo.save(kpiGroup);
-            return null;
+                kpiGroupRepo.save(kpiGroup);
+            }else {
+                groupDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
+                groupDTO.setMessage(ErrorMessage.NOT_FIND_GROUP_TYPE);
+            }
         }else{
-            return ErrorMessage.NULL;
+            groupDTO.setErrorCode(ErrorCode.NULL.getValue());
+            groupDTO.setMessage(ErrorMessage.NULL);
         }
+        return groupDTO;
     }
 
     private boolean validateInfo(GroupDTO<GroupSupportDetail> groupDTO) {

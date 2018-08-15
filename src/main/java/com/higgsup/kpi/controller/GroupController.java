@@ -11,22 +11,24 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
+
 @RestController
 @RequestMapping(BaseConfiguration.BASE_API_URL)
 public class GroupController{
 
     @Autowired
     GroupService groupService;
-    @RequestMapping("/group-support")
-    @PreAuthorize("hasRole('EMPLOYEE')")
-    @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/group-support")
     public Response createSupport(@RequestBody GroupDTO<GroupSupportDetail> groupDTO) throws JsonProcessingException
     {
         Response response = new Response(HttpStatus.OK.value());
-        groupService.createSupport(groupDTO);
-        if(groupService.createSupport(groupDTO) != null)
+        GroupDTO group = groupService.createSupport(groupDTO);
+        if(Objects.nonNull(group.getErrorCode()))
         {
-            response.setMessage(groupService.createSupport(groupDTO));
+            response.setStatus(groupDTO.getErrorCode());
+            response.setMessage(groupDTO.getMessage());
         }
         return response;
     }

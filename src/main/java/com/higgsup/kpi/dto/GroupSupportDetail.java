@@ -46,4 +46,6 @@ public class GroupSupportDetail {
     public void setWeeklyCleanUpPoint(Integer weeklyCleanUpPoint) {
         this.weeklyCleanUpPoint = weeklyCleanUpPoint;
     }
+
+
 }
