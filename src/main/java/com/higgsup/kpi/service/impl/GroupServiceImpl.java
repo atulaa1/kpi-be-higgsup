@@ -54,7 +54,6 @@ public class GroupServiceImpl implements GroupService {
                 ObjectMapper mapper = new ObjectMapper();
                 BeanUtils.copyProperties(groupDTO, kpiGroup);
                 String clubJson = mapper.writeValueAsString(groupDTO.getAdditionalConfig());
-                BeanUtils.copyProperties(groupDTO, kpiGroup);
                 kpiGroup.setAdditionalConfig(clubJson);
                 kpiGroup.setCreatedDate(new Timestamp(System.currentTimeMillis()));
                 Optional<KpiGroupType> kpiGroupType = kpiGroupTypeRepo.findById(groupDTO.getGroupTypeId().getId());
