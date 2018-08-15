@@ -28,24 +28,31 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public GroupDTO createSupport(GroupDTO<GroupSupportDetail> groupDTO) throws JsonProcessingException {
-        if(!validateInfo(groupDTO)) {
-            KpiGroup kpiGroup = new KpiGroup();
-            ObjectMapper mapper = new ObjectMapper();
-            String jsonConfigSeminar = mapper.writeValueAsString(groupDTO.getAdditionalConfig());
-            BeanUtils.copyProperties(groupDTO, kpiGroup);
-            kpiGroup.setAdditionalConfig(jsonConfigSeminar);
-            kpiGroup.setCreatedDate(new Timestamp(System.currentTimeMillis()));
-            Optional<KpiGroupType> kpiGroupType = kpiGroupTypeRepo.findById(groupDTO.getGroupTypeId().getId());
-            if(kpiGroupType.isPresent()) {
-                kpiGroup.setGroupTypeId(kpiGroupType.get());
-                kpiGroupRepo.save(kpiGroup);
-            }else {
-                groupDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
-                groupDTO.setMessage(ErrorMessage.NOT_FIND_GROUP_TYPE);
+        if(kpiGroupRepo.findByName(groupDTO.getName()) != null)
+        {
+            groupDTO.setErrorCode(ErrorCode.ALREADY_CREATED.getValue());
+            groupDTO.setMessage(ErrorMessage.ALREADY_CREATED);
+        }
+        else {
+            if (!validateInfo(groupDTO)) {
+                KpiGroup kpiGroup = new KpiGroup();
+                ObjectMapper mapper = new ObjectMapper();
+                String jsonConfigSeminar = mapper.writeValueAsString(groupDTO.getAdditionalConfig());
+                BeanUtils.copyProperties(groupDTO, kpiGroup);
+                kpiGroup.setAdditionalConfig(jsonConfigSeminar);
+                kpiGroup.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+                Optional<KpiGroupType> kpiGroupType = kpiGroupTypeRepo.findById(groupDTO.getGroupTypeId().getId());
+                if (kpiGroupType.isPresent()) {
+                    kpiGroup.setGroupTypeId(kpiGroupType.get());
+                    kpiGroupRepo.save(kpiGroup);
+                } else {
+                    groupDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
+                    groupDTO.setMessage(ErrorMessage.NOT_FIND_GROUP_TYPE);
+                }
+            } else {
+                groupDTO.setErrorCode(ErrorCode.NOT_FILLING_ALL_INFORMATION.getValue());
+                groupDTO.setMessage(ErrorMessage.NOT_FILLING_ALL_INFORMATION);
             }
-        }else{
-            groupDTO.setErrorCode(ErrorCode.NULL.getValue());
-            groupDTO.setMessage(ErrorMessage.NULL);
         }
         return groupDTO;
     }
