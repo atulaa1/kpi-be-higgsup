@@ -6,7 +6,9 @@ public enum ErrorCode {
     PARAMETERS_IS_NOT_VALID(901, "parameter is not valid"),
     DUPLICATED_ITEM(930,"duplicated item"),
     PARAMETERS_ALREADY_EXIST(932,"parameters already exist"),
-    NO_LARGER_THAN(940,"no larger than");
+    NO_LARGER_THAN(940,"no larger than"),
+    NOT_NULL(903, "parameter is not null"),
+    JSON_PROCESSING_EXCEPTION(904, "json processing exception");
     private Integer value;
     private String description;
 
