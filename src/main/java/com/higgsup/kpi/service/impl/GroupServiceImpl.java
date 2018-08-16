@@ -35,7 +35,7 @@ public class GroupServiceImpl implements GroupService {
     public GroupDTO createSeminar(GroupDTO<GroupSeminarDetail> groupDTO) throws JsonProcessingException {
         if (kpiGroupRepo.findByName(groupDTO.getName()) != null) {
             groupDTO.setErrorCode(ErrorCode.DUPLICATED_ITEM.getValue());
-            groupDTO.setMessage(ErrorCode.DUPLICATED_ITEM.getContent());
+            groupDTO.setMessage(ErrorCode.DUPLICATED_ITEM.getDescription());
         }else if (!UtilsValidate.pointValidate(groupDTO.getAdditionalConfig().getHost())) {
             groupDTO.setMessage(ErrorMessage.POINT_HOST_IS_NOT_VALIDATE);
             groupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
