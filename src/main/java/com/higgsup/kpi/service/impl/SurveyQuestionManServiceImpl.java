@@ -29,25 +29,29 @@ public class SurveyQuestionManServiceImpl implements SurveyQuestionManService {
     }
 
     @Override
-    public SurveyQuestionManDTO updateSurveyQuestionOfMan(SurveyQuestionManDTO surveyQuestionManDTO){
-        Integer id = surveyQuestionManDTO.getId();
-        SurveyQuestionManDTO surveyQuestionManDTO1 = new SurveyQuestionManDTO();
+    public SurveyQuestionManDTO updateSurveyQuestionOfMan(List<SurveyQuestionManDTO> questions){
 
-        if (surveyQuestionManRepo.findById(id) == null) {
-            surveyQuestionManDTO1.setMessage(ErrorCode.NOT_FIND.getDescription());
-            surveyQuestionManDTO1.setErrorCode(ErrorCode.NOT_FIND.getValue());
-        } else {
-            Optional<KpiSurveyQuestionMan> kpiSurveyQuestionManOptional = surveyQuestionManRepo.findById(id);
-            if (kpiSurveyQuestionManOptional.isPresent()) {
-                KpiSurveyQuestionMan kpiSurveyQuestionMan = kpiSurveyQuestionManOptional.get();
-                surveyQuestionManDTO.setId(kpiSurveyQuestionMan.getId());
-                surveyQuestionManDTO.setNumber(kpiSurveyQuestionMan.getNumber());
-                BeanUtils.copyProperties(surveyQuestionManDTO, kpiSurveyQuestionMan);
-                surveyQuestionManRepo.save(kpiSurveyQuestionMan);
+        SurveyQuestionManDTO surveyQuestionManBaseDTO = new SurveyQuestionManDTO();
+
+        for(SurveyQuestionManDTO question : questions){
+            Integer id = question.getId();
+
+            if (surveyQuestionManRepo.findById(id) == null) {
+                surveyQuestionManBaseDTO.setMessage(ErrorCode.NOT_FIND.getDescription());
+                surveyQuestionManBaseDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
+            } else {
+                Optional<KpiSurveyQuestionMan> kpiSurveyQuestionManOptional = surveyQuestionManRepo.findById(id);
+                if (kpiSurveyQuestionManOptional.isPresent()) {
+                    KpiSurveyQuestionMan kpiSurveyQuestionMan = kpiSurveyQuestionManOptional.get();
+                    question.setId(kpiSurveyQuestionMan.getId());
+                    question.setNumber(kpiSurveyQuestionMan.getNumber());
+                    BeanUtils.copyProperties(question, kpiSurveyQuestionMan);
+                    surveyQuestionManRepo.save(kpiSurveyQuestionMan);
+                }
             }
-        }
 
-        return surveyQuestionManDTO1;
+        }
+        return surveyQuestionManBaseDTO;
     }
 
     private List<SurveyQuestionManDTO> convertKpiSurveyQuestionManToDTO(List<KpiSurveyQuestionMan> questions) {
