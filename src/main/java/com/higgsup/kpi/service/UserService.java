@@ -1,15 +1,10 @@
 package com.higgsup.kpi.service;
 
-import java.util.List;
+import com.higgsup.kpi.entity.KpiUser;
 
-import com.higgsup.kpi.dto.UserDTO;
-
-public interface UserService{
+public interface UserService {
 	
-	public UserDTO getUserDetail(String username);
+	public KpiUser getUserDetails(String username);
 	
-	public List<UserDTO> getAllUsers();
-	
-	public UserDTO updateUserRole(String username, List<String> role);
-	
+	public KpiUser registUser(String username);
 }

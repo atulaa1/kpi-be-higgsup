@@ -2,7 +2,9 @@ package com.higgsup.kpi.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-public class BaseDTO {
+import java.util.Objects;
+
+public abstract class BaseDTO {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Integer errorCode;
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -23,5 +25,12 @@ public class BaseDTO {
     public void setMessage(String message) {
         this.message = message;
     }
-    
+
+    public boolean isError() {
+        if (Objects.nonNull(this.errorCode)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
