@@ -1,51 +1,49 @@
 package com.higgsup.kpi.dto;
 
 public class GroupSupportDetail {
-    private Integer cleanUpPoint;
-    private Integer buyingStuffPoint;
-    private Integer supportConferencePoint;
-    private Integer trainingPoint;
-    private Integer weeklyCleanUpPoint;
+    private Float cleanUpPoint;
+    private Float buyingStuffPoint;
+    private Float supportConferencePoint;
+    private Float trainingPoint;
+    private Float weeklyCleanUpPoint;
 
-    public Integer getCleanUpPoint() {
+    public Float getCleanUpPoint() {
         return cleanUpPoint;
     }
 
-    public void setCleanUpPoint(Integer cleanUpPoint) {
+    public void setCleanUpPoint(Float cleanUpPoint) {
         this.cleanUpPoint = cleanUpPoint;
     }
 
-    public Integer getBuyingStuffPoint() {
+    public Float getBuyingStuffPoint() {
         return buyingStuffPoint;
     }
 
-    public void setBuyingStuffPoint(Integer buyingStuffPoint) {
+    public void setBuyingStuffPoint(Float buyingStuffPoint) {
         this.buyingStuffPoint = buyingStuffPoint;
     }
 
-    public Integer getSupportConferencePoint() {
+    public Float getSupportConferencePoint() {
         return supportConferencePoint;
     }
 
-    public void setSupportConferencePoint(Integer supportConferencePoint) {
+    public void setSupportConferencePoint(Float supportConferencePoint) {
         this.supportConferencePoint = supportConferencePoint;
     }
 
-    public Integer getTrainingPoint() {
+    public Float getTrainingPoint() {
         return trainingPoint;
     }
 
-    public void setTrainingPoint(Integer trainingPoint) {
+    public void setTrainingPoint(Float trainingPoint) {
         this.trainingPoint = trainingPoint;
     }
 
-    public Integer getWeeklyCleanUpPoint() {
+    public Float getWeeklyCleanUpPoint() {
         return weeklyCleanUpPoint;
     }
 
-    public void setWeeklyCleanUpPoint(Integer weeklyCleanUpPoint) {
+    public void setWeeklyCleanUpPoint(Float weeklyCleanUpPoint) {
         this.weeklyCleanUpPoint = weeklyCleanUpPoint;
     }
-
-
 }
