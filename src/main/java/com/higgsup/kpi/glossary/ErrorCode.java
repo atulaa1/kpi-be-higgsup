@@ -3,7 +3,9 @@ package com.higgsup.kpi.glossary;
 public enum ErrorCode {
     NOT_FIND(900, "Not find"),
     PARAMETERS_IS_NOT_VALID(901, "Parameter is not valid"),
-
+    PARAMETERS_ALREADY_EXIST(902,"parameters already exist"),
+    NOT_NULL(903, "parameter is not null"),
+    JSON_PROCESSING_EXCEPTION(904, "json processing exception"),
     DUPLICATED_ITEM(926,"Duplicated item"),
     DO_NOT_EXISTED_ITEM(927, "This team building activity do not existed"),
     NOT_FIND_ITEM(928,"Item does not existed"),

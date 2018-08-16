@@ -13,4 +13,7 @@ public final class ErrorMessage {
     public final static String DO_NOT_EXISTED_ITEM = "This team building activity do not existed";
     public final static String NOT_FIND_ITEM = "Item does not existed";
     public final static String NOT_FIND_GROUP_TYPE = "Item does not existed";
+    public final static String GROUP_ALREADY_EXISTS ="group name already exists";
+    public final static String PARAMETERS_MIN_NUMBER_OF_SESSIONS_IS_NOT_VALID ="min number of sessions is not valid";
+    public final static String PARAMETERS_POINT_IS_NOT_VALID="parameter point is not valid";
 }
