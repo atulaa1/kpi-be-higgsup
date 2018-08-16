@@ -1,18 +1,9 @@
 package com.higgsup.kpi.dto;
 
 public class GroupSeminarDetail {
-        private String name;
         private String host;
         private String member;
         private String listener;
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
 
         public String getHost() {
             return host;
