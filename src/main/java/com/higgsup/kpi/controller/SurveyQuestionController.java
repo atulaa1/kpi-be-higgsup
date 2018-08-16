@@ -35,11 +35,10 @@ public class SurveyQuestionController {
     public Response updateSurveyQuestionOfMan(@RequestBody SurveyQuestionManDTO surveyQuestionManDTO) {
         Response response = new Response(HttpStatus.OK.value());
         try {
-            SurveyQuestionManDTO surveyQuestionManDTO1;
-            surveyQuestionManDTO1 = surveyQuestionManService.updateSurveyQuestionOfMan(surveyQuestionManDTO);
-            if (Objects.nonNull(surveyQuestionManDTO1.getErrorCode())) {
-                response.setStatus(surveyQuestionManDTO1.getErrorCode());
-                response.setMessage(surveyQuestionManDTO1.getMessage());
+            SurveyQuestionManDTO surveyQuestionManBaseDTO = surveyQuestionManService.updateSurveyQuestionOfMan(surveyQuestionManDTO);
+            if (Objects.nonNull(surveyQuestionManBaseDTO.getErrorCode())) {
+                response.setStatus(surveyQuestionManBaseDTO.getErrorCode());
+                response.setMessage(surveyQuestionManBaseDTO.getMessage());
             }
         } catch (JsonProcessingException e) {
             response.setMessage(ErrorCode.JSON_PROCESSING_EXCEPTION.getDescription());
