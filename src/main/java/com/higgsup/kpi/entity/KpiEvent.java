@@ -1,5 +1,6 @@
 package com.higgsup.kpi.entity;
 
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
