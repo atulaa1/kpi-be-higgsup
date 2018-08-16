@@ -37,7 +37,7 @@ public class GroupServiceImpl implements GroupService {
             KpiGroup kpiGroup = new KpiGroup();
             ObjectMapper mapper = new ObjectMapper();
 
-            if(groupDTO.getName().length()== 0 || groupDTO.getAdditionalConfig().getName().length()== 0 || groupDTO.getAdditionalConfig().getHost().length() == 0 ){
+            if(groupDTO.getName().length()== 0 || groupDTO.getAdditionalConfig().getHost().length() == 0 ){
                 groupDTO1.setMessage(ErrorMessage.PARAMETERS_NAME_IS_NOT_VALID);
                 groupDTO1.setErrorCode(ErrorCode.NOT_NULL.getValue());
             } else if (minNumberOfSessions != (int) minNumberOfSessions || String.valueOf(minNumberOfSessions).length() > 2 || String.valueOf(minNumberOfSessions).length()==0) {
