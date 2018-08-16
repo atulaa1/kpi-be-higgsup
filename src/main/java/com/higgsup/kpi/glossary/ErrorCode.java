@@ -3,14 +3,17 @@ package com.higgsup.kpi.glossary;
 public enum ErrorCode {
     NOT_FIND(900, "not find"),
     PARAMETERS_IS_NOT_VALID(901, "parameter is not valid"),
+
+    PARAMETERS_ALREADY_EXIST(902,"parameters already exist"),
+    NOT_NULL(903, "parameter is not null"),
+    JSON_PROCESSING_EXCEPTION(904, "json processing exception"),
     CAN_NOT_CREATE(920, "not find");
-
     private Integer value;
-    private String content;
+    private String description;
 
-    ErrorCode(Integer value, String content) {
+    ErrorCode(Integer value, String description) {
         this.value = value;
-        this.content = content;
+        this.description = description;
     }
 
     public Integer getValue() {
@@ -21,11 +24,11 @@ public enum ErrorCode {
         this.value = value;
     }
 
-    public String getContent() {
-        return content;
+    public String getDescription() {
+        return description;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
