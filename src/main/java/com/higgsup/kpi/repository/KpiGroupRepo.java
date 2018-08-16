@@ -5,5 +5,5 @@ import com.higgsup.kpi.entity.KpiGroupType;
 import org.springframework.data.repository.CrudRepository;
 
 public interface KpiGroupRepo extends CrudRepository<KpiGroup, Integer> {
-    KpiGroup findByName(String strName);
+    KpiGroup findByName(String name);
 }

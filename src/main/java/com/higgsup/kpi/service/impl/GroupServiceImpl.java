@@ -42,13 +42,12 @@ public class GroupServiceImpl implements GroupService {
         }
         else if(validateData(groupDTO, validateGroupDTO)) {
                 KpiGroup kpiGroup = kpiGroupOptional.get();
-                groupDTO.setId(kpiGroup.getId());
                 ObjectMapper mapper = new ObjectMapper();
-                BeanUtils.copyProperties(groupDTO, kpiGroup);
+                BeanUtils.copyProperties(groupDTO, kpiGroup,"id");
                 String clubJson = mapper.writeValueAsString(groupDTO.getAdditionalConfig());
                 kpiGroup.setAdditionalConfig(clubJson);
                 kpiGroup.setCreatedDate(new Timestamp(System.currentTimeMillis()));
-                Optional<KpiGroupType> kpiGroupType = kpiGroupTypeRepo.findById(groupDTO.getGroupType().getId());
+                Optional<KpiGroupType> kpiGroupType = kpiGroupTypeRepo.findById(groupDTO.getGroupTypeId().getId());
                 if (kpiGroupType.isPresent()) {
                     kpiGroupOptional.get().setGroupTypeId(kpiGroupType.get());
                     kpiGroupRepo.save(kpiGroupOptional.get());

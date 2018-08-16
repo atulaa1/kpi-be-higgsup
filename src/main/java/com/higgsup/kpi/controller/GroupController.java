@@ -19,10 +19,8 @@ public class GroupController {
     @Autowired
     GroupService groupService;
 
-    @RequestMapping("/groups")
-
-    @PreAuthorize("hasAnyRole('EMPLOYEE','MAN')")
-    @PutMapping
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PutMapping("/team-building")
     public Response updateTeamBuildingActivity(@RequestBody GroupDTO<TeamBuildingDTO> groupDTO) throws JsonProcessingException {
         Response response = new Response(HttpStatus.OK.value());
         GroupDTO groupDTOResponse = groupService.updateTeamBuildingActivity(groupDTO);

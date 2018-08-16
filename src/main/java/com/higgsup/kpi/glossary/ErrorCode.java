@@ -9,13 +9,12 @@ public enum ErrorCode {
     NOT_FIND_ITEM(928,"Item does not existed"),
     NOT_FIND_GROUP_TYPE(929,"Item does not existed");
 
-
     private Integer value;
-    private String content;
+    private String description;
 
-    ErrorCode(Integer value, String content) {
+    ErrorCode(Integer value, String description) {
         this.value = value;
-        this.content = content;
+        this.description = description;
     }
 
     public Integer getValue() {
@@ -26,11 +25,11 @@ public enum ErrorCode {
         this.value = value;
     }
 
-    public String getContent() {
-        return content;
+    public String getDescription() {
+        return description;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
