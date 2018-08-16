@@ -39,10 +39,11 @@ public class GroupController {
         return response;
     }
 
+    @RequestMapping(value = "groups/seminars/{id}" , method = RequestMethod.PUT)
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/seminar")
-    public Response updateSeminar(@RequestBody GroupDTO<GroupSeminarDetail> groupDTO) throws JsonProcessingException {
+    public Response updateSeminar(@PathVariable Integer id ,@RequestBody GroupDTO<GroupSeminarDetail> groupDTO) throws JsonProcessingException {
         Response response = new Response(HttpStatus.OK.value());
+        groupDTO.setId(id);
         GroupDTO groupDTO1 = groupService.updateSeminar(groupDTO);
         if(Objects.nonNull(groupDTO1.getErrorCode())){
             response.setStatus(groupDTO1.getErrorCode());
