@@ -6,6 +6,7 @@ import com.higgsup.kpi.configure.BaseConfiguration;
 import com.higgsup.kpi.dto.GroupClubDetail;
 import com.higgsup.kpi.dto.GroupDTO;
 import com.higgsup.kpi.dto.Response;
+import com.higgsup.kpi.glossary.ErrorCode;
 import com.higgsup.kpi.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,13 +24,20 @@ public class GroupController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/clubs")
-    public Response updateClubActivity(@RequestBody GroupDTO<GroupClubDetail> groupDTO) throws JsonProcessingException {
+    public Response updateClubActivity(@RequestBody GroupDTO<GroupClubDetail> groupDTO) {
         Response response = new Response(HttpStatus.OK.value());
-        GroupDTO groupDTO1 = groupService.updateClub(groupDTO);
-        if(Objects.nonNull(groupDTO1.getErrorCode())){
-            response.setStatus(groupDTO1.getErrorCode());
-            response.setMessage(groupDTO1.getMessage());
+        try {
+            GroupDTO groupDTO1;
+            groupDTO1 = groupService.updateClub(groupDTO);
+            if (Objects.nonNull(groupDTO1.getErrorCode())) {
+                response.setStatus(groupDTO1.getErrorCode());
+                response.setMessage(groupDTO1.getMessage());
+            }
+        } catch (JsonProcessingException e) {
+            response.setMessage(ErrorCode.JSON_PROCESSING_EXCEPTION.getDescription());
+            response.setStatus(ErrorCode.JSON_PROCESSING_EXCEPTION.getValue());
         }
+
         return response;
     }
 }
