@@ -7,16 +7,11 @@ import com.higgsup.kpi.dto.GroupClubDetail;
 import com.higgsup.kpi.dto.GroupDTO;
 import com.higgsup.kpi.dto.Response;
 import com.higgsup.kpi.glossary.ErrorCode;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.higgsup.kpi.configure.BaseConfiguration;
-import com.higgsup.kpi.dto.GroupDTO;
-import com.higgsup.kpi.dto.Response;
 import com.higgsup.kpi.dto.TeamBuildingDTO;
 import com.higgsup.kpi.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,21 +26,6 @@ public class GroupController {
     GroupService groupService;
 
     @RequestMapping("/groups")
-
-    @PreAuthorize("hasAnyRole('EMPLOYEE','MAN')")
-    @PostMapping
-    public Response createConfigTeamBuilding(@RequestBody GroupDTO<TeamBuildingDTO> groupDTO) throws JsonProcessingException {
-        Response response = new Response(HttpStatus.OK.value());
-        GroupDTO groupDTO1 = groupService.createConfigTeamBuilding(groupDTO);
-        if(Objects.nonNull(groupDTO1.getErrorCode())){
-            response.setStatus(groupDTO1.getErrorCode());
-            response.setMessage(groupDTO1.getMessage());
-        }
-        return response;
-    }
-
-    @Autowired
-    GroupService groupService;
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/clubs")
@@ -65,4 +45,15 @@ public class GroupController {
         return response;
     }
 
+    @PreAuthorize("hasAnyRole('EMPLOYEE','MAN')")
+    @PostMapping("/team-building")
+    public Response createConfigTeamBuilding(@RequestBody GroupDTO<TeamBuildingDTO> groupDTO) throws JsonProcessingException {
+        Response response = new Response(HttpStatus.OK.value());
+        GroupDTO groupDTO1 = groupService.createConfigTeamBuilding(groupDTO);
+        if(Objects.nonNull(groupDTO1.getErrorCode())){
+            response.setStatus(groupDTO1.getErrorCode());
+            response.setMessage(groupDTO1.getMessage());
+        }
+        return response;
+    }
 }
