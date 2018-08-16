@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.higgsup.kpi.dto.GroupDTO;
 import com.higgsup.kpi.dto.GroupSupportDetail;
 import com.higgsup.kpi.dto.GroupClubDetail;
+import com.higgsup.kpi.dto.GroupTypeDTO;
 import com.higgsup.kpi.entity.KpiGroup;
 import com.higgsup.kpi.entity.KpiGroupType;
 import com.higgsup.kpi.glossary.ErrorCode;
@@ -65,7 +66,6 @@ public class GroupServiceImpl implements GroupService {
                     groupDTO1.setErrorCode(ErrorCode.NOT_FIND.getValue());
                 }
             }
-
         } else {
             groupDTO1.setMessage(ErrorMessage.GROUP_ALREADY_EXISTS);
             groupDTO1.setErrorCode(ErrorCode.PARAMETERS_ALREADY_EXIST.getValue());
@@ -75,26 +75,20 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public GroupDTO updateSupport(GroupDTO<GroupSupportDetail> groupDTO) throws JsonProcessingException {
-        if (kpiGroupRepo.findByName("Support") == null) {
-            groupDTO.setMessage(ErrorCode.NOT_FIND.getDescription());
+        Optional<KpiGroupType> kpiGroupType = kpiGroupTypeRepo.findById(groupDTO.getGroupTypeId().getId());
+        if (kpiGroupRepo.findByGroupTypeId(kpiGroupType) == null) {
             groupDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
-        }else {
+            groupDTO.setMessage(ErrorMessage.NOT_FIND_GROUP_TYPE);
+        } else {
             if (!validateInfo(groupDTO)) {
-                KpiGroup kpiGroup = kpiGroupRepo.findByName("Support");
+                KpiGroup kpiGroup = kpiGroupRepo.findByGroupTypeId(kpiGroupType);
                 groupDTO.setId(kpiGroup.getId());
                 ObjectMapper mapper = new ObjectMapper();
                 String jsonConfigSeminar = mapper.writeValueAsString(groupDTO.getAdditionalConfig());
                 BeanUtils.copyProperties(groupDTO, kpiGroup);
                 kpiGroup.setAdditionalConfig(jsonConfigSeminar);
                 kpiGroup.setCreatedDate(new Timestamp(System.currentTimeMillis()));
-                Optional<KpiGroupType> kpiGroupType = kpiGroupTypeRepo.findById(groupDTO.getGroupTypeId().getId());
-                if (kpiGroupType.isPresent()) {
-                    kpiGroup.setGroupTypeId(kpiGroupType.get());
-                    kpiGroupRepo.save(kpiGroup);
-                } else {
-                    groupDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
-                    groupDTO.setMessage(ErrorMessage.NOT_FIND_GROUP_TYPE);
-                }
+                kpiGroupRepo.save(kpiGroup);
             } else {
                 groupDTO.setErrorCode(ErrorCode.NOT_FILLING_ALL_INFORMATION.getValue());
                 groupDTO.setMessage(ErrorMessage.NOT_FILLING_ALL_INFORMATION);

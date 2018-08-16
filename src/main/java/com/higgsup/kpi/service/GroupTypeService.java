@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface GroupTypeService {
     List<GroupTypeDTO> getAllGroupType();
+
 }
