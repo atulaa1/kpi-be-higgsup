@@ -25,10 +25,10 @@ public class GroupController {
     @PutMapping
     public Response updateTeamBuildingActivity(@RequestBody GroupDTO<TeamBuildingDTO> groupDTO) throws JsonProcessingException {
         Response response = new Response(HttpStatus.OK.value());
-        GroupDTO groupDTO1 = groupService.updateTeamBuildingActivity(groupDTO);
-        if(Objects.nonNull(groupDTO1.getErrorCode())){
-            response.setStatus(groupDTO1.getErrorCode());
-            response.setMessage(groupDTO1.getMessage());
+        GroupDTO groupDTOResponse = groupService.updateTeamBuildingActivity(groupDTO);
+        if(Objects.nonNull(groupDTOResponse.getErrorCode())){
+            response.setStatus(groupDTOResponse.getErrorCode());
+            response.setMessage(groupDTOResponse.getMessage());
         }
         return response;
     }
