@@ -1,8 +1,17 @@
 package com.higgsup.kpi.dto;
 
 public class SurveyQuestionManDTO {
+    private Integer id;
     private Integer number;
     private String question;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Integer getNumber() {
         return number;
