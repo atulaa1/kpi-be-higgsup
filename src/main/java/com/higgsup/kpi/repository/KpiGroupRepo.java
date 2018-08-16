@@ -12,7 +12,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 public interface KpiGroupRepo extends CrudRepository<KpiGroup, Integer> {
     KpiGroup findByName(String strName);
 
-    @Query("select g from KpiGroup g where g.groupTypeId = :groupTypeId")
+    @Query(value = "SELECT * from kpi_group as g where g.group_type_id = :groupTypeId",nativeQuery = true)
     KpiGroup findByGroupTypeId(@Param("groupTypeId") Integer groupTypeId);
 
 }

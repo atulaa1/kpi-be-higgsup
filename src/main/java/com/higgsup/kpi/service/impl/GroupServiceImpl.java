@@ -36,7 +36,7 @@ public class GroupServiceImpl implements GroupService {
         Integer groupTypeId = groupDTO.getGroupType().getId();
 
 
-        Optional<KpiGroup> test = Optional.ofNullable(kpiGroupRepo.findByGroupTypeId(groupTypeId));
+        KpiGroup test = kpiGroupRepo.findByGroupTypeId(groupTypeId);
         if(test == null){
             if (validateData(groupDTO, validateGroupDTO)) {
                 KpiGroup kpiGroup = new KpiGroup();
@@ -54,6 +54,9 @@ public class GroupServiceImpl implements GroupService {
                     validateGroupDTO.setMessage(ErrorMessage.NOT_FIND_GROUP_TYPE);
                 }
             }
+        } else {
+            validateGroupDTO.setErrorCode(ErrorCode.CAN_NOT_CREATE.getValue());
+            validateGroupDTO.setMessage(ErrorMessage.CAN_NOT_CREATE);
         }
         return validateGroupDTO;
     }

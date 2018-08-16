@@ -12,4 +12,5 @@ public final class ErrorMessage {
     public final static String SECOND_PRIZE_NOT_LARGER_THAN_THIRD_PRIZE = "Second prize has to large than thirst prize";
     public final static String DUPLICATED_ITEM = "Duplicated item";
     public final static String NOT_FIND_GROUP_TYPE = "Item does not existed";
+        public final static String CAN_NOT_CREATE = "Can not create";
 }
