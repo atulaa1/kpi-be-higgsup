@@ -32,7 +32,7 @@ public class SurveyQuestionController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/questions-man")
-    public Response updateSurveyQuestionMan(@RequestBody SurveyQuestionManDTO surveyQuestionManDTO) throws JsonProcessingException {
+    public Response updateSurveyQuestionMan(@RequestBody SurveyQuestionManDTO surveyQuestionManDTO){
         Response response = new Response(HttpStatus.OK.value());
         try {
             SurveyQuestionManDTO surveyQuestionManDTO1;
