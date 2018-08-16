@@ -16,7 +16,7 @@ public class KpiGroupType implements Serializable {
     private String name;
 
     @OneToMany(mappedBy = "groupTypeId", fetch = FetchType.LAZY)
-    private List<com.higgsup.kpi.entity.KpiGroup> kpiGroupList;
+    private List<KpiGroup> kpiGroupList;
 
     public Integer getId() {
         return id;
@@ -34,11 +34,11 @@ public class KpiGroupType implements Serializable {
         this.name = name;
     }
 
-    public List<com.higgsup.kpi.entity.KpiGroup> getKpiGroupList() {
+    public List<KpiGroup> getKpiGroupList() {
         return kpiGroupList;
     }
 
-    public void setKpiGroupList(List<com.higgsup.kpi.entity.KpiGroup> kpiGroupList) {
+    public void setKpiGroupList(List<KpiGroup> kpiGroupList) {
         this.kpiGroupList = kpiGroupList;
     }
 }
