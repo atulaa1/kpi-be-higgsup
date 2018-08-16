@@ -1,19 +1,10 @@
 package com.higgsup.kpi.dto;
 
 public class GroupClubDetail {
-    private String name;
     private String host;
     private Integer minNumberOfSessions;
     private Float participationPoint;
     private Float effectivePoint;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String getHost() {
         return host;
