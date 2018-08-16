@@ -25,8 +25,6 @@ public class GroupController {
     @Autowired
     GroupService groupService;
 
-    @RequestMapping("/groups")
-
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/clubs")
     public Response createClub(@RequestBody GroupDTO<GroupClubDetail> groupDTO) {

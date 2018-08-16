@@ -25,4 +25,12 @@ public abstract class BaseDTO {
     public void setMessage(String message) {
         this.message = message;
     }
+
+    public boolean isError() {
+        if (Objects.nonNull(this.errorCode)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

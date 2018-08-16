@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 import javax.persistence.criteria.CriteriaBuilder;
 
 public interface KpiGroupRepo extends CrudRepository<KpiGroup, Integer> {
-    KpiGroup findByName(String strName);
+    KpiGroup findByName(String name);
 
     @Query(value = "SELECT * from kpi_group as g where g.group_type_id = :groupTypeId",nativeQuery = true)
     KpiGroup findByGroupTypeId(@Param("groupTypeId") Integer groupTypeId);

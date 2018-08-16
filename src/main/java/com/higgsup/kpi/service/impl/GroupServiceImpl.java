@@ -32,7 +32,7 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public GroupDTO createConfigTeamBuilding(GroupDTO<TeamBuildingDTO> groupDTO)  throws JsonProcessingException {
         GroupDTO validateGroupDTO = new GroupDTO();
-        Integer groupTypeId = groupDTO.getGroupType().getId();
+        Integer groupTypeId = groupDTO.getGroupTypeId().getId();
 
         KpiGroup checkGroupTypeId = kpiGroupRepo.findByGroupTypeId(groupTypeId);
         if(checkGroupTypeId == null){
@@ -43,7 +43,7 @@ public class GroupServiceImpl implements GroupService {
                 BeanUtils.copyProperties(groupDTO, kpiGroup);
                 kpiGroup.setAdditionalConfig(jsonConfigTeamBuilding);
                 kpiGroup.setCreatedDate(new Timestamp(System.currentTimeMillis()));
-                Optional<KpiGroupType> kpiGroupType = kpiGroupTypeRepo.findById(groupDTO.getGroupType().getId());
+                Optional<KpiGroupType> kpiGroupType = kpiGroupTypeRepo.findById(groupDTO.getGroupTypeId().getId());
                 if(kpiGroupType.isPresent()){
                     kpiGroup.setGroupTypeId(kpiGroupType.get());
                     kpiGroupRepo.save(kpiGroup);
@@ -85,7 +85,7 @@ public class GroupServiceImpl implements GroupService {
                 BeanUtils.copyProperties(groupDTO, kpiGroup);
                 kpiGroup.setAdditionalConfig(clubJson);
                 kpiGroup.setCreatedDate(new Timestamp(System.currentTimeMillis()));
-                Optional<KpiGroupType> kpiGroupType = kpiGroupTypeRepo.findById(groupDTO.getGroupType().getId());
+                Optional<KpiGroupType> kpiGroupType = kpiGroupTypeRepo.findById(groupDTO.getGroupTypeId().getId());
 
                 if (kpiGroupType.isPresent()) {
                     kpiGroup.setGroupTypeId(kpiGroupType.get());
