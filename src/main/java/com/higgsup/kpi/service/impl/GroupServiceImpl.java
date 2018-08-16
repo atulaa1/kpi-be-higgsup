@@ -47,10 +47,10 @@ public class GroupServiceImpl implements GroupService {
             groupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
         } else if (Double.parseDouble(groupDTO.getAdditionalConfig().getHost()) <= Double.parseDouble(groupDTO.getAdditionalConfig().getMember())) {
             groupDTO.setMessage(ErrorMessage.POINT_HOST_NOT_LARGER_THAN_POINT_MEMBER);
-            groupDTO.setErrorCode(ErrorCode.POINT_HOST_NOT_LARGER_THAN_POINT_MEMBER.getValue());
+            groupDTO.setErrorCode(ErrorCode.NO_LARGER_THAN.getValue());
         } else if (Double.parseDouble(groupDTO.getAdditionalConfig().getMember()) <= Double.parseDouble(groupDTO.getAdditionalConfig().getListener())) {
             groupDTO.setMessage(ErrorMessage.POINT_MEMBER_NOT_LARGER_THAN_POINT_LISTENER);
-            groupDTO.setErrorCode(ErrorCode.POINT_MEMBER_NOT_LARGER_THAN_POINT_LISTENER.getValue());
+            groupDTO.setErrorCode(ErrorCode.NO_LARGER_THAN.getValue());
         } else {
             KpiGroup kpiGroup = new KpiGroup();
             ObjectMapper mapper = new ObjectMapper();
