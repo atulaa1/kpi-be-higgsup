@@ -39,5 +39,23 @@ public class GroupController {
         }
         return response;
     }
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("groups/clubs/{id}")
+    public Response updateClubActivity(@PathVariable Integer id, @RequestBody GroupDTO<GroupClubDetail> groupDTO) {
+        Response response = new Response(HttpStatus.OK.value());
+        try {
+            groupDTO.setId(id);
+            GroupDTO groupDTO1 = groupService.updateClub(groupDTO);
 
+            if (Objects.nonNull(groupDTO1.getErrorCode())) {
+                response.setStatus(groupDTO1.getErrorCode());
+                response.setMessage(groupDTO1.getMessage());
+            }
+        } catch (JsonProcessingException e) {
+            response.setMessage(ErrorCode.JSON_PROCESSING_EXCEPTION.getDescription());
+            response.setStatus(ErrorCode.JSON_PROCESSING_EXCEPTION.getValue());
+        }
+
+        return response;
+    }
 }
