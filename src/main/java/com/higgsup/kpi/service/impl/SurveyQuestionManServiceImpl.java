@@ -29,7 +29,7 @@ public class SurveyQuestionManServiceImpl implements SurveyQuestionManService {
     }
 
     @Override
-    public SurveyQuestionManDTO updateSurveyQuestionOfMan(SurveyQuestionManDTO surveyQuestionManDTO) throws JsonProcessingException {
+    public SurveyQuestionManDTO updateSurveyQuestionOfMan(SurveyQuestionManDTO surveyQuestionManDTO){
         Integer id = surveyQuestionManDTO.getId();
         SurveyQuestionManDTO surveyQuestionManDTO1 = new SurveyQuestionManDTO();
 
