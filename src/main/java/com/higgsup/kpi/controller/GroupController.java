@@ -39,10 +39,6 @@ public class GroupController{
         }
         return response;
     }
-public class GroupController {
-
-    @Autowired
-    GroupService groupService;
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/clubs")
@@ -61,5 +57,4 @@ public class GroupController {
         }
         return response;
     }
-
 }

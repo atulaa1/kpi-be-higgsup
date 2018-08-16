@@ -24,28 +24,12 @@ import java.util.Optional;
 public class GroupServiceImpl implements GroupService {
 
     @Autowired
-    KpiGroupRepo kpiGroupRepo;
     private KpiGroupRepo kpiGroupRepo;
 
     @Autowired
     KpiGroupTypeRepo kpiGroupTypeRepo;
 
     @Override
-    public GroupDTO createSupport(GroupDTO<GroupSupportDetail> groupDTO) throws JsonProcessingException {
-        if(kpiGroupRepo.findByName(groupDTO.getName()) != null)
-        {
-            groupDTO.setErrorCode(ErrorCode.ALREADY_CREATED.getValue());
-            groupDTO.setMessage(ErrorMessage.ALREADY_CREATED);
-        }
-        else {
-            if (!validateInfo(groupDTO)) {
-                KpiGroup kpiGroup = new KpiGroup();
-                ObjectMapper mapper = new ObjectMapper();
-                String jsonConfigSeminar = mapper.writeValueAsString(groupDTO.getAdditionalConfig());
-                BeanUtils.copyProperties(groupDTO, kpiGroup);
-                kpiGroup.setAdditionalConfig(jsonConfigSeminar);
-                kpiGroup.setCreatedDate(new Timestamp(System.currentTimeMillis()));
-                Optional<KpiGroupType> kpiGroupType = kpiGroupTypeRepo.findById(groupDTO.getGroupTypeId().getId());
     public GroupDTO createClub(GroupDTO<GroupClubDetail> groupDTO) throws JsonProcessingException {
         GroupDTO groupDTO1 = new GroupDTO();
         Integer minNumberOfSessions = groupDTO.getAdditionalConfig().getMinNumberOfSessions();
@@ -78,6 +62,38 @@ public class GroupServiceImpl implements GroupService {
                     kpiGroup.setGroupTypeId(kpiGroupType.get());
                     kpiGroupRepo.save(kpiGroup);
                 } else {
+                    groupDTO1.setMessage(ErrorMessage.NOT_FIND_GROUP_TYPE);
+                    groupDTO1.setErrorCode(ErrorCode.NOT_FIND.getValue());
+                }
+            }
+
+        } else {
+            groupDTO1.setMessage(ErrorMessage.GROUP_ALREADY_EXISTS);
+            groupDTO1.setErrorCode(ErrorCode.PARAMETERS_ALREADY_EXIST.getValue());
+        }
+        return groupDTO1;
+    }
+
+    @Override
+    public GroupDTO createSupport(GroupDTO<GroupSupportDetail> groupDTO) throws JsonProcessingException {
+        if(kpiGroupRepo.findByName(groupDTO.getName()) != null)
+        {
+            groupDTO.setErrorCode(ErrorCode.ALREADY_CREATED.getValue());
+            groupDTO.setMessage(ErrorMessage.ALREADY_CREATED);
+        }
+        else {
+            if (!validateInfo(groupDTO)) {
+                KpiGroup kpiGroup = new KpiGroup();
+                ObjectMapper mapper = new ObjectMapper();
+                String jsonConfigSeminar = mapper.writeValueAsString(groupDTO.getAdditionalConfig());
+                BeanUtils.copyProperties(groupDTO, kpiGroup);
+                kpiGroup.setAdditionalConfig(jsonConfigSeminar);
+                kpiGroup.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+                Optional<KpiGroupType> kpiGroupType = kpiGroupTypeRepo.findById(groupDTO.getGroupTypeId().getId());
+                if (kpiGroupType.isPresent()) {
+                    kpiGroup.setGroupTypeId(kpiGroupType.get());
+                    kpiGroupRepo.save(kpiGroup);
+                } else {
                     groupDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
                     groupDTO.setMessage(ErrorMessage.NOT_FIND_GROUP_TYPE);
                 }
@@ -95,17 +111,8 @@ public class GroupServiceImpl implements GroupService {
                 groupSupportDetail.getBuyingStuffPoint() == null || groupSupportDetail.getWeeklyCleanUpPoint() == null ||
                 groupSupportDetail.getTrainingPoint() == null);
     }
-}
-                    groupDTO1.setMessage(ErrorMessage.NOT_FIND_GROUP_TYPE);
-                    groupDTO1.setErrorCode(ErrorCode.NOT_FIND.getValue());
-                }
-            }
 
-        } else {
-            groupDTO1.setMessage(ErrorMessage.GROUP_ALREADY_EXISTS);
-            groupDTO1.setErrorCode(ErrorCode.PARAMETERS_ALREADY_EXIST.getValue());
-        }
-        return groupDTO1;
-    }
+
 }
+
 

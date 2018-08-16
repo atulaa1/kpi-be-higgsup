@@ -4,9 +4,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.sql.Timestamp;
 
-public class GroupDTO<T> extends BaseDTO{
-import java.sql.Timestamp;
-
 public class GroupDTO<T> extends BaseDTO {
     private Integer id;
     private String name;
