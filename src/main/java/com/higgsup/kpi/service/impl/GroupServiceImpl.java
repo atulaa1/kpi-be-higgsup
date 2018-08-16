@@ -102,8 +102,8 @@ public class GroupServiceImpl implements GroupService {
                 kpiGroup.setAdditionalConfig(seminarJson);
                 kpiGroup.setCreatedDate(new Timestamp(System.currentTimeMillis()));
                 Optional<KpiGroupType> kpiGroupType = kpiGroupTypeRepo.findById(groupDTO.getGroupTypeId().getId());
-
-                if (kpiGroupType.isPresent()) {
+                if (kpiGroupType.isPresent())
+                {
                     kpiGroup.setGroupTypeId(kpiGroupType.get());
                     kpiGroupRepo.save(kpiGroup);
                 } else {
