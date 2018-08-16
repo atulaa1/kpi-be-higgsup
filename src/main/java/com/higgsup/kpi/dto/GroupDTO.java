@@ -7,7 +7,7 @@ public class GroupDTO<T> extends BaseDTO{
     private String name;
     private String description;
     private GroupTypeDTO  groupTypeId;
-    private Timestamp createdDate;
+    private Timestamp createdData;
     private T additionalConfig;
 
     public Integer getId() {
@@ -42,12 +42,12 @@ public class GroupDTO<T> extends BaseDTO{
         this.groupTypeId = groupTypeId;
     }
 
-    public Timestamp getCreatedDate() {
-        return createdDate;
+    public Timestamp getCreatedData() {
+        return createdData;
     }
 
-    public void setCreatedDate(Timestamp createdDate) {
-        this.createdDate = createdDate;
+    public void setCreatedData(Timestamp createdData) {
+        this.createdData = createdData;
     }
 
     public T getAdditionalConfig() {
