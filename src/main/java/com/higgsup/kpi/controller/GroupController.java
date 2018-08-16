@@ -20,7 +20,7 @@ public class GroupController {
     GroupService groupService;
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/seminar")
-    public Response updateClubActivity(@RequestBody GroupDTO<GroupSeminarDetail> groupDTO) throws JsonProcessingException {
+    public Response updateSeminar(@RequestBody GroupDTO<GroupSeminarDetail> groupDTO) throws JsonProcessingException {
         Response response = new Response(HttpStatus.OK.value());
         GroupDTO groupDTO1 = groupService.updateSeminar(groupDTO);
         if(Objects.nonNull(groupDTO1.getErrorCode())){
