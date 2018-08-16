@@ -41,6 +41,7 @@ public class SurveyQuestionManServiceImpl implements SurveyQuestionManService {
             if (kpiSurveyQuestionManOptional.isPresent()) {
                 KpiSurveyQuestionMan kpiSurveyQuestionMan = kpiSurveyQuestionManOptional.get();
                 surveyQuestionManDTO.setId(kpiSurveyQuestionMan.getId());
+                surveyQuestionManDTO.setNumber(kpiSurveyQuestionMan.getNumber());
                 BeanUtils.copyProperties(surveyQuestionManDTO, kpiSurveyQuestionMan);
                 surveyQuestionManRepo.save(kpiSurveyQuestionMan);
             }
