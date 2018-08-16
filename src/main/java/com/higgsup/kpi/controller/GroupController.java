@@ -20,21 +20,18 @@ import java.util.Objects;
 public class GroupController {
     @Autowired
     GroupService groupService;
-    @RequestMapping("/groups")
+
+    @RequestMapping(value = "/groups/seminars" ,method = RequestMethod.POST)
     @PreAuthorize("hasAnyRole('MAN','EMPLOYEE')")
-    @PostMapping
     public Response create(@RequestBody GroupDTO<GroupSeminarDetail> groupDTO) throws JsonProcessingException {
         Response response = new Response(HttpStatus.OK.value());
-        GroupDTO groupDTO1 = groupService.createSeminar(groupDTO);
-        if(Objects.nonNull(groupDTO1.getErrorCode())){
-            response.setStatus(groupDTO1.getErrorCode());
-            response.setMessage(groupDTO1.getMessage());
+        GroupDTO groupDTORP = groupService.createSeminar(groupDTO);
+        if (Objects.nonNull(groupDTORP.getErrorCode())) {
+            response.setStatus(groupDTORP.getErrorCode());
+            response.setMessage(groupDTORP.getMessage());
         }
         return response;
     }
-
-    @Autowired
-    GroupService groupService;
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/clubs")

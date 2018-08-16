@@ -49,7 +49,7 @@ public class GroupServiceImpl implements GroupService {
         } else if (Double.parseDouble(groupDTO.getAdditionalConfig().getMember()) <= Double.parseDouble(groupDTO.getAdditionalConfig().getListener())) {
             groupDTO.setMessage(ErrorMessage.POINT_MEMBER_NOT_LARGER_THAN_POINT_LISTENER);
             groupDTO.setErrorCode(ErrorCode.NO_LARGER_THAN.getValue());
-        } else {
+        }else {
             KpiGroup kpiGroup = new KpiGroup();
             ObjectMapper mapper = new ObjectMapper();
             String jsonConfigSeminar = mapper.writeValueAsString(groupDTO.getAdditionalConfig());
