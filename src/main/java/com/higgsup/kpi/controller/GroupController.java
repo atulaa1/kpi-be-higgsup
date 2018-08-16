@@ -21,7 +21,7 @@ public class GroupController {
     @Autowired
     GroupService groupService;
 
-    @PreAuthorize("hasRole('EMPLOYEE')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/clubs")
     public Response createClub(@RequestBody GroupDTO<GroupClubDetail> groupDTO) throws JsonProcessingException {
         Response response = new Response(HttpStatus.OK.value());
