@@ -2,7 +2,7 @@ package com.higgsup.kpi.dto;
 
 import java.sql.Timestamp;
 
-public class GroupDTO<T> extends BaseDTO{
+public class GroupDTO<T> extends BaseDTO {
     private Integer id;
     private String name;
     private String description;

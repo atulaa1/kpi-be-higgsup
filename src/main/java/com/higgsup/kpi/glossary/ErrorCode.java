@@ -3,9 +3,11 @@ package com.higgsup.kpi.glossary;
 public enum ErrorCode {
     NOT_FIND(900, "not find"),
     NOT_FIND_USER(980,"Not find user"),
+    NO_LARGER_THAN(940,"no larger than"),
     PARAMETERS_IS_NOT_VALID(901, "parameter is not valid"),
-    PARAMETERS_ALREADY_EXIST(932,"parameters already exist"),
-    NO_LARGER_THAN(940,"no larger than");
+    PARAMETERS_ALREADY_EXIST(902,"parameters already exist"),
+    NOT_NULL(903, "parameter is not null"),
+    JSON_PROCESSING_EXCEPTION(904, "json processing exception");
     private Integer value;
     private String description;
 
