@@ -22,8 +22,8 @@ public class GroupController {
     GroupService groupService;
 
     @RequestMapping(value = "/groups/seminars" ,method = RequestMethod.POST)
-    @PreAuthorize("hasAnyRole('MAN','EMPLOYEE')")
-    public Response create(@RequestBody GroupDTO<GroupSeminarDetail> groupDTO) throws JsonProcessingException {
+    @PreAuthorize("hasRole('ADMIN')")
+    public Response createSeminar(@RequestBody GroupDTO<GroupSeminarDetail> groupDTO) throws JsonProcessingException {
         Response response = new Response(HttpStatus.OK.value());
         GroupDTO groupDTORP = groupService.createSeminar(groupDTO);
         if (Objects.nonNull(groupDTORP.getErrorCode())) {
