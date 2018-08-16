@@ -39,4 +39,3 @@ public class UtilsValidate {
         return false;
     }
 }
-

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.Objects;
 
-public class BaseDTO {
+public abstract class BaseDTO {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Integer errorCode;
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -26,4 +26,11 @@ public class BaseDTO {
         this.message = message;
     }
 
+    public boolean isError() {
+        if (Objects.nonNull(this.errorCode)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
