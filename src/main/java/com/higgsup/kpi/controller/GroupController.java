@@ -40,12 +40,13 @@ public class GroupController {
         return response;
     }
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/clubs")
-    public Response updateClubActivity(@RequestBody GroupDTO<GroupClubDetail> groupDTO) {
+    @PutMapping("groups/clubs/{id}")
+    public Response updateClubActivity(@PathVariable Integer id, @RequestBody GroupDTO<GroupClubDetail> groupDTO) {
         Response response = new Response(HttpStatus.OK.value());
         try {
-            GroupDTO groupDTO1;
-            groupDTO1 = groupService.updateClub(groupDTO);
+            groupDTO.setId(id);
+            GroupDTO groupDTO1 = groupService.updateClub(groupDTO);
+
             if (Objects.nonNull(groupDTO1.getErrorCode())) {
                 response.setStatus(groupDTO1.getErrorCode());
                 response.setMessage(groupDTO1.getMessage());
