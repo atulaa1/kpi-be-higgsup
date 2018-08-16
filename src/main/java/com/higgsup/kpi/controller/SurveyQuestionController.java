@@ -32,10 +32,10 @@ public class SurveyQuestionController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/questions-man")
-    public Response updateSurveyQuestionOfMan(@RequestBody SurveyQuestionManDTO surveyQuestionManDTO) {
+    public Response updateSurveyQuestionOfMan(@RequestBody List<SurveyQuestionManDTO> surveyQuestionManDTOs) {
         Response response = new Response(HttpStatus.OK.value());
         try {
-            SurveyQuestionManDTO surveyQuestionManBaseDTO = surveyQuestionManService.updateSurveyQuestionOfMan(surveyQuestionManDTO);
+            SurveyQuestionManDTO surveyQuestionManBaseDTO = surveyQuestionManService.updateSurveyQuestionOfMan(surveyQuestionManDTOs);
             if (Objects.nonNull(surveyQuestionManBaseDTO.getErrorCode())) {
                 response.setStatus(surveyQuestionManBaseDTO.getErrorCode());
                 response.setMessage(surveyQuestionManBaseDTO.getMessage());
