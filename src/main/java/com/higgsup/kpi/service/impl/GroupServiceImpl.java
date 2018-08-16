@@ -34,8 +34,8 @@ public class GroupServiceImpl implements GroupService {
         GroupDTO validateGroupDTO = new GroupDTO();
         Integer groupTypeId = groupDTO.getGroupType().getId();
 
-        KpiGroup test = kpiGroupRepo.findByGroupTypeId(groupTypeId);
-        if(test == null){
+        KpiGroup checkGroupTypeId = kpiGroupRepo.findByGroupTypeId(groupTypeId);
+        if(checkGroupTypeId == null){
             if (validateData(groupDTO, validateGroupDTO)) {
                 KpiGroup kpiGroup = new KpiGroup();
                 ObjectMapper mapper = new ObjectMapper();
