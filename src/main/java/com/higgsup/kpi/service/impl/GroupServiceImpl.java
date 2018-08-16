@@ -76,7 +76,8 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public GroupDTO createSupport(GroupDTO<GroupSupportDetail> groupDTO) throws JsonProcessingException {
-        if(kpiGroupRepo.findByName(groupDTO.getName()) != null)
+        Optional<KpiGroupType> kpiGroupType = kpiGroupTypeRepo.findById(groupDTO.getGroupTypeId().getId());
+        if(kpiGroupRepo.findByGroupTypeId(kpiGroupType) != null)
         {
             groupDTO.setErrorCode(ErrorCode.ALREADY_CREATED.getValue());
             groupDTO.setMessage(ErrorMessage.ALREADY_CREATED);
@@ -89,7 +90,6 @@ public class GroupServiceImpl implements GroupService {
                 BeanUtils.copyProperties(groupDTO, kpiGroup);
                 kpiGroup.setAdditionalConfig(jsonConfigSeminar);
                 kpiGroup.setCreatedDate(new Timestamp(System.currentTimeMillis()));
-                Optional<KpiGroupType> kpiGroupType = kpiGroupTypeRepo.findById(groupDTO.getGroupTypeId().getId());
                 if (kpiGroupType.isPresent()) {
                     kpiGroup.setGroupTypeId(kpiGroupType.get());
                     kpiGroupRepo.save(kpiGroup);
