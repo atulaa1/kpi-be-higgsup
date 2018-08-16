@@ -11,7 +11,6 @@ import com.higgsup.kpi.glossary.ErrorMessage;
 import com.higgsup.kpi.repository.KpiGroupRepo;
 import com.higgsup.kpi.repository.KpiGroupTypeRepo;
 import com.higgsup.kpi.service.GroupService;
-import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
