@@ -19,8 +19,7 @@ public class SurveyQuestionManServiceImpl implements SurveyQuestionManService {
     @Autowired
     private KpiSurveyQuestionManRepo surveyQuestionManRepo;
 
-    public List<SurveyQuestionManDTO> getAllQuestion()
-    {
+    public List<SurveyQuestionManDTO> getAllQuestion() {
         List<KpiSurveyQuestionMan> questions = (List<KpiSurveyQuestionMan>) surveyQuestionManRepo.findAll();
         return convertKpiSurveyQuestionManToDTO(questions);
     }
