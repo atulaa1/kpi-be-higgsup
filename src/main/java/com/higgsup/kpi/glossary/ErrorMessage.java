@@ -10,7 +10,6 @@ public final class ErrorMessage {
     public final static String NOT_FIND_GROUP= "not find group";
     public final static String PARAMETERS_NAME_PROJECT_EXISTS = "parameters name project exists";
     public final static String NOT_FILLING_ALL_INFORMATION = "not filling all information";
-    public final static String PARAMETERS_ROLES_IS_EMPTY = "parameterrole is empty";
-
-    public final static String DATA_EXIST_WITH_USER_NAMWE = "user name exist";
+    public final static String PARAMETERS_ROLES_IS_EMPTY = "parameter role is empty";
+    public final static String DATA_EXIST_WITH_USER_NAME = "user name exist";
 }
