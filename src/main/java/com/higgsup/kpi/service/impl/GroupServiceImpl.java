@@ -134,7 +134,7 @@ public class GroupServiceImpl implements GroupService {
         GroupDTO validateGroupDTO = new GroupDTO();
         Integer groupTypeId = groupDTO.getGroupTypeId().getId();
 
-        KpiGroup checkGroupTypeId = kpiGroupRepo.findByGroupTypeId(groupTypeId);
+        KpiGroup checkGroupTypeId = kpiGroupRepo.findGroupTypeId(groupTypeId);
         if(checkGroupTypeId == null){
             if (validateData(groupDTO, validateGroupDTO)) {
                 KpiGroup kpiGroup = new KpiGroup();
@@ -190,8 +190,6 @@ public class GroupServiceImpl implements GroupService {
         }
         return validate;
     }
-}
-
 
     @Override
     public GroupDTO createSupport(GroupDTO<GroupSupportDetail> groupDTO) throws JsonProcessingException {
