@@ -24,15 +24,19 @@ public class GroupController {
     GroupService groupService;
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/group-support")
-    public Response updateSupport(@RequestBody GroupDTO<GroupSupportDetail> groupDTO) throws JsonProcessingException
+    @PutMapping("/groups/support")
+    public Response updateSupport(@RequestBody GroupDTO<GroupSupportDetail> groupDTO)
     {
         Response response = new Response(HttpStatus.OK.value());
-        GroupDTO group = groupService.updateSupport(groupDTO);
-        if(Objects.nonNull(group.getErrorCode()))
-        {
-            response.setStatus(groupDTO.getErrorCode());
-            response.setMessage(groupDTO.getMessage());
+        try {
+            GroupDTO group = groupService.updateSupport(groupDTO);
+            if (Objects.nonNull(group.getErrorCode())) {
+                response.setStatus(groupDTO.getErrorCode());
+                response.setMessage(groupDTO.getMessage());
+            }
+        }catch(JsonProcessingException e){
+            response.setMessage(ErrorCode.JSON_PROCESSING_EXCEPTION.getDescription());
+            response.setStatus(ErrorCode.JSON_PROCESSING_EXCEPTION.getValue());
         }
         return response;
     }
