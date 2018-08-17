@@ -1,11 +1,12 @@
 package com.higgsup.kpi.controller;
 
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.higgsup.kpi.configure.BaseConfiguration;
-import com.higgsup.kpi.dto.GroupDTO;
-import com.higgsup.kpi.dto.Response;
-import com.higgsup.kpi.dto.TeamBuildingDTO;
 import com.higgsup.kpi.dto.GroupClubDetail;
+import com.higgsup.kpi.dto.GroupDTO;
+import com.higgsup.kpi.dto.GroupSupportDetail;
+import com.higgsup.kpi.dto.Response;
 import com.higgsup.kpi.glossary.ErrorCode;
 import com.higgsup.kpi.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,45 @@ import java.util.Objects;
 @RestController
 @RequestMapping(BaseConfiguration.BASE_API_URL)
 public class GroupController {
+
     @Autowired
     GroupService groupService;
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/groups/support")
+    public Response createSupport(@RequestBody GroupDTO<GroupSupportDetail> groupDTO)
+    {
+        Response response = new Response(HttpStatus.OK.value());
+        try {
+            GroupDTO group = groupService.createSupport(groupDTO);
+            if (Objects.nonNull(group.getErrorCode())) {
+                response.setStatus(groupDTO.getErrorCode());
+                response.setMessage(groupDTO.getMessage());
+            }
+        }catch(JsonProcessingException e)
+        {
+            response.setMessage(ErrorCode.JSON_PROCESSING_EXCEPTION.getDescription());
+            response.setStatus(ErrorCode.JSON_PROCESSING_EXCEPTION.getValue());
+        }
+        return response;
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/groups/support")
+    public Response updateSupport(@RequestBody GroupDTO<GroupSupportDetail> groupDTO)
+    {
+        Response response = new Response(HttpStatus.OK.value());
+        try {
+            GroupDTO group = groupService.updateSupport(groupDTO);
+            if (Objects.nonNull(group.getErrorCode())) {
+                response.setStatus(groupDTO.getErrorCode());
+                response.setMessage(groupDTO.getMessage());
+            }
+        }catch(JsonProcessingException e){
+            response.setMessage(ErrorCode.JSON_PROCESSING_EXCEPTION.getDescription());
+            response.setStatus(ErrorCode.JSON_PROCESSING_EXCEPTION.getValue());
+        }
+        return response;
+    }
 
     @PreAuthorize("hasAnyRole('ADMIN')")
     @PutMapping("groups/team-building")
@@ -33,7 +71,8 @@ public class GroupController {
                 response.setStatus(ErrorCode.JSON_PROCESSING_EXCEPTION.getValue());
             }
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            response.setMessage(ErrorCode.JSON_PROCESSING_EXCEPTION.getDescription());
+            response.setStatus(ErrorCode.JSON_PROCESSING_EXCEPTION.getValue());
         }
 
         return response;

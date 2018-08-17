@@ -29,7 +29,7 @@ public class ProjectController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = "projects/{id}", method = RequestMethod.PUT)
-    public Response updateProject(@PathVariable Integer id,@RequestBody ProjectDTO projectDTO) {
+    public Response updateProject(@PathVariable Integer id, @RequestBody ProjectDTO projectDTO) {
         Response response = new Response(HttpStatus.OK.value());
         projectDTO.setId(id);
         ProjectDTO projectRP = projectService.updateProject(projectDTO);
@@ -54,8 +54,9 @@ public class ProjectController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = "projects/{id}", method = RequestMethod.DELETE)
-    public Response deleteProject(@PathVariable Integer id, @RequestBody ProjectDTO projectDTO) {
+    public Response deleteProject(@PathVariable Integer id) {
         Response response = new Response(HttpStatus.OK.value());
+        ProjectDTO projectDTO = new ProjectDTO();
         projectDTO.setId(id);
         ProjectDTO projectRP = projectService.deleteProject(projectDTO);
         if (Objects.nonNull(projectRP.getErrorCode())) {
