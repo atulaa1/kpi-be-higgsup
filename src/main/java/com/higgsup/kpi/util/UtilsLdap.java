@@ -1,30 +1,26 @@
 package com.higgsup.kpi.util;
 
-import java.util.List;
-
-import javax.naming.Name;
-
+import com.higgsup.kpi.dto.UserDTO;
 import org.springframework.ldap.support.LdapNameBuilder;
 
-import com.higgsup.kpi.dto.UserDTO;
+import javax.naming.Name;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UtilsLdap {
 
-	public static Name buildDn(UserDTO user, final String BASEDN) {
-		return LdapNameBuilder.newInstance(BASEDN).add("cn", user.getFullName()).add("cn", "Users").build();
-	}
+    public static Name buildDn(UserDTO user) {
+        return LdapNameBuilder.newInstance().add("cn", "Users").add("cn", user.getFullName()).build();
+    }
 
-	public static String convertRole(List<String> listRole) {
-		String result = null;
-		if (!listRole.isEmpty()) {
-			for (String item : listRole) {
-				String role = item.replace("ROLE_", "").toLowerCase();
-				result += role+",";
-			}
-		}
-		if (result != null && result.length() > 0 && result.charAt(result.length() - 1) == ',') {
-			result = result.substring(0, result.length() - 1);
-	    }
-		return result;
-	}
+    public static String convertRole(List<String> listRole) {
+        List<String> rolesConvert = new ArrayList<>();
+        if (!listRole.isEmpty()) {
+            for (String item : listRole) {
+                String role = item.replace("ROLE_", "").toLowerCase();
+                rolesConvert.add(role);
+            }
+        }
+        return String.join(",", rolesConvert);
+    }
 }

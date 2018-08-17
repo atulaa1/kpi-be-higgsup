@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.higgsup.kpi.dto.GroupClubDetail;
 import com.higgsup.kpi.dto.GroupDTO;
 import com.higgsup.kpi.dto.TeamBuildingDTO;
+import com.higgsup.kpi.dto.GroupSupportDetail;
 import com.higgsup.kpi.entity.KpiGroup;
 import com.higgsup.kpi.entity.KpiGroupType;
 import com.higgsup.kpi.glossary.ErrorCode;
@@ -39,16 +40,19 @@ public class GroupServiceImpl implements GroupService {
             KpiGroup kpiGroup = new KpiGroup();
             ObjectMapper mapper = new ObjectMapper();
 
-            if(groupDTO.getName().length()== 0 || groupDTO.getAdditionalConfig().getHost().length() == 0 ){
+            if (groupDTO.getName().length() == 0 || groupDTO.getAdditionalConfig().getHost().length() == 0) {
                 groupDTO1.setMessage(ErrorMessage.PARAMETERS_NAME_IS_NOT_VALID);
                 groupDTO1.setErrorCode(ErrorCode.NOT_NULL.getValue());
-            } else if (minNumberOfSessions != (int) minNumberOfSessions || String.valueOf(minNumberOfSessions).length() > 2 || String.valueOf(minNumberOfSessions).length()==0) {
+            } else if (minNumberOfSessions != (int) minNumberOfSessions || String.valueOf(minNumberOfSessions).length() > 2
+                    || String.valueOf(minNumberOfSessions).length() == 0) {
                 groupDTO1.setMessage(ErrorMessage.PARAMETERS_MIN_NUMBER_OF_SESSIONS_IS_NOT_VALID);
                 groupDTO1.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-            } else if (participationPoint != (float) participationPoint || String.valueOf(participationPoint).substring(1).length() != 2 || String.valueOf(participationPoint).length() == 0) {
+            } else if (participationPoint != (float) participationPoint || String.valueOf(participationPoint).substring(1).length() != 2
+                    || String.valueOf(participationPoint).length() == 0) {
                 groupDTO1.setMessage(ErrorMessage.PARAMETERS_POINT_IS_NOT_VALID);
                 groupDTO1.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-            } else if (effectivePoint != (float) effectivePoint || String.valueOf(effectivePoint).substring(1).length() != 2 || String.valueOf(effectivePoint).length() == 0) {
+            } else if (effectivePoint != (float) effectivePoint || String.valueOf(effectivePoint).substring(1).length() != 2
+                    || String.valueOf(effectivePoint).length() == 0) {
                 groupDTO1.setMessage(ErrorMessage.PARAMETERS_POINT_IS_NOT_VALID);
                 groupDTO1.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
             } else {
@@ -188,3 +192,87 @@ public class GroupServiceImpl implements GroupService {
     }
 }
 
+
+    @Override
+    public GroupDTO createSupport(GroupDTO<GroupSupportDetail> groupDTO) throws JsonProcessingException {
+        Optional<KpiGroupType> kpiGroupType = kpiGroupTypeRepo.findById(groupDTO.getGroupTypeId().getId());
+        if(kpiGroupRepo.findByGroupTypeId(kpiGroupType) != null)
+        {
+            groupDTO.setErrorCode(ErrorCode.ALREADY_CREATED.getValue());
+            groupDTO.setMessage(ErrorMessage.ALREADY_CREATED);
+        }
+        else {
+            if (validateNullInformation(groupDTO)) {
+                if(!validatePoint(groupDTO))
+                {
+                    groupDTO.setMessage(ErrorMessage.PARAMETERS_POINT_IS_NOT_VALID);
+                    groupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+                }
+                else {
+                    KpiGroup kpiGroup = kpiGroupRepo.findByGroupTypeId(kpiGroupType);
+                    groupDTO.setId(kpiGroup.getId());
+                    ObjectMapper mapper = new ObjectMapper();
+                    String jsonConfigSeminar = mapper.writeValueAsString(groupDTO.getAdditionalConfig());
+                    BeanUtils.copyProperties(groupDTO, kpiGroup);
+                    kpiGroup.setAdditionalConfig(jsonConfigSeminar);
+                    kpiGroup.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+                    kpiGroup.setGroupTypeId(kpiGroupType.get());
+                    kpiGroupRepo.save(kpiGroup);
+                }
+            } else {
+                groupDTO.setErrorCode(ErrorCode.NOT_FILLING_ALL_INFORMATION.getValue());
+                groupDTO.setMessage(ErrorMessage.NOT_FILLING_ALL_INFORMATION);
+            }
+        }
+        return groupDTO;
+    }
+
+
+    @Override
+    public GroupDTO updateSupport(GroupDTO<GroupSupportDetail> groupDTO) throws JsonProcessingException {
+        Optional<KpiGroupType> kpiGroupType = kpiGroupTypeRepo.findById(groupDTO.getGroupTypeId().getId());
+        if (kpiGroupRepo.findByGroupTypeId(kpiGroupType) == null) {
+            groupDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
+            groupDTO.setMessage(ErrorMessage.NOT_FIND_GROUP_TYPE);
+        } else {
+            if (validateNullInformation(groupDTO)) {
+                if(!validatePoint(groupDTO))
+                {
+                    groupDTO.setMessage(ErrorMessage.PARAMETERS_POINT_IS_NOT_VALID);
+                    groupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+                }
+                else {
+                    KpiGroup kpiGroup = kpiGroupRepo.findByGroupTypeId(kpiGroupType);
+                    groupDTO.setId(kpiGroup.getId());
+                    ObjectMapper mapper = new ObjectMapper();
+                    String jsonConfigSeminar = mapper.writeValueAsString(groupDTO.getAdditionalConfig());
+                    BeanUtils.copyProperties(groupDTO, kpiGroup);
+                    kpiGroup.setAdditionalConfig(jsonConfigSeminar);
+                    kpiGroup.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+                    kpiGroup.setGroupTypeId(kpiGroupType.get());
+                    kpiGroupRepo.save(kpiGroup);
+                }
+            } else {
+                groupDTO.setErrorCode(ErrorCode.NOT_FILLING_ALL_INFORMATION.getValue());
+                groupDTO.setMessage(ErrorMessage.NOT_FILLING_ALL_INFORMATION);
+            }
+        }
+        return groupDTO;
+    }
+
+    private boolean validateNullInformation(GroupDTO<GroupSupportDetail> groupDTO) {
+        GroupSupportDetail groupSupportDetail = groupDTO.getAdditionalConfig();
+        return (groupSupportDetail.getSupportConferencePoint() != null && groupSupportDetail.getCleanUpPoint() != null &&
+                groupSupportDetail.getBuyingStuffPoint() != null && groupSupportDetail.getWeeklyCleanUpPoint() != null &&
+                groupSupportDetail.getTrainingPoint() != null);
+    }
+
+    private boolean validatePoint(GroupDTO<GroupSupportDetail> groupDTO)
+    {
+        return (UtilsValidate.isValidPoint(String.valueOf(groupDTO.getAdditionalConfig().getWeeklyCleanUpPoint()))
+                && UtilsValidate.isValidPoint(String.valueOf(groupDTO.getAdditionalConfig().getBuyingStuffPoint()))
+                && UtilsValidate.isValidPoint(String.valueOf(groupDTO.getAdditionalConfig().getCleanUpPoint()))
+                && UtilsValidate.isValidPoint(String.valueOf(groupDTO.getAdditionalConfig().getSupportConferencePoint()))
+                && UtilsValidate.isValidPoint(String.valueOf(groupDTO.getAdditionalConfig().getTrainingPoint())));
+    }
+}
