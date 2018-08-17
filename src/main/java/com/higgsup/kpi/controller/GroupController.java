@@ -43,13 +43,20 @@ public class GroupController {
 
     @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping("groups/team-building")
-    public Response createConfigTeamBuilding(@RequestBody GroupDTO<TeamBuildingDTO> groupDTO) throws JsonProcessingException {
+    public Response createConfigTeamBuilding(@RequestBody GroupDTO<TeamBuildingDTO> groupDTO){
         Response response = new Response(HttpStatus.OK.value());
-        GroupDTO groupDTO1 = groupService.createConfigTeamBuilding(groupDTO);
-        if(Objects.nonNull(groupDTO1.getErrorCode())){
-            response.setStatus(groupDTO1.getErrorCode());
-            response.setMessage(groupDTO1.getMessage());
+
+        try {
+            GroupDTO groupDTOTeamBuilding = groupService.createConfigTeamBuilding(groupDTO);
+            if(Objects.nonNull(groupDTOTeamBuilding.getErrorCode())){
+                response.setStatus(groupDTOTeamBuilding.getErrorCode());
+                response.setMessage(groupDTOTeamBuilding.getMessage());
+            }
+        } catch (JsonProcessingException e) {
+            response.setMessage(ErrorCode.JSON_PROCESSING_EXCEPTION.getDescription());
+            response.setStatus(ErrorCode.JSON_PROCESSING_EXCEPTION.getValue());
         }
+
         return response;
     }
 
