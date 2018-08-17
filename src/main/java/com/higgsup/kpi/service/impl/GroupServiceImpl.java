@@ -2,9 +2,11 @@ package com.higgsup.kpi.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.higgsup.kpi.dto.GroupClubDetail;
 import com.higgsup.kpi.dto.GroupDTO;
 import com.higgsup.kpi.dto.GroupSeminarDetail;
 import com.higgsup.kpi.dto.GroupClubDetail;
+import com.higgsup.kpi.dto.GroupSupportDetail;
 import com.higgsup.kpi.entity.KpiGroup;
 import com.higgsup.kpi.entity.KpiGroupType;
 import com.higgsup.kpi.glossary.ErrorCode;
@@ -57,6 +59,7 @@ public class GroupServiceImpl implements GroupService {
                 kpiGroup.setAdditionalConfig(clubJson);
                 kpiGroup.setCreatedDate(new Timestamp(System.currentTimeMillis()));
                 Optional<KpiGroupType> kpiGroupType = kpiGroupTypeRepo.findById(groupDTO.getGroupTypeId().getId());
+
                 if (kpiGroupType.isPresent()) {
                     kpiGroup.setGroupTypeId(kpiGroupType.get());
                     kpiGroupRepo.save(kpiGroup);
@@ -116,3 +119,37 @@ public class GroupServiceImpl implements GroupService {
     }
 }
 
+    @Override
+    public GroupDTO createSupport(GroupDTO<GroupSupportDetail> groupDTO) throws JsonProcessingException {
+        Optional<KpiGroupType> kpiGroupType = kpiGroupTypeRepo.findById(groupDTO.getGroupTypeId().getId());
+        if(kpiGroupRepo.findByGroupTypeId(kpiGroupType) != null)
+        {
+            groupDTO.setErrorCode(ErrorCode.ALREADY_CREATED.getValue());
+            groupDTO.setMessage(ErrorMessage.ALREADY_CREATED);
+        }
+        else {
+            if (validateNullInformation(groupDTO)) {
+                if(!validatePoint(groupDTO))
+                {
+                    groupDTO.setMessage(ErrorMessage.PARAMETERS_POINT_IS_NOT_VALID);
+                    groupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+                }
+                else {
+                    KpiGroup kpiGroup = kpiGroupRepo.findByGroupTypeId(kpiGroupType);
+                    groupDTO.setId(kpiGroup.getId());
+                    ObjectMapper mapper = new ObjectMapper();
+                    String jsonConfigSeminar = mapper.writeValueAsString(groupDTO.getAdditionalConfig());
+                    BeanUtils.copyProperties(groupDTO, kpiGroup);
+                    kpiGroup.setAdditionalConfig(jsonConfigSeminar);
+                    kpiGroup.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+                    kpiGroup.setGroupTypeId(kpiGroupType.get());
+                    kpiGroupRepo.save(kpiGroup);
+                }
+            } else {
+                groupDTO.setErrorCode(ErrorCode.NOT_FILLING_ALL_INFORMATION.getValue());
+                groupDTO.setMessage(ErrorMessage.NOT_FILLING_ALL_INFORMATION);
+            }
+        }
+        return groupDTO;
+    }
+}
