@@ -2,8 +2,11 @@ package com.higgsup.kpi.repository;
 
 import com.higgsup.kpi.entity.KpiGroup;
 import com.higgsup.kpi.entity.KpiGroupType;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+
+import java.util.Optional;
 
 public interface KpiGroupRepo extends CrudRepository<KpiGroup, Integer> {
     KpiGroup findByName(String name);
