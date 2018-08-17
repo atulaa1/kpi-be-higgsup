@@ -1,9 +1,9 @@
 package com.higgsup.kpi.repository;
 
-import com.higgsup.kpi.dto.GroupTypeDTO;
 import com.higgsup.kpi.entity.KpiGroup;
 import com.higgsup.kpi.entity.KpiGroupType;
 import org.springframework.data.jpa.repository.Query;
+import com.higgsup.kpi.entity.KpiGroupType;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 

@@ -12,16 +12,14 @@ import com.higgsup.kpi.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
 
 @RestController
 @RequestMapping(BaseConfiguration.BASE_API_URL)
 public class GroupController {
+
     @Autowired
     GroupService groupService;
 
@@ -52,6 +50,26 @@ public class GroupController {
             response.setStatus(groupDTO1.getErrorCode());
             response.setMessage(groupDTO1.getMessage());
         }
+        return response;
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("groups/clubs/{id}")
+    public Response updateClubActivity(@PathVariable Integer id, @RequestBody GroupDTO<GroupClubDetail> groupDTO) {
+        Response response = new Response(HttpStatus.OK.value());
+        try {
+            groupDTO.setId(id);
+            GroupDTO groupDTO1 = groupService.updateClub(groupDTO);
+
+            if (Objects.nonNull(groupDTO1.getErrorCode())) {
+                response.setStatus(groupDTO1.getErrorCode());
+                response.setMessage(groupDTO1.getMessage());
+            }
+        } catch (JsonProcessingException e) {
+            response.setMessage(ErrorCode.JSON_PROCESSING_EXCEPTION.getDescription());
+            response.setStatus(ErrorCode.JSON_PROCESSING_EXCEPTION.getValue());
+        }
+
         return response;
     }
 }
