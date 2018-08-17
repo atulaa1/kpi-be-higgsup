@@ -2,10 +2,10 @@ package com.higgsup.kpi.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.higgsup.kpi.configure.BaseConfiguration;
+import com.higgsup.kpi.dto.GroupClubDetail;
 import com.higgsup.kpi.dto.GroupDTO;
 import com.higgsup.kpi.dto.GroupSeminarDetail;
 import com.higgsup.kpi.dto.Response;
-import com.higgsup.kpi.dto.GroupClubDetail;
 import com.higgsup.kpi.glossary.ErrorCode;
 import com.higgsup.kpi.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +21,19 @@ public class GroupController {
     @Autowired
     GroupService groupService;
 
-    @RequestMapping(value = "/groups/seminars" ,method = RequestMethod.POST)
+    @RequestMapping(value = "/groups/seminars", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ADMIN')")
-    public Response createSeminar(@RequestBody GroupDTO<GroupSeminarDetail> groupDTO) throws JsonProcessingException {
+    public Response createSeminar(@RequestBody GroupDTO<GroupSeminarDetail> groupDTO) {
         Response response = new Response(HttpStatus.OK.value());
-        GroupDTO groupDTORP = groupService.createSeminar(groupDTO);
-        if (Objects.nonNull(groupDTORP.getErrorCode())) {
-            response.setStatus(groupDTORP.getErrorCode());
-            response.setMessage(groupDTORP.getMessage());
+        try {
+            GroupDTO groupDTORP = groupService.createSeminar(groupDTO);
+            if (Objects.nonNull(groupDTORP.getErrorCode())) {
+                response.setStatus(groupDTORP.getErrorCode());
+                response.setMessage(groupDTORP.getMessage());
+            }
+        } catch (JsonProcessingException e) {
+            response.setStatus(ErrorCode.JSON_PROCESSING_EXCEPTION.getValue());
+            response.setMessage(ErrorCode.JSON_PROCESSING_EXCEPTION.getDescription());
         }
         return response;
     }
@@ -50,6 +55,7 @@ public class GroupController {
         }
         return response;
     }
+
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("groups/clubs/{id}")
     public Response updateClubActivity(@PathVariable Integer id, @RequestBody GroupDTO<GroupClubDetail> groupDTO) {
