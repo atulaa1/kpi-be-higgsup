@@ -8,6 +8,7 @@ import com.higgsup.kpi.dto.GroupDTO;
 import com.higgsup.kpi.dto.GroupSupportDetail;
 import com.higgsup.kpi.dto.Response;
 import com.higgsup.kpi.glossary.ErrorCode;
+import com.higgsup.kpi.dto.TeamBuildingDTO;
 import com.higgsup.kpi.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -76,6 +77,26 @@ public class GroupController{
         }
         return response;
     }
+
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PostMapping("groups/team-building")
+    public Response createConfigTeamBuilding(@RequestBody GroupDTO<TeamBuildingDTO> groupDTO){
+        Response response = new Response(HttpStatus.OK.value());
+
+        try {
+            GroupDTO groupDTOTeamBuilding = groupService.createConfigTeamBuilding(groupDTO);
+            if(Objects.nonNull(groupDTOTeamBuilding.getErrorCode())){
+                response.setStatus(groupDTOTeamBuilding.getErrorCode());
+                response.setMessage(groupDTOTeamBuilding.getMessage());
+            }
+        } catch (JsonProcessingException e) {
+            response.setMessage(ErrorCode.JSON_PROCESSING_EXCEPTION.getDescription());
+            response.setStatus(ErrorCode.JSON_PROCESSING_EXCEPTION.getValue());
+        }
+
+        return response;
+    }
+
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("groups/clubs/{id}")
     public Response updateClubActivity(@PathVariable Integer id, @RequestBody GroupDTO<GroupClubDetail> groupDTO) {
