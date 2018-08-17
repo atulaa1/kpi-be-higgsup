@@ -2,6 +2,7 @@ package com.higgsup.kpi.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import java.sql.Date;
 import java.util.List;
 
 public class UserDTO extends BaseDTO {
@@ -19,6 +20,21 @@ public class UserDTO extends BaseDTO {
     private String email;
 
     private List<String> userRole;
+
+    private String avatar;
+
+    private Date birthday;
+
+    private String numberPhone;
+
+    private String address;
+
+    private String gmail;
+
+    private String skype;
+
+    private Integer yearWork;
+
 
     public UserDTO() {
     }
@@ -90,5 +106,59 @@ public class UserDTO extends BaseDTO {
         this.email = email;
     }
 
+    public String getAvatar() {
+        return avatar;
+    }
 
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
+
+    public String getNumberPhone() {
+        return numberPhone;
+    }
+
+    public void setNumberPhone(String numberPhone) {
+        this.numberPhone = numberPhone;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getGmail() {
+        return gmail;
+    }
+
+    public void setGmail(String gmail) {
+        this.gmail = gmail;
+    }
+
+    public String getSkype() {
+        return skype;
+    }
+
+    public void setSkype(String skype) {
+        this.skype = skype;
+    }
+
+    public Integer getYearWork() {
+        return yearWork;
+    }
+
+    public void setYearWork(Integer yearWork) {
+        this.yearWork = yearWork;
+    }
 }

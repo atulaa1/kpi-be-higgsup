@@ -6,7 +6,8 @@ public enum ErrorCode {
     PARAMETERS_ALREADY_EXIST(902,"parameters already exist"),
     NOT_NULL(903, "parameter is not null"),
     JSON_PROCESSING_EXCEPTION(904, "json processing exception"),
-    NOT_FILLING_ALL_INFORMATION(905, "Not filling all information");
+    NOT_FILLING_ALL_INFORMATION(905, "Not filling all information"),
+    DATA_EXIST(902, "data exist");
 
     private Integer value;
     private String description;

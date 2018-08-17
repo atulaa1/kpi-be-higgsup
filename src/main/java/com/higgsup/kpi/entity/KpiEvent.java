@@ -1,6 +1,5 @@
 package com.higgsup.kpi.entity;
 
-import com.higgsup.kpi.dto.KpiGroup;
 
 import javax.persistence.*;
 import java.io.Serializable;
