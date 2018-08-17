@@ -1,7 +1,5 @@
 package com.higgsup.kpi.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-
 import java.sql.Timestamp;
 
 public class GroupDTO<T> extends BaseDTO{
