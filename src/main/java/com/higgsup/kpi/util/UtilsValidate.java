@@ -32,4 +32,13 @@ public class UtilsValidate {
 		return true;
 	}
 
+	public static Boolean isValidPoint(String str)
+	{
+		Pattern pattern = Pattern.compile("^([0-9]{0,2}[.])?[0-9]{0,2}");
+		Matcher matcher = pattern.matcher(str);
+		if (!matcher.matches()) {
+			return false;
+		}
+		return true;
+	}
 }

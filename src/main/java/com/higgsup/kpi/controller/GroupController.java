@@ -7,6 +7,7 @@ import com.higgsup.kpi.dto.GroupClubDetail;
 import com.higgsup.kpi.dto.GroupDTO;
 import com.higgsup.kpi.dto.Response;
 import com.higgsup.kpi.glossary.ErrorCode;
+import com.higgsup.kpi.dto.GroupSupportDetail;
 import com.higgsup.kpi.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,24 @@ public class GroupController {
 
     @Autowired
     GroupService groupService;
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/groups/support")
+    public Response updateSupport(@RequestBody GroupDTO<GroupSupportDetail> groupDTO)
+    {
+        Response response = new Response(HttpStatus.OK.value());
+        try {
+            GroupDTO group = groupService.updateSupport(groupDTO);
+            if (Objects.nonNull(group.getErrorCode())) {
+                response.setStatus(groupDTO.getErrorCode());
+                response.setMessage(groupDTO.getMessage());
+            }
+        }catch(JsonProcessingException e){
+            response.setMessage(ErrorCode.JSON_PROCESSING_EXCEPTION.getDescription());
+            response.setStatus(ErrorCode.JSON_PROCESSING_EXCEPTION.getValue());
+        }
+        return response;
+    }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/clubs")
