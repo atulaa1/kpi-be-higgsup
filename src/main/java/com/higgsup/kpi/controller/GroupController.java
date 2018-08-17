@@ -1,10 +1,13 @@
 package com.higgsup.kpi.controller;
 
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.higgsup.kpi.configure.BaseConfiguration;
 import com.higgsup.kpi.dto.*;
 import com.higgsup.kpi.dto.GroupClubDetail;
+import com.higgsup.kpi.dto.GroupClubDetail;
+import com.higgsup.kpi.dto.GroupDTO;
+import com.higgsup.kpi.dto.GroupSeminarDetail;
+import com.higgsup.kpi.dto.Response;
 import com.higgsup.kpi.glossary.ErrorCode;
 import com.higgsup.kpi.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,6 +88,7 @@ public class GroupController {
         }
         return response;
     }
+
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("groups/clubs/{id}")
     public Response updateClubActivity(@PathVariable Integer id, @RequestBody GroupDTO<GroupClubDetail> groupDTO) {
