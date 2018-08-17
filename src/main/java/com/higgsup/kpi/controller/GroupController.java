@@ -41,8 +41,8 @@ public class GroupController {
         return response;
     }
 
-    @PreAuthorize("hasAnyRole('EMPLOYEE','MAN')")
-    @PostMapping("/team-building")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PostMapping("groups/team-building")
     public Response createConfigTeamBuilding(@RequestBody GroupDTO<TeamBuildingDTO> groupDTO) throws JsonProcessingException {
         Response response = new Response(HttpStatus.OK.value());
         GroupDTO groupDTO1 = groupService.createConfigTeamBuilding(groupDTO);

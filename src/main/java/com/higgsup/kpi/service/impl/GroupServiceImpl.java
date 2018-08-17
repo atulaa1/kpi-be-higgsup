@@ -149,8 +149,8 @@ public class GroupServiceImpl implements GroupService {
                 }
             }
         } else {
-            validateGroupDTO.setErrorCode(ErrorCode.CAN_NOT_CREATE.getValue());
-            validateGroupDTO.setMessage(ErrorMessage.CAN_NOT_CREATE);
+            validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_ALREADY_EXIST.getValue());
+            validateGroupDTO.setMessage(ErrorMessage.HAS_BEEN_EXISTED);
         }
         return validateGroupDTO;
     }
@@ -158,11 +158,7 @@ public class GroupServiceImpl implements GroupService {
 
     Boolean validateData(GroupDTO<TeamBuildingDTO> groupDTO, GroupDTO validateGroupDTO){
         boolean validate = false;
-        if (kpiGroupRepo.findByName(groupDTO.getName()) != null){
-            validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-            validateGroupDTO.setMessage(ErrorMessage.DUPLICATED_ITEM);
-        }
-        else if(!UtilsValidate.isNumber(groupDTO.getAdditionalConfig().getFirstPrize())){
+        if(!UtilsValidate.isNumber(groupDTO.getAdditionalConfig().getFirstPrize())){
             validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
             validateGroupDTO.setMessage(ErrorMessage.INVALIDATED_FIRST_PRIZE);
         }
