@@ -6,10 +6,13 @@ import com.higgsup.kpi.dto.UserDTO;
 import com.higgsup.kpi.glossary.ErrorCode;
 import com.higgsup.kpi.glossary.ErrorMessage;
 import com.higgsup.kpi.service.LdapUserService;
+import com.higgsup.kpi.service.UserService;
 import com.higgsup.kpi.util.UtilsValidate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +24,8 @@ public class UserController {
 
     @Autowired
     private LdapUserService ldapUserService;
+    @Autowired
+    private UserService userService;
 
     @PreAuthorize("hasAnyRole('EMPLOYEE')")
     @GetMapping(BaseConfiguration.BASE_API_URL + "/users/{username}")
@@ -29,7 +34,7 @@ public class UserController {
         Response response = new Response(HttpStatus.OK.value());
         if (username != null && !username.equals("")) {
             if (!UtilsValidate.containRegex(username)) {
-                UserDTO user = ldapUserService.getUserDetail(username);
+                UserDTO user = userService.getUserDetails(username);
                 if (user != null) {
                     response.setData(user);
                 } else {
@@ -85,4 +90,23 @@ public class UserController {
         return null;
     }
 
+    @PreAuthorize("hasRole('EMPLOYEE')")
+    @PutMapping(BaseConfiguration.BASE_API_URL + "/users/{username}")
+    public Response updateInfo(@PathVariable String username, @RequestBody UserDTO userDTO) {
+        Response response = new Response(HttpStatus.OK.value());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        //check if token of user
+        if (authentication.getPrincipal().equals(username)) {
+            UserDTO userDTOUpdate = userService.updateInfoUser(username, userDTO);
+            if (Objects.nonNull(userDTOUpdate.getErrorCode())) {
+                response.setMessage(userDTOUpdate.getMessage());
+                response.setStatus(userDTOUpdate.getErrorCode());
+            }
+        } else {
+            response.setStatus(HttpStatus.FORBIDDEN.value());
+            response.setMessage(HttpStatus.FORBIDDEN.getReasonPhrase());
+        }
+
+        return response;
+    }
 }
