@@ -21,4 +21,8 @@ public final class ErrorMessage {
     public final static String PARAMETERS_ROLES_IS_EMPTY = "parameterrole is empty";
     public final static String DATA_EXIST_WITH_USER_NAMWE = "user name exist";
     public final static String DATA_EXIST_WITH_USER_NAME = "user name exist";
+    public final static String NOT_FIND_ITEM = "Item does not existed";
+
+
+
 }

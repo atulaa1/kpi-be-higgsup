@@ -37,7 +37,7 @@ public class GroupServiceImpl implements GroupService {
         Optional<KpiGroup> kpiGroupOptional = kpiGroupRepo.findById(id);
         if (!kpiGroupOptional.isPresent()){
             validateGroupDTO.setErrorCode(ErrorCode.NOT_FIND_ITEM.getValue());
-            validateGroupDTO.setMessage(ErrorMessage.);
+            validateGroupDTO.setMessage(ErrorMessage.NOT_FIND_ITEM);
         } else if(validateData(groupDTO, validateGroupDTO)) {
                 KpiGroup kpiGroup = kpiGroupOptional.get();
                 ObjectMapper mapper = new ObjectMapper();
@@ -111,7 +111,7 @@ public class GroupServiceImpl implements GroupService {
         Float effectivePoint = groupDTO.getAdditionalConfig().getEffectivePoint();
 
         if (kpiGroupRepo.findById(id) == null) {
-            groupDTO1.setMessage(ErrorCode.NOT_FIND.getContent());
+            groupDTO1.setMessage(ErrorCode.NOT_FIND.getDescription());
             groupDTO1.setErrorCode(ErrorCode.NOT_FIND.getValue());
         } else {
             if (groupDTO.getName().length() == 0 || groupDTO.getAdditionalConfig().getHost().length() == 0) {
