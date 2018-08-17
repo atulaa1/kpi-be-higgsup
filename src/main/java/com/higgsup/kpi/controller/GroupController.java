@@ -88,7 +88,6 @@ public class GroupController {
         }
         return response;
     }
-
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("groups/clubs/{id}")
     public Response updateClubActivity(@PathVariable Integer id, @RequestBody GroupDTO<GroupClubDetail> groupDTO) {
