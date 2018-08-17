@@ -12,6 +12,7 @@ public interface GroupService {
 
     GroupDTO createSupport(GroupDTO<GroupSupportDetail> groupDTO) throws JsonProcessingException;
     GroupDTO updateSupport(GroupDTO<GroupSupportDetail> groupDTO) throws JsonProcessingException;
+    GroupDTO createConfigTeamBuilding(GroupDTO<TeamBuildingDTO> groupDTO) throws JsonProcessingException;
     GroupDTO createClub(GroupDTO<GroupClubDetail> groupDTO) throws JsonProcessingException;
     GroupDTO updateClub(GroupDTO<GroupClubDetail> groupDTO) throws JsonProcessingException;
 }

@@ -15,11 +15,11 @@ public enum ErrorCode {
     NOT_FIND_GROUP_TYPE(929,"Item does not existed");
 
     private Integer value;
-    private String description;
+    private String content;
 
-    ErrorCode(Integer value, String description) {
+    ErrorCode(Integer value, String content) {
         this.value = value;
-        this.description = description;
+        this.content = content;
     }
 
     public Integer getValue() {
@@ -30,11 +30,11 @@ public enum ErrorCode {
         this.value = value;
     }
 
-    public String getDescription() {
-        return description;
+    public String getContent() {
+        return content;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setContent(String content) {
+        this.content = content;
     }
 }

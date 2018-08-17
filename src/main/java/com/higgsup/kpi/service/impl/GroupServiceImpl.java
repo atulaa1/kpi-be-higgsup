@@ -30,7 +30,6 @@ public class GroupServiceImpl implements GroupService {
     @Autowired
     KpiGroupTypeRepo kpiGroupTypeRepo;
 
-
     @Override
     public GroupDTO updateTeamBuildingActivity(GroupDTO<TeamBuildingDTO> groupDTO) throws JsonProcessingException {
         Integer id = groupDTO.getId();
@@ -38,7 +37,7 @@ public class GroupServiceImpl implements GroupService {
         Optional<KpiGroup> kpiGroupOptional = kpiGroupRepo.findById(id);
         if (!kpiGroupOptional.isPresent()){
             validateGroupDTO.setErrorCode(ErrorCode.NOT_FIND_ITEM.getValue());
-            validateGroupDTO.setMessage(ErrorMessage.NOT_FIND_ITEM);
+            validateGroupDTO.setMessage(ErrorMessage.);
         } else if(validateData(groupDTO, validateGroupDTO)) {
                 KpiGroup kpiGroup = kpiGroupOptional.get();
                 ObjectMapper mapper = new ObjectMapper();
@@ -99,9 +98,6 @@ public class GroupServiceImpl implements GroupService {
                 }
             }
 
-        } else {
-            groupDTO1.setMessage(ErrorMessage.GROUP_ALREADY_EXISTS);
-            groupDTO1.setErrorCode(ErrorCode.PARAMETERS_ALREADY_EXIST.getValue());
         }
         return groupDTO1;
     }
@@ -115,7 +111,7 @@ public class GroupServiceImpl implements GroupService {
         Float effectivePoint = groupDTO.getAdditionalConfig().getEffectivePoint();
 
         if (kpiGroupRepo.findById(id) == null) {
-            groupDTO1.setMessage(ErrorCode.NOT_FIND.getDescription());
+            groupDTO1.setMessage(ErrorCode.NOT_FIND.getContent());
             groupDTO1.setErrorCode(ErrorCode.NOT_FIND.getValue());
         } else {
             if (groupDTO.getName().length() == 0 || groupDTO.getAdditionalConfig().getHost().length() == 0) {
@@ -155,6 +151,68 @@ public class GroupServiceImpl implements GroupService {
 
         }
         return groupDTO1;
+    }
+
+    @Override
+    public GroupDTO createConfigTeamBuilding(GroupDTO<TeamBuildingDTO> groupDTO)  throws JsonProcessingException {
+        GroupDTO validateGroupDTO = new GroupDTO();
+        Integer groupTypeId = groupDTO.getGroupTypeId().getId();
+
+        KpiGroup checkGroupTypeId = kpiGroupRepo.findGroupTypeId(groupTypeId);
+        if(checkGroupTypeId == null){
+            if (validateData(groupDTO, validateGroupDTO)) {
+                KpiGroup kpiGroup = new KpiGroup();
+                ObjectMapper mapper = new ObjectMapper();
+                String jsonConfigTeamBuilding = mapper.writeValueAsString(groupDTO.getAdditionalConfig());
+                BeanUtils.copyProperties(groupDTO, kpiGroup);
+                kpiGroup.setAdditionalConfig(jsonConfigTeamBuilding);
+                kpiGroup.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+                Optional<KpiGroupType> kpiGroupType = kpiGroupTypeRepo.findById(groupDTO.getGroupTypeId().getId());
+                if(kpiGroupType.isPresent()){
+                    kpiGroup.setGroupTypeId(kpiGroupType.get());
+                    kpiGroupRepo.save(kpiGroup);
+                }else {
+                    validateGroupDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
+                    validateGroupDTO.setMessage(ErrorMessage.NOT_FIND_GROUP_TYPE);
+                }
+            }
+        } else {
+            validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_ALREADY_EXIST.getValue());
+            validateGroupDTO.setMessage(ErrorMessage.TEAMBUIDING_HAS_BEEN_EXISTED);
+        }
+        return validateGroupDTO;
+    }
+
+
+    Boolean validateData(GroupDTO<TeamBuildingDTO> groupDTO, GroupDTO validateGroupDTO){
+        boolean validate = false;
+        if(!UtilsValidate.isNumber(groupDTO.getAdditionalConfig().getFirstPrize())){
+            validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+            validateGroupDTO.setMessage(ErrorMessage.INVALIDATED_FIRST_PRIZE);
+        }
+        else if(!UtilsValidate.isNumber(groupDTO.getAdditionalConfig().getSecondPrize())){
+            validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+            validateGroupDTO.setMessage(ErrorMessage.INVALIDATED_SECOND_PRIZE);
+        }
+        else if(!UtilsValidate.isNumber(groupDTO.getAdditionalConfig().getThirdPrize())){
+            validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+            validateGroupDTO.setMessage(ErrorMessage.INVALIDATED_THIRD_PRIZE);
+        }
+        else if(!UtilsValidate.isNumber(groupDTO.getAdditionalConfig().getOrganizers())){
+            validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+            validateGroupDTO.setMessage(ErrorMessage.INVALIDATED_ORGNIZERS_PRIZE);
+        }
+        else if(Double.parseDouble(groupDTO.getAdditionalConfig().getFirstPrize()) <= Double.parseDouble(groupDTO.getAdditionalConfig().getSecondPrize())){
+            validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+            validateGroupDTO.setMessage(ErrorMessage.FIRST_PRIZE_NOT_LARGER_THAN_SECOND_PRIZE);
+        }
+        else if(Double.parseDouble(groupDTO.getAdditionalConfig().getSecondPrize()) <= Double.parseDouble(groupDTO.getAdditionalConfig().getThirdPrize())){
+            validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+            validateGroupDTO.setMessage(ErrorMessage.SECOND_PRIZE_NOT_LARGER_THAN_THIRD_PRIZE);
+        } else {
+            validate = true;
+        }
+        return validate;
     }
 
     @Override
@@ -224,6 +282,7 @@ public class GroupServiceImpl implements GroupService {
         return groupDTO;
     }
 
+
     private boolean validateNullInformation(GroupDTO<GroupSupportDetail> groupDTO) {
         GroupSupportDetail groupSupportDetail = groupDTO.getAdditionalConfig();
         return (groupSupportDetail.getSupportConferencePoint() != null && groupSupportDetail.getCleanUpPoint() != null &&
@@ -239,36 +298,4 @@ public class GroupServiceImpl implements GroupService {
                 && UtilsValidate.isValidPoint(String.valueOf(groupDTO.getAdditionalConfig().getSupportConferencePoint()))
                 && UtilsValidate.isValidPoint(String.valueOf(groupDTO.getAdditionalConfig().getTrainingPoint())));
     }
-
-    Boolean validateData(GroupDTO<TeamBuildingDTO> groupDTO, GroupDTO validateGroupDTO){
-        boolean validate = false;
-        if(!UtilsValidate.isNumber(groupDTO.getAdditionalConfig().getFirstPrize())){
-            validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-            validateGroupDTO.setMessage(ErrorMessage.INVALIDATED_FIRST_PRIZE);
-        }
-        else if(!UtilsValidate.isNumber(groupDTO.getAdditionalConfig().getSecondPrize())){
-            validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-            validateGroupDTO.setMessage(ErrorMessage.INVALIDATED_SECOND_PRIZE);
-        }
-        else if(!UtilsValidate.isNumber(groupDTO.getAdditionalConfig().getThirdPrize())){
-            validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-            validateGroupDTO.setMessage(ErrorMessage.INVALIDATED_THIRD_PRIZE);
-        }
-        else if(!UtilsValidate.isNumber(groupDTO.getAdditionalConfig().getOrganizers())){
-            validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-            validateGroupDTO.setMessage(ErrorMessage.INVALIDATED_ORGNIZERS_PRIZE);
-        }
-        else if(Double.parseDouble(groupDTO.getAdditionalConfig().getFirstPrize()) <= Double.parseDouble(groupDTO.getAdditionalConfig().getSecondPrize())){
-            validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-            validateGroupDTO.setMessage(ErrorMessage.FIRST_PRIZE_NOT_LARGER_THAN_SECOND_PRIZE);
-        }
-        else if(Double.parseDouble(groupDTO.getAdditionalConfig().getSecondPrize()) <= Double.parseDouble(groupDTO.getAdditionalConfig().getThirdPrize())){
-            validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-            validateGroupDTO.setMessage(ErrorMessage.SECOND_PRIZE_NOT_LARGER_THAN_THIRD_PRIZE);
-        } else {
-            validate = true;
-        }
-        return validate;
-    }
 }
-

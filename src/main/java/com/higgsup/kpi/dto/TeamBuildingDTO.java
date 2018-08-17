@@ -1,10 +1,10 @@
 package com.higgsup.kpi.dto;
 
 public class TeamBuildingDTO {
-    private String firstPrize;
-    private String secondPrize;
-    private String thirdPrize;
-    private String organizers;
+   private String firstPrize;
+   private String secondPrize;
+   private String thirdPrize;
+   private String organizers;
 
     public String getFirstPrize() {
         return firstPrize;
