@@ -1,6 +1,8 @@
 package com.higgsup.kpi.service.impl;
 
 import com.higgsup.kpi.dto.UserDTO;
+import com.higgsup.kpi.glossary.ErrorCode;
+import com.higgsup.kpi.glossary.ErrorMessage;
 import com.higgsup.kpi.service.LdapUserService;
 import com.higgsup.kpi.util.UserAttributesMapper;
 import com.higgsup.kpi.util.UtilsLdap;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.naming.Name;
 import java.util.List;
+import java.util.Objects;
 
 import static org.springframework.ldap.query.LdapQueryBuilder.query;
 
@@ -47,12 +50,21 @@ public class LdapUserServiceImpl implements LdapUserService {
     }
 
     @Override
-    public UserDTO updateUserRole(String username, List<String> role) {
+    public UserDTO updateUserRole(String username, List<String> roles) {
+        String rolesJoin = UtilsLdap.convertRole(roles);
         UserDTO user = getUserDetail(username);
-        Name dn = UtilsLdap.buildDn(user, env.getProperty("ldap.baseDN"));
-        DirContextOperations context = ldapTemplate.lookupContext(dn);
-        context.setAttributeValue("roleForKPI", role);
-        return null;
+        if (Objects.isNull(user)) {
+            user = new UserDTO();
+            user.setErrorCode(ErrorCode.NOT_FIND.getValue());
+            user.setMessage(ErrorMessage.NOT_FIND_USER);
+        } else {
+            Name dn = UtilsLdap.buildDn(user);
+            DirContextOperations context = ldapTemplate.lookupContext(dn);
+            context.setAttributeValue("roleForKPI", rolesJoin);
+            ldapTemplate.modifyAttributes(context);
+        }
+        user.setUserRole(roles);
+        return user;
     }
 
     @Override
