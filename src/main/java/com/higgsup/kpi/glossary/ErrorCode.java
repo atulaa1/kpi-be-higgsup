@@ -9,6 +9,7 @@ public enum ErrorCode {
     NO_LARGER_THAN(940,"no larger than"),
     NOT_NULL(903, "parameter is not null"),
     JSON_PROCESSING_EXCEPTION(904, "json processing exception");
+
     private Integer value;
     private String description;
 
