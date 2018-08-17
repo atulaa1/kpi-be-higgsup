@@ -125,8 +125,6 @@ public class GroupServiceImpl implements GroupService {
         return groupDTO1;
     }
 
-
-
     @Override
     public GroupDTO createSupport(GroupDTO<GroupSupportDetail> groupDTO) throws JsonProcessingException {
         Optional<KpiGroupType> kpiGroupType = kpiGroupTypeRepo.findById(groupDTO.getGroupTypeId().getId());
@@ -175,7 +173,4 @@ public class GroupServiceImpl implements GroupService {
                 && UtilsValidate.isValidPoint(String.valueOf(groupDTO.getAdditionalConfig().getSupportConferencePoint()))
                 && UtilsValidate.isValidPoint(String.valueOf(groupDTO.getAdditionalConfig().getTrainingPoint())));
     }
-}
-
-
 }
