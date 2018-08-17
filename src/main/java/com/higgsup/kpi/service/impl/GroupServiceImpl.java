@@ -38,8 +38,7 @@ public class GroupServiceImpl implements GroupService {
         if (!kpiGroupOptional.isPresent()){
             validateGroupDTO.setErrorCode(ErrorCode.NOT_FIND_ITEM.getValue());
             validateGroupDTO.setMessage(ErrorMessage.NOT_FIND_ITEM);
-        }
-        else if(validateData(groupDTO, validateGroupDTO)) {
+        } else if(validateData(groupDTO, validateGroupDTO)) {
                 KpiGroup kpiGroup = kpiGroupOptional.get();
                 ObjectMapper mapper = new ObjectMapper();
                 BeanUtils.copyProperties(groupDTO, kpiGroup,"id");
@@ -160,11 +159,7 @@ public class GroupServiceImpl implements GroupService {
 
     Boolean validateData(GroupDTO<TeamBuildingDTO> groupDTO, GroupDTO validateGroupDTO){
         boolean validate = false;
-        if (kpiGroupRepo.findByName(groupDTO.getName()) != null){
-            validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-            validateGroupDTO.setMessage(ErrorMessage.DUPLICATED_ITEM);
-        }
-        else if(!UtilsValidate.isNumber(groupDTO.getAdditionalConfig().getFirstPrize())){
+        if(!UtilsValidate.isNumber(groupDTO.getAdditionalConfig().getFirstPrize())){
             validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
             validateGroupDTO.setMessage(ErrorMessage.INVALIDATED_FIRST_PRIZE);
         }

@@ -22,7 +22,7 @@ public class GroupController {
     GroupService groupService;
 
     @PreAuthorize("hasAnyRole('ADMIN')")
-    @PutMapping("/team-building")
+    @PutMapping("groups/team-building")
     public Response updateTeamBuildingActivity(@RequestBody GroupDTO<TeamBuildingDTO> groupDTO) throws JsonProcessingException {
         Response response = new Response(HttpStatus.OK.value());
         GroupDTO groupDTOResponse = groupService.updateTeamBuildingActivity(groupDTO);
