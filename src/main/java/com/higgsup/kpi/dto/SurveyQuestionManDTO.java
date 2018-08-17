@@ -1,6 +1,6 @@
 package com.higgsup.kpi.dto;
 
-public class SurveyQuestionManDTO {
+public class SurveyQuestionManDTO extends BaseDTO {
     private Integer id;
     private Integer number;
     private String question;
