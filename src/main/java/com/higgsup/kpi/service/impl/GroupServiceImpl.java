@@ -148,6 +148,7 @@ public class GroupServiceImpl implements GroupService {
                     BeanUtils.copyProperties(groupDTO, kpiGroup);
                     kpiGroup.setAdditionalConfig(jsonConfigSeminar);
                     kpiGroup.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+                    kpiGroup.setGroupTypeId(kpiGroupType.get());
                     kpiGroupRepo.save(kpiGroup);
                 }
             } else {
