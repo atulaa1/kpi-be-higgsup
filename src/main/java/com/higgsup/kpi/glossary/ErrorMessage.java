@@ -14,7 +14,7 @@ public final class ErrorMessage {
     public final static String INVALIDATED_ORGNIZERS_PRIZE = "Invalidated orgnizers record";
     public final static String FIRST_PRIZE_NOT_LARGER_THAN_SECOND_PRIZE = "First prize has to large than second prize";
     public final static String SECOND_PRIZE_NOT_LARGER_THAN_THIRD_PRIZE = "Second prize has to large than thirst prize";
-    public final static String HAS_BEEN_EXISTED = "Team building has been existed";
+    public final static String TEAMBUIDING_HAS_BEEN_EXISTED = "Team building has been existed";
     public final static String NOT_FIND_GROUP= "not find group";
     public final static String PARAMETERS_NAME_PROJECT_EXISTS = "parameters name project exists";
     public final static String PARAMETERS_ROLES_IS_EMPTY = "parameterrole is empty";

@@ -154,7 +154,7 @@ public class GroupServiceImpl implements GroupService {
             }
         } else {
             validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_ALREADY_EXIST.getValue());
-            validateGroupDTO.setMessage(ErrorMessage.HAS_BEEN_EXISTED);
+            validateGroupDTO.setMessage(ErrorMessage.TEAMBUIDING_HAS_BEEN_EXISTED);
         }
         return validateGroupDTO;
     }
