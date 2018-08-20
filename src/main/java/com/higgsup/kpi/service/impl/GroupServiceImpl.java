@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.higgsup.kpi.dto.GroupClubDetail;
 import com.higgsup.kpi.dto.GroupDTO;
+import com.higgsup.kpi.dto.GroupSeminarDetail;
+import com.higgsup.kpi.dto.GroupClubDetail;
 import com.higgsup.kpi.dto.TeamBuildingDTO;
 import com.higgsup.kpi.dto.GroupSupportDetail;
 import com.higgsup.kpi.entity.KpiGroup;
@@ -58,6 +60,43 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    public GroupDTO createSeminar(GroupDTO<GroupSeminarDetail> groupDTO) throws JsonProcessingException {
+        if (kpiGroupRepo.findByName(groupDTO.getName()) != null) {
+            groupDTO.setErrorCode(ErrorCode.DUPLICATED_ITEM.getValue());
+            groupDTO.setMessage(ErrorCode.DUPLICATED_ITEM.getDescription());
+        } else if (!UtilsValidate.pointValidate(String.valueOf(groupDTO.getAdditionalConfig().getHost()))){
+            groupDTO.setMessage(ErrorMessage.POINT_HOST_IS_NOT_VALIDATE);
+            groupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+        } else if (!UtilsValidate.pointValidate((String.valueOf(groupDTO.getAdditionalConfig().getMember())))) {
+            groupDTO.setMessage(ErrorMessage.POINT_MEMBER_IS_NOT_VALIDATE);
+            groupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+        } else if (!UtilsValidate.pointValidate((String.valueOf(groupDTO.getAdditionalConfig().getListener())))) {
+            groupDTO.setMessage(ErrorMessage.POINT_LISTENER_IS_NOT_VALIDATE);
+            groupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+        } else if (Double.parseDouble((String.valueOf(groupDTO.getAdditionalConfig().getHost()))) <= Double.parseDouble((String.valueOf(groupDTO.getAdditionalConfig().getMember())))) {
+            groupDTO.setMessage(ErrorMessage.POINT_HOST_NOT_LARGER_THAN_POINT_MEMBER);
+            groupDTO.setErrorCode(ErrorCode.NO_LARGER_THAN.getValue());
+        } else if (Double.parseDouble((String.valueOf(groupDTO.getAdditionalConfig().getMember()))) <= Double.parseDouble((String.valueOf(groupDTO.getAdditionalConfig().getListener())))) {
+            groupDTO.setMessage(ErrorMessage.POINT_MEMBER_NOT_LARGER_THAN_POINT_LISTENER);
+            groupDTO.setErrorCode(ErrorCode.NO_LARGER_THAN.getValue());
+        }else {
+            KpiGroup kpiGroup = new KpiGroup();
+            ObjectMapper mapper = new ObjectMapper();
+            String jsonConfigSeminar = mapper.writeValueAsString(groupDTO.getAdditionalConfig());
+            BeanUtils.copyProperties(groupDTO, kpiGroup);
+            kpiGroup.setAdditionalConfig(jsonConfigSeminar);
+            kpiGroup.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+            Optional<KpiGroupType> kpiGroupType = kpiGroupTypeRepo.findById(groupDTO.getGroupTypeId().getId());
+            if (kpiGroupType.isPresent()) {
+                kpiGroup.setGroupTypeId(kpiGroupType.get());
+                kpiGroupRepo.save(kpiGroup);
+            } else {
+                groupDTO.setMessage(ErrorMessage.NOT_FIND_SEMINAR);
+                groupDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
+            }
+        }
+        return groupDTO;
+    }
     public GroupDTO createClub(GroupDTO<GroupClubDetail> groupDTO) throws JsonProcessingException {
         GroupDTO groupDTO1 = new GroupDTO();
         Integer minNumberOfSessions = groupDTO.getAdditionalConfig().getMinNumberOfSessions();
@@ -149,7 +188,9 @@ public class GroupServiceImpl implements GroupService {
                         groupDTO1.setErrorCode(ErrorCode.NOT_FIND.getValue());
                     }
                 }
+
             }
+
         }
         return groupDTO1;
     }
@@ -217,6 +258,7 @@ public class GroupServiceImpl implements GroupService {
         }
         return groupDTO;
     }
+
 
     @Override
     public GroupDTO updateSupport(GroupDTO<GroupSupportDetail> groupDTO) throws JsonProcessingException {
@@ -296,4 +338,5 @@ public class GroupServiceImpl implements GroupService {
         }
         return validate;
     }
+    
 }
