@@ -1,31 +1,31 @@
 package com.higgsup.kpi.dto;
 
 public class GroupSeminarDetail {
-    private String host;
-    private String member;
-    private String listener;
+    private float host;
+    private float member;
+    private float listener;
 
-    public String getHost() {
+    public float getHost() {
         return host;
     }
 
-    public void setHost(String host) {
+    public void setHost(float host) {
         this.host = host;
     }
 
-    public String getMember() {
+    public float getMember() {
         return member;
     }
 
-    public void setMember(String member) {
+    public void setMember(float member) {
         this.member = member;
     }
 
-    public String getListener() {
+    public float getListener() {
         return listener;
     }
 
-    public void setListener(String listener) {
+    public void setListener(float listener) {
         this.listener = listener;
     }
 }

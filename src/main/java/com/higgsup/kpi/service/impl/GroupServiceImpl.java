@@ -64,19 +64,19 @@ public class GroupServiceImpl implements GroupService {
         if (kpiGroupRepo.findByName(groupDTO.getName()) != null) {
             groupDTO.setErrorCode(ErrorCode.DUPLICATED_ITEM.getValue());
             groupDTO.setMessage(ErrorCode.DUPLICATED_ITEM.getDescription());
-        } else if (!UtilsValidate.pointValidate(groupDTO.getAdditionalConfig().getHost())) {
+        } else if (!UtilsValidate.pointValidate(String.valueOf(groupDTO.getAdditionalConfig().getHost()))){
             groupDTO.setMessage(ErrorMessage.POINT_HOST_IS_NOT_VALIDATE);
             groupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-        } else if (!UtilsValidate.pointValidate(groupDTO.getAdditionalConfig().getMember())) {
+        } else if (!UtilsValidate.pointValidate((String.valueOf(groupDTO.getAdditionalConfig().getMember())))) {
             groupDTO.setMessage(ErrorMessage.POINT_MEMBER_IS_NOT_VALIDATE);
             groupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-        } else if (!UtilsValidate.pointValidate(groupDTO.getAdditionalConfig().getListener())) {
+        } else if (!UtilsValidate.pointValidate((String.valueOf(groupDTO.getAdditionalConfig().getListener())))) {
             groupDTO.setMessage(ErrorMessage.POINT_LISTENER_IS_NOT_VALIDATE);
             groupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-        } else if (Double.parseDouble(groupDTO.getAdditionalConfig().getHost()) <= Double.parseDouble(groupDTO.getAdditionalConfig().getMember())) {
+        } else if (Double.parseDouble((String.valueOf(groupDTO.getAdditionalConfig().getHost()))) <= Double.parseDouble((String.valueOf(groupDTO.getAdditionalConfig().getMember())))) {
             groupDTO.setMessage(ErrorMessage.POINT_HOST_NOT_LARGER_THAN_POINT_MEMBER);
             groupDTO.setErrorCode(ErrorCode.NO_LARGER_THAN.getValue());
-        } else if (Double.parseDouble(groupDTO.getAdditionalConfig().getMember()) <= Double.parseDouble(groupDTO.getAdditionalConfig().getListener())) {
+        } else if (Double.parseDouble((String.valueOf(groupDTO.getAdditionalConfig().getMember()))) <= Double.parseDouble((String.valueOf(groupDTO.getAdditionalConfig().getListener())))) {
             groupDTO.setMessage(ErrorMessage.POINT_MEMBER_NOT_LARGER_THAN_POINT_LISTENER);
             groupDTO.setErrorCode(ErrorCode.NO_LARGER_THAN.getValue());
         }else {
@@ -338,4 +338,5 @@ public class GroupServiceImpl implements GroupService {
         }
         return validate;
     }
+    
 }
