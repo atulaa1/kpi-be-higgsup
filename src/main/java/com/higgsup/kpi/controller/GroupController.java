@@ -9,6 +9,10 @@ import com.higgsup.kpi.dto.GroupSeminarDetail;
 import com.higgsup.kpi.dto.GroupSupportDetail;
 import com.higgsup.kpi.dto.Response;
 import com.higgsup.kpi.dto.*;
+import com.higgsup.kpi.dto.GroupClubDetail;
+import com.higgsup.kpi.dto.GroupDTO;
+import com.higgsup.kpi.dto.GroupSeminarDetail;
+import com.higgsup.kpi.dto.Response;
 import com.higgsup.kpi.glossary.ErrorCode;
 import com.higgsup.kpi.dto.TeamBuildingDTO;
 import com.higgsup.kpi.service.GroupService;
@@ -58,6 +62,18 @@ public class GroupController{
         }catch(JsonProcessingException e){
             response.setMessage(ErrorCode.JSON_PROCESSING_EXCEPTION.getDescription());
             response.setStatus(ErrorCode.JSON_PROCESSING_EXCEPTION.getValue());
+        }
+        return response;
+    }
+
+    @RequestMapping(value = "/groups/seminars" ,method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ADMIN')")
+    public Response createSeminar(@RequestBody GroupDTO<GroupSeminarDetail> groupDTO) throws JsonProcessingException {
+        Response response = new Response(HttpStatus.OK.value());
+        GroupDTO groupDTORP = groupService.createSeminar(groupDTO);
+        if (Objects.nonNull(groupDTORP.getErrorCode())) {
+            response.setStatus(groupDTORP.getErrorCode());
+            response.setMessage(groupDTORP.getMessage());
         }
         return response;
     }

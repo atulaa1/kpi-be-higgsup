@@ -73,11 +73,6 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-tomcat</artifactId>
-			<scope>provided</scope>
-		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -100,18 +95,29 @@
 				<datasource.password>123456</datasource.password>
 				<server.port>8080</server.port>
 			</properties>
-
+			<dependencies>
+				<dependency>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-tomcat</artifactId>
+				</dependency>
+			</dependencies>
 		</profile>
 
 		<profile>
-			<id>test</id>
+			<id>staging</id>
 			<properties>
 				<datasource.url>jdbc:mysql://localhost:3306/higgsup_kpi?useSSL=false</datasource.url>
 				<datasource.username>root</datasource.username>
 				<datasource.password>123qweasd</datasource.password>
 				<server.port>8080</server.port>
 			</properties>
-
+			<dependencies>
+				<dependency>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-tomcat</artifactId>
+					<scope>provided</scope>
+				</dependency>
+			</dependencies>
 		</profile>
 
 	</profiles>

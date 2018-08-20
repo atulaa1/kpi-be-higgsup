@@ -1,9 +1,9 @@
 package com.higgsup.kpi.dto;
 
 public class GroupSeminarDetail {
-        private float host;
-        private float member;
-        private float listener;
+    private float host;
+    private float member;
+    private float listener;
 
     public float getHost() {
         return host;
