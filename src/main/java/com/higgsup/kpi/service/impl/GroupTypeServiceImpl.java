@@ -3,6 +3,7 @@ package com.higgsup.kpi.service.impl;
 import com.higgsup.kpi.dto.GroupTypeDTO;
 import com.higgsup.kpi.entity.KpiGroupType;
 import com.higgsup.kpi.repository.KpiEventUserRepo;
+import com.higgsup.kpi.repository.KpiGroupRepo;
 import com.higgsup.kpi.repository.KpiGroupTypeRepo;
 import com.higgsup.kpi.service.GroupTypeService;
 import org.springframework.beans.BeanUtils;
