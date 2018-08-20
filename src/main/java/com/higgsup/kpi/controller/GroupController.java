@@ -16,6 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 
 @RestController
@@ -148,4 +150,14 @@ public class GroupController {
 
         return response;
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @RequestMapping("/groups")
+    public Response getAllGroup() throws IOException {
+        Response response = new Response(HttpStatus.OK.value());
+        List<GroupDTO> groupDTOS = groupService.getAllGroup();
+        response.setData(groupDTOS);
+        return response;
+    }
+
 }
