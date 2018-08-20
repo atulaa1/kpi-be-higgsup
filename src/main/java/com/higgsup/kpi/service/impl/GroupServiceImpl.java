@@ -38,7 +38,7 @@ public class GroupServiceImpl implements GroupService {
         if (!kpiGroupOptional.isPresent()){
             validateGroupDTO.setErrorCode(ErrorCode.NOT_FIND_ITEM.getValue());
             validateGroupDTO.setMessage(ErrorMessage.NOT_FIND_ITEM);
-        } else if(validateData(groupDTO, validateGroupDTO)) {
+        } else if(validateTeambuildingInfo(groupDTO, validateGroupDTO)) {
                 KpiGroup kpiGroup = kpiGroupOptional.get();
                 ObjectMapper mapper = new ObjectMapper();
                 BeanUtils.copyProperties(groupDTO, kpiGroup,"id");
@@ -161,7 +161,7 @@ public class GroupServiceImpl implements GroupService {
 
         KpiGroup checkGroupTypeId = kpiGroupRepo.findGroupTypeId(groupTypeId);
         if(checkGroupTypeId == null){
-            if (validateData(groupDTO, validateGroupDTO)) {
+            if (validateTeambuildingInfo(groupDTO, validateGroupDTO)) {
                 KpiGroup kpiGroup = new KpiGroup();
                 ObjectMapper mapper = new ObjectMapper();
                 String jsonConfigTeamBuilding = mapper.writeValueAsString(groupDTO.getAdditionalConfig());
@@ -266,7 +266,7 @@ public class GroupServiceImpl implements GroupService {
                 && UtilsValidate.isValidPoint(String.valueOf(groupDTO.getAdditionalConfig().getTrainingPoint())));
     }
 
-    Boolean validateData(GroupDTO<TeamBuildingDTO> groupDTO, GroupDTO validateGroupDTO){
+    Boolean validateTeambuildingInfo(GroupDTO<TeamBuildingDTO> groupDTO, GroupDTO validateGroupDTO){
         boolean validate = false;
         if(!UtilsValidate.isNumber(groupDTO.getAdditionalConfig().getFirstPrize())){
             validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
