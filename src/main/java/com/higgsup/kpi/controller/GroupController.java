@@ -65,8 +65,8 @@ public class GroupController {
         try {
             GroupDTO groupDTOResponse = groupService.updateTeamBuildingActivity(groupDTO);
             if(Objects.nonNull(groupDTOResponse.getErrorCode())){
-                response.setStatus(groupDTO.getErrorCode());
-                response.setMessage(groupDTO.getMessage());
+                response.setStatus(groupDTOResponse.getErrorCode());
+                response.setMessage(groupDTOResponse.getMessage());
             }
         } catch (JsonProcessingException e) {
             response.setMessage(ErrorCode.JSON_PROCESSING_EXCEPTION.getDescription());
