@@ -76,7 +76,7 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>
-
+			<scope>provide</scope>
 		</dependency>
 	</dependencies>
 	<build>
@@ -97,7 +97,7 @@
 			<properties>
 				<datasource.url>jdbc:mysql://localhost:3306/higgsup_kpi?useSSL=false</datasource.url>
 				<datasource.username>root</datasource.username>
-				<datasource.password></datasource.password>
+				<datasource.password>123456</datasource.password>
 				<server.port>8080</server.port>
 			</properties>
 
