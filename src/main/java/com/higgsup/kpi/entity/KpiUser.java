@@ -20,6 +20,7 @@ public class KpiUser implements Serializable {
     @Column(name = "created_date")
     @CreationTimestamp
     private Timestamp name;
+
     @Basic
     @Column(name = "active")
     private Integer active;

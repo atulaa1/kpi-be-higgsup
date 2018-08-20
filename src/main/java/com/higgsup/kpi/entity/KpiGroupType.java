@@ -8,9 +8,11 @@ import java.util.List;
 @Table(name = "kpi_group_type")
 public class KpiGroupType implements Serializable {
     private static final long serialVersionUID = 1L;
+
     @Id
     @Column(name = "id")
     private Integer id;
+
     @Basic
     @Column(name = "name")
     private String name;
