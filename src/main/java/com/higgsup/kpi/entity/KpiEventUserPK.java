@@ -8,9 +8,11 @@ import java.io.Serializable;
 @Embeddable
 public class KpiEventUserPK implements Serializable {
     private static final long serialVersionUID = 1L;
+
     @Basic(optional = false)
     @Column(name = "user_name")
     private String userName;
+
     @Basic(optional = false)
     @Column(name = "event_id")
     private int eventId;

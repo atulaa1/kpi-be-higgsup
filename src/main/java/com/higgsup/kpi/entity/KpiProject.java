@@ -1,38 +1,31 @@
 package com.higgsup.kpi.entity;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "kpi_group")
-public class KpiGroup implements Serializable {
+@Table(name = "kpi_project")
+public class KpiProject implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
-
     @Basic
     @Column(name = "name")
     private String name;
-
     @Basic
-    @Column(name = "description")
-    private String description;
-
-    @JoinColumn(name = "group_type_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private KpiGroupType groupTypeId;
+    @Column(name = "active", columnDefinition = "TINYINT default 1")
+    private Integer active;
 
     @Basic
     @Column(name = "created_date")
+    @CreationTimestamp
     private Timestamp createdDate;
-
-    @Basic
-    @Column(name = "additional_config")
-    private String additionalConfig;
 
     public Integer getId() {
         return id;
@@ -50,20 +43,12 @@ public class KpiGroup implements Serializable {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
+    public Integer getActive() {
+        return active;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public KpiGroupType getGroupTypeId() {
-        return groupTypeId;
-    }
-
-    public void setGroupTypeId(KpiGroupType groupTypeId) {
-        this.groupTypeId = groupTypeId;
+    public void setActive(Integer active) {
+        this.active = active;
     }
 
     public Timestamp getCreatedDate() {
@@ -72,13 +57,5 @@ public class KpiGroup implements Serializable {
 
     public void setCreatedDate(Timestamp createdDate) {
         this.createdDate = createdDate;
-    }
-
-    public String getAdditionalConfig() {
-        return additionalConfig;
-    }
-
-    public void setAdditionalConfig(String additionalConfig) {
-        this.additionalConfig = additionalConfig;
     }
 }
