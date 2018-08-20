@@ -8,6 +8,8 @@ import com.higgsup.kpi.dto.TeamBuildingDTO;
 import com.higgsup.kpi.dto.GroupSupportDetail;
 
 public interface GroupService {
+    GroupDTO updateTeamBuildingActivity(GroupDTO<TeamBuildingDTO> groupDTO) throws JsonProcessingException;
+
     GroupDTO createSupport(GroupDTO<GroupSupportDetail> groupDTO) throws JsonProcessingException;
     GroupDTO updateSupport(GroupDTO<GroupSupportDetail> groupDTO) throws JsonProcessingException;
     GroupDTO createConfigTeamBuilding(GroupDTO<TeamBuildingDTO> groupDTO) throws JsonProcessingException;
