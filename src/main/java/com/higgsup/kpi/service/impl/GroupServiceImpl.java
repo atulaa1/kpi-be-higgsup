@@ -145,6 +145,49 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    public GroupDTO updateSeminar(GroupDTO<GroupSeminarDetail> groupDTO) throws JsonProcessingException {
+        if (kpiGroupRepo.findById(groupDTO.getId())==null){
+            groupDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
+            groupDTO.setMessage(ErrorMessage.NOT_FIND_SEMINAR);
+        }else if (!UtilsValidate.pointValidate(String.valueOf(groupDTO.getAdditionalConfig().getHost()))) {
+            groupDTO.setMessage(ErrorMessage.POINT_HOST_IS_NOT_VALIDATE);
+            groupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+        } else if (!UtilsValidate.pointValidate(String.valueOf(groupDTO.getAdditionalConfig().getMember()))){
+            groupDTO.setMessage(ErrorMessage.POINT_MEMBER_IS_NOT_VALIDATE);
+            groupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+        } else if (!UtilsValidate.pointValidate(String.valueOf(groupDTO.getAdditionalConfig().getListener()))) {
+            groupDTO.setMessage(ErrorMessage.POINT_LISTENER_IS_NOT_VALIDATE);
+            groupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+        } else if (Double.parseDouble(String.valueOf(groupDTO.getAdditionalConfig().getHost()) )<= Double.parseDouble(String.valueOf(groupDTO.getAdditionalConfig().getMember()))) {
+            groupDTO.setMessage(ErrorMessage.POINT_HOST_NOT_LARGER_THAN_POINT_MEMBER);
+            groupDTO.setErrorCode(ErrorCode.NO_LARGER_THAN.getValue());
+        } else if (Double.parseDouble(String.valueOf(groupDTO.getAdditionalConfig().getMember())) <= Double.parseDouble(String.valueOf(groupDTO.getAdditionalConfig().getListener()))) {
+            groupDTO.setMessage(ErrorMessage.POINT_MEMBER_NOT_LARGER_THAN_POINT_LISTENER);
+            groupDTO.setErrorCode(ErrorCode.NO_LARGER_THAN.getValue());
+        }else {
+            Optional<KpiGroup> kpiGroupOptional = kpiGroupRepo.findById(groupDTO.getId());
+            if (kpiGroupOptional.isPresent()){
+                KpiGroup kpiGroup = kpiGroupOptional.get();
+                ObjectMapper mapper = new ObjectMapper();
+                BeanUtils.copyProperties(groupDTO, kpiGroup,"id");
+                String seminarJson = mapper.writeValueAsString(groupDTO.getAdditionalConfig());
+                kpiGroup.setAdditionalConfig(seminarJson);
+                kpiGroup.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+                Optional<KpiGroupType> kpiGroupType = kpiGroupTypeRepo.findById(groupDTO.getGroupTypeId().getId());
+                if (kpiGroupType.isPresent())
+                {
+                    kpiGroup.setGroupTypeId(kpiGroupType.get());
+                    kpiGroupRepo.save(kpiGroup);
+                } else {
+                    groupDTO.setMessage(ErrorMessage.NOT_FIND_GROUP_TYPE);
+                    groupDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
+                }
+            }
+        }
+        return groupDTO;
+    }
+
+    @Override
     public GroupDTO updateClub(GroupDTO<GroupClubDetail> groupDTO) throws JsonProcessingException {
         Integer id = groupDTO.getId();
         GroupDTO groupDTO1 = new GroupDTO();
@@ -188,9 +231,7 @@ public class GroupServiceImpl implements GroupService {
                         groupDTO1.setErrorCode(ErrorCode.NOT_FIND.getValue());
                     }
                 }
-
             }
-
         }
         return groupDTO1;
     }
@@ -258,7 +299,6 @@ public class GroupServiceImpl implements GroupService {
         }
         return groupDTO;
     }
-
 
     @Override
     public GroupDTO updateSupport(GroupDTO<GroupSupportDetail> groupDTO) throws JsonProcessingException {
@@ -338,5 +378,5 @@ public class GroupServiceImpl implements GroupService {
         }
         return validate;
     }
-    
+
 }
