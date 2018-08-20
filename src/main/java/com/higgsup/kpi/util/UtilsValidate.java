@@ -46,13 +46,13 @@ public class UtilsValidate {
 		}
 		return false;
 	}
-    public static Boolean pointValidate(String point) {
+  /*  public static Boolean pointValidate(String point) {
         String regex = "((-|\\+)?[0-9]+(\\.[0-9]+)?)+";
         if (point.matches(regex)){
             return true;
         }
         return false;
-    }
+    }*/
 
 	public static Boolean isValidPoint(String str)
 	{
