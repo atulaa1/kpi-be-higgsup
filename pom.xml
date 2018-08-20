@@ -104,7 +104,7 @@
 		</profile>
 
 		<profile>
-			<id>test</id>
+			<id>staging</id>
 			<properties>
 				<datasource.url>jdbc:mysql://localhost:3306/higgsup_kpi?useSSL=false</datasource.url>
 				<datasource.username>root</datasource.username>
