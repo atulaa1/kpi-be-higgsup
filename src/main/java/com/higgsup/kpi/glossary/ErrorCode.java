@@ -14,7 +14,11 @@ public enum ErrorCode {
     DUPLICATED_ITEM(926, "Duplicated item"),
     DO_NOT_EXISTED_ITEM(927, "This team building activity do not existed"),
     NOT_FIND_ITEM(928, "Item does not existed"),
-    NOT_FIND_GROUP_TYPE(929, "Item does not existed");
+    NOT_FIND_GROUP_TYPE(929, "Item does not existed"),
+    ERROR_IO_EXCEPTION(930, "Error IOException"),
+
+
+    ;
 
     private Integer value;
     private String description;

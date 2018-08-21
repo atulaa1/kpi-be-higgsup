@@ -385,8 +385,7 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public List<GroupDTO> getAllGroup() throws IOException {
         List<KpiGroup> groupList = (List<KpiGroup>) kpiGroupRepo.findAll();
-        List<GroupDTO> groupDTOS = convertGroupsEntityToDTO(groupList);
-        return groupDTOS;
+        return convertGroupsEntityToDTO(groupList);
     }
 
     private List<GroupDTO> convertGroupsEntityToDTO(List<KpiGroup> groupList) throws IOException {
