@@ -207,8 +207,7 @@ public class GroupServiceImpl implements GroupService {
                     groupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
                 }
                 else {
-                    KpiGroup kpiGroup = kpiGroupRepo.findByGroupTypeId(kpiGroupType);
-                    groupDTO.setId(kpiGroup.getId());
+                    KpiGroup kpiGroup = new KpiGroup();
                     ObjectMapper mapper = new ObjectMapper();
                     String jsonConfigSeminar = mapper.writeValueAsString(groupDTO.getAdditionalConfig());
                     BeanUtils.copyProperties(groupDTO, kpiGroup);
@@ -231,7 +230,7 @@ public class GroupServiceImpl implements GroupService {
         Optional<KpiGroupType> kpiGroupType = kpiGroupTypeRepo.findById(groupDTO.getGroupTypeId().getId());
         if (kpiGroupRepo.findByGroupTypeId(kpiGroupType) == null) {
             groupDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
-            groupDTO.setMessage(ErrorMessage.NOT_FIND_GROUP_TYPE);
+            groupDTO.setMessage(ErrorMessage.NOT_FIND_GROUP);
         } else {
             if (validateNullInformation(groupDTO)) {
                 if(!validatePoint(groupDTO))
