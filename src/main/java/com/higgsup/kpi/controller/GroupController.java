@@ -22,10 +22,10 @@ public class GroupController {
 
     @Autowired
     GroupService groupService;
+
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/groups/support")
-    public Response createSupport(@RequestBody GroupDTO<GroupSupportDetail> groupDTO)
-    {
+    public Response createSupport(@RequestBody GroupDTO<GroupSupportDetail> groupDTO) {
         Response response = new Response(HttpStatus.OK.value());
         try {
             GroupDTO group = groupService.createSupport(groupDTO);
@@ -33,8 +33,7 @@ public class GroupController {
                 response.setStatus(groupDTO.getErrorCode());
                 response.setMessage(groupDTO.getMessage());
             }
-        }catch(JsonProcessingException e)
-        {
+        } catch (JsonProcessingException e) {
             response.setMessage(ErrorCode.JSON_PROCESSING_EXCEPTION.getDescription());
             response.setStatus(ErrorCode.JSON_PROCESSING_EXCEPTION.getValue());
         }
@@ -43,8 +42,7 @@ public class GroupController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/groups/support")
-    public Response updateSupport(@RequestBody GroupDTO<GroupSupportDetail> groupDTO)
-    {
+    public Response updateSupport(@RequestBody GroupDTO<GroupSupportDetail> groupDTO) {
         Response response = new Response(HttpStatus.OK.value());
         try {
             GroupDTO group = groupService.updateSupport(groupDTO);
@@ -52,14 +50,14 @@ public class GroupController {
                 response.setStatus(groupDTO.getErrorCode());
                 response.setMessage(groupDTO.getMessage());
             }
-        }catch(JsonProcessingException e){
+        } catch (JsonProcessingException e) {
             response.setMessage(ErrorCode.JSON_PROCESSING_EXCEPTION.getDescription());
             response.setStatus(ErrorCode.JSON_PROCESSING_EXCEPTION.getValue());
         }
         return response;
     }
 
-    @RequestMapping(value = "/groups/seminars" ,method = RequestMethod.POST)
+    @RequestMapping(value = "/groups/seminars", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ADMIN')")
     public Response createSeminar(@RequestBody GroupDTO<GroupSeminarDetail> groupDTO) throws JsonProcessingException {
         Response response = new Response(HttpStatus.OK.value());
@@ -78,7 +76,7 @@ public class GroupController {
 
         try {
             GroupDTO groupDTOResponse = groupService.updateTeamBuildingActivity(groupDTO);
-            if(Objects.nonNull(groupDTOResponse.getErrorCode())){
+            if (Objects.nonNull(groupDTOResponse.getErrorCode())) {
                 response.setStatus(groupDTOResponse.getErrorCode());
                 response.setMessage(groupDTOResponse.getMessage());
             }
@@ -108,13 +106,13 @@ public class GroupController {
         return response;
     }
 
-    @RequestMapping(value = "groups/seminars/{id}" , method = RequestMethod.PUT)
+    @RequestMapping(value = "groups/seminars/{id}", method = RequestMethod.PUT)
     @PreAuthorize("hasRole('ADMIN')")
-    public Response updateSeminar(@PathVariable Integer id ,@RequestBody GroupDTO<GroupSeminarDetail> groupDTO) throws JsonProcessingException {
+    public Response updateSeminar(@PathVariable Integer id, @RequestBody GroupDTO<GroupSeminarDetail> groupDTO) throws JsonProcessingException {
         Response response = new Response(HttpStatus.OK.value());
         groupDTO.setId(id);
         GroupDTO groupDTO1 = groupService.updateSeminar(groupDTO);
-        if(Objects.nonNull(groupDTO1.getErrorCode())){
+        if (Objects.nonNull(groupDTO1.getErrorCode())) {
             response.setStatus(groupDTO1.getErrorCode());
             response.setMessage(groupDTO1.getMessage());
         }
@@ -123,12 +121,12 @@ public class GroupController {
 
     @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping("groups/team-building")
-    public Response createConfigTeamBuilding(@RequestBody GroupDTO<TeamBuildingDTO> groupDTO){
+    public Response createConfigTeamBuilding(@RequestBody GroupDTO<TeamBuildingDTO> groupDTO) {
         Response response = new Response(HttpStatus.OK.value());
 
         try {
             GroupDTO groupDTOTeamBuilding = groupService.createConfigTeamBuilding(groupDTO);
-            if(Objects.nonNull(groupDTOTeamBuilding.getErrorCode())){
+            if (Objects.nonNull(groupDTOTeamBuilding.getErrorCode())) {
                 response.setStatus(groupDTOTeamBuilding.getErrorCode());
                 response.setMessage(groupDTOTeamBuilding.getMessage());
             }
