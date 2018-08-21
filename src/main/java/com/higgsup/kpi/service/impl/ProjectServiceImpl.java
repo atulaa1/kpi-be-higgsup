@@ -31,25 +31,32 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ProjectDTO updateProject(ProjectDTO projectDTO) {
-        Optional<KpiProject> kpiProjectOptional = kpiProjectRepo.findById(projectDTO.getId());
+        //check name is null then not update
+        if (Objects.nonNull(projectDTO.getName())) {
+            Optional<KpiProject> kpiProjectOptional = kpiProjectRepo.findById(projectDTO.getId());
+            if (kpiProjectOptional.isPresent()) {
+                KpiProject kpiProject = kpiProjectOptional.get();
+                //check if same
+                KpiProject kpiProjectInDB = kpiProjectRepo.findByName(projectDTO.getName());
+                if (!(Objects.nonNull(kpiProjectInDB) && !Objects.equals(projectDTO.getId(), kpiProjectInDB.getId()))) {
+                    BeanUtils.copyProperties(projectDTO, kpiProject, "id", "createdDate");
+                    kpiProjectRepo.save(kpiProject);
+                    return new ProjectDTO();
+                } else {
+                    projectDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+                    projectDTO.setMessage(ErrorMessage.PARAMETERS_NAME_PROJECT_EXISTS);
+                }
 
-        if (kpiProjectOptional.isPresent()) {
-            KpiProject kpiProject = kpiProjectOptional.get();
-            //check if same
-            KpiProject kpiProjectInDB = kpiProjectRepo.findByName(projectDTO.getName());
-            if (!(Objects.nonNull(kpiProjectInDB) && !Objects.equals(projectDTO.getId(), kpiProjectInDB.getId()))) {
-                BeanUtils.copyProperties(projectDTO, kpiProject, "id", "createdDate");
-                kpiProjectRepo.save(kpiProject);
-                return new ProjectDTO();
             } else {
-                projectDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-                projectDTO.setMessage(ErrorMessage.PARAMETERS_NAME_PROJECT_EXISTS);
+                projectDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
+                projectDTO.setMessage(ErrorMessage.NOT_FIND_GROUP);
             }
-
         } else {
-            projectDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
-            projectDTO.setMessage(ErrorMessage.NOT_FIND_GROUP);
+            projectDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
+            projectDTO.setMessage(ErrorMessage.NAME_IS_NOT_ALLOWED_NULL);
         }
+
+
         return projectDTO;
     }
 
@@ -71,16 +78,22 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ProjectDTO createProject(ProjectDTO projectDTO) {
-        KpiProject kpiProject = kpiProjectRepo.findByName(projectDTO.getName());
-        if (Objects.isNull(kpiProject)) {
-            kpiProject = new KpiProject();
-            BeanUtils.copyProperties(projectDTO, kpiProject, "id");
-            kpiProjectRepo.save(kpiProject);
-            return new ProjectDTO();
+        if (Objects.nonNull(projectDTO.getName())) {
+            KpiProject kpiProject = kpiProjectRepo.findByName(projectDTO.getName());
+            if (Objects.isNull(kpiProject)) {
+                kpiProject = new KpiProject();
+                BeanUtils.copyProperties(projectDTO, kpiProject, "id");
+                kpiProjectRepo.save(kpiProject);
+                return new ProjectDTO();
+            } else {
+                projectDTO.setErrorCode(ErrorCode.PARAMETERS_ALREADY_EXIST.getValue());
+                projectDTO.setMessage(ErrorMessage.PARAMETERS_NAME_PROJECT_EXISTS);
+            }
         } else {
-            projectDTO.setErrorCode(ErrorCode.PARAMETERS_ALREADY_EXIST.getValue());
-            projectDTO.setMessage(ErrorMessage.PARAMETERS_NAME_PROJECT_EXISTS);
+            projectDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
+            projectDTO.setMessage(ErrorMessage.NAME_IS_NOT_ALLOWED_NULL);
         }
+
         return projectDTO;
     }
 

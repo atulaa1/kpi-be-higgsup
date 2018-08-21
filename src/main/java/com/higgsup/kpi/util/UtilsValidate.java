@@ -32,6 +32,13 @@ public class UtilsValidate {
 		return true;
 	}
 
+    public static Boolean pointValidate(String point) {
+        String regex = "((-|\\+)?[0-9]+(\\.[0-9]+)?)+";
+        if (point.matches(regex)){
+            return true;
+        }
+        return false;
+    }
 	public static Boolean isNumber(String str){
 		String regex = "((-|\\+)?[0-9]+(\\.[0-9]+)?)+";
 		if (str.matches(regex)){
@@ -39,6 +46,7 @@ public class UtilsValidate {
 		}
 		return false;
 	}
+
 	public static Boolean isValidPoint(String str)
 	{
 		Pattern pattern = Pattern.compile("^([0-9]{0,2}[.])?[0-9]{0,2}");
