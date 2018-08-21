@@ -7,6 +7,9 @@ import com.higgsup.kpi.dto.GroupSeminarDetail;
 import com.higgsup.kpi.dto.TeamBuildingDTO;
 import com.higgsup.kpi.dto.GroupSupportDetail;
 
+import java.io.IOException;
+import java.util.List;
+
 
 public interface GroupService {
     GroupDTO updateTeamBuildingActivity(GroupDTO<TeamBuildingDTO> groupDTO) throws JsonProcessingException;
@@ -17,4 +20,5 @@ public interface GroupService {
     GroupDTO updateSeminar(GroupDTO<GroupSeminarDetail> groupDTO) throws JsonProcessingException;
     GroupDTO updateClub(GroupDTO<GroupClubDetail> groupDTO) throws JsonProcessingException;
     GroupDTO createSeminar(GroupDTO<GroupSeminarDetail> groupDTO) throws JsonProcessingException;
+    List<GroupDTO> getAllGroup() throws IOException;
 }

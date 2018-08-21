@@ -3,36 +3,29 @@ package com.higgsup.kpi.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.higgsup.kpi.configure.BaseConfiguration;
-import com.higgsup.kpi.dto.GroupClubDetail;
-import com.higgsup.kpi.dto.GroupDTO;
-import com.higgsup.kpi.dto.GroupSeminarDetail;
-import com.higgsup.kpi.dto.GroupSupportDetail;
-import com.higgsup.kpi.dto.Response;
 import com.higgsup.kpi.dto.*;
-import com.higgsup.kpi.dto.GroupClubDetail;
-import com.higgsup.kpi.dto.GroupDTO;
-import com.higgsup.kpi.dto.GroupSeminarDetail;
-import com.higgsup.kpi.dto.Response;
 import com.higgsup.kpi.glossary.ErrorCode;
-import com.higgsup.kpi.dto.TeamBuildingDTO;
+import com.higgsup.kpi.glossary.ErrorMessage;
 import com.higgsup.kpi.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 
 @RestController
 @RequestMapping(BaseConfiguration.BASE_API_URL)
-public class GroupController{
+public class GroupController {
 
     @Autowired
     GroupService groupService;
+
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/groups/support")
-    public Response createSupport(@RequestBody GroupDTO<GroupSupportDetail> groupDTO)
-    {
+    public Response createSupport(@RequestBody GroupDTO<GroupSupportDetail> groupDTO) {
         Response response = new Response(HttpStatus.OK.value());
         try {
             GroupDTO group = groupService.createSupport(groupDTO);
@@ -40,8 +33,7 @@ public class GroupController{
                 response.setStatus(groupDTO.getErrorCode());
                 response.setMessage(groupDTO.getMessage());
             }
-        }catch(JsonProcessingException e)
-        {
+        } catch (JsonProcessingException e) {
             response.setMessage(ErrorCode.JSON_PROCESSING_EXCEPTION.getDescription());
             response.setStatus(ErrorCode.JSON_PROCESSING_EXCEPTION.getValue());
         }
@@ -50,8 +42,7 @@ public class GroupController{
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/groups/support")
-    public Response updateSupport(@RequestBody GroupDTO<GroupSupportDetail> groupDTO)
-    {
+    public Response updateSupport(@RequestBody GroupDTO<GroupSupportDetail> groupDTO) {
         Response response = new Response(HttpStatus.OK.value());
         try {
             GroupDTO group = groupService.updateSupport(groupDTO);
@@ -59,14 +50,14 @@ public class GroupController{
                 response.setStatus(groupDTO.getErrorCode());
                 response.setMessage(groupDTO.getMessage());
             }
-        }catch(JsonProcessingException e){
+        } catch (JsonProcessingException e) {
             response.setMessage(ErrorCode.JSON_PROCESSING_EXCEPTION.getDescription());
             response.setStatus(ErrorCode.JSON_PROCESSING_EXCEPTION.getValue());
         }
         return response;
     }
 
-    @RequestMapping(value = "/groups/seminars" ,method = RequestMethod.POST)
+    @RequestMapping(value = "/groups/seminars", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ADMIN')")
     public Response createSeminar(@RequestBody GroupDTO<GroupSeminarDetail> groupDTO) throws JsonProcessingException {
         Response response = new Response(HttpStatus.OK.value());
@@ -85,7 +76,7 @@ public class GroupController{
 
         try {
             GroupDTO groupDTOResponse = groupService.updateTeamBuildingActivity(groupDTO);
-            if(Objects.nonNull(groupDTOResponse.getErrorCode())){
+            if (Objects.nonNull(groupDTOResponse.getErrorCode())) {
                 response.setStatus(groupDTOResponse.getErrorCode());
                 response.setMessage(groupDTOResponse.getMessage());
             }
@@ -115,13 +106,13 @@ public class GroupController{
         return response;
     }
 
-    @RequestMapping(value = "groups/seminars/{id}" , method = RequestMethod.PUT)
+    @RequestMapping(value = "groups/seminars/{id}", method = RequestMethod.PUT)
     @PreAuthorize("hasRole('ADMIN')")
-    public Response updateSeminar(@PathVariable Integer id ,@RequestBody GroupDTO<GroupSeminarDetail> groupDTO) throws JsonProcessingException {
+    public Response updateSeminar(@PathVariable Integer id, @RequestBody GroupDTO<GroupSeminarDetail> groupDTO) throws JsonProcessingException {
         Response response = new Response(HttpStatus.OK.value());
         groupDTO.setId(id);
         GroupDTO groupDTO1 = groupService.updateSeminar(groupDTO);
-        if(Objects.nonNull(groupDTO1.getErrorCode())){
+        if (Objects.nonNull(groupDTO1.getErrorCode())) {
             response.setStatus(groupDTO1.getErrorCode());
             response.setMessage(groupDTO1.getMessage());
         }
@@ -130,12 +121,12 @@ public class GroupController{
 
     @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping("groups/team-building")
-    public Response createConfigTeamBuilding(@RequestBody GroupDTO<TeamBuildingDTO> groupDTO){
+    public Response createConfigTeamBuilding(@RequestBody GroupDTO<TeamBuildingDTO> groupDTO) {
         Response response = new Response(HttpStatus.OK.value());
 
         try {
             GroupDTO groupDTOTeamBuilding = groupService.createConfigTeamBuilding(groupDTO);
-            if(Objects.nonNull(groupDTOTeamBuilding.getErrorCode())){
+            if (Objects.nonNull(groupDTOTeamBuilding.getErrorCode())) {
                 response.setStatus(groupDTOTeamBuilding.getErrorCode());
                 response.setMessage(groupDTOTeamBuilding.getMessage());
             }
@@ -166,4 +157,19 @@ public class GroupController{
 
         return response;
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @RequestMapping("/groups")
+    public Response getAllGroup() {
+        Response response = new Response(HttpStatus.OK.value());
+        try {
+            List<GroupDTO> groupDTOS = groupService.getAllGroup();
+            response.setData(groupDTOS);
+        } catch (IOException e) {
+            response.setStatus(ErrorCode.ERROR_IO_EXCEPTION.getValue());
+            response.setMessage(ErrorMessage.ERROR_IO_EXCEPTION);
+        }
+        return response;
+    }
+
 }

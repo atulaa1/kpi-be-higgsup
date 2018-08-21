@@ -29,5 +29,8 @@ public final class ErrorMessage {
     public final static String POINT_HOST_NOT_LARGER_THAN_POINT_MEMBER = "point host not larger than point member";
     public final static String POINT_MEMBER_NOT_LARGER_THAN_POINT_LISTENER ="point member not larger than point listener";
     public final static String NOT_FIND_SEMINAR = "not find seminar";
+    public final static String NAME_IS_NOT_ALLOWED_NULL = "Name is not allowed null";
+    public final static String ERROR_IO_EXCEPTION = "Error IOException";
+
 
 }

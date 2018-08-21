@@ -2,16 +2,12 @@ package com.higgsup.kpi.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.higgsup.kpi.dto.GroupClubDetail;
-import com.higgsup.kpi.dto.GroupDTO;
-import com.higgsup.kpi.dto.GroupSeminarDetail;
-import com.higgsup.kpi.dto.GroupClubDetail;
-import com.higgsup.kpi.dto.TeamBuildingDTO;
-import com.higgsup.kpi.dto.GroupSupportDetail;
+import com.higgsup.kpi.dto.*;
 import com.higgsup.kpi.entity.KpiGroup;
 import com.higgsup.kpi.entity.KpiGroupType;
 import com.higgsup.kpi.glossary.ErrorCode;
 import com.higgsup.kpi.glossary.ErrorMessage;
+import com.higgsup.kpi.glossary.GroupType;
 import com.higgsup.kpi.repository.KpiGroupRepo;
 import com.higgsup.kpi.repository.KpiGroupTypeRepo;
 import com.higgsup.kpi.service.GroupService;
@@ -19,8 +15,12 @@ import com.higgsup.kpi.util.UtilsValidate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -231,7 +231,9 @@ public class GroupServiceImpl implements GroupService {
                         groupDTO1.setErrorCode(ErrorCode.NOT_FIND.getValue());
                     }
                 }
+
             }
+
         }
         return groupDTO1;
     }
@@ -299,6 +301,7 @@ public class GroupServiceImpl implements GroupService {
         }
         return groupDTO;
     }
+
 
     @Override
     public GroupDTO updateSupport(GroupDTO<GroupSupportDetail> groupDTO) throws JsonProcessingException {
@@ -377,6 +380,82 @@ public class GroupServiceImpl implements GroupService {
             validate = true;
         }
         return validate;
+    }
+
+    @Override
+    public List<GroupDTO> getAllGroup() throws IOException {
+        List<KpiGroup> groupList = (List<KpiGroup>) kpiGroupRepo.findAll();
+        return convertGroupsEntityToDTO(groupList);
+    }
+
+    private List<GroupDTO> convertGroupsEntityToDTO(List<KpiGroup> groupList) throws IOException {
+        List<GroupDTO> groupDTOS = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(groupList)) {
+            for (KpiGroup kpiGroup : groupList) {
+                switch (GroupType.getGroupType(kpiGroup.getGroupTypeId().getId())) {
+                    case SEMINAR:
+                        groupDTOS.add(convertConfigSeminarToDTO(kpiGroup));
+                        break;
+                    case CLUB:
+                        groupDTOS.add(convertConfigClubToDTO(kpiGroup));
+                        break;
+                    case TEAM_BUILDING:
+                        groupDTOS.add(convertConfigTeamBuildingToDTO(kpiGroup));
+                        break;
+                    case SUPPORT:
+                        groupDTOS.add(convertConfigSupportToDTO(kpiGroup));
+                        break;
+                }
+            }
+        }
+        return groupDTOS;
+    }
+
+    private GroupDTO convertConfigSupportToDTO(KpiGroup kpiGroup) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        GroupDTO<GroupSupportDetail> groupSupportDTO = new GroupDTO<>();
+        BeanUtils.copyProperties(kpiGroup, groupSupportDTO);
+        GroupSupportDetail groupSeminarDetail = mapper.readValue(kpiGroup.getAdditionalConfig(), GroupSupportDetail.class);
+        groupSupportDTO.setAdditionalConfig(groupSeminarDetail);
+        groupSupportDTO.setGroupTypeId(convertGroupTypeEntityToDTO(kpiGroup.getGroupTypeId()));
+        return groupSupportDTO;
+    }
+
+    private GroupDTO convertConfigTeamBuildingToDTO(KpiGroup kpiGroup) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        GroupDTO<TeamBuildingDTO> teamBuildingGroupDTO = new GroupDTO<>();
+        BeanUtils.copyProperties(kpiGroup, teamBuildingGroupDTO);
+        TeamBuildingDTO groupSeminarDetail = mapper.readValue(kpiGroup.getAdditionalConfig(), TeamBuildingDTO.class);
+        teamBuildingGroupDTO.setAdditionalConfig(groupSeminarDetail);
+        teamBuildingGroupDTO.setGroupTypeId(convertGroupTypeEntityToDTO(kpiGroup.getGroupTypeId()));
+        return teamBuildingGroupDTO;
+    }
+
+    private GroupDTO convertConfigSeminarToDTO(KpiGroup kpiGroup) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        GroupDTO<GroupSeminarDetail> seminarGroupDTO = new GroupDTO<>();
+
+        BeanUtils.copyProperties(kpiGroup, seminarGroupDTO);
+        GroupSeminarDetail groupSeminarDetail = mapper.readValue(kpiGroup.getAdditionalConfig(), GroupSeminarDetail.class);
+        seminarGroupDTO.setAdditionalConfig(groupSeminarDetail);
+        seminarGroupDTO.setGroupTypeId(convertGroupTypeEntityToDTO(kpiGroup.getGroupTypeId()));
+        return seminarGroupDTO;
+    }
+
+    private GroupDTO convertConfigClubToDTO(KpiGroup kpiGroup) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        GroupDTO<GroupClubDetail> groupClubDTO = new GroupDTO<>();
+        BeanUtils.copyProperties(kpiGroup, groupClubDTO);
+        GroupClubDetail groupClubDetail = mapper.readValue(kpiGroup.getAdditionalConfig(), GroupClubDetail.class);
+        groupClubDTO.setAdditionalConfig(groupClubDetail);
+        groupClubDTO.setGroupTypeId(convertGroupTypeEntityToDTO(kpiGroup.getGroupTypeId()));
+        return groupClubDTO;
+    }
+
+    private GroupTypeDTO convertGroupTypeEntityToDTO(KpiGroupType kpiGroupType) {
+        GroupTypeDTO groupTypeDTO = new GroupTypeDTO();
+        BeanUtils.copyProperties(kpiGroupType, groupTypeDTO);
+        return groupTypeDTO;
     }
 
 }
