@@ -357,7 +357,11 @@ public class GroupServiceImpl implements GroupService {
 
     Boolean validateTeambuildingInfo(GroupDTO<TeamBuildingDTO> groupDTO, GroupDTO validateGroupDTO){
         boolean validate = false;
-         if(groupDTO.getAdditionalConfig().getFirstPrize().length() == 0){
+        if (groupDTO.getGroupTypeId().getId() == null){
+            validateGroupDTO.setErrorCode(ErrorCode.GROUP_TYPE_ID_CAN_NOT_NULL.getValue());
+            validateGroupDTO.setMessage(ErrorMessage.GROUP_TYPE_ID_CAN_NOT_NULL);
+        }
+         else if(groupDTO.getAdditionalConfig().getFirstPrize().length() == 0){
             validateGroupDTO.setErrorCode(ErrorCode.TEAMBUILDING_PRIZE_SCORE_CAN_NOT_NULL.getValue());
             validateGroupDTO.setMessage(ErrorMessage.TEAMBUILDING_FIRST_PRIZE_SCORE_CAN_NOT_NULL);
         }

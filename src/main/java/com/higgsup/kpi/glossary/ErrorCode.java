@@ -16,7 +16,9 @@ public enum ErrorCode {
     NOT_FIND_ITEM(928, "Item does not existed"),
     NOT_FIND_GROUP_TYPE(929, "Item does not existed"),
     ERROR_IO_EXCEPTION(930, "Error IOException"),
-    TEAMBUILDING_PRIZE_SCORE_CAN_NOT_NULL(931, "Team building prize score can not be null");
+    GROUP_TYPE_ID_CAN_NOT_NULL(931, "Group type ID can not be null"),
+    TEAMBUILDING_PRIZE_SCORE_CAN_NOT_NULL(932, "Team building prize score can not be null");
+
 
     private Integer value;
     private String description;
