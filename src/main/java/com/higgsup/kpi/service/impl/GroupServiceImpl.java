@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -34,10 +35,10 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public GroupDTO updateTeamBuildingActivity(GroupDTO<TeamBuildingDTO> groupDTO) throws JsonProcessingException {
-        Integer id = groupDTO.getId();
         GroupDTO validateGroupDTO = new GroupDTO();
-        Optional<KpiGroup> kpiGroupOptional = kpiGroupRepo.findById(id);
         if(checkGroupTypeIdExisted(groupDTO,validateGroupDTO)){
+            Integer id = groupDTO.getId();
+            Optional<KpiGroup> kpiGroupOptional = kpiGroupRepo.findById(id);
             if (!kpiGroupOptional.isPresent()){
                 validateGroupDTO.setErrorCode(ErrorCode.NOT_FIND_ITEM.getValue());
                 validateGroupDTO.setMessage(ErrorMessage.NOT_FIND_ITEM);
@@ -75,10 +76,12 @@ public class GroupServiceImpl implements GroupService {
         } else if (!UtilsValidate.pointValidate((String.valueOf(groupDTO.getAdditionalConfig().getListener())))) {
             groupDTO.setMessage(ErrorMessage.POINT_LISTENER_IS_NOT_VALIDATE);
             groupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-        } else if (Double.parseDouble((String.valueOf(groupDTO.getAdditionalConfig().getHost()))) <= Double.parseDouble((String.valueOf(groupDTO.getAdditionalConfig().getMember())))) {
+        } else if (Double.parseDouble((String.valueOf(groupDTO.getAdditionalConfig().getHost()))) <=
+                Double.parseDouble((String.valueOf(groupDTO.getAdditionalConfig().getMember())))) {
             groupDTO.setMessage(ErrorMessage.POINT_HOST_NOT_LARGER_THAN_POINT_MEMBER);
             groupDTO.setErrorCode(ErrorCode.NO_LARGER_THAN.getValue());
-        } else if (Double.parseDouble((String.valueOf(groupDTO.getAdditionalConfig().getMember()))) <= Double.parseDouble((String.valueOf(groupDTO.getAdditionalConfig().getListener())))) {
+        } else if (Double.parseDouble((String.valueOf(groupDTO.getAdditionalConfig().getMember()))) <=
+                Double.parseDouble((String.valueOf(groupDTO.getAdditionalConfig().getListener())))) {
             groupDTO.setMessage(ErrorMessage.POINT_MEMBER_NOT_LARGER_THAN_POINT_LISTENER);
             groupDTO.setErrorCode(ErrorCode.NO_LARGER_THAN.getValue());
         }else {
@@ -235,7 +238,6 @@ public class GroupServiceImpl implements GroupService {
                 }
 
             }
-
         }
         return groupDTO1;
     }
@@ -243,9 +245,9 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public GroupDTO createConfigTeamBuilding(GroupDTO<TeamBuildingDTO> groupDTO)  throws JsonProcessingException {
         GroupDTO validateGroupDTO = new GroupDTO();
-        Integer groupTypeId = groupDTO.getGroupTypeId().getId();
-        KpiGroup findGroupTypeId = kpiGroupRepo.findGroupTypeId(groupTypeId);
         if (checkGroupTypeIdExisted(groupDTO,validateGroupDTO)){
+            Integer groupTypeId = groupDTO.getGroupTypeId().getId();
+            KpiGroup findGroupTypeId = kpiGroupRepo.findGroupTypeId(groupTypeId);
             if(findGroupTypeId == null){
                 if (validateTeambuildingInfo(groupDTO, validateGroupDTO)) {
                     KpiGroup kpiGroup = new KpiGroup();
@@ -412,13 +414,19 @@ public class GroupServiceImpl implements GroupService {
 
     Boolean checkGroupTypeIdExisted(GroupDTO<TeamBuildingDTO> groupDTO, GroupDTO validateGroupDTO){
         boolean isExitested = false;
-        if (groupDTO.getGroupTypeId().getId() == null){
+        if(Objects.isNull(groupDTO.getGroupTypeId())){
             validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-            validateGroupDTO.setMessage(ErrorMessage.GROUP_TYPE_ID_CAN_NOT_NULL);
+            validateGroupDTO.setMessage(ErrorMessage.GROUP_TYPE_CAN_NOT_NULL);
             isExitested = false;
         } else {
-            isExitested = true;
+            if (groupDTO.getGroupTypeId().getId() == null){
+                validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+                validateGroupDTO.setMessage(ErrorMessage.GROUP_TYPE_ID_CAN_NOT_NULL);
+            } else {
+                isExitested = true;
+            }
         }
+
         return isExitested;
     }
 

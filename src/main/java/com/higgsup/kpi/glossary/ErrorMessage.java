@@ -36,4 +36,5 @@ public final class ErrorMessage {
     public final static String TEAMBUILDING_THIRD_PRIZE_SCORE_CAN_NOT_NULL = "The third prize score can not be null";
     public final static String TEAMBUILDING_ORGNIZERS_SCORE_CAN_NOT_NULL = "The orgnizers score can not be null";
     public final static String GROUP_TYPE_ID_CAN_NOT_NULL = "Group type ID can not be null";
+    public final static String GROUP_TYPE_CAN_NOT_NULL = "Group type can not be null";
 }
