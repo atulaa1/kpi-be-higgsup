@@ -13,7 +13,7 @@ public final class ErrorMessage {
     public final static String INVALIDATED_FIRST_PRIZE = "Invalidated first prize";
     public final static String INVALIDATED_SECOND_PRIZE = "Invalidated second prize";
     public final static String INVALIDATED_THIRD_PRIZE = "Invalidated third prize";
-    public final static String INVALIDATED_ORGNIZERS_PRIZE = "Invalidated orgnizers record";
+    public final static String INVALIDATED_ORGNIZERS_PRIZE = "Invalidated orgnizers score";
     public final static String FIRST_PRIZE_NOT_LARGER_THAN_SECOND_PRIZE = "First prize has to large than second prize";
     public final static String SECOND_PRIZE_NOT_LARGER_THAN_THIRD_PRIZE = "Second prize has to large than thirst prize";
     public final static String TEAMBUIDING_HAS_BEEN_EXISTED = "Team building has been existed";
@@ -31,6 +31,10 @@ public final class ErrorMessage {
     public final static String NOT_FIND_SEMINAR = "not find seminar";
     public final static String NAME_IS_NOT_ALLOWED_NULL = "Name is not allowed null";
     public final static String ERROR_IO_EXCEPTION = "Error IOException";
-
-
+    public final static String TEAMBUILDING_FIRST_PRIZE_SCORE_CAN_NOT_NULL = "The first prize score can not be null";
+    public final static String TEAMBUILDING_SECOND_PRIZE_SCORE_CAN_NOT_NULL = "The second prize score can not be null";
+    public final static String TEAMBUILDING_THIRD_PRIZE_SCORE_CAN_NOT_NULL = "The third prize score can not be null";
+    public final static String TEAMBUILDING_ORGNIZERS_SCORE_CAN_NOT_NULL = "The orgnizers score can not be null";
+    public final static String GROUP_TYPE_ID_CAN_NOT_NULL = "Group type ID can not be null";
+    public final static String GROUP_TYPE_CAN_NOT_NULL = "Group type can not be null";
 }

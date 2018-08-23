@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -34,13 +35,14 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public GroupDTO updateTeamBuildingActivity(GroupDTO<TeamBuildingDTO> groupDTO) throws JsonProcessingException {
-        Integer id = groupDTO.getId();
         GroupDTO validateGroupDTO = new GroupDTO();
-        Optional<KpiGroup> kpiGroupOptional = kpiGroupRepo.findById(id);
-        if (!kpiGroupOptional.isPresent()){
-            validateGroupDTO.setErrorCode(ErrorCode.NOT_FIND_ITEM.getValue());
-            validateGroupDTO.setMessage(ErrorMessage.NOT_FIND_ITEM);
-        } else if(validateTeambuildingInfo(groupDTO, validateGroupDTO)) {
+        if(checkGroupTypeIdExisted(groupDTO,validateGroupDTO)){
+            Integer id = groupDTO.getId();
+            Optional<KpiGroup> kpiGroupOptional = kpiGroupRepo.findById(id);
+            if (!kpiGroupOptional.isPresent()){
+                validateGroupDTO.setErrorCode(ErrorCode.NOT_FIND_ITEM.getValue());
+                validateGroupDTO.setMessage(ErrorMessage.NOT_FIND_ITEM);
+            } else if(validateTeambuildingInfo(groupDTO, validateGroupDTO)) {
                 KpiGroup kpiGroup = kpiGroupOptional.get();
                 ObjectMapper mapper = new ObjectMapper();
                 BeanUtils.copyProperties(groupDTO, kpiGroup,"id");
@@ -55,6 +57,7 @@ public class GroupServiceImpl implements GroupService {
                     validateGroupDTO.setErrorCode(ErrorCode.NOT_FIND_GROUP_TYPE.getValue());
                     validateGroupDTO.setMessage(ErrorMessage.NOT_FIND_GROUP_TYPE);
                 }
+            }
         }
         return validateGroupDTO;
     }
@@ -233,7 +236,6 @@ public class GroupServiceImpl implements GroupService {
                 }
 
             }
-
         }
         return groupDTO1;
     }
@@ -241,30 +243,32 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public GroupDTO createConfigTeamBuilding(GroupDTO<TeamBuildingDTO> groupDTO)  throws JsonProcessingException {
         GroupDTO validateGroupDTO = new GroupDTO();
-        Integer groupTypeId = groupDTO.getGroupTypeId().getId();
-
-        KpiGroup checkGroupTypeId = kpiGroupRepo.findGroupTypeId(groupTypeId);
-        if(checkGroupTypeId == null){
-            if (validateTeambuildingInfo(groupDTO, validateGroupDTO)) {
-                KpiGroup kpiGroup = new KpiGroup();
-                ObjectMapper mapper = new ObjectMapper();
-                String jsonConfigTeamBuilding = mapper.writeValueAsString(groupDTO.getAdditionalConfig());
-                BeanUtils.copyProperties(groupDTO, kpiGroup);
-                kpiGroup.setAdditionalConfig(jsonConfigTeamBuilding);
-                kpiGroup.setCreatedDate(new Timestamp(System.currentTimeMillis()));
-                Optional<KpiGroupType> kpiGroupType = kpiGroupTypeRepo.findById(groupDTO.getGroupTypeId().getId());
-                if(kpiGroupType.isPresent()){
-                    kpiGroup.setGroupTypeId(kpiGroupType.get());
-                    kpiGroupRepo.save(kpiGroup);
-                }else {
-                    validateGroupDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
-                    validateGroupDTO.setMessage(ErrorMessage.NOT_FIND_GROUP_TYPE);
+        if (checkGroupTypeIdExisted(groupDTO,validateGroupDTO)){
+            Integer groupTypeId = groupDTO.getGroupTypeId().getId();
+            KpiGroup findGroupTypeId = kpiGroupRepo.findGroupTypeId(groupTypeId);
+            if(findGroupTypeId == null){
+                if (validateTeambuildingInfo(groupDTO, validateGroupDTO)) {
+                    KpiGroup kpiGroup = new KpiGroup();
+                    ObjectMapper mapper = new ObjectMapper();
+                    String jsonConfigTeamBuilding = mapper.writeValueAsString(groupDTO.getAdditionalConfig());
+                    BeanUtils.copyProperties(groupDTO, kpiGroup);
+                    kpiGroup.setAdditionalConfig(jsonConfigTeamBuilding);
+                    kpiGroup.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+                    Optional<KpiGroupType> kpiGroupType = kpiGroupTypeRepo.findById(groupDTO.getGroupTypeId().getId());
+                    if(kpiGroupType.isPresent()){
+                        kpiGroup.setGroupTypeId(kpiGroupType.get());
+                        kpiGroupRepo.save(kpiGroup);
+                    }else {
+                        validateGroupDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
+                        validateGroupDTO.setMessage(ErrorMessage.NOT_FIND_GROUP_TYPE);
+                    }
                 }
+            } else {
+                validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_ALREADY_EXIST.getValue());
+                validateGroupDTO.setMessage(ErrorMessage.TEAMBUIDING_HAS_BEEN_EXISTED);
             }
-        } else {
-            validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_ALREADY_EXIST.getValue());
-            validateGroupDTO.setMessage(ErrorMessage.TEAMBUIDING_HAS_BEEN_EXISTED);
         }
+
         return validateGroupDTO;
     }
 
@@ -357,7 +361,27 @@ public class GroupServiceImpl implements GroupService {
 
     Boolean validateTeambuildingInfo(GroupDTO<TeamBuildingDTO> groupDTO, GroupDTO validateGroupDTO){
         boolean validate = false;
-        if(!UtilsValidate.isNumber(groupDTO.getAdditionalConfig().getFirstPrize())){
+        Double firstPrizeScore = Double.parseDouble(groupDTO.getAdditionalConfig().getFirstPrize());
+        Double secondPrizeScore = Double.parseDouble(groupDTO.getAdditionalConfig().getSecondPrize());
+        Double thirdPrizeScore = Double.parseDouble(groupDTO.getAdditionalConfig().getThirdPrize());
+
+        if(groupDTO.getAdditionalConfig().getFirstPrize().length() == 0){
+            validateGroupDTO.setErrorCode(ErrorCode.TEAMBUILDING_PRIZE_SCORE_CAN_NOT_NULL.getValue());
+            validateGroupDTO.setMessage(ErrorMessage.TEAMBUILDING_FIRST_PRIZE_SCORE_CAN_NOT_NULL);
+        }
+        else if(groupDTO.getAdditionalConfig().getSecondPrize().length() == 0){
+            validateGroupDTO.setErrorCode(ErrorCode.TEAMBUILDING_PRIZE_SCORE_CAN_NOT_NULL.getValue());
+            validateGroupDTO.setMessage(ErrorMessage.TEAMBUILDING_SECOND_PRIZE_SCORE_CAN_NOT_NULL);
+        }
+        else if(groupDTO.getAdditionalConfig().getThirdPrize().length() == 0){
+            validateGroupDTO.setErrorCode(ErrorCode.TEAMBUILDING_PRIZE_SCORE_CAN_NOT_NULL.getValue());
+            validateGroupDTO.setMessage(ErrorMessage.TEAMBUILDING_THIRD_PRIZE_SCORE_CAN_NOT_NULL);
+        }
+        else if(groupDTO.getAdditionalConfig().getOrganizers().length() == 0){
+            validateGroupDTO.setErrorCode(ErrorCode.TEAMBUILDING_PRIZE_SCORE_CAN_NOT_NULL.getValue());
+            validateGroupDTO.setMessage(ErrorMessage.TEAMBUILDING_ORGNIZERS_SCORE_CAN_NOT_NULL);
+        }
+        else if(!UtilsValidate.isNumber(groupDTO.getAdditionalConfig().getFirstPrize())){
             validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
             validateGroupDTO.setMessage(ErrorMessage.INVALIDATED_FIRST_PRIZE);
         }
@@ -373,17 +397,35 @@ public class GroupServiceImpl implements GroupService {
             validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
             validateGroupDTO.setMessage(ErrorMessage.INVALIDATED_ORGNIZERS_PRIZE);
         }
-        else if(Double.parseDouble(groupDTO.getAdditionalConfig().getFirstPrize()) <= Double.parseDouble(groupDTO.getAdditionalConfig().getSecondPrize())){
+        else if(firstPrizeScore <= secondPrizeScore){
             validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
             validateGroupDTO.setMessage(ErrorMessage.FIRST_PRIZE_NOT_LARGER_THAN_SECOND_PRIZE);
         }
-        else if(Double.parseDouble(groupDTO.getAdditionalConfig().getSecondPrize()) <= Double.parseDouble(groupDTO.getAdditionalConfig().getThirdPrize())){
+        else if(secondPrizeScore <= thirdPrizeScore){
             validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
             validateGroupDTO.setMessage(ErrorMessage.SECOND_PRIZE_NOT_LARGER_THAN_THIRD_PRIZE);
-        } else {
+        }
+        else {
             validate = true;
         }
         return validate;
+    }
+
+    Boolean checkGroupTypeIdExisted(GroupDTO<TeamBuildingDTO> groupDTO, GroupDTO validateGroupDTO){
+        boolean isExitested = false;
+        if(Objects.isNull(groupDTO.getGroupTypeId())){
+            validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+            validateGroupDTO.setMessage(ErrorMessage.GROUP_TYPE_CAN_NOT_NULL);
+        } else {
+            if (groupDTO.getGroupTypeId().getId() == null){
+                validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+                validateGroupDTO.setMessage(ErrorMessage.GROUP_TYPE_ID_CAN_NOT_NULL);
+            } else {
+                isExitested = true;
+            }
+        }
+
+        return isExitested;
     }
 
     @Override
