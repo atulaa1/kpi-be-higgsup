@@ -74,10 +74,10 @@ public class GroupServiceImpl implements GroupService {
             groupDTO.setMessage(ErrorMessage.POINT_LISTENER_IS_NOT_VALIDATE);
             groupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
         } else if (Double.parseDouble((String.valueOf(groupDTO.getAdditionalConfig().getHost()))) <= Double.parseDouble((String.valueOf(groupDTO.getAdditionalConfig().getMember())))) {
-            groupDTO.setMessage(ErrorMessage.POINT_HOST_NOT_LARGER_THAN_POINT_MEMBER);
+            groupDTO.setMessage(ErrorMessage.POINT_MEMBER_NOT_LARGER_THAN_POINT_HOST);
             groupDTO.setErrorCode(ErrorCode.NO_LARGER_THAN.getValue());
         } else if (Double.parseDouble((String.valueOf(groupDTO.getAdditionalConfig().getMember()))) <= Double.parseDouble((String.valueOf(groupDTO.getAdditionalConfig().getListener())))) {
-            groupDTO.setMessage(ErrorMessage.POINT_MEMBER_NOT_LARGER_THAN_POINT_LISTENER);
+            groupDTO.setMessage(ErrorMessage.POINT_LISTENER_NOT_LARGER_THAN_POINT_MEMBER);
             groupDTO.setErrorCode(ErrorCode.NO_LARGER_THAN.getValue());
         }else {
             KpiGroup kpiGroup = new KpiGroup();
@@ -159,10 +159,10 @@ public class GroupServiceImpl implements GroupService {
             groupDTO.setMessage(ErrorMessage.POINT_LISTENER_IS_NOT_VALIDATE);
             groupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
         } else if (Double.parseDouble(String.valueOf(groupDTO.getAdditionalConfig().getHost()) )<= Double.parseDouble(String.valueOf(groupDTO.getAdditionalConfig().getMember()))) {
-            groupDTO.setMessage(ErrorMessage.POINT_HOST_NOT_LARGER_THAN_POINT_MEMBER);
+            groupDTO.setMessage(ErrorMessage.POINT_MEMBER_NOT_LARGER_THAN_POINT_HOST);
             groupDTO.setErrorCode(ErrorCode.NO_LARGER_THAN.getValue());
         } else if (Double.parseDouble(String.valueOf(groupDTO.getAdditionalConfig().getMember())) <= Double.parseDouble(String.valueOf(groupDTO.getAdditionalConfig().getListener()))) {
-            groupDTO.setMessage(ErrorMessage.POINT_MEMBER_NOT_LARGER_THAN_POINT_LISTENER);
+            groupDTO.setMessage(ErrorMessage.POINT_LISTENER_NOT_LARGER_THAN_POINT_MEMBER);
             groupDTO.setErrorCode(ErrorCode.NO_LARGER_THAN.getValue());
         }else {
             Optional<KpiGroup> kpiGroupOptional = kpiGroupRepo.findById(groupDTO.getId());
