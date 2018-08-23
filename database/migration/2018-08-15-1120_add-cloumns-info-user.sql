@@ -10,5 +10,4 @@ ALTER TABLE kpi_user ADD address NVARCHAR(250) NULL;
 ALTER TABLE kpi_user ADD gmail VARCHAR(200) NULL;
 ALTER TABLE kpi_user ADD skype VARCHAR(200) NULL;
 ALTER TABLE kpi_user ADD year_work INT NULL;
-ALTER TABLE kpi_user MODIFY avatar_url TEXT;
-ALTER TABLE kpi_user CHANGE avatar_url avatar TEXT;
+ALTER TABLE kpi_user MODIFY avatar_url MEDIUMTEXT;
