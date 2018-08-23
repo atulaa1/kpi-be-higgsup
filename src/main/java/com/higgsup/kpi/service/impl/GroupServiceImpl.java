@@ -76,12 +76,10 @@ public class GroupServiceImpl implements GroupService {
         } else if (!UtilsValidate.pointValidate((String.valueOf(groupDTO.getAdditionalConfig().getListener())))) {
             groupDTO.setMessage(ErrorMessage.POINT_LISTENER_IS_NOT_VALIDATE);
             groupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-        } else if (Double.parseDouble((String.valueOf(groupDTO.getAdditionalConfig().getHost()))) <=
-                Double.parseDouble((String.valueOf(groupDTO.getAdditionalConfig().getMember())))) {
+        } else if (Double.parseDouble((String.valueOf(groupDTO.getAdditionalConfig().getHost()))) <= Double.parseDouble((String.valueOf(groupDTO.getAdditionalConfig().getMember())))) {
             groupDTO.setMessage(ErrorMessage.POINT_HOST_NOT_LARGER_THAN_POINT_MEMBER);
             groupDTO.setErrorCode(ErrorCode.NO_LARGER_THAN.getValue());
-        } else if (Double.parseDouble((String.valueOf(groupDTO.getAdditionalConfig().getMember()))) <=
-                Double.parseDouble((String.valueOf(groupDTO.getAdditionalConfig().getListener())))) {
+        } else if (Double.parseDouble((String.valueOf(groupDTO.getAdditionalConfig().getMember()))) <= Double.parseDouble((String.valueOf(groupDTO.getAdditionalConfig().getListener())))) {
             groupDTO.setMessage(ErrorMessage.POINT_MEMBER_NOT_LARGER_THAN_POINT_LISTENER);
             groupDTO.setErrorCode(ErrorCode.NO_LARGER_THAN.getValue());
         }else {
@@ -363,6 +361,9 @@ public class GroupServiceImpl implements GroupService {
 
     Boolean validateTeambuildingInfo(GroupDTO<TeamBuildingDTO> groupDTO, GroupDTO validateGroupDTO){
         boolean validate = false;
+        Double firstPrizeScore = Double.parseDouble(groupDTO.getAdditionalConfig().getFirstPrize());
+        Double secondPrizeScore = Double.parseDouble(groupDTO.getAdditionalConfig().getSecondPrize());
+        Double thirdPrizeScore = Double.parseDouble(groupDTO.getAdditionalConfig().getThirdPrize());
 
         if(groupDTO.getAdditionalConfig().getFirstPrize().length() == 0){
             validateGroupDTO.setErrorCode(ErrorCode.TEAMBUILDING_PRIZE_SCORE_CAN_NOT_NULL.getValue());
@@ -396,13 +397,11 @@ public class GroupServiceImpl implements GroupService {
             validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
             validateGroupDTO.setMessage(ErrorMessage.INVALIDATED_ORGNIZERS_PRIZE);
         }
-        else if(Double.parseDouble(groupDTO.getAdditionalConfig().getFirstPrize()) <=
-                Double.parseDouble(groupDTO.getAdditionalConfig().getSecondPrize())){
+        else if(firstPrizeScore <= secondPrizeScore){
             validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
             validateGroupDTO.setMessage(ErrorMessage.FIRST_PRIZE_NOT_LARGER_THAN_SECOND_PRIZE);
         }
-        else if(Double.parseDouble(groupDTO.getAdditionalConfig().getSecondPrize()) <=
-                  Double.parseDouble(groupDTO.getAdditionalConfig().getThirdPrize())){
+        else if(secondPrizeScore <= thirdPrizeScore){
             validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
             validateGroupDTO.setMessage(ErrorMessage.SECOND_PRIZE_NOT_LARGER_THAN_THIRD_PRIZE);
         }
