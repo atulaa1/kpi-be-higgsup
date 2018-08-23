@@ -417,7 +417,6 @@ public class GroupServiceImpl implements GroupService {
         if(Objects.isNull(groupDTO.getGroupTypeId())){
             validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
             validateGroupDTO.setMessage(ErrorMessage.GROUP_TYPE_CAN_NOT_NULL);
-            isExitested = false;
         } else {
             if (groupDTO.getGroupTypeId().getId() == null){
                 validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
