@@ -361,23 +361,39 @@ public class GroupServiceImpl implements GroupService {
 
     Boolean validateTeambuildingInfo(GroupDTO<TeamBuildingDTO> groupDTO, GroupDTO validateGroupDTO){
         boolean validate = false;
-        Double firstPrizeScore = Double.parseDouble(groupDTO.getAdditionalConfig().getFirstPrize());
-        Double secondPrizeScore = Double.parseDouble(groupDTO.getAdditionalConfig().getSecondPrize());
-        Double thirdPrizeScore = Double.parseDouble(groupDTO.getAdditionalConfig().getThirdPrize());
+        if (Objects.isNull(groupDTO)) {
+            validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+            validateGroupDTO.setMessage(ErrorMessage.PARAMETERS_NAME_IS_NOT_VALID);
+        } else{
+            if (Objects.isNull(groupDTO.getAdditionalConfig())){
+                validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+                validateGroupDTO.setMessage(ErrorMessage.PARAMETERS_NAME_IS_NOT_VALID);
+            } else {
+               validate = checkTeamBuildingPrize(groupDTO,validateGroupDTO);
+            }
+    }
+        return validate;
+    }
 
-        if(groupDTO.getAdditionalConfig().getFirstPrize().length() == 0){
+    Boolean checkTeamBuildingPrize(GroupDTO<TeamBuildingDTO> groupDTO, GroupDTO validateGroupDTO){
+        boolean validate = false;
+        if(groupDTO.getAdditionalConfig().getFirstPrize()== null ||
+           groupDTO.getAdditionalConfig().getFirstPrize().length() == 0 ){
             validateGroupDTO.setErrorCode(ErrorCode.TEAMBUILDING_PRIZE_SCORE_CAN_NOT_NULL.getValue());
             validateGroupDTO.setMessage(ErrorMessage.TEAMBUILDING_FIRST_PRIZE_SCORE_CAN_NOT_NULL);
         }
-        else if(groupDTO.getAdditionalConfig().getSecondPrize().length() == 0){
+        else if(groupDTO.getAdditionalConfig().getSecondPrize() == null ||
+                groupDTO.getAdditionalConfig().getSecondPrize().length() == 0){
             validateGroupDTO.setErrorCode(ErrorCode.TEAMBUILDING_PRIZE_SCORE_CAN_NOT_NULL.getValue());
             validateGroupDTO.setMessage(ErrorMessage.TEAMBUILDING_SECOND_PRIZE_SCORE_CAN_NOT_NULL);
         }
-        else if(groupDTO.getAdditionalConfig().getThirdPrize().length() == 0){
+        else if(groupDTO.getAdditionalConfig().getThirdPrize() == null ||
+                groupDTO.getAdditionalConfig().getThirdPrize().length() == 0){
             validateGroupDTO.setErrorCode(ErrorCode.TEAMBUILDING_PRIZE_SCORE_CAN_NOT_NULL.getValue());
             validateGroupDTO.setMessage(ErrorMessage.TEAMBUILDING_THIRD_PRIZE_SCORE_CAN_NOT_NULL);
         }
-        else if(groupDTO.getAdditionalConfig().getOrganizers().length() == 0){
+        else if(groupDTO.getAdditionalConfig().getOrganizers() == null ||
+                groupDTO.getAdditionalConfig().getOrganizers().length() == 0){
             validateGroupDTO.setErrorCode(ErrorCode.TEAMBUILDING_PRIZE_SCORE_CAN_NOT_NULL.getValue());
             validateGroupDTO.setMessage(ErrorMessage.TEAMBUILDING_ORGNIZERS_SCORE_CAN_NOT_NULL);
         }
@@ -397,16 +413,20 @@ public class GroupServiceImpl implements GroupService {
             validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
             validateGroupDTO.setMessage(ErrorMessage.INVALIDATED_ORGNIZERS_PRIZE);
         }
-        else if(firstPrizeScore <= secondPrizeScore){
-            validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-            validateGroupDTO.setMessage(ErrorMessage.FIRST_PRIZE_NOT_LARGER_THAN_SECOND_PRIZE);
-        }
-        else if(secondPrizeScore <= thirdPrizeScore){
-            validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-            validateGroupDTO.setMessage(ErrorMessage.SECOND_PRIZE_NOT_LARGER_THAN_THIRD_PRIZE);
-        }
         else {
-            validate = true;
+            Double firstPrizeScore = Double.parseDouble(groupDTO.getAdditionalConfig().getFirstPrize());
+            Double secondPrizeScore = Double.parseDouble(groupDTO.getAdditionalConfig().getSecondPrize());
+            Double thirdPrizeScore = Double.parseDouble(groupDTO.getAdditionalConfig().getThirdPrize());
+            if(firstPrizeScore <= secondPrizeScore){
+                validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+                validateGroupDTO.setMessage(ErrorMessage.FIRST_PRIZE_NOT_LARGER_THAN_SECOND_PRIZE);
+            }
+            else if(secondPrizeScore <= thirdPrizeScore){
+                validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+                validateGroupDTO.setMessage(ErrorMessage.SECOND_PRIZE_NOT_LARGER_THAN_THIRD_PRIZE);
+            } else {
+                validate = true;
+            }
         }
         return validate;
     }
