@@ -170,7 +170,7 @@ public class GroupController {
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping("/groups")
     public Response getAllGroup() {
-        Response response = new Response(HttpStatus.OK.value());
+        Response<List<GroupDTO>> response = new Response(HttpStatus.OK.value());
         try {
             List<GroupDTO> groupDTOS = groupService.getAllGroup();
             response.setData(groupDTOS);
