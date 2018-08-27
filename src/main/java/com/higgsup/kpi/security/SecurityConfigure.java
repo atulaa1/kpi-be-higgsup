@@ -36,85 +36,85 @@ import com.higgsup.kpi.security.jwt.JWTLoginFilter;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class SecurityConfigure extends WebSecurityConfigurerAdapter  {
+public class SecurityConfigure extends WebSecurityConfigurerAdapter {
 
-	@Autowired
-	@Qualifier("UserDetailsServiceImpl")
-	private UserDetailsService userDetailsService;
+    @Autowired
+    @Qualifier("UserDetailsServiceImpl")
+    private UserDetailsService userDetailsService;
 
-	@Autowired
-	private Environment env;
+    @Autowired
+    private Environment environment;
 
+    @Bean
+    public UserDetailsContextMapper userDetailsContextMapper() {
+        return new UserDetailsContextMapper() {
 
-	@Bean
-	public UserDetailsContextMapper userDetailsContextMapper() {
-		return new UserDetailsContextMapper() {
+            @Override
+            public void mapUserToContext(UserDetails user, DirContextAdapter ctx) {
+            }
 
-			@Override
-			public void mapUserToContext(UserDetails user, DirContextAdapter ctx) {				
-			}
+            @Override
+            public UserDetails mapUserFromContext(DirContextOperations ctx, String username,
+                                                  Collection<? extends GrantedAuthority> authorities) {
 
-			@Override
-			public UserDetails mapUserFromContext(DirContextOperations ctx, String username,
-					Collection<? extends GrantedAuthority> authorities) {
-				
-				UserDetails userDetail = userDetailsService.loadUserByUsername(username);
-				return userDetail;
-			}
-		};
-	}
-	
-	@Bean
-	CorsConfigurationSource corsConfigurationSource() {
-		CorsConfiguration configuration = new CorsConfiguration();
-		configuration.addAllowedOrigin("*");
-		configuration.setAllowedMethods(Arrays.asList("GET","POST", "PUT", "DELETE"));
-		configuration.setAllowCredentials(true);
-		configuration.setAllowedHeaders(Arrays.asList(BaseConfiguration.HEADER_STRING_AUTHORIZATION, "Content-type"));
-		configuration.setExposedHeaders(Arrays.asList(BaseConfiguration.HEADER_STRING_AUTHORIZATION, "Content-type", "Cache-Control"));
-		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/**", configuration);
-		return source;
-	}
-	
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable().cors()
-		.and()	
-			.authorizeRequests()
-			.antMatchers(HttpMethod.POST, BaseConfiguration.BASE_API_URL+"/login").permitAll()
-			.antMatchers(BaseConfiguration.BASE_API_URL+"/**").fullyAuthenticated()
-			.anyRequest().fullyAuthenticated()
-		.and()
-			.addFilterBefore(new JWTLoginFilter(BaseConfiguration.BASE_API_URL+"/login", authenticationManager()),
-	                UsernamePasswordAuthenticationFilter.class)
-	        .addFilterBefore(new JWTAuthenticateFilter(),
-	                UsernamePasswordAuthenticationFilter.class)
-    		.logout()
-    		.invalidateHttpSession(true)
-    		.deleteCookies("JSESSIONID")
-    		.permitAll();
-	}
+                UserDetails userDetail = userDetailsService.loadUserByUsername(username);
+                return userDetail;
+            }
+        };
+    }
 
-	@Configuration
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedOrigin("*");
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+        configuration.setAllowCredentials(true);
+        configuration.setAllowedHeaders(Arrays.asList(BaseConfiguration.HEADER_STRING_AUTHORIZATION, "Content-type"));
+        configuration.setExposedHeaders(Arrays.asList(BaseConfiguration.HEADER_STRING_AUTHORIZATION, "Content-type", "Cache-Control"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable().cors()
+                .and()
+                .authorizeRequests()
+                .antMatchers(HttpMethod.POST, BaseConfiguration.BASE_API_URL + "/login").permitAll()
+                .antMatchers(BaseConfiguration.BASE_API_URL + "/**").fullyAuthenticated()
+                .anyRequest().fullyAuthenticated()
+                .and()
+                .addFilterBefore(new JWTLoginFilter(BaseConfiguration.BASE_API_URL + "/login", authenticationManager()),
+                        UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JWTAuthenticateFilter(),
+                        UsernamePasswordAuthenticationFilter.class)
+                .logout()
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+                .permitAll();
+    }
+
+    @Configuration
     protected class AuthenticationConfiguration extends GlobalAuthenticationConfigurerAdapter {
         @Override
         public void init(AuthenticationManagerBuilder auth) throws Exception {
-        	LdapContextSource contextSource = new LdapContextSource();
-			contextSource.setUrl(env.getProperty("ldap.baseUrl"));
-			contextSource.setBase(env.getProperty("ldap.baseDN"));
-			contextSource.setUserDn(env.getProperty("ldap.baseUserDN"));
-			contextSource.setPassword(env.getProperty("ldap.password"));
-			contextSource.setReferral("follow");
-			contextSource.afterPropertiesSet();
+            LdapContextSource contextSource = new LdapContextSource();
+            contextSource.setUrl(environment.getProperty("ldap.baseUrl"));
+            contextSource.setBase(environment.getProperty("ldap.baseDN"));
+            contextSource.setUserDn(environment.getProperty("ldap.baseUserDN"));
+            contextSource.setPassword(environment.getProperty("ldap.password"));
+            contextSource.setReferral("follow");
+            contextSource.afterPropertiesSet();
 
-            LdapAuthenticationProviderConfigurer<AuthenticationManagerBuilder> ldapAuthenticationProviderConfigurer = auth.ldapAuthentication();
+            LdapAuthenticationProviderConfigurer<AuthenticationManagerBuilder> ldapAuthenticationProviderConfigurer
+                    = auth.ldapAuthentication();
 
             ldapAuthenticationProviderConfigurer
-            	.userSearchBase(env.getProperty("ldap.searchBase"))
-                .userSearchFilter(env.getProperty("ldap.userSearchBase"))
-                .contextSource(contextSource)
-                .userDetailsContextMapper(userDetailsContextMapper());
+                    .userSearchBase(environment.getProperty("ldap.searchBase"))
+                    .userSearchFilter(environment.getProperty("ldap.userSearchBase"))
+                    .contextSource(contextSource)
+                    .userDetailsContextMapper(userDetailsContextMapper());
         }
     }
 }

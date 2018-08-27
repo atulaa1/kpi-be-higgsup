@@ -12,13 +12,21 @@ import java.util.List;
 
 
 public interface GroupService {
-    GroupDTO updateTeamBuildingActivity(GroupDTO<TeamBuildingDTO> groupDTO) throws JsonProcessingException;
+    GroupDTO updateTeamBuilding(GroupDTO<TeamBuildingDTO> groupDTO) throws JsonProcessingException;
+
     GroupDTO createSupport(GroupDTO<GroupSupportDetail> groupDTO) throws JsonProcessingException;
+
     GroupDTO updateSupport(GroupDTO<GroupSupportDetail> groupDTO) throws JsonProcessingException;
-    GroupDTO createConfigTeamBuilding(GroupDTO<TeamBuildingDTO> groupDTO) throws JsonProcessingException;
+
+    GroupDTO createTeamBuilding(GroupDTO<TeamBuildingDTO> groupDTO) throws JsonProcessingException;
+
     GroupDTO createClub(GroupDTO<GroupClubDetail> groupDTO) throws JsonProcessingException;
+
     GroupDTO updateSeminar(GroupDTO<GroupSeminarDetail> groupDTO) throws JsonProcessingException;
+
     GroupDTO updateClub(GroupDTO<GroupClubDetail> groupDTO) throws JsonProcessingException;
+
     GroupDTO createSeminar(GroupDTO<GroupSeminarDetail> groupDTO) throws JsonProcessingException;
+
     List<GroupDTO> getAllGroup() throws IOException;
 }

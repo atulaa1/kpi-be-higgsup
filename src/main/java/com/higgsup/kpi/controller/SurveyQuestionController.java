@@ -3,9 +3,9 @@ package com.higgsup.kpi.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.higgsup.kpi.configure.BaseConfiguration;
 import com.higgsup.kpi.dto.Response;
-import com.higgsup.kpi.dto.SurveyQuestionManDTO;
+import com.higgsup.kpi.dto.SurveyDTO;
 import com.higgsup.kpi.glossary.ErrorCode;
-import com.higgsup.kpi.service.SurveyQuestionManService;
+import com.higgsup.kpi.service.SurveyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,23 +19,23 @@ import java.util.Objects;
 public class SurveyQuestionController {
 
     @Autowired
-    private SurveyQuestionManService surveyQuestionManService;
+    private SurveyService surveyQuestionManService;
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/questions-man")
     public Response getAll() {
         Response response = new Response(HttpStatus.OK.value());
-        List<SurveyQuestionManDTO> surveyQuestionManDTOS = surveyQuestionManService.getAllQuestion();
+        List<SurveyDTO> surveyQuestionManDTOS = surveyQuestionManService.getAllQuestion();
         response.setData(surveyQuestionManDTOS);
         return response;
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/questions-man")
-    public Response updateSurveyQuestionOfMan(@RequestBody List<SurveyQuestionManDTO> surveyQuestionManDTOs) {
+    public Response updateSurveyQuestionOfMan(@RequestBody List<SurveyDTO> surveyQuestionManDTOs) {
         Response response = new Response(HttpStatus.OK.value());
         try {
-            SurveyQuestionManDTO surveyQuestionManBaseDTO = surveyQuestionManService.updateSurveyQuestionOfMan(surveyQuestionManDTOs);
+            SurveyDTO surveyQuestionManBaseDTO = surveyQuestionManService.updateSurvey(surveyQuestionManDTOs);
             if (Objects.nonNull(surveyQuestionManBaseDTO.getErrorCode())) {
                 response.setStatus(surveyQuestionManBaseDTO.getErrorCode());
                 response.setMessage(surveyQuestionManBaseDTO.getMessage());

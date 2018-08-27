@@ -6,11 +6,16 @@ import java.sql.Timestamp;
 
 public class GroupDTO<T> extends BaseDTO{
     private Integer id;
+
     private String name;
+
     private String description;
+
     private GroupTypeDTO  groupTypeId;
+
     @JsonFormat( pattern = "dd-MM-yyy hh:mm")
     private Timestamp createdDate;
+
     private T additionalConfig;
 
     public Integer getId() {

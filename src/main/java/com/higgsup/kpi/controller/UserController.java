@@ -50,6 +50,7 @@ public class UserController {
     @GetMapping(BaseConfiguration.BASE_API_URL + "/users")
     public Response getListUsers(@RequestParam(value = "name", required = false) String name) {
         Response response = new Response(HttpStatus.OK.value());
+
         // search by name
         if (Objects.nonNull(name)) {
             if (!UtilsValidate.containRegex(name)) {
@@ -67,6 +68,7 @@ public class UserController {
             }
             return response;
         } else {
+
             //get all user
             List<UserDTO> listUsers = ldapUserService.getAllUsers();
             if (!listUsers.isEmpty()) {
@@ -106,6 +108,7 @@ public class UserController {
     public Response updateInfo(@PathVariable String username, @RequestBody UserDTO userDTO) {
         Response response = new Response(HttpStatus.OK.value());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
         //check if token of user
         if (authentication.getPrincipal().equals(username)) {
             UserDTO userDTOUpdate = userService.updateInfoUser(username, userDTO);
@@ -117,7 +120,6 @@ public class UserController {
             response.setStatus(HttpStatus.FORBIDDEN.value());
             response.setMessage(HttpStatus.FORBIDDEN.getReasonPhrase());
         }
-
         return response;
     }
 }

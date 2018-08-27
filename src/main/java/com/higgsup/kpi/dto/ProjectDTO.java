@@ -3,7 +3,9 @@ package com.higgsup.kpi.dto;
 
 public class ProjectDTO extends BaseDTO{
     private Integer id;
+
     private String name;
+
     private Integer active;
 
     public Integer getId() {

@@ -5,13 +5,12 @@ import java.util.List;
 import com.higgsup.kpi.dto.UserDTO;
 
 public interface LdapUserService{
+	UserDTO getUserDetail(String username);
 	
-	public UserDTO getUserDetail(String username);
+	List<UserDTO> getAllUsers();
 	
-	public List<UserDTO> getAllUsers();
+	UserDTO updateUserRole(String username, List<String> role);
 	
-	public UserDTO updateUserRole(String username, List<String> role);
-	
-	public List<UserDTO> findUsersByName(String name);
+	List<UserDTO> findUsersByName(String name);
 	
 }

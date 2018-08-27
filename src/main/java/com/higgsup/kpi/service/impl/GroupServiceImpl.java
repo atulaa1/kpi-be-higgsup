@@ -386,6 +386,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     private Boolean validateClub(GroupDTO<GroupClubDetail> groupDTO, GroupDTO validatedGroupDTO) {
+        Boolean validate = false;
         String minNumberOfSessions = String.valueOf(groupDTO.getAdditionalConfig().getMinNumberOfSessions());
         String participationPoint = String.valueOf(groupDTO.getAdditionalConfig().getParticipationPoint());
         String effectivePoint = String.valueOf(groupDTO.getAdditionalConfig().getEffectivePoint());
@@ -404,9 +405,9 @@ public class GroupServiceImpl implements GroupService {
             validatedGroupDTO.setMessage(ErrorMessage.PARAMETERS_POINT_IS_NOT_VALID);
             validatedGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
         } else {
-            return true;
+            validate = true;
         }
-        return false;
+        return validate;
     }
 
         @Override

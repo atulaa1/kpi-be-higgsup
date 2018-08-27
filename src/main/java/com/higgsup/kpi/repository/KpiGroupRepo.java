@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface KpiGroupRepo extends CrudRepository<KpiGroup, Integer> {
     KpiGroup findByName(String name);
 
-    @Query(value = "SELECT * from kpi_group as g where g.group_type_id = :groupTypeId",nativeQuery = true)
+    @Query(value = "SELECT * from kpi_group as g where g.group_type_id = :groupTypeId", nativeQuery = true)
     KpiGroup findGroupTypeId(@Param("groupTypeId") Integer groupTypeId);
 
     KpiGroup findByGroupTypeId(Optional<KpiGroupType> kpiGroupType);

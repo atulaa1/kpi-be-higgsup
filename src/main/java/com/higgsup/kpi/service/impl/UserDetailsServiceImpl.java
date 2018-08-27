@@ -34,7 +34,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			return new org.springframework.security.core.userdetails.User(user.getUsername(), "", grantedAuthorities);
 		}
 
-
 	@SuppressWarnings("unused")
 	private Set<Object> getAuthority(UserDTO user) {
         HashSet<Object> authorities = new HashSet<>();

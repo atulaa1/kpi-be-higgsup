@@ -12,6 +12,7 @@ import java.util.List;
 @Table(name = "kpi_user")
 public class KpiUser implements Serializable {
     private static final long serialVersionUID = 1L;
+
     @Id
     @Column(name = "user_name")
     private String userName;

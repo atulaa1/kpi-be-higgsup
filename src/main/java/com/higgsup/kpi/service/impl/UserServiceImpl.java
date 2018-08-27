@@ -28,6 +28,7 @@ public class UserServiceImpl implements UserService {
         UserDTO user = ldapUserService.getUserDetail(username);
         if (user != null) {
             KpiUser userFromDB = userRepository.findByUserName(username);
+
             //if has in db then add properties
             if (Objects.nonNull(userFromDB)) {
                 BeanUtils.copyProperties(userFromDB, user, "userName",
@@ -64,7 +65,7 @@ public class UserServiceImpl implements UserService {
             }
         } else {
             userDTO.setErrorCode(ErrorCode.DATA_EXIST.getValue());
-            userDTO.setMessage(ErrorMessage.DATA_EXIST_WITH_USER_NAMWE);
+            userDTO.setMessage(ErrorMessage.DATA_EXIST_WITH_USER_NAME);
         }
         return userDTO;
     }

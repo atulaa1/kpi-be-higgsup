@@ -19,29 +19,29 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.higgsup.kpi.dto.UserDTO;
 
 public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
-	
-	public JWTLoginFilter(String url, AuthenticationManager authManager) {
-		super(new AntPathRequestMatcher(url));
-		setAuthenticationManager(authManager);
-	}
 
-	@Override
-	public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res)
-			throws AuthenticationException, IOException, ServletException {
-		
-		UserDTO user = new ObjectMapper().readValue(req.getInputStream(), UserDTO.class);
-		
-		Authentication auth = getAuthenticationManager()
-				.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+    public JWTLoginFilter(String url, AuthenticationManager authManager) {
+        super(new AntPathRequestMatcher(url));
+        setAuthenticationManager(authManager);
+    }
 
-		SecurityContextHolder.getContext().setAuthentication(auth);
-		
-		return auth;
-	}
+    @Override
+    public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res)
+            throws AuthenticationException, IOException, ServletException {
 
-	@Override
-	protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain,
-			Authentication auth) throws IOException, ServletException {
-		JWTTokenProvider.addAuthentication(res, auth.getName(), auth);
-	}
+        UserDTO user = new ObjectMapper().readValue(req.getInputStream(), UserDTO.class);
+
+        Authentication auth = getAuthenticationManager()
+                .authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+
+        SecurityContextHolder.getContext().setAuthentication(auth);
+
+        return auth;
+    }
+
+    @Override
+    protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain,
+                                            Authentication auth) throws IOException, ServletException {
+        JWTTokenProvider.addAuthentication(res, auth.getName(), auth);
+    }
 }
