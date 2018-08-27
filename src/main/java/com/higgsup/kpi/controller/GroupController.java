@@ -1,6 +1,5 @@
 package com.higgsup.kpi.controller;
 
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.higgsup.kpi.configure.BaseConfiguration;
 import com.higgsup.kpi.dto.*;

@@ -58,7 +58,6 @@ public class ProjectServiceImpl implements ProjectService {
             projectDTO.setMessage(ErrorMessage.NAME_DOES_NOT_ALLOW_NULL);
         }
 
-
         return projectDTO;
     }
 

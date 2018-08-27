@@ -81,7 +81,6 @@ public class UserController {
             return response;
         }
 
-
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -93,7 +92,7 @@ public class UserController {
             if (Objects.nonNull(userDTO.getErrorCode())) {
                 response.setStatus(userDTO.getErrorCode());
                 response.setMessage(userDTO.getMessage());
-            }else {
+            } else {
                 response.setData(userDTO);
             }
         } else {

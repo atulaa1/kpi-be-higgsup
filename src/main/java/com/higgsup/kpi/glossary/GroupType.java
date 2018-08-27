@@ -17,8 +17,9 @@ public enum GroupType {
 
     public static final GroupType getGroupType(Integer id) {
         for (GroupType groupType : GroupType.values()) {
-            if (groupType.getId().equals(id))
+            if (groupType.getId().equals(id)) {
                 return groupType;
+            }
         }
         return GroupType.SEMINAR;
     }

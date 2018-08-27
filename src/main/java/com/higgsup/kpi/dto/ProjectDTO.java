@@ -1,7 +1,6 @@
 package com.higgsup.kpi.dto;
 
-
-public class ProjectDTO extends BaseDTO{
+public class ProjectDTO extends BaseDTO {
     private Integer id;
 
     private String name;

@@ -27,7 +27,6 @@ public class KpiEvent implements Serializable {
     @Column(name = "status")
     private String status;
 
-
     @Basic
     @Column(name = "begin_date")
     private Timestamp beginDate;

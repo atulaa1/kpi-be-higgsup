@@ -74,7 +74,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO updateInfoUser(String username, UserDTO user) {
         UserDTO userDTO = registerUser(username);
-        if (Objects.isNull(userDTO.getErrorCode()) || Objects.equals(userDTO.getErrorCode(), ErrorCode.DATA_EXIST.getValue())) {
+        if (Objects.isNull(userDTO.getErrorCode()) || Objects.equals(userDTO.getErrorCode(),
+                ErrorCode.DATA_EXIST.getValue())) {
             KpiUser kpiUser = userRepository.findByUserName(username);
             if (Objects.nonNull(kpiUser)) {
                 BeanUtils.copyProperties(user, kpiUser, "username",

@@ -1,6 +1,5 @@
 package com.higgsup.kpi.security.jwt;
 
-
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -33,7 +32,8 @@ public class JWTTokenProvider {
         Claims claims = Jwts.claims().setSubject(username);
 
         if (username != null && username.length() > 0) {
-            claims.put("authorities", auth.getAuthorities().stream().map(s -> s.toString()).collect(Collectors.toSet()));
+            claims.put("authorities",
+                    auth.getAuthorities().stream().map(s -> s.toString()).collect(Collectors.toSet()));
         }
         String JWT = Jwts.builder().setClaims(claims)
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATIONTIME))
@@ -53,7 +53,7 @@ public class JWTTokenProvider {
 
     @SuppressWarnings("unchecked")
     static Authentication getAuthentication(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
+    throws IOException {
         String token = request.getHeader(BaseConfiguration.HEADER_STRING_AUTHORIZATION);
         if (token != null) {
             String user = null;

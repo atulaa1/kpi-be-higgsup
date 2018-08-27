@@ -4,16 +4,16 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.sql.Timestamp;
 
-public class GroupDTO<T> extends BaseDTO{
+public class GroupDTO<T> extends BaseDTO {
     private Integer id;
 
     private String name;
 
     private String description;
 
-    private GroupTypeDTO  groupTypeId;
+    private GroupTypeDTO groupTypeId;
 
-    @JsonFormat( pattern = "dd-MM-yyy hh:mm")
+    @JsonFormat(pattern = "dd-MM-yyy hh:mm")
     private Timestamp createdDate;
 
     private T additionalConfig;
@@ -42,11 +42,11 @@ public class GroupDTO<T> extends BaseDTO{
         this.description = description;
     }
 
-    public GroupTypeDTO  getGroupTypeId() {
+    public GroupTypeDTO getGroupTypeId() {
         return groupTypeId;
     }
 
-    public void setGroupTypeId(GroupTypeDTO  groupTypeId) {
+    public void setGroupTypeId(GroupTypeDTO groupTypeId) {
         this.groupTypeId = groupTypeId;
     }
 

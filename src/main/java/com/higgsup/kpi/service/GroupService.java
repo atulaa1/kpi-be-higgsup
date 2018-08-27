@@ -10,7 +10,6 @@ import com.higgsup.kpi.dto.GroupSupportDetail;
 import java.io.IOException;
 import java.util.List;
 
-
 public interface GroupService {
     GroupDTO updateTeamBuilding(GroupDTO<TeamBuildingDTO> groupDTO) throws JsonProcessingException;
 

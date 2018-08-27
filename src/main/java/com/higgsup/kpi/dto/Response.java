@@ -3,7 +3,6 @@ package com.higgsup.kpi.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-
 public class Response<T> {
     @JsonProperty("status_code")
     private Integer status;

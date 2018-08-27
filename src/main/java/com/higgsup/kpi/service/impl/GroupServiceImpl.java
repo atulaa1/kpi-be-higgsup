@@ -50,6 +50,7 @@ public class GroupServiceImpl implements GroupService {
                 ObjectMapper mapper = new ObjectMapper();
                 BeanUtils.copyProperties(groupDTO, kpiGroup, "id");
                 String clubJson = mapper.writeValueAsString(groupDTO.getAdditionalConfig());
+
                 kpiGroup.setAdditionalConfig(clubJson);
                 kpiGroup.setCreatedDate(new Timestamp(System.currentTimeMillis()));
                 Optional<KpiGroupType> kpiGroupType = kpiGroupTypeRepo.findById(groupDTO.getGroupTypeId().getId());
@@ -68,10 +69,10 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public GroupDTO createSeminar(GroupDTO<GroupSeminarDetail> groupDTO) throws JsonProcessingException {
         GroupDTO validatedGroupDTO = new GroupDTO();
+
         if (kpiGroupRepo.findByName(groupDTO.getName()) != null) {
             validatedGroupDTO.setErrorCode(ErrorCode.DUPLICATED_ITEM.getValue());
             validatedGroupDTO.setMessage(ErrorCode.DUPLICATED_ITEM.getDescription());
-
         } else if (validateSeminar(groupDTO, validatedGroupDTO)) {
             KpiGroup kpiGroup = new KpiGroup();
             ObjectMapper mapper = new ObjectMapper();
@@ -291,8 +292,10 @@ public class GroupServiceImpl implements GroupService {
 
     private boolean validateNullInformation(GroupDTO<GroupSupportDetail> groupDTO) {
         GroupSupportDetail groupSupportDetail = groupDTO.getAdditionalConfig();
-        return (groupSupportDetail.getSupportConferencePoint() != null && groupSupportDetail.getCleanUpPoint() != null &&
-                groupSupportDetail.getBuyingStuffPoint() != null && groupSupportDetail.getWeeklyCleanUpPoint() != null &&
+        return (groupSupportDetail.getSupportConferencePoint() != null && groupSupportDetail
+                .getCleanUpPoint() != null &&
+                groupSupportDetail.getBuyingStuffPoint() != null && groupSupportDetail
+                .getWeeklyCleanUpPoint() != null &&
                 groupSupportDetail.getTrainingPoint() != null);
     }
 
@@ -448,7 +451,8 @@ public class GroupServiceImpl implements GroupService {
         ObjectMapper mapper = new ObjectMapper();
         GroupDTO<GroupSupportDetail> groupSupportDTO = new GroupDTO<>();
         BeanUtils.copyProperties(kpiGroup, groupSupportDTO);
-        GroupSupportDetail groupSeminarDetail = mapper.readValue(kpiGroup.getAdditionalConfig(), GroupSupportDetail.class);
+        GroupSupportDetail groupSeminarDetail = mapper.readValue(kpiGroup.getAdditionalConfig(),
+                GroupSupportDetail.class);
         groupSupportDTO.setAdditionalConfig(groupSeminarDetail);
         groupSupportDTO.setGroupTypeId(convertGroupTypeEntityToDTO(kpiGroup.getGroupTypeId()));
         return groupSupportDTO;
@@ -469,7 +473,8 @@ public class GroupServiceImpl implements GroupService {
         GroupDTO<GroupSeminarDetail> seminarGroupDTO = new GroupDTO<>();
 
         BeanUtils.copyProperties(kpiGroup, seminarGroupDTO);
-        GroupSeminarDetail groupSeminarDetail = mapper.readValue(kpiGroup.getAdditionalConfig(), GroupSeminarDetail.class);
+        GroupSeminarDetail groupSeminarDetail = mapper.readValue(kpiGroup.getAdditionalConfig(),
+                GroupSeminarDetail.class);
         seminarGroupDTO.setAdditionalConfig(groupSeminarDetail);
         seminarGroupDTO.setGroupTypeId(convertGroupTypeEntityToDTO(kpiGroup.getGroupTypeId()));
         return seminarGroupDTO;

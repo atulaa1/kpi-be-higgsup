@@ -28,9 +28,9 @@ public class SurveyServiceImpl implements SurveyService {
     }
 
     @Override
-    public SurveyDTO updateSurvey(List<SurveyDTO> questions){
+    public SurveyDTO updateSurvey(List<SurveyDTO> questions) {
         SurveyDTO validatedSurveyDTO = new SurveyDTO();
-        for(SurveyDTO question : questions){
+        for (SurveyDTO question : questions) {
             Integer id = question.getId();
 
             if (surveyQuestionManRepo.findById(id) == null) {

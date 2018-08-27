@@ -1,6 +1,5 @@
 package com.higgsup.kpi.security;
 
-
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -55,7 +54,7 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter {
 
             @Override
             public UserDetails mapUserFromContext(DirContextOperations ctx, String username,
-                                                  Collection<? extends GrantedAuthority> authorities) {
+                    Collection<? extends GrantedAuthority> authorities) {
 
                 UserDetails userDetail = userDetailsService.loadUserByUsername(username);
                 return userDetail;
@@ -70,7 +69,8 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter {
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
         configuration.setAllowCredentials(true);
         configuration.setAllowedHeaders(Arrays.asList(BaseConfiguration.HEADER_STRING_AUTHORIZATION, "Content-type"));
-        configuration.setExposedHeaders(Arrays.asList(BaseConfiguration.HEADER_STRING_AUTHORIZATION, "Content-type", "Cache-Control"));
+        configuration.setExposedHeaders(
+                Arrays.asList(BaseConfiguration.HEADER_STRING_AUTHORIZATION, "Content-type", "Cache-Control"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
