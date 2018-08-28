@@ -19,13 +19,13 @@ import java.util.Objects;
 public class SurveyQuestionController {
 
     @Autowired
-    private SurveyService surveyQuestionManService;
+    private SurveyService surveyService;
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/questions-man")
     public Response getAll() {
         Response response = new Response(HttpStatus.OK.value());
-        List<SurveyDTO> surveyQuestionManDTOS = surveyQuestionManService.getAllQuestion();
+        List<SurveyDTO> surveyQuestionManDTOS = surveyService.getAllQuestion();
         response.setData(surveyQuestionManDTOS);
         return response;
     }
@@ -35,7 +35,7 @@ public class SurveyQuestionController {
     public Response updateSurveyQuestionOfMan(@RequestBody List<SurveyDTO> surveyQuestionManDTOs) {
         Response response = new Response(HttpStatus.OK.value());
         try {
-            SurveyDTO surveyQuestionManBaseDTO = surveyQuestionManService.updateSurvey(surveyQuestionManDTOs);
+            SurveyDTO surveyQuestionManBaseDTO = surveyService.updateSurvey(surveyQuestionManDTOs);
             if (Objects.nonNull(surveyQuestionManBaseDTO.getErrorCode())) {
                 response.setStatus(surveyQuestionManBaseDTO.getErrorCode());
                 response.setMessage(surveyQuestionManBaseDTO.getMessage());

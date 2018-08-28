@@ -94,7 +94,7 @@ public class GroupController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("groups/clubs")
+    @PostMapping("groups/club")
     public Response createClub(@RequestBody GroupDTO<GroupClubDetail> groupDTO) {
         Response response = new Response(HttpStatus.OK.value());
         try {
@@ -111,7 +111,7 @@ public class GroupController {
         return response;
     }
 
-    @RequestMapping(value = "groups/seminars/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "groups/seminar/{id}", method = RequestMethod.PUT)
     @PreAuthorize("hasRole('ADMIN')")
     public Response updateSeminar(@PathVariable Integer id, @RequestBody GroupDTO<GroupSeminarDetail> groupDTO) {
         Response response = new Response(HttpStatus.OK.value());
@@ -149,7 +149,7 @@ public class GroupController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("groups/clubs/{id}")
+    @PutMapping("groups/club/{id}")
     public Response updateClub(@PathVariable Integer id, @RequestBody GroupDTO<GroupClubDetail> groupDTO) {
         Response response = new Response(HttpStatus.OK.value());
         try {
@@ -170,7 +170,7 @@ public class GroupController {
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping("/groups")
     public Response getAllGroup() {
-        Response<List<GroupDTO>> response = new Response(HttpStatus.OK.value());
+        Response<List<GroupDTO>> response = new Response<>(HttpStatus.OK.value());
         try {
             List<GroupDTO> groupDTOS = groupService.getAllGroup();
             response.setData(groupDTOS);

@@ -51,7 +51,7 @@ CREATE TABLE kpi_event (
 CREATE TABLE kpi_event_user (
   user_name VARCHAR(255) NOT NULL,
   event_id  INT(11)      NOT NULL,
-  is_host   TINYINT(4) DEFAULT NULL COMMENT 'if not null then is hostPoint, null is memberPoint',
+  is_host   TINYINT(4) DEFAULT NULL COMMENT 'if not null then is host, null is member',
   FOREIGN KEY (user_name) REFERENCES kpi_user (user_name),
   FOREIGN KEY (event_id) REFERENCES kpi_event (id),
   CONSTRAINT PK_kpi_event_user PRIMARY KEY (user_name, event_id)
