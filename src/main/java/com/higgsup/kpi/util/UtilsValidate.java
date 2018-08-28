@@ -23,16 +23,6 @@ public class UtilsValidate {
         return matcher.matches();
     }
 
-    public static Boolean pointValidate(String point) {
-        String regex = "((-|\\+)?[0-9]+(\\.[0-9]+)?)+";
-        return point.matches(regex);
-    }
-
-    public static Boolean isNumber(String str) {
-        String regex = "((-|\\+)?[0-9]+(\\.[0-9]+)?)+";
-        return str.matches(regex);
-    }
-
     public static Boolean isValidPoint(String str) {
         Pattern pattern = Pattern.compile("^([0-9]{0,2}[.])?[0-9]{0,2}");
         Matcher matcher = pattern.matcher(str);

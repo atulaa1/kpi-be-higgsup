@@ -23,9 +23,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.higgsup.kpi.util.UtilsValidate.isNumber;
 import static com.higgsup.kpi.util.UtilsValidate.isValidPoint;
-import static com.higgsup.kpi.util.UtilsValidate.pointValidate;
 
 @Service
 public class GroupServiceImpl implements GroupService {
@@ -352,16 +350,16 @@ public class GroupServiceImpl implements GroupService {
         } else if (organizers.length() == 0) {
             validateGroupDTO.setErrorCode(ErrorCode.TEAM_BUILDING_PRIZE_SCORE_CAN_NOT_NULL.getValue());
             validateGroupDTO.setMessage(ErrorMessage.TEAM_BUILDING_ORGANIZERS_SCORE_CAN_NOT_NULL);
-        } else if (!isNumber(firstPrize)) {
+        } else if (!isValidPoint(firstPrize)) {
             validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
             validateGroupDTO.setMessage(ErrorMessage.INVALIDATED_FIRST_PRIZE);
-        } else if (!isNumber(secondPrize)) {
+        } else if (!isValidPoint(secondPrize)) {
             validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
             validateGroupDTO.setMessage(ErrorMessage.INVALIDATED_SECOND_PRIZE);
-        } else if (!isNumber(thirdPrize)) {
+        } else if (!isValidPoint(thirdPrize)) {
             validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
             validateGroupDTO.setMessage(ErrorMessage.INVALIDATED_THIRD_PRIZE);
-        } else if (!isNumber(organizers)) {
+        } else if (!isValidPoint(organizers)) {
             validateGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
             validateGroupDTO.setMessage(ErrorMessage.INVALIDATED_ORGANIZERS_PRIZE);
         } else if (firstPrizeScore <= secondPrizeScore) {
@@ -424,13 +422,13 @@ public class GroupServiceImpl implements GroupService {
         Float memberPoint = groupDTO.getAdditionalConfig().getMemberPoint();
         Float listenerPoint = groupDTO.getAdditionalConfig().getListenerPoint();
 
-        if (!pointValidate(String.valueOf(hostPoint))) {
+        if (!isValidPoint(String.valueOf(hostPoint))) {
             validatedGroupDTO.setMessage(ErrorMessage.POINT_HOST_IS_NOT_VALIDATE);
             validatedGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-        } else if (!pointValidate(String.valueOf(memberPoint))) {
+        } else if (!isValidPoint(String.valueOf(memberPoint))) {
             validatedGroupDTO.setMessage(ErrorMessage.POINT_MEMBER_IS_NOT_VALIDATE);
             validatedGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-        } else if (!pointValidate(String.valueOf(listenerPoint))) {
+        } else if (!isValidPoint(String.valueOf(listenerPoint))) {
             validatedGroupDTO.setMessage(ErrorMessage.POINT_LISTENER_IS_NOT_VALIDATE);
             validatedGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
         } else if (hostPoint <= memberPoint) {
