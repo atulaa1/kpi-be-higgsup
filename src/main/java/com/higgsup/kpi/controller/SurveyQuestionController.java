@@ -24,9 +24,9 @@ public class SurveyQuestionController {
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/questions-man")
     public Response getAll() {
-        Response response = new Response(HttpStatus.OK.value());
-        List<SurveyDTO> surveyQuestionManDTOS = surveyService.getAllQuestion();
-        response.setData(surveyQuestionManDTOS);
+        Response<List<SurveyDTO>> response = new Response<>(HttpStatus.OK.value());
+        List<SurveyDTO> surveyDTOS = surveyService.getAllQuestion();
+        response.setData(surveyDTOS);
         return response;
     }
 
@@ -35,16 +35,15 @@ public class SurveyQuestionController {
     public Response updateSurveyQuestionOfMan(@RequestBody List<SurveyDTO> surveyQuestionManDTOs) {
         Response response = new Response(HttpStatus.OK.value());
         try {
-            SurveyDTO surveyQuestionManBaseDTO = surveyService.updateSurvey(surveyQuestionManDTOs);
-            if (Objects.nonNull(surveyQuestionManBaseDTO.getErrorCode())) {
-                response.setStatus(surveyQuestionManBaseDTO.getErrorCode());
-                response.setMessage(surveyQuestionManBaseDTO.getMessage());
+            SurveyDTO surveyDTOResponse = surveyService.updateSurvey(surveyQuestionManDTOs);
+            if (Objects.nonNull(surveyDTOResponse.getErrorCode())) {
+                response.setStatus(surveyDTOResponse.getErrorCode());
+                response.setMessage(surveyDTOResponse.getMessage());
             }
         } catch (JsonProcessingException e) {
             response.setMessage(ErrorCode.JSON_PROCESSING_EXCEPTION.getDescription());
             response.setStatus(ErrorCode.JSON_PROCESSING_EXCEPTION.getValue());
         }
-
         return response;
     }
 }

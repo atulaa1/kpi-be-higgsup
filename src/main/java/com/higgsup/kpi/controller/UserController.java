@@ -49,7 +49,7 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(BaseConfiguration.BASE_API_URL + "/users")
     public Response getListUsers(@RequestParam(value = "name", required = false) String name) {
-        Response response = new Response(HttpStatus.OK.value());
+        Response<List<UserDTO>> response = new Response<>(HttpStatus.OK.value());
 
         // search by name
         if (Objects.nonNull(name)) {
