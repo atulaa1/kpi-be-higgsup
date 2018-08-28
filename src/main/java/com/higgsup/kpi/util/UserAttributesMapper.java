@@ -27,8 +27,8 @@ public class UserAttributesMapper implements AttributesMapper<UserDTO> {
                 String[] userRoleTmpArr = role.split(",");
                 List<String> listUserRole = new ArrayList<String>();
 
-                for (String elm : userRoleTmpArr) {
-                    listUserRole.add(("ROLE_" + elm).toUpperCase());
+                for (String element : userRoleTmpArr) {
+                    listUserRole.add(("ROLE_" + element).toUpperCase());
                 }
                 user.setUserRole(listUserRole);
             }
