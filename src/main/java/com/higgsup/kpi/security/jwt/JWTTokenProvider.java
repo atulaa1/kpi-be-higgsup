@@ -52,8 +52,7 @@ public class JWTTokenProvider {
     }
 
     @SuppressWarnings("unchecked")
-    static Authentication getAuthentication(HttpServletRequest request, HttpServletResponse response)
-    throws IOException {
+    static Authentication getAuthentication(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String token = request.getHeader(BaseConfiguration.HEADER_STRING_AUTHORIZATION);
         if (token != null) {
             String user = null;
