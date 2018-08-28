@@ -37,11 +37,13 @@ public class SurveyServiceImpl implements SurveyService {
                 validatedSurveyDTO.setMessage(ErrorCode.NOT_FIND.getDescription());
                 validatedSurveyDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
             } else {
-                Optional<KpiSurvey> kpiSurveyQuestionManOptional = surveyQuestionManRepo.findById(id);
-                if (kpiSurveyQuestionManOptional.isPresent()) {
-                    KpiSurvey kpiSurveyQuestionMan = kpiSurveyQuestionManOptional.get();
+                Optional<KpiSurvey> kpiSurveyOptional = surveyQuestionManRepo.findById(id);
+                if (kpiSurveyOptional.isPresent()) {
+                    KpiSurvey kpiSurveyQuestionMan = kpiSurveyOptional.get();
+
                     question.setId(kpiSurveyQuestionMan.getId());
                     question.setNumber(kpiSurveyQuestionMan.getNumber());
+
                     BeanUtils.copyProperties(question, kpiSurveyQuestionMan);
                     surveyQuestionManRepo.save(kpiSurveyQuestionMan);
                 }

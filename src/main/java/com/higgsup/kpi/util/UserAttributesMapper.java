@@ -26,13 +26,13 @@ public class UserAttributesMapper implements AttributesMapper<UserDTO> {
             if (role != null && !role.isEmpty()) {
                 String[] userRoleTmpArr = role.split(",");
                 List<String> listUserRole = new ArrayList<String>();
+
                 for (String elm : userRoleTmpArr) {
                     listUserRole.add(("ROLE_" + elm).toUpperCase());
                 }
                 user.setUserRole(listUserRole);
             }
         }
-
         return user;
     }
 

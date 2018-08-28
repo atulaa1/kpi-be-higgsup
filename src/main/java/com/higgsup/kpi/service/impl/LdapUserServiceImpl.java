@@ -33,8 +33,7 @@ public class LdapUserServiceImpl implements LdapUserService {
         LdapQuery query = query().where("objectclass").is("user").and("sAMAccountName").is(username);
         List<UserDTO> queryResult = ldapTemplate.search(query, new UserAttributesMapper());
         if (!queryResult.isEmpty()) {
-            UserDTO user = queryResult.get(0);
-            return user;
+            return queryResult.get(0);
         } else {
             return null;
         }
