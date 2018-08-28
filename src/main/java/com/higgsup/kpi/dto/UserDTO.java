@@ -25,7 +25,7 @@ public class UserDTO extends BaseDTO {
 
     private Date birthday;
 
-    private String numberPhone;
+    private String phoneNumber;
 
     private String address;
 
@@ -33,7 +33,7 @@ public class UserDTO extends BaseDTO {
 
     private String skype;
 
-    private Integer yearWork;
+    private Integer workYear;
 
     public UserDTO() {
     }
@@ -121,12 +121,12 @@ public class UserDTO extends BaseDTO {
         this.birthday = birthday;
     }
 
-    public String getNumberPhone() {
-        return numberPhone;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setNumberPhone(String numberPhone) {
-        this.numberPhone = numberPhone;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getAddress() {
@@ -153,11 +153,11 @@ public class UserDTO extends BaseDTO {
         this.skype = skype;
     }
 
-    public Integer getYearWork() {
-        return yearWork;
+    public Integer getWorkYear() {
+        return workYear;
     }
 
-    public void setYearWork(Integer yearWork) {
-        this.yearWork = yearWork;
+    public void setWorkYear(Integer workYear) {
+        this.workYear = workYear;
     }
 }

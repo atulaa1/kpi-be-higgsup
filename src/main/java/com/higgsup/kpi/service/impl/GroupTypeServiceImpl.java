@@ -18,14 +18,14 @@ import java.util.List;
 public class GroupTypeServiceImpl implements GroupTypeService {
     @Autowired
     KpiGroupTypeRepo kpiGroupTypeRepo;
+
     @Autowired
     KpiEventUserRepo kpiEventUserRepo;
 
     @Override
     public List<GroupTypeDTO> getAllGroupType() {
-        List<GroupTypeDTO> groupTypeDTOS = null;
         List<KpiGroupType> kpiGroupTypeEntities = (List<KpiGroupType>) kpiGroupTypeRepo.findAll();
-        groupTypeDTOS = convertKpiGroupTypeEntityToDTO(kpiGroupTypeEntities);
+        List<GroupTypeDTO> groupTypeDTOS = convertKpiGroupTypeEntityToDTO(kpiGroupTypeEntities);
         return groupTypeDTOS;
     }
 
@@ -38,7 +38,6 @@ public class GroupTypeServiceImpl implements GroupTypeService {
                 groupTypeDTOS.add(groupTypeDTO);
             }
         }
-
         return groupTypeDTOS;
     }
 }

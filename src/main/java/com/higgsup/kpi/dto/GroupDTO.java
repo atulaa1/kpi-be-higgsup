@@ -11,7 +11,7 @@ public class GroupDTO<T> extends BaseDTO {
 
     private String description;
 
-    private GroupTypeDTO groupTypeId;
+    private GroupTypeDTO groupType;
 
     @JsonFormat(pattern = "dd-MM-yyy hh:mm")
     private Timestamp createdDate;
@@ -42,12 +42,12 @@ public class GroupDTO<T> extends BaseDTO {
         this.description = description;
     }
 
-    public GroupTypeDTO getGroupTypeId() {
-        return groupTypeId;
+    public GroupTypeDTO getGroupType() {
+        return groupType;
     }
 
-    public void setGroupTypeId(GroupTypeDTO groupTypeId) {
-        this.groupTypeId = groupTypeId;
+    public void setGroupType(GroupTypeDTO groupType) {
+        this.groupType = groupType;
     }
 
     public Timestamp getCreatedDate() {
