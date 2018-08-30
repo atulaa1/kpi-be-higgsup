@@ -77,7 +77,7 @@ public class LdapUserServiceImpl implements LdapUserService {
     @Override
     public List<UserDTO> findUsersByName(String name) {
         List<UserDTO> result = null;
-        LdapQuery query = query().where("objectclass").is("user").and("roleForKpi").is("EMPLOYEE").or("MAN").isPresent().and("displayName")
+        LdapQuery query = query().where("objectclass").is("user").and("roleForKpi").isPresent().and("displayName")
                 .like("*" + name + "*");
         result = ldapTemplate.search(query, new UserAttributesMapper());
         return result;
