@@ -30,12 +30,14 @@ public class ProjectController {
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = "projects/{id}", method = RequestMethod.PUT)
     public Response updateProject(@PathVariable Integer id, @RequestBody ProjectDTO projectDTO) {
-        Response response = new Response(HttpStatus.OK.value());
+        Response<ProjectDTO> response = new Response<>(HttpStatus.OK.value());
         projectDTO.setId(id);
         ProjectDTO projectRP = projectService.updateProject(projectDTO);
         if (Objects.nonNull(projectRP.getErrorCode())) {
             response.setStatus(projectRP.getErrorCode());
             response.setMessage(projectRP.getMessage());
+        } else {
+            response.setData(projectRP);
         }
         return response;
     }
@@ -43,11 +45,14 @@ public class ProjectController {
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = "projects", method = RequestMethod.POST)
     public Response createProject(@RequestBody ProjectDTO projectDTO) {
-        Response response = new Response(HttpStatus.OK.value());
+        Response<ProjectDTO> response = new Response<>(HttpStatus.OK.value());
+
         ProjectDTO projectRP = projectService.createProject(projectDTO);
         if (Objects.nonNull(projectRP.getErrorCode())) {
             response.setStatus(projectRP.getErrorCode());
             response.setMessage(projectRP.getMessage());
+        } else {
+            response.setData(projectRP);
         }
         return response;
     }
