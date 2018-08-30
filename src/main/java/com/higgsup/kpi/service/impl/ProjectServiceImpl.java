@@ -24,7 +24,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public List<ProjectDTO> getAllProject() {
-        List<KpiProject> kpiProjects = (List<KpiProject>) kpiProjectRepo.findAll();
+        List<KpiProject> kpiProjects = (List<KpiProject>) kpiProjectRepo.findAllFollowCreateDateSorted();
         List<ProjectDTO> projectDTOS = convertKpiProjectEntityToDTO(kpiProjects);
         return projectDTOS;
     }
