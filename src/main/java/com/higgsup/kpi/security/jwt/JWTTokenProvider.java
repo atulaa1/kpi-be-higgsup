@@ -25,8 +25,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
 
 public class JWTTokenProvider {
-	//14400 is 14400 minute
-	private static final long EXPIRATIONTIME = BaseConfiguration.BASE_TIMEOUT_TOKEN * 14400; // base time out is 6000ms 1 minute
+	//1440 is 1440 minute is 1 day
+	private static final long EXPIRATIONTIME = BaseConfiguration.BASE_TIMEOUT_TOKEN * 1440; // base time out is 6000ms 1 minute
 
 	static void addAuthentication(HttpServletResponse res, String username, Authentication auth) throws IOException {
 		Claims claims = Jwts.claims().setSubject(username);
