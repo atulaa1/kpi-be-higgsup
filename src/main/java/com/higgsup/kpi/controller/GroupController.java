@@ -32,6 +32,8 @@ public class GroupController {
             if (Objects.nonNull(group.getErrorCode())) {
                 response.setStatus(groupDTO.getErrorCode());
                 response.setMessage(groupDTO.getMessage());
+            } else {
+                response.setData(group);
             }
         } catch (JsonProcessingException e) {
             response.setMessage(ErrorCode.JSON_PROCESSING_EXCEPTION.getDescription());
@@ -49,6 +51,8 @@ public class GroupController {
             if (Objects.nonNull(group.getErrorCode())) {
                 response.setStatus(groupDTO.getErrorCode());
                 response.setMessage(groupDTO.getMessage());
+            } else {
+                response.setData(group);
             }
         } catch (JsonProcessingException e) {
             response.setMessage(ErrorCode.JSON_PROCESSING_EXCEPTION.getDescription());
@@ -65,6 +69,8 @@ public class GroupController {
         if (Objects.nonNull(groupDTORP.getErrorCode())) {
             response.setStatus(groupDTORP.getErrorCode());
             response.setMessage(groupDTORP.getMessage());
+        } else {
+            response.setData(groupDTORP);
         }
         return response;
     }
@@ -79,6 +85,8 @@ public class GroupController {
             if (Objects.nonNull(groupDTOResponse.getErrorCode())) {
                 response.setStatus(groupDTOResponse.getErrorCode());
                 response.setMessage(groupDTOResponse.getMessage());
+            } else {
+                response.setData(groupDTOResponse);
             }
         } catch (JsonProcessingException e) {
             response.setMessage(ErrorCode.JSON_PROCESSING_EXCEPTION.getDescription());
@@ -98,6 +106,8 @@ public class GroupController {
             if (Objects.nonNull(groupDTO1.getErrorCode())) {
                 response.setStatus(groupDTO1.getErrorCode());
                 response.setMessage(groupDTO1.getMessage());
+            } else {
+                response.setData(groupDTO1);
             }
         } catch (JsonProcessingException e) {
             response.setMessage(ErrorCode.JSON_PROCESSING_EXCEPTION.getDescription());
@@ -115,6 +125,8 @@ public class GroupController {
         if (Objects.nonNull(groupDTO1.getErrorCode())) {
             response.setStatus(groupDTO1.getErrorCode());
             response.setMessage(groupDTO1.getMessage());
+        } else {
+            response.setData(groupDTO1);
         }
         return response;
     }
@@ -129,6 +141,8 @@ public class GroupController {
             if (Objects.nonNull(groupDTOTeamBuilding.getErrorCode())) {
                 response.setStatus(groupDTOTeamBuilding.getErrorCode());
                 response.setMessage(groupDTOTeamBuilding.getMessage());
+            } else {
+                response.setData(groupDTOTeamBuilding);
             }
         } catch (JsonProcessingException e) {
             response.setMessage(ErrorCode.JSON_PROCESSING_EXCEPTION.getDescription());
@@ -149,6 +163,8 @@ public class GroupController {
             if (Objects.nonNull(groupDTO1.getErrorCode())) {
                 response.setStatus(groupDTO1.getErrorCode());
                 response.setMessage(groupDTO1.getMessage());
+            } else {
+                response.setData(groupDTO1);
             }
         } catch (JsonProcessingException e) {
             response.setMessage(ErrorCode.JSON_PROCESSING_EXCEPTION.getDescription());
