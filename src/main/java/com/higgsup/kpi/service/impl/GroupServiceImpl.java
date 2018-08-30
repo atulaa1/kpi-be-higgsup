@@ -430,7 +430,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public List<GroupDTO> getAllGroup() throws IOException {
-        List<KpiGroup> groupList = (List<KpiGroup>) kpiGroupRepo.findAll();
+        List<KpiGroup> groupList =  kpiGroupRepo.findAllGroup();
         return convertGroupsEntityToDTO(groupList);
     }
 
