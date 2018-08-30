@@ -30,8 +30,8 @@ public class GroupController {
         try {
             GroupDTO group = groupService.createSupport(groupDTO);
             if (Objects.nonNull(group.getErrorCode())) {
-                response.setStatus(groupDTO.getErrorCode());
-                response.setMessage(groupDTO.getMessage());
+                response.setStatus(group.getErrorCode());
+                response.setMessage(group.getMessage());
             } else {
                 response.setData(group);
             }
@@ -49,8 +49,8 @@ public class GroupController {
         try {
             GroupDTO group = groupService.updateSupport(groupDTO);
             if (Objects.nonNull(group.getErrorCode())) {
-                response.setStatus(groupDTO.getErrorCode());
-                response.setMessage(groupDTO.getMessage());
+                response.setStatus(group.getErrorCode());
+                response.setMessage(group.getMessage());
             } else {
                 response.setData(group);
             }
