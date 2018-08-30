@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @RestController
 public class UserController {
@@ -79,7 +80,6 @@ public class UserController {
             return response;
         }
 
-
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -91,7 +91,7 @@ public class UserController {
             if (Objects.nonNull(userDTO.getErrorCode())) {
                 response.setStatus(userDTO.getErrorCode());
                 response.setMessage(userDTO.getMessage());
-            }else {
+            } else {
                 response.setData(userDTO);
             }
         } else {
@@ -104,15 +104,24 @@ public class UserController {
     @PreAuthorize("hasRole('EMPLOYEE')")
     @PutMapping(BaseConfiguration.BASE_API_URL + "/users/{username}")
     public Response updateInfo(@PathVariable String username, @RequestBody UserDTO userDTO) {
-        Response response = new Response(HttpStatus.OK.value());
+        Response<UserDTO> response = new Response<>(HttpStatus.OK.value());
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         //check if token of user
         if (authentication.getPrincipal().equals(username)) {
+            List<String> roles = authentication.getAuthorities().stream().map(Object::toString).collect(Collectors.toList());
+
+            userDTO.setUserRole(roles);
+
             UserDTO userDTOUpdate = userService.updateInfoUser(username, userDTO);
+
             if (Objects.nonNull(userDTOUpdate.getErrorCode())) {
                 response.setMessage(userDTOUpdate.getMessage());
                 response.setStatus(userDTOUpdate.getErrorCode());
+            } else {
+                response.setData(userDTOUpdate);
             }
+
         } else {
             response.setStatus(HttpStatus.FORBIDDEN.value());
             response.setMessage(HttpStatus.FORBIDDEN.getReasonPhrase());
