@@ -70,8 +70,8 @@ public class GroupServiceImpl implements GroupService {
         GroupDTO validatedGroupDTO = new GroupDTO();
 
         if (kpiGroupRepo.findByName(groupDTO.getName()) != null) {
-            validatedGroupDTO.setErrorCode(ErrorCode.DUPLICATED_ITEM.getValue());
-            validatedGroupDTO.setMessage(ErrorCode.DUPLICATED_ITEM.getDescription());
+            validatedGroupDTO.setErrorCode(ErrorCode.ALREADY_CREATED.getValue());
+            validatedGroupDTO.setMessage(ErrorCode.ALREADY_CREATED.getDescription());
         } else if (validateSeminar(groupDTO, validatedGroupDTO)) {
             KpiGroup kpiGroup = new KpiGroup();
             ObjectMapper mapper = new ObjectMapper();
