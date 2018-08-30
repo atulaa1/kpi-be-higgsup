@@ -1,0 +1,1673 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Higgsup KPI APIS",
+    "title": "Higgsup KPI APIS",
+    "version": "2.0"
+  },
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "group-controller",
+      "description": "Group Activities"
+    },
+    {
+      "name": "group-type-controller",
+      "description": "Group Types"
+    },
+    {
+      "name": "login-controller",
+      "description": "Login user"
+    },
+    {
+      "name": "project-controller",
+      "description": "Projects of company"
+    },
+    {
+      "name": "survey-question-controller",
+      "description": "Survey Questions"
+    },
+    {
+      "name": "user-controller",
+      "description": "Users"
+    }
+  ],
+  "security": [
+    {
+      "Authorization": []
+    }
+  ],
+  "securityDefinitions": {
+    "Authorization": {
+      "description": "Get token at API with URI '/api/login' in login-controller ",
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "paths": {
+    "/api/clubs": {
+      "post": {
+        "tags": [
+          "group-controller"
+        ],
+        "summary": "Create a club activity",
+        "operationId": "createClubUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "groupDTO",
+            "description": "groupDTO",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GroupDTO.GroupClubDetail"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Response"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/group-types": {
+      "get": {
+        "tags": [
+          "group-type-controller"
+        ],
+        "summary": "All group types",
+        "operationId": "getAllUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/groups": {
+      "get": {
+        "tags": [
+          "group-controller"
+        ],
+        "summary": "All groups",
+        "operationId": "getAllGroupUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Response"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/groups/clubs/{id}": {
+      "put": {
+        "tags": [
+          "group-controller"
+        ],
+        "summary": "Update the club activity with an ID",
+        "operationId": "updateClubActivityUsingPUT",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "body",
+            "name": "groupDTO",
+            "description": "groupDTO",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GroupDTO.GroupClubDetail"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Response"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/groups/seminars": {
+      "post": {
+        "tags": [
+          "group-controller"
+        ],
+        "summary": "Create a seminar activity",
+        "operationId": "createSeminarUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "groupDTO",
+            "description": "groupDTO",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GroupDTO.GroupSeminarDetail"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Response"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/groups/seminars/{id}": {
+      "put": {
+        "tags": [
+          "group-controller"
+        ],
+        "summary": "Update the seminar activity with an ID",
+        "operationId": "updateSeminarUsingPUT",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "body",
+            "name": "groupDTO",
+            "description": "groupDTO",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GroupDTO.GroupSeminarDetail"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Response"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/groups/support": {
+      "post": {
+        "tags": [
+          "group-controller"
+        ],
+        "summary": "Create a support activity",
+        "operationId": "createSupportUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "groupDTO",
+            "description": "groupDTO",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GroupDTO.GroupSupportDetail"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Response"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "group-controller"
+        ],
+        "summary": "Update the support activity with an ID",
+        "operationId": "updateSupportUsingPUT",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "groupDTO",
+            "description": "groupDTO",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GroupDTO.GroupSupportDetail"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Response"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/groups/team-building": {
+      "post": {
+        "tags": [
+          "group-controller"
+        ],
+        "summary": "Create a team building activity",
+        "operationId": "createConfigTeamBuildingUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "groupDTO",
+            "description": "groupDTO",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GroupDTO.TeamBuildingDTO"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Response"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "group-controller"
+        ],
+        "summary": "Update the team building activity with an ID",
+        "operationId": "updateTeamBuildingActivityUsingPUT",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "groupDTO",
+            "description": "groupDTO",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GroupDTO.TeamBuildingDTO"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Response"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/login": {
+      "post": {
+        "security": [],
+        "tags": [
+          "login-controller"
+        ],
+        "summary": "login",
+        "operationId": "loginUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "loginRequest",
+            "description": "loginRequest",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "username",
+                "password"
+              ],
+              "properties": {
+                "username": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              },
+              "example": {
+                "username": "kpi.admin",
+                "password": "test"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string"
+                }
+              },
+              "example": {
+                "username": "kpi.admin"
+              }
+            },
+            "headers": {
+              "authorization": {
+                "type": "string",
+                "description": "Token"
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/projects": {
+      "get": {
+        "tags": [
+          "project-controller"
+        ],
+        "summary": "All projects",
+        "operationId": "getProjectListUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "200 : Thành công ",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "active": {
+                      "type": "number"
+                    },
+                    "createdDate": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "message": {
+                  "type": "string"
+                },
+                "status_code": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "example": {
+                "status_code": 200,
+                "data": [
+                  {
+                    "id": 8,
+                    "name": "VNTRIP",
+                    "active": 1,
+                    "createdDate": "29-08-2018 03:36"
+                  },
+                  {
+                    "id": 7,
+                    "name": "KPI",
+                    "active": 1,
+                    "createdDate": "23-08-2018 09:45"
+                  }
+                ]
+              },
+              "title": "Response"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "project-controller"
+        ],
+        "summary": "Create a project",
+        "operationId": "createProjectUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "projectDTO",
+            "description": "projectDTO",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ProjectDTO"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Response"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/projects/{id}": {
+      "put": {
+        "tags": [
+          "project-controller"
+        ],
+        "summary": "Update the project with an ID",
+        "operationId": "updateProjectUsingPUT",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "body",
+            "name": "projectDTO",
+            "description": "projectDTO",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ProjectDTO"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Response"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "project-controller"
+        ],
+        "summary": "Delete the project with an ID",
+        "operationId": "deleteProjectUsingDELETE",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Response"
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/api/survey/questions-man": {
+      "get": {
+        "tags": [
+          "survey-question-controller"
+        ],
+        "summary": "All survey questions",
+        "operationId": "getAllUsingGET_1",
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "200 : Thành công \n 900 : not find -- > không tìm thấy questions ID",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "$ref": "#/definitions/SurveyQuestionManDTO"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "status_code": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "example": {
+                "message": "Thành Công",
+                "status_code": 200,
+                "data": [
+                  {
+                    "id": 2,
+                    "number": 2,
+                    "question": "Thái độ chung trong công việc của nhân viên này?"
+                  },
+                  {
+                    "id": 3,
+                    "number": 3,
+                    "question": "Nhân viên này có quan tâm hoặc giúp đỡ đồng nghiệp"
+                  }
+                ]
+              },
+              "title": "Response"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "survey-question-controller"
+        ],
+        "summary": "Update the survey questions with IDs",
+        "operationId": "updateSurveyQuestionOfManUsingPUT",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "surveyQuestionManDTOs",
+            "description": "surveyQuestionManDTOs",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/SurveyQuestionManDTO"
+              },
+              "example": [
+                {
+                  "id": 2,
+                  "number": 2,
+                  "question": "Thái độ chung trong công việc của nhân viên này?"
+                },
+                {
+                  "id": 3,
+                  "number": 3,
+                  "question": "Nhân viên này có quan tâm hoặc giúp đỡ đồng nghiệp"
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 : Thành công \n 900 : Message: not find. Meaning: Không tìm thấy câu hỏi để update",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status_code": {
+                  "type": "number"
+                }
+              },
+              "example": {
+                "status_code": 200
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/users": {
+      "get": {
+        "tags": [
+          "user-controller"
+        ],
+        "summary": "List of users",
+        "operationId": "getListUsersUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "description": "name",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 : Thành công \n 900 : not find user -- > không tìm thấy bầt kỳ user nào",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "$ref": "#/definitions/UserDTO"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "status_code": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "example": {
+                "message": "Thành Công",
+                "status_code": 200,
+                "data": [
+                  {
+                    "username": "kpi.admin",
+                    "lastName": "kpi",
+                    "firstName": "admin",
+                    "fullName": "kpi test. admin",
+                    "email": "kpi.admin@higgsup.com",
+                    "userRole": [
+                      "ROLE_ADMIN",
+                      "ROLE_EMPLOYEE"
+                    ],
+                    "address": "null",
+                    "avatar": "null",
+                    "birthday": "null",
+                    "errorCode": 0,
+                    "gmail": "null",
+                    "message": "null",
+                    "numberPhone": "null",
+                    "skype": "null",
+                    "yearWork": null
+                  }
+                ]
+              },
+              "title": "Response"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/users/{username}": {
+      "get": {
+        "tags": [
+          "user-controller"
+        ],
+        "summary": "User Information",
+        "operationId": "getUserInfoUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "description": "username",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "$ref": "#/definitions/UserDTO"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "status_code": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "example": {
+                "message": "Thành Công",
+                "status_code": 200,
+                "data": {
+                  "username": "kpi.admin",
+                  "lastName": "kpi",
+                  "firstName": "admin",
+                  "fullName": "kpi test. admin",
+                  "email": "kpi.admin@higgsup.com",
+                  "userRole": [
+                    "ROLE_ADMIN",
+                    "ROLE_EMPLOYEE"
+                  ],
+                  "address": "Lê văn Thành",
+                  "avatar": "1220000261",
+                  "birthday": "2018-08-15",
+                  "errorCode": 0,
+                  "gmail": "lethanh9398@gmail.com",
+                  "message": "null",
+                  "numberPhone": "0966211618",
+                  "skype": "solitarysp@gmail.com",
+                  "yearWork": 1
+                }
+              },
+              "title": "Response"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "user-controller"
+        ],
+        "summary": "Update Information of the user with a username",
+        "operationId": "updateInfoUsingPUT",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "description": "username",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "userDTO",
+            "description": "userDTO",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "birthday",
+                "numberPhone",
+                "address",
+                "gmail",
+                "skype",
+                "yearWork"
+              ],
+              "properties": {
+                "avatar": {
+                  "type": "string"
+                },
+                "birthday": {
+                  "type": "number"
+                },
+                "numberPhone": {
+                  "type": "string"
+                },
+                "address": {
+                  "type": "string"
+                },
+                "gmail": {
+                  "type": "string"
+                },
+                "skype": {
+                  "type": "string"
+                },
+                "yearWork": {
+                  "type": "number"
+                }
+              },
+              "example": {
+                "avatar": "base 64",
+                "birthday": 1000000000,
+                "numberPhone": "+84966211618",
+                "address": "ha noi",
+                "gmail": "lethanh9398@gmail.com",
+                "skype": "skype",
+                "yearWork": 1
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status_code": {
+                  "type": "number"
+                }
+              },
+              "example": {
+                "status_code": 200
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/users/{username}/roles": {
+      "put": {
+        "tags": [
+          "user-controller"
+        ],
+        "summary": "Update a user role",
+        "operationId": "updateUserRoleUsingPUT",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "username",
+            "description": "username",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "roles",
+            "description": "roles",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "properties": [
+                "ROLE_ADMIN",
+                "ROLE_EMPLOYEE"
+              ],
+              "example": [
+                "ROLE_ADMIN",
+                "ROLE_EMPLOYEE"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "$ref": "#/definitions/UserDTO"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "status_code": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "example": {
+                "message": "Thành Công",
+                "status_code": 200,
+                "data": {
+                  "username": "kpi.admin",
+                  "lastName": "kpi",
+                  "firstName": "admin",
+                  "fullName": "kpi test. admin",
+                  "email": "kpi.admin@higgsup.com",
+                  "userRole": [
+                    "ROLE_ADMIN",
+                    "ROLE_EMPLOYEE"
+                  ],
+                  "address": "Lê văn Thành",
+                  "avatar": "1220000261",
+                  "birthday": "2018-08-15",
+                  "errorCode": 0,
+                  "gmail": "lethanh9398@gmail.com",
+                  "message": "null",
+                  "numberPhone": "0966211618",
+                  "skype": "solitarysp@gmail.com",
+                  "yearWork": 1
+                }
+              },
+              "title": "Response"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "GroupClubDetail": {
+      "type": "object",
+      "properties": {
+        "effectivePoint": {
+          "type": "number",
+          "format": "float"
+        },
+        "host": {
+          "type": "string"
+        },
+        "minNumberOfSessions": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "participationPoint": {
+          "type": "number",
+          "format": "float"
+        }
+      },
+      "title": "GroupClubDetail"
+    },
+    "GroupDTO.GroupClubDetail": {
+      "type": "object",
+      "properties": {
+        "additionalConfig": {
+          "$ref": "#/definitions/GroupClubDetail"
+        },
+        "createdData": {
+          "$ref": "#/definitions/Timestamp"
+        },
+        "description": {
+          "type": "string"
+        },
+        "errorCode": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "groupTypeId": {
+          "$ref": "#/definitions/GroupTypeDTO"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "title": "GroupDTO.GroupClubDetail"
+    },
+    "GroupDTO.GroupSeminarDetail": {
+      "type": "object",
+      "properties": {
+        "additionalConfig": {
+          "$ref": "#/definitions/GroupSeminarDetail"
+        },
+        "createdData": {
+          "$ref": "#/definitions/Timestamp"
+        },
+        "description": {
+          "type": "string"
+        },
+        "errorCode": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "groupTypeId": {
+          "$ref": "#/definitions/GroupTypeDTO"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "title": "GroupDTO.GroupSeminarDetail"
+    },
+    "GroupDTO.GroupSupportDetail": {
+      "type": "object",
+      "properties": {
+        "additionalConfig": {
+          "$ref": "#/definitions/GroupSupportDetail"
+        },
+        "createdData": {
+          "$ref": "#/definitions/Timestamp"
+        },
+        "description": {
+          "type": "string"
+        },
+        "errorCode": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "groupTypeId": {
+          "$ref": "#/definitions/GroupTypeDTO"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "title": "GroupDTO.GroupSupportDetail"
+    },
+    "GroupDTO.TeamBuildingDTO": {
+      "type": "object",
+      "properties": {
+        "additionalConfig": {
+          "$ref": "#/definitions/TeamBuildingDTO"
+        },
+        "createdData": {
+          "$ref": "#/definitions/Timestamp"
+        },
+        "description": {
+          "type": "string"
+        },
+        "errorCode": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "groupTypeId": {
+          "$ref": "#/definitions/GroupTypeDTO"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "title": "GroupDTO.TeamBuildingDTO"
+    },
+    "GroupSeminarDetail": {
+      "type": "object",
+      "properties": {
+        "host": {
+          "type": "number",
+          "format": "float"
+        },
+        "listener": {
+          "type": "number",
+          "format": "float"
+        },
+        "member": {
+          "type": "number",
+          "format": "float"
+        }
+      },
+      "title": "GroupSeminarDetail"
+    },
+    "GroupSupportDetail": {
+      "type": "object",
+      "properties": {
+        "buyingStuffPoint": {
+          "type": "number",
+          "format": "float"
+        },
+        "cleanUpPoint": {
+          "type": "number",
+          "format": "float"
+        },
+        "supportConferencePoint": {
+          "type": "number",
+          "format": "float"
+        },
+        "trainingPoint": {
+          "type": "number",
+          "format": "float"
+        },
+        "weeklyCleanUpPoint": {
+          "type": "number",
+          "format": "float"
+        }
+      },
+      "title": "GroupSupportDetail"
+    },
+    "GroupTypeDTO": {
+      "type": "object",
+      "properties": {
+        "errorCode": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "title": "GroupTypeDTO"
+    },
+    "LoginRequestDTO": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        }
+      },
+      "title": "LoginRequestDTO"
+    },
+    "LoginResponseDTO": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string"
+        }
+      },
+      "title": "LoginResponseDTO"
+    },
+    "ProjectDTO": {
+      "type": "object",
+      "properties": {
+        "active": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "errorCode": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "title": "ProjectDTO"
+    },
+    "Response": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object"
+        },
+        "message": {
+          "type": "string"
+        },
+        "status_code": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "Response"
+    },
+    "SurveyQuestionManDTO": {
+      "type": "object",
+      "properties": {
+        "errorCode": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "number": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "question": {
+          "type": "string"
+        }
+      },
+      "title": "SurveyQuestionManDTO"
+    },
+    "TeamBuildingDTO": {
+      "type": "object",
+      "properties": {
+        "firstPrize": {
+          "type": "string"
+        },
+        "organizers": {
+          "type": "string"
+        },
+        "secondPrize": {
+          "type": "string"
+        },
+        "thirdPrize": {
+          "type": "string"
+        }
+      },
+      "title": "TeamBuildingDTO"
+    },
+    "Timestamp": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "day": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "hours": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "minutes": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "month": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "nanos": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "seconds": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "time": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "timezoneOffset": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "year": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "Timestamp"
+    },
+    "UserDTO": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string"
+        },
+        "avatar": {
+          "type": "string"
+        },
+        "birthday": {
+          "type": "string",
+          "format": "date"
+        },
+        "email": {
+          "type": "string"
+        },
+        "errorCode": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "fullName": {
+          "type": "string"
+        },
+        "gmail": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "numberPhone": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "skype": {
+          "type": "string"
+        },
+        "userRole": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "username": {
+          "type": "string"
+        },
+        "yearWork": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "UserDTO"
+    }
+  }
+}
