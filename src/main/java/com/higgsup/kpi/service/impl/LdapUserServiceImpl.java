@@ -14,6 +14,7 @@ import org.springframework.ldap.query.LdapQuery;
 import org.springframework.stereotype.Service;
 
 import javax.naming.Name;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -44,8 +45,16 @@ public class LdapUserServiceImpl implements LdapUserService {
     @Override
     public List<UserDTO> getAllUsers() {
         List<UserDTO> result = null;
-        LdapQuery query = query().where("objectclass").is("user").and("roleForKpi").isPresent();
+        LdapQuery query = query().where("objectclass").is("user").and("roleForKpi").is("EMPLOYEE");
         result = ldapTemplate.search(query, new UserAttributesMapper());
+//        List<UserDTO> userDTOList = new ArrayList<>();
+//        for (UserDTO userDTO : result){
+//            if (userDTO.getUserRole().contains("ADMIN")){
+//                continue;
+//            } else {
+//                userDTOList.add(userDTO);
+//            }
+//        }
         return result;
     }
 
@@ -70,7 +79,7 @@ public class LdapUserServiceImpl implements LdapUserService {
     @Override
     public List<UserDTO> findUsersByName(String name) {
         List<UserDTO> result = null;
-        LdapQuery query = query().where("objectclass").is("user").and("roleForKpi").isPresent().and("displayName")
+        LdapQuery query = query().where("objectclass").is("user").and("roleForKpi").is("EMPLOYEE").or("MAN").isPresent().and("displayName")
                 .like("*" + name + "*");
         result = ldapTemplate.search(query, new UserAttributesMapper());
         return result;
