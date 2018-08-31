@@ -107,6 +107,56 @@
           "*/*"
         ],
         "responses": {
+          "200": {
+            "description": "status_code : 200. Meaning: Thành công",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties" :{
+                      "id": {
+                        "type": "number"
+                      },
+                      "name": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "message": {
+                  "type": "string"
+                },
+                "status_code": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "example": {
+                "data": [
+                  {
+                    "id": 1,
+                    "name": "Seminar"
+                  },
+                  {
+                    "id": 2,
+                    "name": "Câu lạc bộ"
+                  },
+                  {
+                    "id": 3,
+                    "name": "Team building"
+                  },
+                  {
+                    "id": 4,
+                    "name": "Support chung"
+                  }
+                ],
+                "status_code": 200
+              }
+            }
+          },
           "401": {
             "description": "Unauthorized"
           },

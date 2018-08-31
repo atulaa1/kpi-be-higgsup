@@ -175,7 +175,7 @@ public class GroupController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @RequestMapping("/groups")
+    @RequestMapping(value = "/groups", method = RequestMethod.GET)
     public Response getAllGroup() {
         Response response = new Response(HttpStatus.OK.value());
         try {
