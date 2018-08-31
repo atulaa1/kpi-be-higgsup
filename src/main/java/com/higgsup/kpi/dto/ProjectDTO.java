@@ -11,7 +11,7 @@ public class ProjectDTO extends BaseDTO {
 
     private Integer active;
 
-    @JsonFormat(pattern = "dd-MM-yyy hh:mm")
+    @JsonFormat(pattern = "dd-MM-yyy HH:mm")
     private Timestamp createdDate;
 
     public Integer getId() {
