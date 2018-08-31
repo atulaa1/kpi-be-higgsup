@@ -617,6 +617,9 @@
                 "name": {
                   "type": "string"
                 },
+                "description": {
+                  "type": "string"
+                },
                 "groupTypeId": {
                   "required": [
                     "id"
@@ -650,6 +653,7 @@
               },
               "example": {
                 "name": "seminar thứ 7",
+                "description": null,
                 "groupTypeId": {
                   "id": 1
                 },
@@ -668,6 +672,7 @@
             "schema": {
               "type": "object",
               "required": [
+                "id",
                 "name",
                 "groupTypeId",
                 "additionalConfig"
@@ -697,9 +702,8 @@
                   "type": "object",
                   "required": [
                     "host",
-                    "minNumberOfSessions",
-                    "participationPoint",
-                    "effectivePoint"
+                    "listener",
+                    "member"
                   ],
                   "properties": {
                     "host": {
@@ -718,6 +722,7 @@
                 "data": {
                   "id": 10,
                   "name": "seminar thứ 7",
+                  "description": null,
                   "groupTypeId": {
                     "id": 2
                   },
@@ -933,15 +938,152 @@
             "description": "groupDTO",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/GroupDTO.GroupSupportDetail"
+              "type": "object",
+              "required": [
+                "name",
+                "groupTypeId",
+                "additionalConfig"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "groupTypeId": {
+                  "required": [
+                    "id"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "additionalConfig": {
+                  "type": "object",
+                  "required": [
+                    "cleanUpPoint",
+                    "buyingStuffPoint",
+                    "trainingPoint",
+                    "weeklyCleanUpPoint",
+                    "supportConferencePoint"
+                  ],
+                  "properties": {
+                    "cleanUpPoint": {
+                      "type": "number"
+                    },
+                    "buyingStuffPoint": {
+                      "type": "number"
+                    },
+                    "supportConferencePoint": {
+                      "type": "number"
+                    },
+                    "trainingPoint": {
+                      "type": "number"
+                    },
+                    "weeklyCleanUpPoint": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "name": "Support",
+                "description": null,
+                "groupTypeId": {
+                  "id": 4
+                },
+                "additionalConfig": {
+                  "cleanUpPoint": 1,
+                  "buyingStuffPoint": 2,
+                  "supportConferencePoint": 3,
+                  "trainingPoint": 4,
+                  "weeklyCleanUpPoint": 5
+                }
+              }
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "status_code : 200. Meaning: Thành công \n status_code : 906. Message:  already created. Meaning: Khung config support đã được tạo \n status_code : 901. Message: parameter is not valid. Meaning: Điền điểm sai với quy định \n status_code : 905. Message: not filling all information. Meaning: không điền hết thông tin",
             "schema": {
-              "$ref": "#/definitions/Response"
+              "type": "object",
+              "required": [
+                "name",
+                "groupTypeId",
+                "additionalConfig"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "groupTypeId": {
+                  "required": [
+                    "id"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "additionalConfig": {
+                  "type": "object",
+                  "required": [
+                    "cleanUpPoint",
+                    "buyingStuffPoint",
+                    "supportConferencePoint",
+                    "weeklyCleanUpPoint",
+                    "trainingPoint"
+                  ],
+                  "properties": {
+                    "cleanUpPoint": {
+                      "type": "number"
+                    },
+                    "buyingStuffPoint": {
+                      "type": "number"
+                    },
+                    "supportConferencePoint": {
+                      "type": "number"
+                    },
+                    "trainingPoint": {
+                      "type": "number"
+                    },
+                    "weeklyCleanUpPoint": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "data": {
+                  "id": 10,
+                  "name": "Support",
+                  "description": null,
+                  "groupTypeId": {
+                    "id": 4
+                  },
+                  "additionalConfig": {
+                    "cleanUpPoint": 1,
+                    "buyingStuffPoint": 2,
+                    "supportConferencePoint": 3,
+                    "trainingPoint": 4,
+                    "weeklyCleanUpPoint": 5
+                  },
+                  "status_code": 200
+                }
+              }
             }
           },
           "201": {
@@ -977,15 +1119,152 @@
             "description": "groupDTO",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/GroupDTO.GroupSupportDetail"
+              "type": "object",
+              "required": [
+                "name",
+                "groupTypeId",
+                "additionalConfig"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "groupTypeId": {
+                  "required": [
+                    "id"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "additionalConfig": {
+                  "type": "object",
+                  "required": [
+                    "cleanUpPoint",
+                    "buyingStuffPoint",
+                    "trainingPoint",
+                    "weeklyCleanUpPoint",
+                    "supportConferencePoint"
+                  ],
+                  "properties": {
+                    "cleanUpPoint": {
+                      "type": "number"
+                    },
+                    "buyingStuffPoint": {
+                      "type": "number"
+                    },
+                    "supportConferencePoint": {
+                      "type": "number"
+                    },
+                    "trainingPoint": {
+                      "type": "number"
+                    },
+                    "weeklyCleanUpPoint": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "name": "Support",
+                "description": null,
+                "groupTypeId": {
+                  "id": 4
+                },
+                "additionalConfig": {
+                  "cleanUpPoint": 1,
+                  "buyingStuffPoint": 2,
+                  "supportConferencePoint": 3,
+                  "trainingPoint": 4,
+                  "weeklyCleanUpPoint": 5
+                }
+              }
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "status_code : 200. Meaning: Thành công \n status_code : 906. Message:  already created. Meaning: Khung config support đã được tạo \n status_code : 901. Message: parameter is not valid. Meaning: Điền điểm sai với quy định \n status_code : 905. Message: not filling all information. Meaning: không điền hết thông tin",
             "schema": {
-              "$ref": "#/definitions/Response"
+              "type": "object",
+              "required": [
+                "name",
+                "groupTypeId",
+                "additionalConfig"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "groupTypeId": {
+                  "required": [
+                    "id"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "additionalConfig": {
+                  "type": "object",
+                  "required": [
+                    "cleanUpPoint",
+                    "buyingStuffPoint",
+                    "supportConferencePoint",
+                    "weeklyCleanUpPoint",
+                    "trainingPoint"
+                  ],
+                  "properties": {
+                    "cleanUpPoint": {
+                      "type": "number"
+                    },
+                    "buyingStuffPoint": {
+                      "type": "number"
+                    },
+                    "supportConferencePoint": {
+                      "type": "number"
+                    },
+                    "trainingPoint": {
+                      "type": "number"
+                    },
+                    "weeklyCleanUpPoint": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "data": {
+                  "id": 10,
+                  "name": "Support",
+                  "description": null,
+                  "groupTypeId": {
+                    "id": 4
+                  },
+                  "additionalConfig": {
+                    "cleanUpPoint": 1,
+                    "buyingStuffPoint": 2,
+                    "supportConferencePoint": 3,
+                    "trainingPoint": 4,
+                    "weeklyCleanUpPoint": 5
+                  },
+                  "status_code": 200
+                }
+              }
             }
           },
           "201": {
