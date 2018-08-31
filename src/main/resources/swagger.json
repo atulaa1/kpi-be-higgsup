@@ -70,7 +70,63 @@
             "description": "groupDTO",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/GroupDTO.GroupClubDetail"
+              "type": "object",
+              "required": [
+                "name",
+                "groupTypeId",
+                "additionalConfig"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "groupTypeId": {
+                  "required": [
+                    "id"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "additionalConfig": {
+                  "type": "object",
+                  "required": [
+                    "host",
+                    "minNumberOfSessions",
+                    "participationPoint",
+                    "effectivePoint"
+                  ],
+                  "properties": {
+                    "host": {
+                      "type": "string"
+                    },
+                    "minNumberOfSessions": {
+                      "type": "number"
+                    },
+                    "participationPoint": {
+                      "type": "number"
+                    },
+                    "effectivePoint": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "name": "Câu lạc bố Đá Bóng",
+                "groupTypeId": {
+                  "id": 2
+                },
+                "additionalConfig": {
+                  "host": "kpi.man",
+                  "minNumberOfSessions": 2,
+                  "participationPoint": 3,
+                  "effectivePoint": 4
+                }
+              }
             }
           }
         ],
@@ -78,7 +134,67 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Response"
+              "type": "object",
+              "required": [
+                "name",
+                "groupTypeId",
+                "additionalConfig"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "groupTypeId": {
+                  "required": [
+                    "id"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "additionalConfig": {
+                  "type": "object",
+                  "required": [
+                    "host",
+                    "minNumberOfSessions",
+                    "participationPoint",
+                    "effectivePoint"
+                  ],
+                  "properties": {
+                    "host": {
+                      "type": "string"
+                    },
+                    "minNumberOfSessions": {
+                      "type": "number"
+                    },
+                    "participationPoint": {
+                      "type": "number"
+                    },
+                    "effectivePoint": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "id": 10,
+                "name": "Câu lạc bố Đá Bóng",
+                "groupTypeId": {
+                  "id": 2
+                },
+                "additionalConfig": {
+                  "host": "kpi.man",
+                  "minNumberOfSessions": 2,
+                  "participationPoint": 3,
+                  "effectivePoint": 4
+                }
+              }
             }
           },
           "201": {
@@ -116,7 +232,7 @@
                   "type": "array",
                   "items": {
                     "type": "object",
-                    "properties" :{
+                    "properties": {
                       "id": {
                         "type": "number"
                       },
@@ -1407,10 +1523,9 @@
             "required": true,
             "schema": {
               "type": "array",
-              "properties": [
-                "ROLE_ADMIN",
-                "ROLE_EMPLOYEE"
-              ],
+              "items": {
+                "type": "spring"
+              },
               "example": [
                 "ROLE_ADMIN",
                 "ROLE_EMPLOYEE"
