@@ -607,15 +607,128 @@
             "description": "groupDTO",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/GroupDTO.GroupSeminarDetail"
+              "type": "object",
+              "required": [
+                "name",
+                "groupTypeId",
+                "additionalConfig"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "groupTypeId": {
+                  "required": [
+                    "id"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "additionalConfig": {
+                  "type": "object",
+                  "required": [
+                    "host",
+                    "listener",
+                    "member"
+                  ],
+                  "properties": {
+                    "host": {
+                      "type": "number"
+                    },
+                    "listener": {
+                      "type": "number"
+                    },
+                    "member": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "name": "seminar thứ 7",
+                "groupTypeId": {
+                  "id": 1
+                },
+                "additionalConfig": {
+                  "host": 7,
+                  "listener": 3,
+                  "member": 5
+                }
+              }
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "status_code : 200. Meaning: Thành công \n status_code : 926 . Message: Duplicated item. Meaning: Đã tồn tại seminar này. \n status_code : 901 . Message: parameter point host  is not valid. Meaning: Điểm của host không hợp lệ. \n status_code : 940 . Message:  point host not larger than point member. Meaning: Điểm của host không thể nhỏ hơn thành viên . \n status_code : 940 . Message:  point member not larger than point host. Meaning: Điểm của thành viên không thể lớn hơn của host .  ",
             "schema": {
-              "$ref": "#/definitions/Response"
+              "type": "object",
+              "required": [
+                "name",
+                "groupTypeId",
+                "additionalConfig"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "groupTypeId": {
+                  "required": [
+                    "id"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "additionalConfig": {
+                  "type": "object",
+                  "required": [
+                    "host",
+                    "minNumberOfSessions",
+                    "participationPoint",
+                    "effectivePoint"
+                  ],
+                  "properties": {
+                    "host": {
+                      "type": "number"
+                    },
+                    "listener": {
+                      "type": "number"
+                    },
+                    "member": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "data": {
+                  "id": 10,
+                  "name": "seminar thứ 7",
+                  "groupTypeId": {
+                    "id": 2
+                  },
+                  "additionalConfig": {
+                    "host": 7,
+                    "listener": 3,
+                    "member": 5
+                  },
+                  "status_code": 200
+                }
+              }
             }
           },
           "201": {
@@ -661,15 +774,128 @@
             "description": "groupDTO",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/GroupDTO.GroupSeminarDetail"
+              "type": "object",
+              "required": [
+                "name",
+                "groupTypeId",
+                "additionalConfig"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "groupTypeId": {
+                  "required": [
+                    "id"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "additionalConfig": {
+                  "type": "object",
+                  "required": [
+                    "host",
+                    "listener",
+                    "member"
+                  ],
+                  "properties": {
+                    "host": {
+                      "type": "number"
+                    },
+                    "listener": {
+                      "type": "number"
+                    },
+                    "member": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "name": "seminar thứ 7",
+                "groupTypeId": {
+                  "id": 1
+                },
+                "additionalConfig": {
+                  "host": 7,
+                  "listener": 3,
+                  "member": 5
+                }
+              }
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "status_code : 200. Meaning: Thành công \n status_code : 900 . Message:  not find seminar. Meaning: Không tìm thấy seminar với id này . \n status_code : 901 . Message: parameter point host  is not valid. Meaning: Điểm của host không hợp lệ. \n status_code : 940 . Message:  point host not larger than point member. Meaning: Điểm của host không thể nhỏ hơn thành viên . \n status_code : 940 . Message:  point member not larger than point host. Meaning: Điểm của thành viên không thể lớn hơn của host .  ",
             "schema": {
-              "$ref": "#/definitions/Response"
+              "type": "object",
+              "required": [
+                "name",
+                "groupTypeId",
+                "additionalConfig"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "groupTypeId": {
+                  "required": [
+                    "id"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "additionalConfig": {
+                  "type": "object",
+                  "required": [
+                    "host",
+                    "minNumberOfSessions",
+                    "participationPoint",
+                    "effectivePoint"
+                  ],
+                  "properties": {
+                    "host": {
+                      "type": "number"
+                    },
+                    "listener": {
+                      "type": "number"
+                    },
+                    "member": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "data": {
+                  "id": 10,
+                  "name": "seminar thứ 7",
+                  "groupTypeId": {
+                    "id": 2
+                  },
+                  "additionalConfig": {
+                    "host": 7,
+                    "listener": 3,
+                    "member": 5
+                  },
+                  "status_code": 200
+                }
+              }
             }
           },
           "201": {
