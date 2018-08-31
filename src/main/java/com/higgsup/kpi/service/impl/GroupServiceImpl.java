@@ -79,13 +79,13 @@ public class GroupServiceImpl implements GroupService {
         } else if (!UtilsValidate.pointValidate((String.valueOf(groupDTO.getAdditionalConfig().getListener())))) {
             validatedGroupDTO.setMessage(ErrorMessage.POINT_LISTENER_IS_NOT_VALIDATE);
             validatedGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-        } else if (Double.parseDouble((String.valueOf(groupDTO.getAdditionalConfig().getHost()))) <= Double.parseDouble((String.valueOf(groupDTO.getAdditionalConfig().getMember())))) {
-            validatedGroupDTO.setMessage(ErrorMessage.POINT_HOST_NOT_LARGER_THAN_POINT_MEMBER);
-            validatedGroupDTO.setErrorCode(ErrorCode.NO_LARGER_THAN.getValue());
-        } else if (Double.parseDouble((String.valueOf(groupDTO.getAdditionalConfig().getMember()))) <= Double.parseDouble((String.valueOf(groupDTO.getAdditionalConfig().getListener())))) {
-            validatedGroupDTO.setMessage(ErrorMessage.POINT_MEMBER_NOT_LARGER_THAN_POINT_LISTENER);
-            validatedGroupDTO.setErrorCode(ErrorCode.NO_LARGER_THAN.getValue());
-        }else {
+        } else if (groupDTO.getAdditionalConfig().getHost() == 0){
+            validatedGroupDTO.setMessage(ErrorMessage.HOST_SCORE_CAN_NOT_NULL);
+            validatedGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+        } else if (groupDTO.getAdditionalConfig().getMember() == 0) {
+            validatedGroupDTO.setMessage(ErrorMessage.MEMBER_SCORE_CAN_NOT_NULL);
+            validatedGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+        } else {
             KpiGroup kpiGroup = new KpiGroup();
             ObjectMapper mapper = new ObjectMapper();
             String jsonConfigSeminar = mapper.writeValueAsString(groupDTO.getAdditionalConfig());
@@ -168,13 +168,13 @@ public class GroupServiceImpl implements GroupService {
         } else if (!UtilsValidate.pointValidate(String.valueOf(groupDTO.getAdditionalConfig().getListener()))) {
             validatedGroupDTO.setMessage(ErrorMessage.POINT_LISTENER_IS_NOT_VALIDATE);
             validatedGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-        } else if (Double.parseDouble(String.valueOf(groupDTO.getAdditionalConfig().getHost()) )<= Double.parseDouble(String.valueOf(groupDTO.getAdditionalConfig().getMember()))) {
-            validatedGroupDTO.setMessage(ErrorMessage.POINT_HOST_NOT_LARGER_THAN_POINT_MEMBER);
-            validatedGroupDTO.setErrorCode(ErrorCode.NO_LARGER_THAN.getValue());
-        } else if (Double.parseDouble(String.valueOf(groupDTO.getAdditionalConfig().getMember())) <= Double.parseDouble(String.valueOf(groupDTO.getAdditionalConfig().getListener()))) {
-            validatedGroupDTO.setMessage(ErrorMessage.POINT_MEMBER_NOT_LARGER_THAN_POINT_LISTENER);
-            validatedGroupDTO.setErrorCode(ErrorCode.NO_LARGER_THAN.getValue());
-        }else {
+        } else if (groupDTO.getAdditionalConfig().getHost() == 0){
+            validatedGroupDTO.setMessage(ErrorMessage.HOST_SCORE_CAN_NOT_NULL);
+            validatedGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+        } else if (groupDTO.getAdditionalConfig().getMember() == 0) {
+            validatedGroupDTO.setMessage(ErrorMessage.MEMBER_SCORE_CAN_NOT_NULL);
+            validatedGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+        } else {
             Optional<KpiGroup> kpiGroupOptional = kpiGroupRepo.findById(groupDTO.getId());
             if (kpiGroupOptional.isPresent()){
                 KpiGroup kpiGroup = kpiGroupOptional.get();
