@@ -132,7 +132,7 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "status_code : 200. Meaning: Thành công \n status_code : 904. Message: json processing exception. Meaning: Lỗi convert josn \n status_code : 903. Message: parameter name is not valid. Meaning: Tên câu lạc bộ không hợp lệ \n status_code : 901. Message: parameter min number of sessions is not valid. Meaning: Số lần tổi thiểu đăng ký không hợp lệ \n status_code : 901. Message: parameter point is not valid. Meaning: Điểm không hợp lệ \n status_code : 901. Message: group type does not exist. Meaning: Loại group không tồn tại \n  status_code : 932. Message: group name already exists. Meaning:  Tên group đã tồn tại \n ",
             "schema": {
               "type": "object",
               "required": [
@@ -183,16 +183,19 @@
                 }
               },
               "example": {
-                "id": 10,
-                "name": "Câu lạc bố Đá Bóng",
-                "groupTypeId": {
-                  "id": 2
-                },
-                "additionalConfig": {
-                  "host": "kpi.man",
-                  "minNumberOfSessions": 2,
-                  "participationPoint": 3,
-                  "effectivePoint": 4
+                "data": {
+                  "id": 10,
+                  "name": "Câu lạc bố Đá Bóng",
+                  "groupTypeId": {
+                    "id": 2
+                  },
+                  "additionalConfig": {
+                    "host": "kpi.man",
+                    "minNumberOfSessions": 2,
+                    "participationPoint": 3,
+                    "effectivePoint": 4
+                  },
+                  "status_code": 200
                 }
               }
             }
@@ -297,9 +300,106 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "status_code : 200. Meaning: Thành công \n status_code : 930. Message: Error IOException. Meaning: Lỗi IOException",
             "schema": {
-              "$ref": "#/definitions/Response"
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "number"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "active": {
+                        "type": "number"
+                      },
+                      "createdDate": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "message": {
+                  "type": "string"
+                },
+                "status_code": {
+                  "type": "integer"
+                }
+              },
+              "example": {
+                "data": [
+                  {
+                    "id": 99,
+                    "name": "Seminar thứ 7",
+                    "description": null,
+                    "groupTypeId": {
+                      "id": 1,
+                      "name": "Seminar"
+                    },
+                    "createdDate": "31-08-2018 10:05",
+                    "additionalConfig": {
+                      "host": 5,
+                      "member": 4,
+                      "listener": 0
+                    }
+                  },
+                  {
+                    "id": 101,
+                    "name": "Câu lạc bộ bóng đá",
+                    "description": null,
+                    "groupTypeId": {
+                      "id": 2,
+                      "name": "Câu lạc bộ"
+                    },
+                    "createdDate": "31-08-2018 09:54",
+                    "additionalConfig": {
+                      "host": "test",
+                      "minNumberOfSessions": 5,
+                      "participationPoint": 3,
+                      "effectivePoint": 3
+                    }
+                  },
+                  {
+                    "id": 68,
+                    "name": "Higgsup Teambuilding",
+                    "description": null,
+                    "groupTypeId": {
+                      "id": 3,
+                      "name": "Team building"
+                    },
+                    "createdDate": "28-08-2018 17:22",
+                    "additionalConfig": {
+                      "firstPrize": "5",
+                      "secondPrize": "4",
+                      "thirdPrize": "3",
+                      "organizers": "5"
+                    }
+                  },
+                  {
+                    "id": 87,
+                    "name": "Support",
+                    "description": null,
+                    "groupTypeId": {
+                      "id": 4,
+                      "name": "Support chung"
+                    },
+                    "createdDate": "31-08-2018 09:13",
+                    "additionalConfig": {
+                      "cleanUpPoint": 1,
+                      "buyingStuffPoint": 2,
+                      "supportConferencePoint": 3,
+                      "trainingPoint": 4,
+                      "weeklyCleanUpPoint": 5
+                    }
+                  }
+                ],
+                "status_code": 200
+              }
             }
           },
           "401": {
@@ -342,15 +442,134 @@
             "description": "groupDTO",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/GroupDTO.GroupClubDetail"
+              "type": "object",
+              "required": [
+                "name",
+                "groupTypeId",
+                "additionalConfig"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "groupTypeId": {
+                  "required": [
+                    "id"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "additionalConfig": {
+                  "type": "object",
+                  "required": [
+                    "host",
+                    "minNumberOfSessions",
+                    "participationPoint",
+                    "effectivePoint"
+                  ],
+                  "properties": {
+                    "host": {
+                      "type": "string"
+                    },
+                    "minNumberOfSessions": {
+                      "type": "number"
+                    },
+                    "participationPoint": {
+                      "type": "number"
+                    },
+                    "effectivePoint": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "name": "Câu lạc bố Đá Bóng",
+                "groupTypeId": {
+                  "id": 2
+                },
+                "additionalConfig": {
+                  "host": "kpi.man",
+                  "minNumberOfSessions": 2,
+                  "participationPoint": 3,
+                  "effectivePoint": 4
+                }
+              }
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "status_code : 200. Meaning: Thành công \n status_code : 904. Message: json processing exception. Meaning: Lỗi convert josn \n status_code : 903. Message: parameter name is not valid. Meaning: Tên câu lạc bộ không hợp lệ \n status_code : 901. Message: parameter min number of sessions is not valid. Meaning: Số lần tổi thiểu đăng ký không hợp lệ \n status_code : 901. Message: parameter point is not valid. Meaning: Điểm không hợp lệ \n status_code : 901. Message: group type does not exist. Meaning: Loại group không tồn tại \n  status_code : 932. Message: group name already exists. Meaning:  Tên group đã tồn tại \n ",
             "schema": {
-              "$ref": "#/definitions/Response"
+              "type": "object",
+              "required": [
+                "name",
+                "groupTypeId",
+                "additionalConfig"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "groupTypeId": {
+                  "required": [
+                    "id"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "additionalConfig": {
+                  "type": "object",
+                  "required": [
+                    "host",
+                    "minNumberOfSessions",
+                    "participationPoint",
+                    "effectivePoint"
+                  ],
+                  "properties": {
+                    "host": {
+                      "type": "string"
+                    },
+                    "minNumberOfSessions": {
+                      "type": "number"
+                    },
+                    "participationPoint": {
+                      "type": "number"
+                    },
+                    "effectivePoint": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "data": {
+                  "id": 10,
+                  "name": "Câu lạc bố Đá Bóng",
+                  "groupTypeId": {
+                    "id": 2
+                  },
+                  "additionalConfig": {
+                    "host": "kpi.man",
+                    "minNumberOfSessions": 2,
+                    "participationPoint": 3,
+                    "effectivePoint": 4
+                  },
+                  "status_code": 200
+                }
+              }
             }
           },
           "201": {
