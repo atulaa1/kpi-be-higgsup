@@ -46,6 +46,12 @@ public class SwaggerJsonController {
             "  \"tagsSorter\": \"alpha\"\n" +
             "}";
 
+    private static String securityConfiguration = "{\n" +
+            "  \"apiKeyName\": \"api_key\",\n" +
+            "  \"scopeSeparator\": \",\",\n" +
+            "  \"apiKeyVehicle\": \"header\"\n" +
+            "}";
+
     private SwaggerJson swaggerJson;
 
     @Autowired
@@ -106,4 +112,13 @@ public class SwaggerJsonController {
         return new ResponseEntity(uiConfiguration, HttpStatus.OK);
     }
 
+    @RequestMapping(value = {"/swagger-resources/configuration/security"},
+            method = {RequestMethod.GET},
+            produces = {"application/json"})
+    @ResponseBody
+    public ResponseEntity<Json> getSecurityConfiguration(
+            HttpServletRequest servletRequest) {
+
+        return new ResponseEntity(securityConfiguration, HttpStatus.OK);
+    }
 }

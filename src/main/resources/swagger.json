@@ -650,15 +650,63 @@
             "description": "projectDTO",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/ProjectDTO"
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "active": {
+                  "type": "number"
+                }
+              },
+              "example": {
+                "name": "VNTRIP",
+                "active": 1
+              }
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "status_code : 200. Meaning : Thành công \n status_code : 901. Message : Name is not allowed null.  Meaning: name project không thể để rỗng \n status_code : 932. Message :parameters name project exists. Meaning : project này đã tồn tại. ",
             "schema": {
-              "$ref": "#/definitions/Response"
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "active": {
+                      "type": "number"
+                    },
+                    "createdDate": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "message": {
+                  "type": "string"
+                },
+                "status_code": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "example": {
+                "data": {
+                  "id": 8,
+                  "name": "VNTRIP",
+                  "active": 1,
+                  "createdDate": "29-08-2018 03:36"
+                },
+                "status_code": 200
+              },
+              "title": "Response"
             }
           },
           "201": {
@@ -704,15 +752,63 @@
             "description": "projectDTO",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/ProjectDTO"
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "active": {
+                  "type": "number"
+                }
+              },
+              "example": {
+                "name": "VNTRIP",
+                "active": 1
+              }
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "status_code : 200. Meaning: Thành công \n status_code : 903. Message: Name is not allowed null. Meaning: name project không thể để rỗng \n  status_code : 900 . Message: not find project . Meaning: không tìm thấy project \n status_code : 901  . Message: parameters name project exists . Meaning: parameters name không chính xác \n ",
             "schema": {
-              "$ref": "#/definitions/Response"
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "active": {
+                      "type": "number"
+                    },
+                    "createdDate": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "message": {
+                  "type": "string"
+                },
+                "status_code": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "example": {
+                "data": {
+                  "id": 8,
+                  "name": "VNTRIP",
+                  "active": 1,
+                  "createdDate": "29-08-2018 03:36"
+                },
+                "status_code": 200
+              },
+              "title": "Response"
             }
           },
           "201": {
@@ -750,9 +846,17 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "status_code : 200. Meaning: Thành công \n status_code : 900. Message: not find group. Meaning: không tìm thấy project với id này",
             "schema": {
-              "$ref": "#/definitions/Response"
+              "type": "object",
+              "properties": {
+                "status_code": {
+                  "type": "number"
+                }
+              },
+              "example": {
+                "status_code": 200
+              }
             }
           },
           "204": {
@@ -992,7 +1096,7 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "200 : Thành công. \n 900 :  Message: not find. Meaning: not find user",
             "schema": {
               "type": "object",
               "properties": {
@@ -1118,17 +1222,96 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "403 Message: Forbidden.  Meaning: bạn không có quyền sửa thông tin cho người dùng này.",
             "schema": {
               "type": "object",
               "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "username": {
+                          "type": "string"
+                        },
+                        "lastName": {
+                          "type": "string"
+                        },
+                        "firstName": {
+                          "type": "number"
+                        },
+                        "fullName": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "userRole": {
+                          "type": "array"
+                        },
+                        "avatar": {
+                          "type": "string"
+                        },
+                        "birthday": {
+                          "type": "string"
+                        },
+                        "numberPhone": {
+                          "type": "string"
+                        },
+                        "address": {
+                          "type": "string"
+                        },
+                        "gmail": {
+                          "type": "string"
+                        },
+                        "skype": {
+                          "type": "string"
+                        },
+                        "yearWork": {
+                          "type": "number"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "status_code": {
+                      "type": "integer",
+                      "format": "int32"
+                    }
+                  }
+                },
+                "message": {
+                  "type": "string"
+                },
                 "status_code": {
-                  "type": "number"
+                  "type": "integer",
+                  "format": "int32"
                 }
               },
               "example": {
+                "data": {
+                  "username": "kpi.admin",
+                  "lastName": "kpi",
+                  "firstName": "admin",
+                  "fullName": "kpi test. admin",
+                  "email": "kpi.admin@higgsup.com",
+                  "userRole": [
+                    "ROLE_ADMIN",
+                    "ROLE_EMPLOYEE"
+                  ],
+                  "avatar": "1220000261",
+                  "birthday": "2018-08-15",
+                  "numberPhone": "0966211618",
+                  "address": "Lê văn Thành",
+                  "gmail": "lethanh9398@gmail.com",
+                  "skype": "solitarysp@gmail.com",
+                  "yearWork": 1
+                },
                 "status_code": 200
-              }
+              },
+              "title": "Response"
             }
           },
           "201": {
@@ -1187,7 +1370,7 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "901 Message: parameterrole is empty Meaning: mảng roles không thể rỗng \n 900 : Message: not find user  Meaning: không tìm thấy user",
             "schema": {
               "type": "object",
               "properties": {
