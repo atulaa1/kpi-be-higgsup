@@ -53,7 +53,9 @@ public class GroupServiceImpl implements GroupService {
                 if (kpiGroupType.isPresent()) {
                     kpiGroupOptional.get().setGroupTypeId(kpiGroupType.get());
                     kpiGroup = kpiGroupRepo.save(kpiGroupOptional.get());
-                    BeanUtils.copyProperties(kpiGroup, validateGroupDTO, "additionalConfig");
+                    BeanUtils.copyProperties(kpiGroup, validateGroupDTO);
+                    validateGroupDTO.setGroupTypeId(groupDTO.getGroupTypeId());
+                    validateGroupDTO.setAdditionalConfig((groupDTO.getAdditionalConfig()));
                 } else {
                     validateGroupDTO.setErrorCode(ErrorCode.NOT_FIND_GROUP_TYPE.getValue());
                     validateGroupDTO.setMessage(ErrorMessage.NOT_FIND_GROUP_TYPE);
@@ -96,7 +98,9 @@ public class GroupServiceImpl implements GroupService {
             if (kpiGroupType.isPresent()) {
                 kpiGroup.setGroupTypeId(kpiGroupType.get());
                 kpiGroup = kpiGroupRepo.save(kpiGroup);
-                BeanUtils.copyProperties(kpiGroup, validatedGroupDTO, "additionalConfig");
+                BeanUtils.copyProperties(kpiGroup, validatedGroupDTO);
+                validatedGroupDTO.setGroupTypeId(groupDTO.getGroupTypeId());
+                validatedGroupDTO.setAdditionalConfig(groupDTO.getAdditionalConfig());
             } else {
                 validatedGroupDTO.setMessage(ErrorMessage.NOT_FIND_SEMINAR);
                 validatedGroupDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
@@ -138,7 +142,10 @@ public class GroupServiceImpl implements GroupService {
                 if (kpiGroupType.isPresent()) {
                     kpiGroup.setGroupTypeId(kpiGroupType.get());
                     kpiGroup = kpiGroupRepo.save(kpiGroup);
-                    BeanUtils.copyProperties(kpiGroup, groupDTO1, "additionalConfig");
+                    BeanUtils.copyProperties(kpiGroup, groupDTO1);
+                    groupDTO1.setGroupTypeId(groupDTO.getGroupTypeId());
+                    groupDTO1.setAdditionalConfig(groupDTO.getAdditionalConfig());
+
                 } else {
                     groupDTO1.setMessage(ErrorMessage.NOT_FIND_GROUP_TYPE);
                     groupDTO1.setErrorCode(ErrorCode.NOT_FIND.getValue());
@@ -189,6 +196,8 @@ public class GroupServiceImpl implements GroupService {
                     kpiGroup.setGroupTypeId(kpiGroupType.get());
                     kpiGroup = kpiGroupRepo.save(kpiGroup);
                     BeanUtils.copyProperties(kpiGroup, validatedGroupDTO);
+                    validatedGroupDTO.setGroupTypeId(groupDTO.getGroupTypeId());
+                    validatedGroupDTO.setAdditionalConfig(groupDTO.getAdditionalConfig());
                 } else {
                     validatedGroupDTO.setMessage(ErrorMessage.NOT_FIND_GROUP_TYPE);
                     validatedGroupDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
@@ -237,7 +246,9 @@ public class GroupServiceImpl implements GroupService {
                     if (kpiGroupType.isPresent()) {
                         kpiGroup.setGroupTypeId(kpiGroupType.get());
                         kpiGroup = kpiGroupRepo.save(kpiGroup);
-                        BeanUtils.copyProperties(kpiGroup, groupDTO1, "additionalConfig");
+                        BeanUtils.copyProperties(kpiGroup, groupDTO1);
+                        groupDTO1.setGroupTypeId(groupDTO.getGroupTypeId());
+                        groupDTO1.setAdditionalConfig(groupDTO.getAdditionalConfig());
                     } else {
                         groupDTO1.setMessage(ErrorMessage.NOT_FIND_GROUP_TYPE);
                         groupDTO1.setErrorCode(ErrorCode.NOT_FIND.getValue());
@@ -267,7 +278,9 @@ public class GroupServiceImpl implements GroupService {
                     if(kpiGroupType.isPresent()){
                         kpiGroup.setGroupTypeId(kpiGroupType.get());
                         kpiGroup = kpiGroupRepo.save(kpiGroup);
-                        BeanUtils.copyProperties(kpiGroup, validateGroupDTO, "additionalConfig" );
+                        BeanUtils.copyProperties(kpiGroup, validateGroupDTO);
+                        validateGroupDTO.setGroupTypeId(groupDTO.getGroupTypeId());
+                        validateGroupDTO.setAdditionalConfig(groupDTO.getAdditionalConfig());
 
                     }else {
                         validateGroupDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
@@ -306,7 +319,9 @@ public class GroupServiceImpl implements GroupService {
                         kpiGroup.setCreatedDate(new Timestamp(System.currentTimeMillis()));
                         kpiGroup.setGroupTypeId(kpiGroupType.get());
                         kpiGroup = kpiGroupRepo.save(kpiGroup);
-                        BeanUtils.copyProperties(kpiGroup, validatedGroupDTO, "additionalConfig" );
+                        BeanUtils.copyProperties(kpiGroup, validatedGroupDTO);
+                        validatedGroupDTO.setGroupTypeId(groupDTO.getGroupTypeId());
+                        validatedGroupDTO.setAdditionalConfig(groupDTO.getAdditionalConfig());
                     }
                 } else {
                     validatedGroupDTO.setErrorCode(ErrorCode.NOT_FILLING_ALL_INFORMATION.getValue());
@@ -346,7 +361,9 @@ public class GroupServiceImpl implements GroupService {
                         kpiGroup.setCreatedDate(new Timestamp(System.currentTimeMillis()));
                         kpiGroup.setGroupTypeId(kpiGroupType.get());
                         kpiGroup = kpiGroupRepo.save(kpiGroup);
-                        BeanUtils.copyProperties(kpiGroup, validatedGroupDTO, "additionalConfig");
+                        BeanUtils.copyProperties(kpiGroup, validatedGroupDTO);
+                        validatedGroupDTO.setGroupTypeId(groupDTO.getGroupTypeId());
+                        validatedGroupDTO.setAdditionalConfig(groupDTO.getAdditionalConfig());
                     }
                 } else {
                     validatedGroupDTO.setErrorCode(ErrorCode.NOT_FILLING_ALL_INFORMATION.getValue());
