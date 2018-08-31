@@ -35,7 +35,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public GroupDTO updateTeamBuildingActivity(GroupDTO<TeamBuildingDTO> groupDTO) throws JsonProcessingException {
-        GroupDTO validateGroupDTO = new GroupDTO();
+        GroupDTO<TeamBuildingDTO> validateGroupDTO = new GroupDTO<>();
         if(checkGroupTypeIdExisted(groupDTO,validateGroupDTO)){
             Integer id = groupDTO.getId();
             Optional<KpiGroup> kpiGroupOptional = kpiGroupRepo.findById(id);
@@ -67,7 +67,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public GroupDTO createSeminar(GroupDTO<GroupSeminarDetail> groupDTO) throws JsonProcessingException {
-        GroupDTO validatedGroupDTO = new GroupDTO();
+        GroupDTO<GroupSeminarDetail> validatedGroupDTO = new GroupDTO<>();
 
         if (kpiGroupRepo.findByName(groupDTO.getName()) != null) {
             validatedGroupDTO.setErrorCode(ErrorCode.DUPLICATED_ITEM.getValue());
@@ -109,7 +109,7 @@ public class GroupServiceImpl implements GroupService {
         return validatedGroupDTO;
     }
     public GroupDTO createClub(GroupDTO<GroupClubDetail> groupDTO) throws JsonProcessingException {
-        GroupDTO groupDTO1 = new GroupDTO();
+        GroupDTO<GroupClubDetail> groupDTO1 = new GroupDTO();
         Integer minNumberOfSessions = groupDTO.getAdditionalConfig().getMinNumberOfSessions();
         Float participationPoint = groupDTO.getAdditionalConfig().getParticipationPoint();
         Float effectivePoint = groupDTO.getAdditionalConfig().getEffectivePoint();
@@ -161,7 +161,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public GroupDTO updateSeminar(GroupDTO<GroupSeminarDetail> groupDTO) throws JsonProcessingException {
-        GroupDTO validatedGroupDTO = new GroupDTO();
+        GroupDTO<GroupSeminarDetail> validatedGroupDTO = new GroupDTO<>();
 
         if (kpiGroupRepo.findById(groupDTO.getId())==null){
             validatedGroupDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
@@ -210,7 +210,7 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public GroupDTO updateClub(GroupDTO<GroupClubDetail> groupDTO) throws JsonProcessingException {
         Integer id = groupDTO.getId();
-        GroupDTO groupDTO1 = new GroupDTO();
+        GroupDTO<GroupClubDetail> groupDTO1 = new GroupDTO<>();
         Integer minNumberOfSessions = groupDTO.getAdditionalConfig().getMinNumberOfSessions();
         Float participationPoint = groupDTO.getAdditionalConfig().getParticipationPoint();
         Float effectivePoint = groupDTO.getAdditionalConfig().getEffectivePoint();
@@ -262,7 +262,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public GroupDTO createConfigTeamBuilding(GroupDTO<TeamBuildingDTO> groupDTO)  throws JsonProcessingException {
-        GroupDTO validateGroupDTO = new GroupDTO();
+        GroupDTO<TeamBuildingDTO> validateGroupDTO = new GroupDTO<>();
         if (checkGroupTypeIdExisted(groupDTO,validateGroupDTO)){
             Integer groupTypeId = groupDTO.getGroupTypeId().getId();
             KpiGroup findGroupTypeId = kpiGroupRepo.findGroupTypeId(groupTypeId);
@@ -298,7 +298,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public GroupDTO createSupport(GroupDTO<GroupSupportDetail> groupDTO) throws JsonProcessingException {
-        GroupDTO validatedGroupDTO = new GroupDTO();
+        GroupDTO<GroupSupportDetail> validatedGroupDTO = new GroupDTO<>();
 
         Optional<KpiGroupType> kpiGroupType = kpiGroupTypeRepo.findById(groupDTO.getGroupTypeId().getId());
         if(kpiGroupType.isPresent()) {
@@ -339,7 +339,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public GroupDTO updateSupport(GroupDTO<GroupSupportDetail> groupDTO) throws JsonProcessingException {
-        GroupDTO validatedGroupDTO = new GroupDTO();
+        GroupDTO<GroupSupportDetail> validatedGroupDTO = new GroupDTO<>();
 
         Optional<KpiGroupType> kpiGroupType = kpiGroupTypeRepo.findById(groupDTO.getGroupTypeId().getId());
         if(kpiGroupType.isPresent()) {
