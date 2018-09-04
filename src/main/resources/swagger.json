@@ -136,6 +136,7 @@
             "schema": {
               "type": "object",
               "required": [
+                "id",
                 "name",
                 "groupTypeId",
                 "additionalConfig"
@@ -230,11 +231,19 @@
             "description": "status_code : 200. Meaning: Thành công",
             "schema": {
               "type": "object",
+              "required": [
+                "status_code",
+                "data"
+              ],
               "properties": {
                 "data": {
                   "type": "array",
                   "items": {
                     "type": "object",
+                    "required": [
+                      "id",
+                      "name"
+                    ],
                     "properties": {
                       "id": {
                         "type": "number"
@@ -303,11 +312,20 @@
             "description": "status_code : 200. Meaning: Thành công \n status_code : 930. Message: Error IOException. Meaning: Lỗi IOException",
             "schema": {
               "type": "object",
+              "required": [
+                "status_code"
+              ],
               "properties": {
                 "data": {
                   "type": "array",
                   "items": {
                     "type": "object",
+                    "required": [
+                      "id",
+                      "name",
+                      "active",
+                      "createdDate"
+                    ],
                     "properties": {
                       "id": {
                         "type": "number"
@@ -508,6 +526,7 @@
             "schema": {
               "type": "object",
               "required": [
+                "id",
                 "name",
                 "groupTypeId",
                 "additionalConfig"
@@ -781,6 +800,7 @@
             "schema": {
               "type": "object",
               "required": [
+                "id",
                 "name",
                 "groupTypeId",
                 "additionalConfig"
@@ -1013,6 +1033,7 @@
             "schema": {
               "type": "object",
               "required": [
+                "id",
                 "name",
                 "groupTypeId",
                 "additionalConfig"
@@ -1194,6 +1215,7 @@
             "schema": {
               "type": "object",
               "required": [
+                "id",
                 "name",
                 "groupTypeId",
                 "additionalConfig"
@@ -1678,6 +1700,9 @@
             "description": "OK",
             "schema": {
               "type": "object",
+              "required": [
+                "username"
+              ],
               "properties": {
                 "username": {
                   "type": "string"
@@ -1690,7 +1715,7 @@
             "headers": {
               "authorization": {
                 "type": "string",
-                "description": "Token"
+                "description": "Token authorization"
               }
             }
           },
@@ -1724,21 +1749,34 @@
             "description": "200 : Thành công ",
             "schema": {
               "type": "object",
+              "required": [
+                "status_code",
+                "data"
+              ],
               "properties": {
                 "data": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "number"
-                    },
-                    "name": {
-                      "type": "string"
-                    },
-                    "active": {
-                      "type": "number"
-                    },
-                    "createdDate": {
-                      "type": "string"
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "name",
+                      "active",
+                      "createdDate"
+                    ],
+                    "properties": {
+                      "id": {
+                        "type": "number"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "active": {
+                        "type": "number"
+                      },
+                      "createdDate": {
+                        "type": "string"
+                      }
                     }
                   }
                 },
@@ -1801,6 +1839,10 @@
             "required": true,
             "schema": {
               "type": "object",
+              "required": [
+                "name",
+                "active"
+              ],
               "properties": {
                 "name": {
                   "type": "string"
@@ -1821,9 +1863,19 @@
             "description": "status_code : 200. Meaning : Thành công \n status_code : 901. Message : Name is not allowed null.  Meaning: name project không thể để rỗng \n status_code : 932. Message :parameters name project exists. Meaning : project này đã tồn tại. ",
             "schema": {
               "type": "object",
+              "required": [
+                "data",
+                "status_code"
+              ],
               "properties": {
                 "data": {
                   "type": "object",
+                  "required": [
+                    "id",
+                    "name",
+                    "active",
+                    "createdDate"
+                  ],
                   "properties": {
                     "id": {
                       "type": "number"
@@ -1903,6 +1955,10 @@
             "required": true,
             "schema": {
               "type": "object",
+              "required": [
+                "name",
+                "active"
+              ],
               "properties": {
                 "name": {
                   "type": "string"
@@ -1923,9 +1979,19 @@
             "description": "status_code : 200. Meaning: Thành công \n status_code : 903. Message: Name is not allowed null. Meaning: name project không thể để rỗng \n  status_code : 900 . Message: not find project . Meaning: không tìm thấy project \n status_code : 901  . Message: parameters name project exists . Meaning: parameters name không chính xác \n ",
             "schema": {
               "type": "object",
+              "required": [
+                "data",
+                "status_code"
+              ],
               "properties": {
                 "data": {
                   "type": "object",
+                  "required": [
+                    "id",
+                    "name",
+                    "active",
+                    "createdDate"
+                  ],
                   "properties": {
                     "id": {
                       "type": "number"
@@ -1996,9 +2062,12 @@
         ],
         "responses": {
           "200": {
-            "description": "status_code : 200. Meaning: Thành công \n status_code : 900. Message: not find group. Meaning: không tìm thấy project với id này",
+            "description": "status_code : 200. Meaning: Thành công \n status_code : 900. Message: not find project by id. Meaning: không tìm thấy project với id này",
             "schema": {
               "type": "object",
+              "required": [
+                "status_code"
+              ],
               "properties": {
                 "status_code": {
                   "type": "number"
@@ -2036,10 +2105,32 @@
             "description": "200 : Thành công \n 900 : not find -- > không tìm thấy questions ID",
             "schema": {
               "type": "object",
+              "required": [
+                "status_code",
+                "data"
+              ],
               "properties": {
                 "data": {
-                  "type": "object",
-                  "$ref": "#/definitions/SurveyQuestionManDTO"
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "number",
+                      "question"
+                    ],
+                    "properties": {
+                      "id": {
+                        "type": "number"
+                      },
+                      "number": {
+                        "type": "number"
+                      },
+                      "question": {
+                        "type": "string"
+                      }
+                    }
+                  }
                 },
                 "message": {
                   "type": "string"
@@ -2050,7 +2141,6 @@
                 }
               },
               "example": {
-                "message": "Thành Công",
                 "status_code": 200,
                 "data": [
                   {
@@ -2100,7 +2190,23 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/SurveyQuestionManDTO"
+                "type": "object",
+                "required": [
+                  "id",
+                  "number",
+                  "question"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "number"
+                  },
+                  "number": {
+                    "type": "number"
+                  },
+                  "question": {
+                    "type": "string"
+                  }
+                }
               },
               "example": [
                 {
@@ -2185,7 +2291,7 @@
                 }
               },
               "example": {
-                "message": "Thành Công",
+                "message": "OK",
                 "status_code": 200,
                 "data": [
                   {
@@ -2263,7 +2369,6 @@
                 }
               },
               "example": {
-                "message": "Thành Công",
                 "status_code": 200,
                 "data": {
                   "username": "kpi.admin",
