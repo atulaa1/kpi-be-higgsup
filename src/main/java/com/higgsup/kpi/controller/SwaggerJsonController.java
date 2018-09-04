@@ -4,19 +4,11 @@ import com.higgsup.kpi.dto.SwaggerJson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.spring.web.json.Json;
 
-import javax.servlet.http.HttpServletRequest;
-
-/**
- * {@code SwaggerJsonController} is responsible for fulfilling Swagger/SpringFox
- * related requests .
- * <p/>
- *
- * @author Indra Basak
- * @since 11/23/17
- */
 @RestController
 public class SwaggerJsonController {
 
@@ -59,66 +51,28 @@ public class SwaggerJsonController {
         this.swaggerJson = swaggerJson;
     }
 
-    /**
-     * Responsible for returning the Swagger JSON document.
-     *
-     * @param swaggerGroup
-     * @param servletRequest
-     * @return
-     */
-    @RequestMapping(
-            value = {"/v2/api-docs"},
-            method = {RequestMethod.GET},
+    @RequestMapping(value = {"/v2/api-docs"}, method = {RequestMethod.GET},
             produces = {"application/json", "application/hal+json"}
     )
-    @ResponseBody
-    public ResponseEntity<Json> getDocumentation(
-            @RequestParam(value = "group", required = false) String swaggerGroup,
-            HttpServletRequest servletRequest) {
-
+    public ResponseEntity<Json> getDocumentation() {
         return new ResponseEntity(swaggerJson.getJson(), HttpStatus.OK);
     }
 
-    /**
-     * Responsible for returning {@code SwaggerResource} when requested by
-     * swagger-ui.html.
-     *
-     * @param servletRequest
-     * @return
-     */
-    @RequestMapping(value = {"/swagger-resources"},
-            method = {RequestMethod.GET},
-            produces = {"application/json"})
-    @ResponseBody
-    public ResponseEntity<Json> getSwaggerResource(
-            HttpServletRequest servletRequest) {
+    @RequestMapping(value = {"/swagger-resources"}, method = {RequestMethod.GET}, produces = {"application/json"})
+    public ResponseEntity<Json> getSwaggerResource() {
         return new ResponseEntity(swaggerResource, HttpStatus.OK);
     }
 
-    /**
-     * Responsible for returning {@code UIConfiguration} when requested by
-     * swagger-ui.html.
-     *
-     * @param servletRequest
-     * @return
-     */
-    @RequestMapping(value = {"/swagger-resources/configuration/ui"},
-            method = {RequestMethod.GET},
+    @RequestMapping(value = {"/swagger-resources/configuration/ui"}, method = {RequestMethod.GET},
             produces = {"application/json"})
-    @ResponseBody
-    public ResponseEntity<Json> getUIConfiguration(
-            HttpServletRequest servletRequest) {
+    public ResponseEntity<Json> getUIConfiguration() {
 
         return new ResponseEntity(uiConfiguration, HttpStatus.OK);
     }
 
-    @RequestMapping(value = {"/swagger-resources/configuration/security"},
-            method = {RequestMethod.GET},
+    @RequestMapping(value = {"/swagger-resources/configuration/security"}, method = {RequestMethod.GET},
             produces = {"application/json"})
-    @ResponseBody
-    public ResponseEntity<Json> getSecurityConfiguration(
-            HttpServletRequest servletRequest) {
-
+    public ResponseEntity<Json> getSecurityConfiguration() {
         return new ResponseEntity(securityConfiguration, HttpStatus.OK);
     }
 }
