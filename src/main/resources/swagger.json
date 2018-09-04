@@ -2277,10 +2277,65 @@
             "description": "200 : Thành công \n 900 : not find user -- > không tìm thấy bầt kỳ user nào",
             "schema": {
               "type": "object",
+              "required": [
+                "data",
+                "status_code"
+              ],
               "properties": {
                 "data": {
-                  "type": "object",
-                  "$ref": "#/definitions/UserDTO"
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "username",
+                      "lastName",
+                      "firstName",
+                      "fullName",
+                      "email",
+                      "userRole"
+                    ],
+                    "properties": {
+                      "username": {
+                        "type": "string"
+                      },
+                      "lastName": {
+                        "type": "string"
+                      },
+                      "firstName": {
+                        "type": "string"
+                      },
+                      "fullName": {
+                        "type": "string"
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "userRole": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "avatar": {
+                        "type": "string"
+                      },
+                      "birthday": {
+                        "type": "date"
+                      },
+                      "numberPhone": {
+                        "type": "string"
+                      },
+                      "gmail": {
+                        "type": "string"
+                      },
+                      "skype": {
+                        "type": "string"
+                      },
+                      "yearWork": {
+                        "type": "number"
+                      }
+                    }
+                  }
                 },
                 "message": {
                   "type": "string"
@@ -2307,12 +2362,10 @@
                     "address": "null",
                     "avatar": "null",
                     "birthday": "null",
-                    "errorCode": 0,
                     "gmail": "null",
-                    "message": "null",
                     "numberPhone": "null",
                     "skype": "null",
-                    "yearWork": null
+                    "yearWork": 1
                   }
                 ]
               },
@@ -2355,10 +2408,69 @@
             "description": "200 : Thành công. \n 900 :  Message: not find. Meaning: not find user",
             "schema": {
               "type": "object",
+              "required": [
+                "data",
+                "status_code"
+              ],
               "properties": {
                 "data": {
                   "type": "object",
-                  "$ref": "#/definitions/UserDTO"
+                  "required": [
+                    "username",
+                    "lastName",
+                    "firstName",
+                    "fullName",
+                    "email",
+                    "userRole",
+                    "avatar",
+                    "birthday",
+                    "numberPhone",
+                    "address",
+                    "gmail",
+                    "skype",
+                    "yearWork"
+                  ],
+                  "properties": {
+                    "username": {
+                      "type": "string"
+                    },
+                    "lastName": {
+                      "type": "string"
+                    },
+                    "firstName": {
+                      "type": "string"
+                    },
+                    "fullName": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "userRole": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "avatar": {
+                      "type": "string"
+                    },
+                    "birthday": {
+                      "type": "date"
+                    },
+                    "numberPhone": {
+                      "type": "string"
+                    },
+                    "gmail": {
+                      "type": "string"
+                    },
+                    "skype": {
+                      "type": "string"
+                    },
+                    "yearWork": {
+                      "type": "number"
+                    }
+                  }
                 },
                 "message": {
                   "type": "string"
@@ -2383,9 +2495,7 @@
                   "address": "Lê văn Thành",
                   "avatar": "1220000261",
                   "birthday": "2018-08-15",
-                  "errorCode": 0,
                   "gmail": "lethanh9398@gmail.com",
-                  "message": "null",
                   "numberPhone": "0966211618",
                   "skype": "solitarysp@gmail.com",
                   "yearWork": 1
@@ -2480,60 +2590,70 @@
             "description": "403 Message: Forbidden.  Meaning: bạn không có quyền sửa thông tin cho người dùng này.",
             "schema": {
               "type": "object",
+              "required": [
+                "data",
+                "status_code"
+              ],
               "properties": {
                 "data": {
                   "type": "object",
+                  "required": [
+                    "username",
+                    "lastName",
+                    "firstName",
+                    "fullName",
+                    "email",
+                    "userRole",
+                    "avatar",
+                    "birthday",
+                    "numberPhone",
+                    "address",
+                    "gmail",
+                    "skype",
+                    "yearWork"
+                  ],
                   "properties": {
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "username": {
-                          "type": "string"
-                        },
-                        "lastName": {
-                          "type": "string"
-                        },
-                        "firstName": {
-                          "type": "number"
-                        },
-                        "fullName": {
-                          "type": "string"
-                        },
-                        "email": {
-                          "type": "string"
-                        },
-                        "userRole": {
-                          "type": "array"
-                        },
-                        "avatar": {
-                          "type": "string"
-                        },
-                        "birthday": {
-                          "type": "string"
-                        },
-                        "numberPhone": {
-                          "type": "string"
-                        },
-                        "address": {
-                          "type": "string"
-                        },
-                        "gmail": {
-                          "type": "string"
-                        },
-                        "skype": {
-                          "type": "string"
-                        },
-                        "yearWork": {
-                          "type": "number"
-                        }
-                      }
-                    },
-                    "message": {
+                    "username": {
                       "type": "string"
                     },
-                    "status_code": {
-                      "type": "integer",
-                      "format": "int32"
+                    "lastName": {
+                      "type": "string"
+                    },
+                    "firstName": {
+                      "type": "number"
+                    },
+                    "fullName": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "userRole": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "avatar": {
+                      "type": "string"
+                    },
+                    "birthday": {
+                      "type": "date"
+                    },
+                    "numberPhone": {
+                      "type": "string"
+                    },
+                    "address": {
+                      "type": "string"
+                    },
+                    "gmail": {
+                      "type": "string"
+                    },
+                    "skype": {
+                      "type": "string"
+                    },
+                    "yearWork": {
+                      "type": "number"
                     }
                   }
                 },
@@ -2627,10 +2747,72 @@
             "description": "901 Message: parameterrole is empty Meaning: mảng roles không thể rỗng \n 900 : Message: not find user  Meaning: không tìm thấy user",
             "schema": {
               "type": "object",
+              "required": [
+                "data",
+                "status_code"
+              ],
               "properties": {
                 "data": {
                   "type": "object",
-                  "$ref": "#/definitions/UserDTO"
+                  "required": [
+                    "username",
+                    "lastName",
+                    "firstName",
+                    "fullName",
+                    "email",
+                    "userRole",
+                    "avatar",
+                    "birthday",
+                    "numberPhone",
+                    "address",
+                    "gmail",
+                    "skype",
+                    "yearWork"
+                  ],
+                  "properties": {
+                    "username": {
+                      "type": "string"
+                    },
+                    "lastName": {
+                      "type": "string"
+                    },
+                    "firstName": {
+                      "type": "number"
+                    },
+                    "fullName": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "userRole": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "avatar": {
+                      "type": "string"
+                    },
+                    "birthday": {
+                      "type": "date"
+                    },
+                    "numberPhone": {
+                      "type": "string"
+                    },
+                    "address": {
+                      "type": "string"
+                    },
+                    "gmail": {
+                      "type": "string"
+                    },
+                    "skype": {
+                      "type": "string"
+                    },
+                    "yearWork": {
+                      "type": "number"
+                    }
+                  }
                 },
                 "message": {
                   "type": "string"
