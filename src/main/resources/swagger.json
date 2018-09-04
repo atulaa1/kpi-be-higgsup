@@ -1302,29 +1302,157 @@
             "description": "groupDTO",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/GroupDTO.TeamBuildingDTO"
+              "type": "object",
+              "required": [
+                "name",
+                "groupTypeId",
+                "additionalConfig"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "groupTypeId": {
+                  "required": [
+                    "id"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "additionalConfig": {
+                  "type": "object",
+                  "required": [
+                    "firstPrize",
+                    "secondPrize",
+                    "thirdPrize",
+                    "organizers"
+                  ],
+                  "properties": {
+                    "firstPrize": {
+                      "type": "number"
+                    },
+                    "secondPrize": {
+                      "type": "number"
+                    },
+                    "thirdPrize": {
+                      "type": "number"
+                    },
+                    "organizers": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "name": "Team Building",
+                "description": null,
+                "groupTypeId": {
+                  "id": 3
+                },
+                "additionalConfig": {
+                  "firstPrize": 7,
+                  "secondPrize": 3,
+                  "thirdPrize": 2,
+                  "organizers": 5
+                }
+              }
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "status_code : 200. Meaning: Thành công \n status_code : 900. Message: group type does not exist. Meaning: Không tìm thấy group type id. \n status_code : 932. Message: Team building has been existed. Meaning: Hoạt động team building đã được tạo rồi. \n status_code : 931. Message: The first prize score can not be nul. Meaning: Không được để trống điểm của first prize. \n status_code : 931. Message: The second prize score can not be null. Meaning: Không được để trống điểm của second prize . \n status_code : 931. Message: The third prize score can not be null. Meaning: Không được để trống điểm của third prize. \n status_code : 931. Message: The orgnizers score can not be null. Meaning: Không được để trống điểm của ban tổ chức. \n status_code : 901. Message: Invalidated first prize. Meaning: Điểm của first prize không hợp lệ, điểm nhập vào phải là số. \n status_code : 901. Message: Invalidated second prize. Meaning: Điểm của second prize không hợp lệ, điểm nhập vào phải là số. \n status_code : 901. Message: Invalidated third prize. Meaning: Điểm của third prize không hợp lệ, điểm nhập vào phải là số. \n status_code : 901. Message: Invalidated orgnizers prize. Meaning: Điểm của ban tổ chức không hợp lệ, điểm nhập vào phải là số. \n status_code : 901. Message: First prize has to large than second prize. Meaning: Điểm của first prize phải lớn hơn điểm của second prize. \n status_code : 901. Message: Second prize has to large than thirst prize. Meaning: Điểm của second prize phải lớn hơn điểm của third prize.",
             "schema": {
-              "$ref": "#/definitions/Response"
+              "type": "object",
+              "required": [
+                "id",
+                "name",
+                "groupTypeId",
+                "additionalConfig"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "groupTypeId": {
+                  "required": [
+                    "id"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "additionalConfig": {
+                  "type": "object",
+                  "required": [
+                    "firstPrize",
+                    "secondPrize",
+                    "thirdPrize",
+                    "organizers"
+                  ],
+                  "properties": {
+                    "firstPrize": {
+                      "type": "number"
+                    },
+                    "secondPrize": {
+                      "type": "number"
+                    },
+                    "thirdPrize": {
+                      "type": "number"
+                    },
+                    "organizers": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "data": {
+                  "id": 10,
+                  "name": "Team Building",
+                  "description": null,
+                  "groupTypeId": {
+                    "id": 3
+                  },
+                  "additionalConfig": {
+                    "firstPrize": 7,
+                    "secondPrize": 3,
+                    "thirdPrize": 2,
+                    "organizers": 5
+                  },
+                  "status_code": 200
+                }
+              }
             }
-          },
-          "201": {
-            "description": "Created"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
           }
+        },
+        "201": {
+          "description": "Created"
+        },
+        "401": {
+          "description": "Unauthorized"
+        },
+        "403": {
+          "description": "Forbidden"
+        },
+        "404": {
+          "description": "Not Found"
         }
       },
       "put": {
@@ -1346,15 +1474,147 @@
             "description": "groupDTO",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/GroupDTO.TeamBuildingDTO"
+              "type": "object",
+              "required": [
+                "name",
+                "groupTypeId",
+                "additionalConfig"
+              ],
+              "properties": {
+                "id": {
+                  "type": "number"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "groupTypeId": {
+                  "required": [
+                    "id"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "additionalConfig": {
+                  "type": "object",
+                  "required": [
+                    "firstPrize",
+                    "secondPrize",
+                    "thirdPrize",
+                    "organizers"
+                  ],
+                  "properties": {
+                    "firstPrize": {
+                      "type": "number"
+                    },
+                    "secondPrize": {
+                      "type": "number"
+                    },
+                    "thirdPrize": {
+                      "type": "number"
+                    },
+                    "organizers": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "id": 10,
+                "name": "Team Building",
+                "description": null,
+                "groupTypeId": {
+                  "id": 3
+                },
+                "additionalConfig": {
+                  "firstPrize": 7,
+                  "secondPrize": 3,
+                  "thirdPrize": 2,
+                  "organizers": 5
+                }
+              }
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "status_code : 200. Meaning: Thành công \n status_code : 900. Message: group type does not exist. Meaning: Không tìm thấy group type id. \n status_code : 932. Message: Team building has been existed. Meaning: Hoạt động team building đã được tạo rồi. \n status_code : 931. Message: The first prize score can not be nul. Meaning: Không được để trống điểm của first prize. \n status_code : 931. Message: The second prize score can not be null. Meaning: Không được để trống điểm của second prize . \n status_code : 931. Message: The third prize score can not be null. Meaning: Không được để trống điểm của third prize. \n status_code : 931. Message: The orgnizers score can not be null. Meaning: Không được để trống điểm của ban tổ chức. \n status_code : 901. Message: Invalidated first prize. Meaning: Điểm của first prize không hợp lệ, điểm nhập vào phải là số. \n status_code : 901. Message: Invalidated second prize. Meaning: Điểm của second prize không hợp lệ, điểm nhập vào phải là số. \n status_code : 901. Message: Invalidated third prize. Meaning: Điểm của third prize không hợp lệ, điểm nhập vào phải là số. \n status_code : 901. Message: Invalidated orgnizers prize. Meaning: Điểm của ban tổ chức không hợp lệ, điểm nhập vào phải là số. \n status_code : 901. Message: First prize has to large than second prize. Meaning: Điểm của first prize phải lớn hơn điểm của second prize. \n status_code : 901. Message: Second prize has to large than thirst prize. Meaning: Điểm của second prize phải lớn hơn điểm của third prize.",
             "schema": {
-              "$ref": "#/definitions/Response"
+              "type": "object",
+              "required": [
+                "id",
+                "name",
+                "groupTypeId",
+                "additionalConfig"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "groupTypeId": {
+                  "required": [
+                    "id"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "additionalConfig": {
+                  "type": "object",
+                  "required": [
+                    "firstPrize",
+                    "secondPrize",
+                    "thirdPrize",
+                    "organizers"
+                  ],
+                  "properties": {
+                    "firstPrize": {
+                      "type": "number"
+                    },
+                    "secondPrize": {
+                      "type": "number"
+                    },
+                    "thirdPrize": {
+                      "type": "number"
+                    },
+                    "organizers": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "data": {
+                  "id": 10,
+                  "name": "Team Building",
+                  "description": null,
+                  "groupTypeId": {
+                    "id": 3
+                  },
+                  "additionalConfig": {
+                    "firstPrize": 7,
+                    "secondPrize": 3,
+                    "thirdPrize": 2,
+                    "organizers": 5
+                  },
+                  "status_code": 200
+                }
+              }
             }
           },
           "201": {
