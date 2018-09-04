@@ -24,7 +24,7 @@ public class SwaggerJsonConfiguration {
 
         StringBuilder builder = new StringBuilder();
         try (BufferedReader bufferedReader
-                = new BufferedReader(new InputStreamReader(istream))) {
+                = new BufferedReader(new InputStreamReader(istream,"UTF-8"))) {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 builder.append(line).append("\n");
