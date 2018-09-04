@@ -35,7 +35,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public GroupDTO updateTeamBuildingActivity(GroupDTO<TeamBuildingDTO> groupDTO) throws JsonProcessingException {
-        GroupDTO validateGroupDTO = new GroupDTO();
+        GroupDTO<TeamBuildingDTO> validateGroupDTO = new GroupDTO<>();
         if(checkGroupTypeIdExisted(groupDTO,validateGroupDTO)){
             Integer id = groupDTO.getId();
             Optional<KpiGroup> kpiGroupOptional = kpiGroupRepo.findById(id);
@@ -53,7 +53,9 @@ public class GroupServiceImpl implements GroupService {
                 if (kpiGroupType.isPresent()) {
                     kpiGroupOptional.get().setGroupTypeId(kpiGroupType.get());
                     kpiGroup = kpiGroupRepo.save(kpiGroupOptional.get());
-                    BeanUtils.copyProperties(kpiGroup, validateGroupDTO, "additionalConfig");
+                    BeanUtils.copyProperties(kpiGroup, validateGroupDTO);
+                    validateGroupDTO.setGroupTypeId(groupDTO.getGroupTypeId());
+                    validateGroupDTO.setAdditionalConfig((groupDTO.getAdditionalConfig()));
                 } else {
                     validateGroupDTO.setErrorCode(ErrorCode.NOT_FIND_GROUP_TYPE.getValue());
                     validateGroupDTO.setMessage(ErrorMessage.NOT_FIND_GROUP_TYPE);
@@ -65,7 +67,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public GroupDTO createSeminar(GroupDTO<GroupSeminarDetail> groupDTO) throws JsonProcessingException {
-        GroupDTO validatedGroupDTO = new GroupDTO();
+        GroupDTO<GroupSeminarDetail> validatedGroupDTO = new GroupDTO<>();
 
         if (kpiGroupRepo.findByName(groupDTO.getName()) != null) {
             validatedGroupDTO.setErrorCode(ErrorCode.DUPLICATED_ITEM.getValue());
@@ -96,7 +98,9 @@ public class GroupServiceImpl implements GroupService {
             if (kpiGroupType.isPresent()) {
                 kpiGroup.setGroupTypeId(kpiGroupType.get());
                 kpiGroup = kpiGroupRepo.save(kpiGroup);
-                BeanUtils.copyProperties(kpiGroup, validatedGroupDTO, "additionalConfig");
+                BeanUtils.copyProperties(kpiGroup, validatedGroupDTO);
+                validatedGroupDTO.setGroupTypeId(groupDTO.getGroupTypeId());
+                validatedGroupDTO.setAdditionalConfig(groupDTO.getAdditionalConfig());
             } else {
                 validatedGroupDTO.setMessage(ErrorMessage.NOT_FIND_SEMINAR);
                 validatedGroupDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
@@ -105,7 +109,7 @@ public class GroupServiceImpl implements GroupService {
         return validatedGroupDTO;
     }
     public GroupDTO createClub(GroupDTO<GroupClubDetail> groupDTO) throws JsonProcessingException {
-        GroupDTO groupDTO1 = new GroupDTO();
+        GroupDTO<GroupClubDetail> groupDTO1 = new GroupDTO();
         Integer minNumberOfSessions = groupDTO.getAdditionalConfig().getMinNumberOfSessions();
         Float participationPoint = groupDTO.getAdditionalConfig().getParticipationPoint();
         Float effectivePoint = groupDTO.getAdditionalConfig().getEffectivePoint();
@@ -138,7 +142,10 @@ public class GroupServiceImpl implements GroupService {
                 if (kpiGroupType.isPresent()) {
                     kpiGroup.setGroupTypeId(kpiGroupType.get());
                     kpiGroup = kpiGroupRepo.save(kpiGroup);
-                    BeanUtils.copyProperties(kpiGroup, groupDTO1, "additionalConfig");
+                    BeanUtils.copyProperties(kpiGroup, groupDTO1);
+                    groupDTO1.setGroupTypeId(groupDTO.getGroupTypeId());
+                    groupDTO1.setAdditionalConfig(groupDTO.getAdditionalConfig());
+
                 } else {
                     groupDTO1.setMessage(ErrorMessage.NOT_FIND_GROUP_TYPE);
                     groupDTO1.setErrorCode(ErrorCode.NOT_FIND.getValue());
@@ -154,7 +161,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public GroupDTO updateSeminar(GroupDTO<GroupSeminarDetail> groupDTO) throws JsonProcessingException {
-        GroupDTO validatedGroupDTO = new GroupDTO();
+        GroupDTO<GroupSeminarDetail> validatedGroupDTO = new GroupDTO<>();
 
         if (kpiGroupRepo.findById(groupDTO.getId())==null){
             validatedGroupDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
@@ -189,6 +196,8 @@ public class GroupServiceImpl implements GroupService {
                     kpiGroup.setGroupTypeId(kpiGroupType.get());
                     kpiGroup = kpiGroupRepo.save(kpiGroup);
                     BeanUtils.copyProperties(kpiGroup, validatedGroupDTO);
+                    validatedGroupDTO.setGroupTypeId(groupDTO.getGroupTypeId());
+                    validatedGroupDTO.setAdditionalConfig(groupDTO.getAdditionalConfig());
                 } else {
                     validatedGroupDTO.setMessage(ErrorMessage.NOT_FIND_GROUP_TYPE);
                     validatedGroupDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
@@ -201,7 +210,7 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public GroupDTO updateClub(GroupDTO<GroupClubDetail> groupDTO) throws JsonProcessingException {
         Integer id = groupDTO.getId();
-        GroupDTO groupDTO1 = new GroupDTO();
+        GroupDTO<GroupClubDetail> groupDTO1 = new GroupDTO<>();
         Integer minNumberOfSessions = groupDTO.getAdditionalConfig().getMinNumberOfSessions();
         Float participationPoint = groupDTO.getAdditionalConfig().getParticipationPoint();
         Float effectivePoint = groupDTO.getAdditionalConfig().getEffectivePoint();
@@ -237,7 +246,9 @@ public class GroupServiceImpl implements GroupService {
                     if (kpiGroupType.isPresent()) {
                         kpiGroup.setGroupTypeId(kpiGroupType.get());
                         kpiGroup = kpiGroupRepo.save(kpiGroup);
-                        BeanUtils.copyProperties(kpiGroup, groupDTO1, "additionalConfig");
+                        BeanUtils.copyProperties(kpiGroup, groupDTO1);
+                        groupDTO1.setGroupTypeId(groupDTO.getGroupTypeId());
+                        groupDTO1.setAdditionalConfig(groupDTO.getAdditionalConfig());
                     } else {
                         groupDTO1.setMessage(ErrorMessage.NOT_FIND_GROUP_TYPE);
                         groupDTO1.setErrorCode(ErrorCode.NOT_FIND.getValue());
@@ -251,7 +262,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public GroupDTO createConfigTeamBuilding(GroupDTO<TeamBuildingDTO> groupDTO)  throws JsonProcessingException {
-        GroupDTO validateGroupDTO = new GroupDTO();
+        GroupDTO<TeamBuildingDTO> validateGroupDTO = new GroupDTO<>();
         if (checkGroupTypeIdExisted(groupDTO,validateGroupDTO)){
             Integer groupTypeId = groupDTO.getGroupTypeId().getId();
             KpiGroup findGroupTypeId = kpiGroupRepo.findGroupTypeId(groupTypeId);
@@ -267,7 +278,9 @@ public class GroupServiceImpl implements GroupService {
                     if(kpiGroupType.isPresent()){
                         kpiGroup.setGroupTypeId(kpiGroupType.get());
                         kpiGroup = kpiGroupRepo.save(kpiGroup);
-                        BeanUtils.copyProperties(kpiGroup, validateGroupDTO, "additionalConfig" );
+                        BeanUtils.copyProperties(kpiGroup, validateGroupDTO);
+                        validateGroupDTO.setGroupTypeId(groupDTO.getGroupTypeId());
+                        validateGroupDTO.setAdditionalConfig(groupDTO.getAdditionalConfig());
 
                     }else {
                         validateGroupDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
@@ -285,7 +298,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public GroupDTO createSupport(GroupDTO<GroupSupportDetail> groupDTO) throws JsonProcessingException {
-        GroupDTO validatedGroupDTO = new GroupDTO();
+        GroupDTO<GroupSupportDetail> validatedGroupDTO = new GroupDTO<>();
 
         Optional<KpiGroupType> kpiGroupType = kpiGroupTypeRepo.findById(groupDTO.getGroupTypeId().getId());
         if(kpiGroupType.isPresent()) {
@@ -306,7 +319,9 @@ public class GroupServiceImpl implements GroupService {
                         kpiGroup.setCreatedDate(new Timestamp(System.currentTimeMillis()));
                         kpiGroup.setGroupTypeId(kpiGroupType.get());
                         kpiGroup = kpiGroupRepo.save(kpiGroup);
-                        BeanUtils.copyProperties(kpiGroup, validatedGroupDTO, "additionalConfig" );
+                        BeanUtils.copyProperties(kpiGroup, validatedGroupDTO);
+                        validatedGroupDTO.setGroupTypeId(groupDTO.getGroupTypeId());
+                        validatedGroupDTO.setAdditionalConfig(groupDTO.getAdditionalConfig());
                     }
                 } else {
                     validatedGroupDTO.setErrorCode(ErrorCode.NOT_FILLING_ALL_INFORMATION.getValue());
@@ -324,7 +339,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public GroupDTO updateSupport(GroupDTO<GroupSupportDetail> groupDTO) throws JsonProcessingException {
-        GroupDTO validatedGroupDTO = new GroupDTO();
+        GroupDTO<GroupSupportDetail> validatedGroupDTO = new GroupDTO<>();
 
         Optional<KpiGroupType> kpiGroupType = kpiGroupTypeRepo.findById(groupDTO.getGroupTypeId().getId());
         if(kpiGroupType.isPresent()) {
@@ -346,7 +361,9 @@ public class GroupServiceImpl implements GroupService {
                         kpiGroup.setCreatedDate(new Timestamp(System.currentTimeMillis()));
                         kpiGroup.setGroupTypeId(kpiGroupType.get());
                         kpiGroup = kpiGroupRepo.save(kpiGroup);
-                        BeanUtils.copyProperties(kpiGroup, validatedGroupDTO, "additionalConfig");
+                        BeanUtils.copyProperties(kpiGroup, validatedGroupDTO);
+                        validatedGroupDTO.setGroupTypeId(groupDTO.getGroupTypeId());
+                        validatedGroupDTO.setAdditionalConfig(groupDTO.getAdditionalConfig());
                     }
                 } else {
                     validatedGroupDTO.setErrorCode(ErrorCode.NOT_FILLING_ALL_INFORMATION.getValue());
