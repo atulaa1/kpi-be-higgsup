@@ -5,6 +5,7 @@
     "title": "Higgsup KPI APIS",
     "version": "2.0"
   },
+  "host": "${host}",
   "basePath": "/",
   "tags": [
     {

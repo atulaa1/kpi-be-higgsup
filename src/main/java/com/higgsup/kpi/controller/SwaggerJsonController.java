@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.spring.web.json.Json;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 public class SwaggerJsonController {
 
@@ -54,8 +56,12 @@ public class SwaggerJsonController {
     @RequestMapping(value = {"/v2/api-docs"}, method = {RequestMethod.GET},
             produces = {"application/json", "application/hal+json"}
     )
-    public ResponseEntity<Json> getDocumentation() {
-        return new ResponseEntity(swaggerJson.getJson(), HttpStatus.OK);
+    public ResponseEntity<Json> getDocumentation(HttpServletRequest request) {
+        String urlRoot = request.getRequestURL().toString().
+                replaceFirst("^(http[s]?://www\\.|http[s]?://|www\\.)", "")
+                .replace("/v2/api-docs", "");
+
+        return new ResponseEntity(swaggerJson.getJson().replace("${host}", urlRoot), HttpStatus.OK);
     }
 
     @RequestMapping(value = {"/swagger-resources"}, method = {RequestMethod.GET}, produces = {"application/json"})
