@@ -64,7 +64,7 @@ public class KpiUser implements Serializable {
 
     @Basic
     @Column(name = "year_work")
-    private Integer yearWork;
+    private Integer workYear;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "kpiUser", fetch = FetchType.LAZY)
     private List<KpiEventUser> kpiEventUserList;
@@ -173,11 +173,11 @@ public class KpiUser implements Serializable {
         this.skype = skype;
     }
 
-    public Integer getYearWork() {
-        return yearWork;
+    public Integer getWorkYear() {
+        return workYear;
     }
 
-    public void setYearWork(Integer yearWork) {
-        this.yearWork = yearWork;
+    public void setWorkYear(Integer workYear) {
+        this.workYear = workYear;
     }
 }

@@ -1,6 +1,5 @@
 package com.higgsup.kpi.controller;
 
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.higgsup.kpi.configure.BaseConfiguration;
 import com.higgsup.kpi.dto.*;
@@ -26,7 +25,7 @@ public class GroupController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/groups/support")
     public Response createSupport(@RequestBody GroupDTO<GroupSupportDetail> groupDTO) {
-        Response response = new Response(HttpStatus.OK.value());
+        Response<GroupDTO> response = new Response<>(HttpStatus.OK.value());
         try {
             GroupDTO groupDTOResponse = groupService.createSupport(groupDTO);
             if (Objects.nonNull(groupDTOResponse.getErrorCode())) {
@@ -45,7 +44,7 @@ public class GroupController {
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/groups/support")
     public Response updateSupport(@RequestBody GroupDTO<GroupSupportDetail> groupDTO) {
-        Response response = new Response(HttpStatus.OK.value());
+        Response<GroupDTO> response = new Response<>(HttpStatus.OK.value());
         try {
             GroupDTO groupDTOResponse = groupService.updateSupport(groupDTO);
             if (Objects.nonNull(groupDTOResponse.getErrorCode())) {
@@ -61,10 +60,10 @@ public class GroupController {
         return response;
     }
 
-    @RequestMapping(value = "/groups/seminars", method = RequestMethod.POST)
+    @RequestMapping(value = "/groups/seminar", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ADMIN')")
     public Response createSeminar(@RequestBody GroupDTO<GroupSeminarDetail> groupDTO) {
-        Response response = new Response(HttpStatus.OK.value());
+        Response<GroupDTO> response = new Response<>(HttpStatus.OK.value());
         try {
             GroupDTO groupDTOResponse = groupService.createSeminar(groupDTO);
 
@@ -84,7 +83,7 @@ public class GroupController {
     @PreAuthorize("hasAnyRole('ADMIN')")
     @PutMapping("groups/team-building/{id}")
     public Response updateTeamBuilding(@PathVariable Integer id, @RequestBody GroupDTO<TeamBuildingDTO> groupDTO) {
-        Response response = new Response(HttpStatus.OK.value());
+        Response<GroupDTO> response = new Response<>(HttpStatus.OK.value());
         try {
             groupDTO.setId(id);
             GroupDTO groupDTOResponse = groupService.updateTeamBuilding(groupDTO);
@@ -105,14 +104,14 @@ public class GroupController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("groups/club")
     public Response createClub(@RequestBody GroupDTO<GroupClubDetail> groupDTO) {
-        Response response = new Response(HttpStatus.OK.value());
+        Response<GroupDTO> response = new Response<>(HttpStatus.OK.value());
         try {
             GroupDTO groupDTOResponse = groupService.createClub(groupDTO);
 
             if (Objects.nonNull(groupDTOResponse.getErrorCode())) {
                 response.setStatus(groupDTOResponse.getErrorCode());
                 response.setMessage(groupDTOResponse.getMessage());
-            }  else {
+            } else {
                 response.setData(groupDTOResponse);
             }
         } catch (JsonProcessingException e) {
@@ -125,7 +124,7 @@ public class GroupController {
     @RequestMapping(value = "groups/seminar/{id}", method = RequestMethod.PUT)
     @PreAuthorize("hasRole('ADMIN')")
     public Response updateSeminar(@PathVariable Integer id, @RequestBody GroupDTO<GroupSeminarDetail> groupDTO) {
-        Response response = new Response(HttpStatus.OK.value());
+        Response<GroupDTO> response = new Response<>(HttpStatus.OK.value());
         try {
             groupDTO.setId(id);
             GroupDTO groupDTOResponse = groupService.updateSeminar(groupDTO);
@@ -146,7 +145,7 @@ public class GroupController {
     @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping("groups/team-building")
     public Response createTeamBuilding(@RequestBody GroupDTO<TeamBuildingDTO> groupDTO) {
-        Response response = new Response(HttpStatus.OK.value());
+        Response<GroupDTO> response = new Response<>(HttpStatus.OK.value());
         try {
             GroupDTO groupDTOResponse = groupService.createTeamBuilding(groupDTO);
 
@@ -166,7 +165,7 @@ public class GroupController {
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("groups/club/{id}")
     public Response updateClub(@PathVariable Integer id, @RequestBody GroupDTO<GroupClubDetail> groupDTO) {
-        Response response = new Response(HttpStatus.OK.value());
+        Response<GroupDTO> response = new Response<>(HttpStatus.OK.value());
         try {
             groupDTO.setId(id);
             GroupDTO groupDTOResponse = groupService.updateClub(groupDTO);

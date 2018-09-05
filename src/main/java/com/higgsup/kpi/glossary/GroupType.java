@@ -15,7 +15,7 @@ public enum GroupType {
         this.name = name;
     }
 
-    public static final GroupType getGroupType(Integer id) {
+    public static GroupType getGroupType(Integer id) {
         for (GroupType groupType : GroupType.values()) {
             if (groupType.getId().equals(id)) {
                 return groupType;

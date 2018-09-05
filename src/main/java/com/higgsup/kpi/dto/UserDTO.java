@@ -7,8 +7,8 @@ import java.util.List;
 
 public class UserDTO extends BaseDTO {
     private String username;
-    @JsonInclude(JsonInclude.Include.NON_NULL)
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String password;
 
     private String lastName;
