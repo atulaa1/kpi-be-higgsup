@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -24,7 +25,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public List<ProjectDTO> getAllProject() {
-        List<KpiProject> kpiProjects = (List<KpiProject>) kpiProjectRepo.findAllFollowCreateDateSorted();
+        List<KpiProject> kpiProjects =  kpiProjectRepo.findAllFollowCreateDateSorted();
         List<ProjectDTO> projectDTOS = convertKpiProjectEntityToDTO(kpiProjects);
         return projectDTOS;
     }
@@ -40,7 +41,7 @@ public class ProjectServiceImpl implements ProjectService {
                 KpiProject kpiProjectInDB = kpiProjectRepo.findByName(projectDTO.getName());
                 if (!(Objects.nonNull(kpiProjectInDB) && !Objects.equals(projectDTO.getId(), kpiProjectInDB.getId()))) {
                     BeanUtils.copyProperties(projectDTO, kpiProject, "id", "createdDate");
-
+                    kpiProject.setUpdateDate(new Timestamp(System.currentTimeMillis()));
                     kpiProject = kpiProjectRepo.save(kpiProject);
 
                     BeanUtils.copyProperties(kpiProject, projectDTO);
