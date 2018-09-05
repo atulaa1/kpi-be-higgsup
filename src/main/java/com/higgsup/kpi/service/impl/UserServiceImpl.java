@@ -84,9 +84,17 @@ public class UserServiceImpl implements UserService {
                         "firstName",
                         "lastName",
                         "fullName",
+                        "avatar",
                         "email");
-                userRepository.save(kpiUser);
-                return new UserDTO();
+                if (Objects.nonNull(user.getAvatar())) {
+                    kpiUser.setAvatar(user.getAvatar());
+                }
+                KpiUser kpiUserRP = userRepository.save(kpiUser);
+
+                BeanUtils.copyProperties(kpiUserRP, user);
+                user.setUsername(kpiUserRP.getUserName());
+
+                return user;
             } else {
                 userDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
                 userDTO.setMessage(ErrorMessage.NOT_FIND_USER);

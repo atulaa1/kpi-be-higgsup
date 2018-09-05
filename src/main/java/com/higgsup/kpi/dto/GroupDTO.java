@@ -13,7 +13,7 @@ public class GroupDTO<T> extends BaseDTO {
 
     private GroupTypeDTO groupType;
 
-    @JsonFormat(pattern = "dd-MM-yyy hh:mm")
+    @JsonFormat(pattern = "dd-MM-yyy HH:mm")
     private Timestamp createdDate;
 
     private T additionalConfig;

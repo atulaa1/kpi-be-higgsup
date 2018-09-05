@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface KpiGroupRepo extends CrudRepository<KpiGroup, Integer> {
@@ -15,4 +16,7 @@ public interface KpiGroupRepo extends CrudRepository<KpiGroup, Integer> {
     KpiGroup findGroupTypeId(@Param("groupTypeId") Integer groupTypeId);
 
     KpiGroup findByGroupType(Optional<KpiGroupType> kpiGroupType);
+
+    @Query("SELECT g from KpiGroup g order by g.createdDate desc")
+    List<KpiGroup> findAllGroup();
 }
