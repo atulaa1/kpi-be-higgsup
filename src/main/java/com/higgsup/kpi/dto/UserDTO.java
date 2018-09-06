@@ -6,8 +6,8 @@ import java.sql.Date;
 import java.util.List;
 
 public class UserDTO extends BaseDTO {
-
     private String username;
+
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String password;
 
@@ -35,12 +35,11 @@ public class UserDTO extends BaseDTO {
 
     private Integer yearWork;
 
-
     public UserDTO() {
     }
 
     public UserDTO(String username, String password, String lastName, String firstName, String fullName, String email,
-                   List<String> userRole) {
+            List<String> userRole) {
         this.username = username;
         this.password = password;
         this.lastName = lastName;

@@ -25,6 +25,7 @@ public class UserController {
 
     @Autowired
     private LdapUserService ldapUserService;
+
     @Autowired
     private UserService userService;
 
@@ -32,7 +33,7 @@ public class UserController {
     @GetMapping(BaseConfiguration.BASE_API_URL + "/users/{username}")
     public @ResponseBody
     Response getUserInfo(@PathVariable String username) {
-        Response response = new Response(HttpStatus.OK.value());
+        Response<UserDTO> response = new Response<>(HttpStatus.OK.value());
         if (username != null && !username.equals("")) {
             if (!UtilsValidate.containRegex(username)) {
                 UserDTO user = userService.getUserDetails(username);
@@ -50,7 +51,8 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(BaseConfiguration.BASE_API_URL + "/users")
     public Response getListUsers(@RequestParam(value = "name", required = false) String name) {
-        Response response = new Response(HttpStatus.OK.value());
+        Response<List<UserDTO>> response = new Response<>(HttpStatus.OK.value());
+
         // search by name
         if (Objects.nonNull(name)) {
             if (!UtilsValidate.containRegex(name)) {
@@ -68,6 +70,7 @@ public class UserController {
             }
             return response;
         } else {
+
             //get all user
             List<UserDTO> listUsers = ldapUserService.getAllUsers();
             if (!listUsers.isEmpty()) {
@@ -85,7 +88,7 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping(BaseConfiguration.BASE_API_URL + "/users/{username}/roles")
     public Response updateUserRole(@PathVariable String username, @RequestBody List<String> roles) {
-        Response response = new Response(HttpStatus.OK.value());
+        Response<UserDTO> response = new Response<>(HttpStatus.OK.value());
         if (!CollectionUtils.isEmpty(roles)) {
             UserDTO userDTO = ldapUserService.updateUserRole(username, roles);
             if (Objects.nonNull(userDTO.getErrorCode())) {
@@ -107,9 +110,11 @@ public class UserController {
         Response<UserDTO> response = new Response<>(HttpStatus.OK.value());
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
         //check if token of user
         if (authentication.getPrincipal().equals(username)) {
-            List<String> roles = authentication.getAuthorities().stream().map(Object::toString).collect(Collectors.toList());
+            List<String> roles = authentication.getAuthorities().stream().map(Object::toString).collect(
+                    Collectors.toList());
 
             userDTO.setUserRole(roles);
 
@@ -126,7 +131,6 @@ public class UserController {
             response.setStatus(HttpStatus.FORBIDDEN.value());
             response.setMessage(HttpStatus.FORBIDDEN.getReasonPhrase());
         }
-
         return response;
     }
 }

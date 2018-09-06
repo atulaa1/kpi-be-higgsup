@@ -4,10 +4,9 @@ import com.higgsup.kpi.dto.UserDTO;
 import com.higgsup.kpi.entity.KpiUser;
 
 public interface UserService {
-	
-	public UserDTO getUserDetails(String username);
-	
-	public UserDTO registerUser(String username);
+    UserDTO getUserDetails(String username);
 
-	public UserDTO updateInfoUser(String username,UserDTO user);
+    UserDTO registerUser(String username);
+
+    UserDTO updateInfoUser(String username, UserDTO user);
 }

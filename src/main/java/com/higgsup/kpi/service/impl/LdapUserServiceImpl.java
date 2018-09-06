@@ -22,19 +22,17 @@ import static org.springframework.ldap.query.LdapQueryBuilder.query;
 public class LdapUserServiceImpl implements LdapUserService {
 
     @Autowired
-    private Environment env;
+    private Environment environment;
 
     @Autowired
     private LdapTemplate ldapTemplate;
 
     @Override
     public UserDTO getUserDetail(String username) {
-        UserDTO user = new UserDTO();
         LdapQuery query = query().where("objectclass").is("user").and("sAMAccountName").is(username);
         List<UserDTO> queryResult = ldapTemplate.search(query, new UserAttributesMapper());
         if (!queryResult.isEmpty()) {
-            user = queryResult.get(0);
-            return user;
+            return queryResult.get(0);
         } else {
             return null;
         }
@@ -82,10 +80,9 @@ public class LdapUserServiceImpl implements LdapUserService {
 
     @Override
     public List<UserDTO> findUsersByName(String name) {
-        List<UserDTO> result = null;
         LdapQuery query = query().where("objectclass").is("user").and("roleForKpi").isPresent().and("displayName")
                 .like("*" + name + "*");
-        result = ldapTemplate.search(query, new UserAttributesMapper());
+        List<UserDTO> result = ldapTemplate.search(query, new UserAttributesMapper());
         return result;
     }
 

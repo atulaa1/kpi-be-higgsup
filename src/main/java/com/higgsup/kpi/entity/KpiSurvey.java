@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "kpi_survey_question_man")
-public class KpiSurveyQuestionMan implements Serializable {
+public class KpiSurvey implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
