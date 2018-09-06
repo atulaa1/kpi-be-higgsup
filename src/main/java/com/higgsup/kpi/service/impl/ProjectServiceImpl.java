@@ -32,16 +32,20 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ProjectDTO updateProject(ProjectDTO projectDTO) {
+
         //check name is null then not update
         if (Objects.nonNull(projectDTO.getName())) {
             Optional<KpiProject> kpiProjectOptional = kpiProjectRepo.findById(projectDTO.getId());
             if (kpiProjectOptional.isPresent()) {
                 KpiProject kpiProject = kpiProjectOptional.get();
+
                 //check if same
                 KpiProject kpiProjectInDB = kpiProjectRepo.findByName(projectDTO.getName());
                 if (!(Objects.nonNull(kpiProjectInDB) && !Objects.equals(projectDTO.getId(), kpiProjectInDB.getId()))) {
                     BeanUtils.copyProperties(projectDTO, kpiProject, "id", "createdDate");
+
                     kpiProject.setUpdateDate(new Timestamp(System.currentTimeMillis()));
+
                     kpiProject = kpiProjectRepo.save(kpiProject);
 
                     BeanUtils.copyProperties(kpiProject, projectDTO);
@@ -56,7 +60,7 @@ public class ProjectServiceImpl implements ProjectService {
             }
         } else {
             projectDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
-            projectDTO.setMessage(ErrorMessage.NAME_IS_NOT_ALLOWED_NULL);
+            projectDTO.setMessage(ErrorMessage.NAME_DOES_NOT_ALLOW_NULL);
         }
 
         return projectDTO;
@@ -66,6 +70,7 @@ public class ProjectServiceImpl implements ProjectService {
     public ProjectDTO deleteProject(ProjectDTO projectDTO) {
         Optional<KpiProject> kpiProjectOptional = kpiProjectRepo.findById(projectDTO.getId());
         if (kpiProjectOptional.isPresent()) {
+
             //must check is not used anywhere to be deleted
             //not available
             kpiProjectRepo.deleteById(projectDTO.getId());
@@ -93,7 +98,7 @@ public class ProjectServiceImpl implements ProjectService {
             }
         } else {
             projectDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
-            projectDTO.setMessage(ErrorMessage.NAME_IS_NOT_ALLOWED_NULL);
+            projectDTO.setMessage(ErrorMessage.NAME_DOES_NOT_ALLOW_NULL);
         }
 
         return projectDTO;

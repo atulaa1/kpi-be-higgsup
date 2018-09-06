@@ -2,9 +2,13 @@ package com.higgsup.kpi.dto;
 
 public class GroupSupportDetail {
     private Float cleanUpPoint;
+
     private Float buyingStuffPoint;
+
     private Float supportConferencePoint;
+
     private Float trainingPoint;
+
     private Float weeklyCleanUpPoint;
 
     public Float getCleanUpPoint() {

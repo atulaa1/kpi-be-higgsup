@@ -1,31 +1,33 @@
 package com.higgsup.kpi.dto;
 
 public class GroupSeminarDetail {
-    private float host;
-    private float member;
-    private float listener;
+    private float hostPoint;
 
-    public float getHost() {
-        return host;
+    private float memberPoint;
+
+    private float listenerPoint;
+
+    public float getHostPoint() {
+        return hostPoint;
     }
 
-    public void setHost(float host) {
-        this.host = host;
+    public void setHostPoint(float hostPoint) {
+        this.hostPoint = hostPoint;
     }
 
-    public float getMember() {
-        return member;
+    public float getMemberPoint() {
+        return memberPoint;
     }
 
-    public void setMember(float member) {
-        this.member = member;
+    public void setMemberPoint(float memberPoint) {
+        this.memberPoint = memberPoint;
     }
 
-    public float getListener() {
-        return listener;
+    public float getListenerPoint() {
+        return listenerPoint;
     }
 
-    public void setListener(float listener) {
-        this.listener = listener;
+    public void setListenerPoint(float listenerPoint) {
+        this.listenerPoint = listenerPoint;
     }
 }

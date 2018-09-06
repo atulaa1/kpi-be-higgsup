@@ -7,16 +7,19 @@ public enum GroupType {
     SUPPORT(4, "Support chung");
 
     private Integer id;
+
     private String name;
 
     GroupType(Integer id, String name) {
         this.id = id;
         this.name = name;
     }
-    public static final GroupType getGroupType(Integer id) {
+
+    public static GroupType getGroupType(Integer id) {
         for (GroupType groupType : GroupType.values()) {
-            if (groupType.getId().equals(id))
+            if (groupType.getId().equals(id)) {
                 return groupType;
+            }
         }
         return GroupType.SEMINAR;
     }
