@@ -95,7 +95,7 @@ public class GroupServiceImpl implements GroupService {
                 validatedGroupDTO.setGroupType(groupDTO.getGroupType());
                 validatedGroupDTO.setAdditionalConfig(groupDTO.getAdditionalConfig());
             } else {
-                validatedGroupDTO.setMessage(ErrorMessage.NOT_FIND_SEMINAR);
+                validatedGroupDTO.setMessage(ErrorMessage.NOT_FIND_GROUP_TYPE);
                 validatedGroupDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
             }
         }
