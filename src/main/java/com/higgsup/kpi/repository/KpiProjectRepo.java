@@ -9,6 +9,6 @@ import java.util.List;
 public interface KpiProjectRepo extends CrudRepository<KpiProject, Integer> {
     KpiProject findByName(String name);
 
-    @Query(value = "SELECT * from kpi_project as p order by created_date DESC",nativeQuery = true)
+    @Query(value = "SELECT * from kpi_project as p order by created_date DESC", nativeQuery = true)
     List<KpiProject> findAllFollowCreateDateSorted();
 }

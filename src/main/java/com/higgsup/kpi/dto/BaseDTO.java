@@ -7,6 +7,7 @@ import java.util.Objects;
 public abstract class BaseDTO {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Integer errorCode;
+
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String message;
 

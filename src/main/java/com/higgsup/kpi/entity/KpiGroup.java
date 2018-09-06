@@ -24,7 +24,7 @@ public class KpiGroup implements Serializable {
 
     @JoinColumn(name = "group_type_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
-    private KpiGroupType groupTypeId;
+    private KpiGroupType groupType;
 
     @Basic
     @Column(name = "created_date")
@@ -58,12 +58,12 @@ public class KpiGroup implements Serializable {
         this.description = description;
     }
 
-    public KpiGroupType getGroupTypeId() {
-        return groupTypeId;
+    public KpiGroupType getGroupType() {
+        return groupType;
     }
 
-    public void setGroupTypeId(KpiGroupType groupTypeId) {
-        this.groupTypeId = groupTypeId;
+    public void setGroupType(KpiGroupType groupType) {
+        this.groupType = groupType;
     }
 
     public Timestamp getCreatedDate() {

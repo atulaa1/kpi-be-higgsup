@@ -22,15 +22,15 @@ public class BaseConfiguration {
     public static final String TOKEN_PREFIX = "Bearer";
 
     @Autowired
-    private Environment env;
+    private Environment environment;
 
     @Bean
     public LdapContextSource contextSource() {
         LdapContextSource contextSource = new LdapContextSource();
-        contextSource.setUrl(env.getProperty("ldap.baseUrl"));
-        contextSource.setBase(env.getProperty("ldap.baseDN"));
-        contextSource.setUserDn(env.getProperty("ldap.baseUserDN"));
-        contextSource.setPassword(env.getProperty("ldap.password"));
+        contextSource.setUrl(environment.getProperty("ldap.baseUrl"));
+        contextSource.setBase(environment.getProperty("ldap.baseDN"));
+        contextSource.setUserDn(environment.getProperty("ldap.baseUserDN"));
+        contextSource.setPassword(environment.getProperty("ldap.password"));
         contextSource.setReferral("follow");
         contextSource.afterPropertiesSet();
         return contextSource;

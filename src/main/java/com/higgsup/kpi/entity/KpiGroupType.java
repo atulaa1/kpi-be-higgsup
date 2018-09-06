@@ -17,7 +17,7 @@ public class KpiGroupType implements Serializable {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "groupTypeId", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "groupType", fetch = FetchType.LAZY)
     private List<KpiGroup> kpiGroupList;
 
     public Integer getId() {

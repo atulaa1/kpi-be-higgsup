@@ -15,9 +15,11 @@ public class KpiProject implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
+
     @Basic
     @Column(name = "name")
     private String name;
+
     @Basic
     @Column(name = "active", columnDefinition = "TINYINT default 1")
     private Integer active;

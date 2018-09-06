@@ -7,5 +7,5 @@ import javax.persistence.PersistenceContext;
 
 public class KpiUserRepoImpl implements KpiUserRepoCustom {
     @PersistenceContext
-    private EntityManager em;
+    private EntityManager entityManager;
 }
