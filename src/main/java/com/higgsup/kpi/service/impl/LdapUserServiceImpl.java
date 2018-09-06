@@ -14,9 +14,7 @@ import org.springframework.ldap.query.LdapQuery;
 import org.springframework.stereotype.Service;
 
 import javax.naming.Name;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static org.springframework.ldap.query.LdapQueryBuilder.query;
 
@@ -44,15 +42,23 @@ public class LdapUserServiceImpl implements LdapUserService {
 
     @Override
     public List<UserDTO> getAllUsers() {
-        List<UserDTO> result = null;
         LdapQuery query = query().where("objectclass").is("user").and("roleForKpi").isPresent();
-        result = ldapTemplate.search(query, new UserAttributesMapper());
+        List<UserDTO> result = ldapTemplate.search(query, new UserAttributesMapper());
+        result.sort(Comparator.comparing(UserDTO::getUsername));
         List<UserDTO> userDTOList = new ArrayList<>();
+
         for (UserDTO userDTO : result){
-            if (!userDTO.getUserRole().contains("ROLE_ADMIN")){
+            if (!userDTO.getUserRole().contains("ROLE_ADMIN") && userDTO.getUserRole().contains("ROLE_MAN")){
                 userDTOList.add(userDTO);
             }
         }
+
+        for (UserDTO userDTO : result){
+            if (!userDTO.getUserRole().contains("ROLE_ADMIN") && !userDTO.getUserRole().contains("ROLE_MAN")){
+                userDTOList.add(userDTO);
+            }
+        }
+
         return userDTOList;
     }
 
