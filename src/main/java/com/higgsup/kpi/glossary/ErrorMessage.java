@@ -24,8 +24,6 @@ public final class ErrorMessage {
     public final static String POINT_HOST_IS_NOT_VALIDATE = "parameter point of host is not valid";
     public final static String POINT_MEMBER_IS_NOT_VALIDATE = "parameter point of member is not valid";
     public final static String POINT_LISTENER_IS_NOT_VALIDATE = "parameter point of listener is not valid";
-    public final static String POINT_HOST_NOT_LARGER_THAN_POINT_MEMBER = "point of host has not to larger than point of member";
-    public final static String POINT_MEMBER_NOT_LARGER_THAN_POINT_LISTENER = "point of member has not to larger than point of listener";
     public final static String NOT_FIND_SEMINAR = "not find seminar";
     public final static String NAME_DOES_NOT_ALLOW_NULL = "name does not allow null";
     public final static String ERROR_IO_EXCEPTION = "error IOException";
