@@ -25,7 +25,7 @@ public class UserDTO extends BaseDTO {
 
     private Date birthday;
 
-    private String phoneNumber;
+    private String numberPhone;
 
     private String address;
 
@@ -121,12 +121,12 @@ public class UserDTO extends BaseDTO {
         this.birthday = birthday;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getNumberPhone() {
+        return numberPhone;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setNumberPhone(String numberPhone) {
+        this.numberPhone = numberPhone;
     }
 
     public String getAddress() {
