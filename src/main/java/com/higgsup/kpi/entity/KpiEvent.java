@@ -1,5 +1,7 @@
 package com.higgsup.kpi.entity;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -16,8 +18,26 @@ public class KpiEvent implements Serializable {
 
     private Integer id;
     @Basic
-    @Column(name = "name")
-    private String name;
+    @Column(name = "event_Name")
+    private String eventName;
+
+    @Basic
+    @Column(name = "created_date")
+    @CreationTimestamp
+    private Timestamp createdDate;
+
+    @Basic
+    @Column(name = "updated_date")
+    @CreationTimestamp
+    private Timestamp updatedDate;
+
+    @Basic
+    @Column(name = "address")
+    private String address;
+
+    @Basic
+    @Column(name = "event_additional_config")
+    private String eventAdditionalConfig;
 
     @Basic
     @Column(name = "description")
@@ -25,7 +45,7 @@ public class KpiEvent implements Serializable {
 
     @Basic
     @Column(name = "status")
-    private String status;
+    private Integer status;
 
     @Basic
     @Column(name = "begin_date")
@@ -50,12 +70,12 @@ public class KpiEvent implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getEventName() {
+        return eventName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setEventName(String name) {
+        this.eventName = name;
     }
 
     public String getDescription() {
@@ -82,11 +102,11 @@ public class KpiEvent implements Serializable {
         this.kpiEventUserList = kpiEventUserList;
     }
 
-    public String getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
@@ -104,5 +124,37 @@ public class KpiEvent implements Serializable {
 
     public void setEndDate(Timestamp endDate) {
         this.endDate = endDate;
+    }
+
+    public Timestamp getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Timestamp createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public Timestamp getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(Timestamp updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getEventAdditionalConfig() {
+        return eventAdditionalConfig;
+    }
+
+    public void setEventAdditionalConfig(String eventAdditionalConfig) {
+        this.eventAdditionalConfig = eventAdditionalConfig;
     }
 }
