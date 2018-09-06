@@ -45,20 +45,20 @@ public class LdapUserServiceImpl implements LdapUserService {
         LdapQuery query = query().where("objectclass").is("user").and("roleForKpi").isPresent();
         List<UserDTO> result = ldapTemplate.search(query, new UserAttributesMapper());
         result.sort(Comparator.comparing(UserDTO::getUsername));
+
         List<UserDTO> userDTOList = new ArrayList<>();
+        List<UserDTO> userEmployee = new ArrayList<>();
 
         for (UserDTO userDTO : result){
             if (!userDTO.getUserRole().contains("ROLE_ADMIN") && userDTO.getUserRole().contains("ROLE_MAN")){
                 userDTOList.add(userDTO);
             }
-        }
-
-        for (UserDTO userDTO : result){
             if (!userDTO.getUserRole().contains("ROLE_ADMIN") && !userDTO.getUserRole().contains("ROLE_MAN")){
-                userDTOList.add(userDTO);
+                userEmployee.add(userDTO);
             }
         }
 
+        userDTOList.addAll(userEmployee);
         return userDTOList;
     }
 
