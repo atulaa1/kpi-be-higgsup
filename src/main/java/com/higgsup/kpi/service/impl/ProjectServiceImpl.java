@@ -44,7 +44,7 @@ public class ProjectServiceImpl implements ProjectService {
                 if (!(Objects.nonNull(kpiProjectInDB) && !Objects.equals(projectDTO.getId(), kpiProjectInDB.getId()))) {
                     BeanUtils.copyProperties(projectDTO, kpiProject, "id", "createdDate");
 
-                    kpiProject.setUpdateDate(new Timestamp(System.currentTimeMillis()));
+                    kpiProject.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
 
                     kpiProject = kpiProjectRepo.save(kpiProject);
 

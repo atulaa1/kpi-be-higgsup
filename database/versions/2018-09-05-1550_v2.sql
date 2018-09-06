@@ -1,5 +1,5 @@
 /**
-date: 2018-08-31
+date: 2018-09-05 15:50
 author: ThanhLV
 purpose: add column update_date in project
 **/
@@ -90,7 +90,7 @@ CREATE TABLE kpi_project (
   id int(11) NOT NULL AUTO_INCREMENT,
   active tinyint(4) NULL DEFAULT 1,
   created_date datetime NULL DEFAULT NULL,
-  update_date datetime NULL DEFAULT NULL,
+  updated_date datetime NULL DEFAULT NULL,
   name varchar(255),
   PRIMARY KEY (id)
 );

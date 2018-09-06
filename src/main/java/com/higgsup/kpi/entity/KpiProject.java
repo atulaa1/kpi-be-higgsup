@@ -30,9 +30,9 @@ public class KpiProject implements Serializable {
     private Timestamp createdDate;
 
     @Basic
-    @Column(name = "update_date")
+    @Column(name = "updated_date")
     @CreationTimestamp
-    private Timestamp updateDate;
+    private Timestamp updatedDate;
 
     public Integer getId() {
         return id;
@@ -66,11 +66,11 @@ public class KpiProject implements Serializable {
         this.createdDate = createdDate;
     }
 
-    public Timestamp getUpdateDate() {
-        return updateDate;
+    public Timestamp getUpdatedDate() {
+        return updatedDate;
     }
 
-    public void setUpdateDate(Timestamp updateDate) {
-        this.updateDate = updateDate;
+    public void setUpdatedDate(Timestamp updateDate) {
+        this.updatedDate = updateDate;
     }
 }
