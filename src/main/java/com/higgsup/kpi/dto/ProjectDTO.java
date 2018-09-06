@@ -14,6 +14,9 @@ public class ProjectDTO extends BaseDTO {
     @JsonFormat(pattern = "dd-MM-yyy HH:mm")
     private Timestamp createdDate;
 
+    @JsonFormat(pattern = "dd-MM-yyy HH:mm")
+    private Timestamp updatedDate;
+
     public Integer getId() {
         return id;
     }
@@ -44,5 +47,13 @@ public class ProjectDTO extends BaseDTO {
 
     public void setCreatedDate(Timestamp createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public Timestamp getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(Timestamp updatedDate) {
+        this.updatedDate = updatedDate;
     }
 }
