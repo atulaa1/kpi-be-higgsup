@@ -25,7 +25,7 @@ public class KpiEvent implements Serializable {
 
     @Basic
     @Column(name = "status")
-    private String status;
+    private Integer status;
 
     @Basic
     @Column(name = "begin_date")
@@ -86,7 +86,7 @@ public class KpiEvent implements Serializable {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
