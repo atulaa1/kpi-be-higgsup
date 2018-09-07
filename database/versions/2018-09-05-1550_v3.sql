@@ -54,7 +54,7 @@ CREATE TABLE kpi_group (
 
 CREATE TABLE kpi_event (
   id           INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  event_name         VARCHAR(350)                  DEFAULT NULL,
+  event_name   VARCHAR(350)                 DEFAULT NULL,
   description  VARCHAR(255)                 DEFAULT NULL,
   created_date DATETIME                     DEFAULT NULL,
   updated_date DATETIME                     DEFAULT NULL,
