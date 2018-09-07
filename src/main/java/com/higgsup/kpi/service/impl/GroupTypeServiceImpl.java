@@ -23,7 +23,7 @@ public class GroupTypeServiceImpl implements GroupTypeService {
 
     @Override
     public List<GroupTypeDTO> getAllGroupType() {
-        List<KpiGroupType> kpiGroupTypeEntities = kpiGroupTypeRepo.findAllGroupTypeSortedName();
+        List<KpiGroupType> kpiGroupTypeEntities = kpiGroupTypeRepo.findAllGroupTypeOrderByNameASC();
         return convertKpiGroupTypeEntityToDTO(kpiGroupTypeEntities);
     }
 

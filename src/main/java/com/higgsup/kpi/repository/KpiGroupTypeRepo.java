@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface KpiGroupTypeRepo extends CrudRepository<KpiGroupType, Integer> {
     @Query("SELECT g from KpiGroupType g order by g.name")
-    List<KpiGroupType> findAllGroupTypeSortedName();
+    List<KpiGroupType> findAllGroupTypeOrderByNameASC();
 }
