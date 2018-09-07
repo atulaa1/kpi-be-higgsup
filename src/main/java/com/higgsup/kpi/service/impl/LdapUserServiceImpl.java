@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.naming.Name;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.springframework.ldap.query.LdapQueryBuilder.query;
 
@@ -45,18 +46,15 @@ public class LdapUserServiceImpl implements LdapUserService {
         result.sort(Comparator.comparing(UserDTO::getUsername));
 
         List<UserDTO> userDTOList = new ArrayList<>();
-        List<UserDTO> userEmployee = new ArrayList<>();
-
-        for (UserDTO userDTO : result){
-            if (!userDTO.getUserRole().contains("ROLE_ADMIN") && userDTO.getUserRole().contains("ROLE_MAN")){
+        for (UserDTO userDTO : result) {
+            if (!userDTO.getUserRole().contains("ROLE_ADMIN")) {
                 userDTOList.add(userDTO);
-            }
-            if (!userDTO.getUserRole().contains("ROLE_ADMIN") && !userDTO.getUserRole().contains("ROLE_MAN")){
-                userEmployee.add(userDTO);
             }
         }
 
-        userDTOList.addAll(userEmployee);
+        userDTOList = userDTOList.stream()
+                .sorted(Comparator.comparingInt(u -> u.getUserRole().contains("ROLE_MAN") ? 0 : 1))
+                .collect(Collectors.toList());
         return userDTOList;
     }
 
