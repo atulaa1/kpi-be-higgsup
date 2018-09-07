@@ -8,12 +8,12 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 @SpringBootApplication
 public class KpiApplication extends SpringBootServletInitializer {
 
-	@Override
-	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-		return application.sources(KpiApplication.class);
-	}
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(KpiApplication.class);
+    }
 
-	public static void main(String[] args) {
-		SpringApplication.run(KpiApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(KpiApplication.class, args);
+    }
 }

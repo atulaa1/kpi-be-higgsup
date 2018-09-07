@@ -22,7 +22,7 @@ public class GroupTypeController {
     @RequestMapping(value = "/group-types",method = RequestMethod.GET)
     @PreAuthorize("hasRole('ADMIN')")
     public Response getAll() {
-        Response response = new Response(HttpStatus.OK.value());
+        Response<List<GroupTypeDTO>> response = new Response<>(HttpStatus.OK.value());
         List<GroupTypeDTO> groupTypeDTOS = groupTypeService.getAllGroupType();
         response.setData(groupTypeDTOS);
         return response;

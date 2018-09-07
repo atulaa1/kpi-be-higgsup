@@ -2,8 +2,11 @@ package com.higgsup.kpi.dto;
 
 public class GroupClubDetail {
     private String host;
+
     private Integer minNumberOfSessions;
+
     private Float participationPoint;
+
     private Float effectivePoint;
 
     public String getHost() {

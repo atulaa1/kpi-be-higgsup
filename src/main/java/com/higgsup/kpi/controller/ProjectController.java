@@ -21,7 +21,7 @@ public class ProjectController {
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/projects")
     public Response getProjectList() {
-        Response response = new Response(HttpStatus.OK.value());
+        Response<List<ProjectDTO>> response = new Response<>(HttpStatus.OK.value());
         List<ProjectDTO> projectDTOS = projectService.getAllProject();
         response.setData(projectDTOS);
         return response;

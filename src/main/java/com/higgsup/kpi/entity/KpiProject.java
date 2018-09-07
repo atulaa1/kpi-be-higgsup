@@ -15,9 +15,11 @@ public class KpiProject implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
+
     @Basic
     @Column(name = "name")
     private String name;
+
     @Basic
     @Column(name = "active", columnDefinition = "TINYINT default 1")
     private Integer active;
@@ -26,6 +28,11 @@ public class KpiProject implements Serializable {
     @Column(name = "created_date")
     @CreationTimestamp
     private Timestamp createdDate;
+
+    @Basic
+    @Column(name = "updated_date")
+    @CreationTimestamp
+    private Timestamp updatedDate;
 
     public Integer getId() {
         return id;
@@ -57,5 +64,13 @@ public class KpiProject implements Serializable {
 
     public void setCreatedDate(Timestamp createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public Timestamp getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(Timestamp updateDate) {
+        this.updatedDate = updateDate;
     }
 }

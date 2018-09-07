@@ -1,40 +1,43 @@
 package com.higgsup.kpi.dto;
 
 public class TeamBuildingDTO {
-   private String firstPrize;
-   private String secondPrize;
-   private String thirdPrize;
-   private String organizers;
+    private String firstPrizePoint;
 
-    public String getFirstPrize() {
-        return firstPrize;
+    private String secondPrizePoint;
+
+    private String thirdPrizePoint;
+
+    private String organizerPoint;
+
+    public String getFirstPrizePoint() {
+        return firstPrizePoint;
     }
 
-    public void setFirstPrize(String firstPrize) {
-        this.firstPrize = firstPrize;
+    public void setFirstPrizePoint(String firstPrizePoint) {
+        this.firstPrizePoint = firstPrizePoint;
     }
 
-    public String getSecondPrize() {
-        return secondPrize;
+    public String getSecondPrizePoint() {
+        return secondPrizePoint;
     }
 
-    public void setSecondPrize(String secondPrize) {
-        this.secondPrize = secondPrize;
+    public void setSecondPrizePoint(String secondPrizePoint) {
+        this.secondPrizePoint = secondPrizePoint;
     }
 
-    public String getThirdPrize() {
-        return thirdPrize;
+    public String getThirdPrizePoint() {
+        return thirdPrizePoint;
     }
 
-    public void setThirdPrize(String thirdPrize) {
-        this.thirdPrize = thirdPrize;
+    public void setThirdPrizePoint(String thirdPrizePoint) {
+        this.thirdPrizePoint = thirdPrizePoint;
     }
 
-    public String getOrganizers() {
-        return organizers;
+    public String getOrganizerPoint() {
+        return organizerPoint;
     }
 
-    public void setOrganizers(String organizers) {
-        this.organizers = organizers;
+    public void setOrganizerPoint(String organizerPoint) {
+        this.organizerPoint = organizerPoint;
     }
 }
