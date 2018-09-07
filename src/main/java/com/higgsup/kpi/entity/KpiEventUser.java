@@ -19,8 +19,8 @@ public class KpiEventUser implements Serializable {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private KpiEvent kpiEvent;
 
-    @Column(name = "type")
-    private Integer type;
+    @Column(name = "is_host")
+    private Integer isHost;
 
     public KpiEventUserPK getKpiEventUserPK() {
         return kpiEventUserPK;
@@ -46,11 +46,11 @@ public class KpiEventUser implements Serializable {
         this.kpiEvent = kpiEvent;
     }
 
-    public Integer getType() {
-        return type;
+    public Integer getIsHost() {
+        return isHost;
     }
 
-    public void setType(Integer isHost) {
-        this.type = isHost;
+    public void setIsHost(Integer isHost) {
+        this.isHost = isHost;
     }
 }
