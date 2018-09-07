@@ -51,7 +51,7 @@
     "https"
   ],
   "paths": {
-    "/api/clubs": {
+    "/api/groups/club": {
       "post": {
         "tags": [
           "group-controller"
@@ -74,14 +74,17 @@
               "type": "object",
               "required": [
                 "name",
-                "groupTypeId",
+                "groupType",
                 "additionalConfig"
               ],
               "properties": {
                 "name": {
                   "type": "string"
                 },
-                "groupTypeId": {
+                "description": {
+                  "type": "string"
+                },
+                "groupType": {
                   "required": [
                     "id"
                   ],
@@ -118,7 +121,7 @@
               },
               "example": {
                 "name": "Câu lạc bố Đá Bóng",
-                "groupTypeId": {
+                "groupType": {
                   "id": 2
                 },
                 "additionalConfig": {
@@ -139,7 +142,7 @@
               "required": [
                 "id",
                 "name",
-                "groupTypeId",
+                "groupType",
                 "additionalConfig"
               ],
               "properties": {
@@ -149,7 +152,10 @@
                 "name": {
                   "type": "string"
                 },
-                "groupTypeId": {
+                "description": {
+                  "type": "string"
+                },
+                "groupType": {
                   "required": [
                     "id"
                   ],
@@ -159,6 +165,9 @@
                       "type": "number"
                     }
                   }
+                },
+                "createdDate": {
+                  "type": "string"
                 },
                 "additionalConfig": {
                   "type": "object",
@@ -188,9 +197,11 @@
                 "data": {
                   "id": 10,
                   "name": "Câu lạc bố Đá Bóng",
-                  "groupTypeId": {
+                  "description": null,
+                  "groupType": {
                     "id": 2
                   },
+                  "createdDate": "07-09-2018 11:35",
                   "additionalConfig": {
                     "host": "kpi.man",
                     "minNumberOfSessions": 2,
@@ -356,7 +367,7 @@
                     "id": 99,
                     "name": "Seminar thứ 7",
                     "description": null,
-                    "groupTypeId": {
+                    "groupType": {
                       "id": 1,
                       "name": "Seminar"
                     },
@@ -371,7 +382,7 @@
                     "id": 101,
                     "name": "Câu lạc bộ bóng đá",
                     "description": null,
-                    "groupTypeId": {
+                    "groupType": {
                       "id": 2,
                       "name": "Câu lạc bộ"
                     },
@@ -387,7 +398,7 @@
                     "id": 68,
                     "name": "Higgsup Teambuilding",
                     "description": null,
-                    "groupTypeId": {
+                    "groupType": {
                       "id": 3,
                       "name": "Team building"
                     },
@@ -403,7 +414,7 @@
                     "id": 87,
                     "name": "Support",
                     "description": null,
-                    "groupTypeId": {
+                    "groupType": {
                       "id": 4,
                       "name": "Support chung"
                     },
@@ -433,7 +444,7 @@
         }
       }
     },
-    "/api/groups/clubs/{id}": {
+    "/api/groups/club/{id}": {
       "put": {
         "tags": [
           "group-controller"
@@ -464,14 +475,17 @@
               "type": "object",
               "required": [
                 "name",
-                "groupTypeId",
+                "groupType",
                 "additionalConfig"
               ],
               "properties": {
                 "name": {
                   "type": "string"
                 },
-                "groupTypeId": {
+                "description": {
+                  "type": "string"
+                },
+                "groupType": {
                   "required": [
                     "id"
                   ],
@@ -508,7 +522,7 @@
               },
               "example": {
                 "name": "Câu lạc bố Đá Bóng",
-                "groupTypeId": {
+                "groupType": {
                   "id": 2
                 },
                 "additionalConfig": {
@@ -529,7 +543,7 @@
               "required": [
                 "id",
                 "name",
-                "groupTypeId",
+                "groupType",
                 "additionalConfig"
               ],
               "properties": {
@@ -539,7 +553,7 @@
                 "name": {
                   "type": "string"
                 },
-                "groupTypeId": {
+                "groupType": {
                   "required": [
                     "id"
                   ],
@@ -549,6 +563,9 @@
                       "type": "number"
                     }
                   }
+                },
+                "createdDate": {
+                  "type": "string"
                 },
                 "additionalConfig": {
                   "type": "object",
@@ -578,9 +595,11 @@
                 "data": {
                   "id": 10,
                   "name": "Câu lạc bố Đá Bóng",
-                  "groupTypeId": {
+                  "description": null,
+                  "groupType": {
                     "id": 2
                   },
+                  "createdDate": "07-09-2018 11:35",
                   "additionalConfig": {
                     "host": "kpi.man",
                     "minNumberOfSessions": 2,
@@ -607,7 +626,7 @@
         }
       }
     },
-    "/api/groups/seminars": {
+    "/api/groups/seminar": {
       "post": {
         "tags": [
           "group-controller"
@@ -630,7 +649,7 @@
               "type": "object",
               "required": [
                 "name",
-                "groupTypeId",
+                "groupType",
                 "additionalConfig"
               ],
               "properties": {
@@ -640,7 +659,7 @@
                 "description": {
                   "type": "string"
                 },
-                "groupTypeId": {
+                "groupType": {
                   "required": [
                     "id"
                   ],
@@ -654,18 +673,18 @@
                 "additionalConfig": {
                   "type": "object",
                   "required": [
-                    "host",
-                    "listener",
-                    "member"
+                    "hostPoint",
+                    "listenerPoint",
+                    "memberPoint"
                   ],
                   "properties": {
-                    "host": {
+                    "hostPoint": {
                       "type": "number"
                     },
-                    "listener": {
+                    "listenerPoint": {
                       "type": "number"
                     },
-                    "member": {
+                    "memberPoint": {
                       "type": "number"
                     }
                   }
@@ -673,14 +692,13 @@
               },
               "example": {
                 "name": "seminar thứ 7",
-                "description": null,
-                "groupTypeId": {
+                "groupType": {
                   "id": 1
                 },
                 "additionalConfig": {
-                  "host": 7,
-                  "listener": 3,
-                  "member": 5
+                  "hostPoint": 7,
+                  "listenerPoint": 3,
+                  "memberPoint": 5
                 }
               }
             }
@@ -694,7 +712,7 @@
               "required": [
                 "id",
                 "name",
-                "groupTypeId",
+                "groupType",
                 "additionalConfig"
               ],
               "properties": {
@@ -707,7 +725,7 @@
                 "description": {
                   "type": "string"
                 },
-                "groupTypeId": {
+                "groupType": {
                   "required": [
                     "id"
                   ],
@@ -718,21 +736,24 @@
                     }
                   }
                 },
+                "createdDate": {
+                  "type": "string"
+                },
                 "additionalConfig": {
                   "type": "object",
                   "required": [
-                    "host",
-                    "listener",
-                    "member"
+                    "hostPoint",
+                    "listenerPoint",
+                    "memberPoint"
                   ],
                   "properties": {
-                    "host": {
+                    "hostPoint": {
                       "type": "number"
                     },
-                    "listener": {
+                    "listenerPoint": {
                       "type": "number"
                     },
-                    "member": {
+                    "memberPoint": {
                       "type": "number"
                     }
                   }
@@ -743,13 +764,14 @@
                   "id": 10,
                   "name": "seminar thứ 7",
                   "description": null,
-                  "groupTypeId": {
-                    "id": 2
+                  "groupType": {
+                    "id": 1
                   },
+                  "createdDate": "07-09-2018 11:35",
                   "additionalConfig": {
-                    "host": 7,
-                    "listener": 3,
-                    "member": 5
+                    "hostPoint": 7,
+                    "listenerPoint": 3,
+                    "memberPoint": 5
                   },
                   "status_code": 200
                 }
@@ -771,7 +793,7 @@
         }
       }
     },
-    "/api/groups/seminars/{id}": {
+    "/api/groups/seminar/{id}": {
       "put": {
         "tags": [
           "group-controller"
@@ -803,14 +825,14 @@
               "required": [
                 "id",
                 "name",
-                "groupTypeId",
+                "groupType",
                 "additionalConfig"
               ],
               "properties": {
                 "name": {
                   "type": "string"
                 },
-                "groupTypeId": {
+                "groupType": {
                   "required": [
                     "id"
                   ],
@@ -824,18 +846,18 @@
                 "additionalConfig": {
                   "type": "object",
                   "required": [
-                    "host",
-                    "listener",
-                    "member"
+                    "hostPoint",
+                    "memberPoint",
+                    "listenerPoint"
                   ],
                   "properties": {
-                    "host": {
+                    "hostPoint": {
                       "type": "number"
                     },
-                    "listener": {
+                    "memberPoint": {
                       "type": "number"
                     },
-                    "member": {
+                    "listenerPoint": {
                       "type": "number"
                     }
                   }
@@ -843,13 +865,13 @@
               },
               "example": {
                 "name": "seminar thứ 7",
-                "groupTypeId": {
+                "groupType": {
                   "id": 1
                 },
                 "additionalConfig": {
-                  "host": 7,
-                  "listener": 3,
-                  "member": 5
+                  "hostPoint": 7,
+                  "listenerPoint": 3,
+                  "memberPoint": 5
                 }
               }
             }
@@ -862,7 +884,7 @@
               "type": "object",
               "required": [
                 "name",
-                "groupTypeId",
+                "groupType",
                 "additionalConfig"
               ],
               "properties": {
@@ -875,7 +897,7 @@
                 "description": {
                   "type": "string"
                 },
-                "groupTypeId": {
+                "groupType": {
                   "required": [
                     "id"
                   ],
@@ -886,22 +908,24 @@
                     }
                   }
                 },
+                "createdDate": {
+                  "type": "string"
+                },
                 "additionalConfig": {
                   "type": "object",
                   "required": [
-                    "host",
-                    "minNumberOfSessions",
-                    "participationPoint",
-                    "effectivePoint"
+                    "hostPoint",
+                    "memberPoint",
+                    "listenerPoint"
                   ],
                   "properties": {
-                    "host": {
+                    "hostPoint": {
                       "type": "number"
                     },
-                    "listener": {
+                    "listenerPoint": {
                       "type": "number"
                     },
-                    "member": {
+                    "memberPoint": {
                       "type": "number"
                     }
                   }
@@ -911,13 +935,15 @@
                 "data": {
                   "id": 10,
                   "name": "seminar thứ 7",
-                  "groupTypeId": {
-                    "id": 2
+                  "description": null,
+                  "groupType": {
+                    "id": 1
                   },
+                  "createdDate": "07-09-2018 11:35",
                   "additionalConfig": {
-                    "host": 7,
-                    "listener": 3,
-                    "member": 5
+                    "hostPoint": 7,
+                    "listenerPoint": 3,
+                    "memberPoint": 5
                   },
                   "status_code": 200
                 }
@@ -962,7 +988,7 @@
               "type": "object",
               "required": [
                 "name",
-                "groupTypeId",
+                "groupType",
                 "additionalConfig"
               ],
               "properties": {
@@ -972,7 +998,7 @@
                 "description": {
                   "type": "string"
                 },
-                "groupTypeId": {
+                "groupType": {
                   "required": [
                     "id"
                   ],
@@ -1013,8 +1039,7 @@
               },
               "example": {
                 "name": "Support",
-                "description": null,
-                "groupTypeId": {
+                "groupType": {
                   "id": 4
                 },
                 "additionalConfig": {
@@ -1036,7 +1061,7 @@
               "required": [
                 "id",
                 "name",
-                "groupTypeId",
+                "groupType",
                 "additionalConfig"
               ],
               "properties": {
@@ -1049,7 +1074,7 @@
                 "description": {
                   "type": "string"
                 },
-                "groupTypeId": {
+                "groupType": {
                   "required": [
                     "id"
                   ],
@@ -1059,6 +1084,9 @@
                       "type": "number"
                     }
                   }
+                },
+                "createdDate": {
+                  "type": "string"
                 },
                 "additionalConfig": {
                   "type": "object",
@@ -1093,9 +1121,10 @@
                   "id": 10,
                   "name": "Support",
                   "description": null,
-                  "groupTypeId": {
+                  "groupType": {
                     "id": 4
                   },
+                  "createdDate": "07-09-2018 11:35",
                   "additionalConfig": {
                     "cleanUpPoint": 1,
                     "buyingStuffPoint": 2,
@@ -1144,7 +1173,7 @@
               "type": "object",
               "required": [
                 "name",
-                "groupTypeId",
+                "groupType",
                 "additionalConfig"
               ],
               "properties": {
@@ -1154,7 +1183,7 @@
                 "description": {
                   "type": "string"
                 },
-                "groupTypeId": {
+                "groupType": {
                   "required": [
                     "id"
                   ],
@@ -1195,8 +1224,7 @@
               },
               "example": {
                 "name": "Support",
-                "description": null,
-                "groupTypeId": {
+                "groupType": {
                   "id": 4
                 },
                 "additionalConfig": {
@@ -1218,7 +1246,7 @@
               "required": [
                 "id",
                 "name",
-                "groupTypeId",
+                "groupType",
                 "additionalConfig"
               ],
               "properties": {
@@ -1231,7 +1259,7 @@
                 "description": {
                   "type": "string"
                 },
-                "groupTypeId": {
+                "groupType": {
                   "required": [
                     "id"
                   ],
@@ -1241,6 +1269,9 @@
                       "type": "number"
                     }
                   }
+                },
+                "createdDate": {
+                  "type": "string"
                 },
                 "additionalConfig": {
                   "type": "object",
@@ -1275,9 +1306,10 @@
                   "id": 10,
                   "name": "Support",
                   "description": null,
-                  "groupTypeId": {
+                  "groupType": {
                     "id": 4
                   },
+                  "createdDate": "07-09-2018 11:35",
                   "additionalConfig": {
                     "cleanUpPoint": 1,
                     "buyingStuffPoint": 2,
@@ -1328,7 +1360,7 @@
               "type": "object",
               "required": [
                 "name",
-                "groupTypeId",
+                "groupType",
                 "additionalConfig"
               ],
               "properties": {
@@ -1338,7 +1370,7 @@
                 "description": {
                   "type": "string"
                 },
-                "groupTypeId": {
+                "groupType": {
                   "required": [
                     "id"
                   ],
@@ -1352,22 +1384,22 @@
                 "additionalConfig": {
                   "type": "object",
                   "required": [
-                    "firstPrize",
-                    "secondPrize",
-                    "thirdPrize",
-                    "organizers"
+                    "firstPrizePoint",
+                    "secondPrizePoint",
+                    "thirdPrizePoint",
+                    "organizerPoint"
                   ],
                   "properties": {
-                    "firstPrize": {
+                    "firstPrizePoint": {
                       "type": "number"
                     },
-                    "secondPrize": {
+                    "secondPrizePoint": {
                       "type": "number"
                     },
-                    "thirdPrize": {
+                    "thirdPrizePoint": {
                       "type": "number"
                     },
-                    "organizers": {
+                    "organizerPoint": {
                       "type": "number"
                     }
                   }
@@ -1375,15 +1407,14 @@
               },
               "example": {
                 "name": "Team Building",
-                "description": null,
-                "groupTypeId": {
+                "groupType": {
                   "id": 3
                 },
                 "additionalConfig": {
-                  "firstPrize": 7,
-                  "secondPrize": 3,
-                  "thirdPrize": 2,
-                  "organizers": 5
+                  "firstPrizePoint": 7,
+                  "secondPrizePoint": 3,
+                  "thirdPrizePoint": 2,
+                  "organizerPoint": 5
                 }
               }
             }
@@ -1397,7 +1428,7 @@
               "required": [
                 "id",
                 "name",
-                "groupTypeId",
+                "groupType",
                 "additionalConfig"
               ],
               "properties": {
@@ -1410,7 +1441,7 @@
                 "description": {
                   "type": "string"
                 },
-                "groupTypeId": {
+                "groupType": {
                   "required": [
                     "id"
                   ],
@@ -1421,25 +1452,28 @@
                     }
                   }
                 },
+                "createdDate": {
+                  "type": "string"
+                },
                 "additionalConfig": {
                   "type": "object",
                   "required": [
-                    "firstPrize",
-                    "secondPrize",
-                    "thirdPrize",
-                    "organizers"
+                    "firstPrizePoint",
+                    "secondPrizePoint",
+                    "thirdPrizePoint",
+                    "organizerPoint"
                   ],
                   "properties": {
-                    "firstPrize": {
+                    "firstPrizePoint": {
                       "type": "number"
                     },
-                    "secondPrize": {
+                    "secondPrizePoint": {
                       "type": "number"
                     },
-                    "thirdPrize": {
+                    "thirdPrizePoint": {
                       "type": "number"
                     },
-                    "organizers": {
+                    "organizerPoint": {
                       "type": "number"
                     }
                   }
@@ -1450,14 +1484,15 @@
                   "id": 10,
                   "name": "Team Building",
                   "description": null,
-                  "groupTypeId": {
+                  "groupType": {
                     "id": 3
                   },
+                  "createdDate": "07-09-2018 11:35",
                   "additionalConfig": {
-                    "firstPrize": 7,
-                    "secondPrize": 3,
-                    "thirdPrize": 2,
-                    "organizers": 5
+                    "firstPrizePoint": 7,
+                    "secondPrizePoint": 3,
+                    "thirdPrizePoint": 2,
+                    "organizerPoint": 5
                   },
                   "status_code": 200
                 }
@@ -1477,7 +1512,9 @@
         "404": {
           "description": "Not Found"
         }
-      },
+      }
+    },
+    "/api/groups/team-building/{id}": {
       "put": {
         "tags": [
           "group-controller"
@@ -1492,6 +1529,14 @@
         ],
         "parameters": [
           {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
             "in": "body",
             "name": "groupDTO",
             "description": "groupDTO",
@@ -1500,20 +1545,17 @@
               "type": "object",
               "required": [
                 "name",
-                "groupTypeId",
+                "groupType",
                 "additionalConfig"
               ],
               "properties": {
-                "id": {
-                  "type": "number"
-                },
                 "name": {
                   "type": "string"
                 },
                 "description": {
                   "type": "string"
                 },
-                "groupTypeId": {
+                "groupType": {
                   "required": [
                     "id"
                   ],
@@ -1527,39 +1569,37 @@
                 "additionalConfig": {
                   "type": "object",
                   "required": [
-                    "firstPrize",
-                    "secondPrize",
-                    "thirdPrize",
-                    "organizers"
+                    "firstPrizePoint",
+                    "secondPrizePoint",
+                    "thirdPrizePoint",
+                    "organizerPoint"
                   ],
                   "properties": {
-                    "firstPrize": {
+                    "firstPrizePoint": {
                       "type": "number"
                     },
-                    "secondPrize": {
+                    "secondPrizePoint": {
                       "type": "number"
                     },
-                    "thirdPrize": {
+                    "thirdPrizePoint": {
                       "type": "number"
                     },
-                    "organizers": {
+                    "organizerPoint": {
                       "type": "number"
                     }
                   }
                 }
               },
               "example": {
-                "id": 10,
                 "name": "Team Building",
-                "description": null,
-                "groupTypeId": {
+                "groupType": {
                   "id": 3
                 },
                 "additionalConfig": {
-                  "firstPrize": 7,
-                  "secondPrize": 3,
-                  "thirdPrize": 2,
-                  "organizers": 5
+                  "firstPrizePoint": 7,
+                  "secondPrizePoint": 3,
+                  "thirdPrizePoint": 2,
+                  "organizerPoint": 5
                 }
               }
             }
@@ -1573,7 +1613,7 @@
               "required": [
                 "id",
                 "name",
-                "groupTypeId",
+                "groupType",
                 "additionalConfig"
               ],
               "properties": {
@@ -1586,7 +1626,7 @@
                 "description": {
                   "type": "string"
                 },
-                "groupTypeId": {
+                "groupType": {
                   "required": [
                     "id"
                   ],
@@ -1597,25 +1637,28 @@
                     }
                   }
                 },
+                "createdDate": {
+                  "type": "string"
+                },
                 "additionalConfig": {
                   "type": "object",
                   "required": [
-                    "firstPrize",
-                    "secondPrize",
-                    "thirdPrize",
-                    "organizers"
+                    "firstPrizePoint",
+                    "secondPrizePoint",
+                    "thirdPrizePoint",
+                    "organizerPoint"
                   ],
                   "properties": {
-                    "firstPrize": {
+                    "firstPrizePoint": {
                       "type": "number"
                     },
-                    "secondPrize": {
+                    "secondPrizePoint": {
                       "type": "number"
                     },
-                    "thirdPrize": {
+                    "thirdPrizePoint": {
                       "type": "number"
                     },
-                    "organizers": {
+                    "organizerPoint": {
                       "type": "number"
                     }
                   }
@@ -1626,14 +1669,15 @@
                   "id": 10,
                   "name": "Team Building",
                   "description": null,
-                  "groupTypeId": {
+                  "groupType": {
                     "id": 3
                   },
+                  "createdDate": "07-09-2018 11:35",
                   "additionalConfig": {
-                    "firstPrize": 7,
-                    "secondPrize": 3,
-                    "thirdPrize": 2,
-                    "organizers": 5
+                    "firstPrizePoint": 7,
+                    "secondPrizePoint": 3,
+                    "thirdPrizePoint": 2,
+                    "organizerPoint": 5
                   },
                   "status_code": 200
                 }
@@ -2904,7 +2948,7 @@
           "type": "integer",
           "format": "int32"
         },
-        "groupTypeId": {
+        "groupType": {
           "$ref": "#/definitions/GroupTypeDTO"
         },
         "id": {
@@ -2936,7 +2980,7 @@
           "type": "integer",
           "format": "int32"
         },
-        "groupTypeId": {
+        "groupType": {
           "$ref": "#/definitions/GroupTypeDTO"
         },
         "id": {
@@ -2968,7 +3012,7 @@
           "type": "integer",
           "format": "int32"
         },
-        "groupTypeId": {
+        "groupType": {
           "$ref": "#/definitions/GroupTypeDTO"
         },
         "id": {
@@ -3000,7 +3044,7 @@
           "type": "integer",
           "format": "int32"
         },
-        "groupTypeId": {
+        "groupType": {
           "$ref": "#/definitions/GroupTypeDTO"
         },
         "id": {
