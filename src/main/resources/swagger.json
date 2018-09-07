@@ -136,7 +136,7 @@
         ],
         "responses": {
           "200": {
-            "description": "status_code : 200. Meaning: Thành công \n status_code : 904. Message: json processing exception. Meaning: Lỗi convert josn \n status_code : 903. Message: parameter name is not valid. Meaning: Tên câu lạc bộ không hợp lệ \n status_code : 901. Message: parameter min number of sessions is not valid. Meaning: Số lần tổi thiểu đăng ký không hợp lệ \n status_code : 901. Message: parameter point is not valid. Meaning: Điểm không hợp lệ \n status_code : 901. Message: group type does not exist. Meaning: Loại group không tồn tại \n  status_code : 932. Message: group name already exists. Meaning:  Tên group đã tồn tại \n ",
+            "description": "status_code : 200. Meaning: Thành công \n status_code : 904. Message: json processing exception. Meaning: Lỗi convert json \n status_code : 903. Message: parameter name is not valid. Meaning: Tên câu lạc bộ không hợp lệ \n status_code : 901. Message: parameter min number of sessions is not valid. Meaning: Số lần tổi thiểu đăng ký không hợp lệ \n status_code : 901. Message: parameter point is not valid. Meaning: Điểm không hợp lệ \n status_code : 901. Message: group type does not exist. Meaning: Loại group không tồn tại \n  status_code : 932. Message: group name already exist. Meaning:  Tên group đã tồn tại \n ",
             "schema": {
               "type": "object",
               "required": [
@@ -537,7 +537,7 @@
         ],
         "responses": {
           "200": {
-            "description": "status_code : 200. Meaning: Thành công \n status_code : 904. Message: json processing exception. Meaning: Lỗi convert josn \n status_code : 903. Message: parameter name is not valid. Meaning: Tên câu lạc bộ không hợp lệ \n status_code : 901. Message: parameter min number of sessions is not valid. Meaning: Số lần tổi thiểu đăng ký không hợp lệ \n status_code : 901. Message: parameter point is not valid. Meaning: Điểm không hợp lệ \n status_code : 901. Message: group type does not exist. Meaning: Loại group không tồn tại \n  status_code : 932. Message: group name already exists. Meaning:  Tên group đã tồn tại \n ",
+            "description": "status_code : 200. Meaning: Thành công \n status_code : 904. Message: json processing exception. Meaning: Lỗi convert josn \n status_code : 903. Message: parameter name is not valid. Meaning: Tên câu lạc bộ không hợp lệ \n status_code : 901. Message: parameter min number of sessions is not valid. Meaning: Số lần tổi thiểu đăng ký không hợp lệ \n status_code : 901. Message: parameter point is not valid. Meaning: Điểm không hợp lệ \n status_code : 901. Message: group type does not exist. Meaning: Loại group không tồn tại \n  status_code : 932. Message: group name already exist. Meaning:  Tên group đã tồn tại \n ",
             "schema": {
               "type": "object",
               "required": [
@@ -706,7 +706,7 @@
         ],
         "responses": {
           "200": {
-            "description": "status_code : 200. Meaning: Thành công \n status_code : 926 . Message: Duplicated item. Meaning: Đã tồn tại seminar này. \n status_code : 901 . Message: parameter point host  is not valid. Meaning: Điểm của host không hợp lệ. \n status_code : 940 . Message:  point host not larger than point member. Meaning: Điểm của host không thể nhỏ hơn thành viên . \n status_code : 940 . Message:  point member not larger than point host. Meaning: Điểm của thành viên không thể lớn hơn của host .  ",
+            "description": "status_code : 200. Meaning: Thành công \n status_code : 926 . Message: already created. Meaning: Đã tồn tại seminar này. \n status_code : 900. Message: group type does not exist. Meaning: Nhập sai group type. \n status_code : 901 . Message: parameter point of host is not valid. Meaning: Điểm của host không hợp lệ. \n status_code : 901 . Message: parameter point of member is not valid. Meaning: Điểm của thành viên tham gia không hợp lệ. \n status_code : 901 . Message: parameter point of listener is not valid. Meaning: Điểm của người dự thính không hợp lệ. \n status_code : 901 . Message: host score can not be null. Meaning: Điểm của host không thể để trống hoặc bằng 0. \n status_code : 901 . Message: member score can not be null. Meaning: Điểm của thành viên tham gia seminar không thể để trống hoặc bằng 0.",
             "schema": {
               "type": "object",
               "required": [
@@ -879,7 +879,7 @@
         ],
         "responses": {
           "200": {
-            "description": "status_code : 200. Meaning: Thành công \n status_code : 900 . Message:  not find seminar. Meaning: Không tìm thấy seminar với id này . \n status_code : 901 . Message: parameter point host  is not valid. Meaning: Điểm của host không hợp lệ. \n status_code : 940 . Message:  point host not larger than point member. Meaning: Điểm của host không thể nhỏ hơn thành viên . \n status_code : 940 . Message:  point member not larger than point host. Meaning: Điểm của thành viên không thể lớn hơn của host .  ",
+            "description": "status_code : 200. Meaning: Thành công \n status_code : 926 . Message: already created. Meaning: Đã tồn tại seminar này. \n status_code : 900. Message: group type does not exist. Meaning: Nhập sai group type. \n status_code : 901 . Message: parameter point of host is not valid. Meaning: Điểm của host không hợp lệ. \n status_code : 901 . Message: parameter point of member is not valid. Meaning: Điểm của thành viên tham gia không hợp lệ. \n status_code : 901 . Message: parameter point of listener is not valid. Meaning: Điểm của người dự thính không hợp lệ. \n status_code : 901 . Message: host score can not be null. Meaning: Điểm của host không thể để trống hoặc bằng 0. \n status_code : 901 . Message: member score can not be null. Meaning: Điểm của thành viên tham gia seminar không thể để trống hoặc bằng 0.",
             "schema": {
               "type": "object",
               "required": [
@@ -1911,7 +1911,7 @@
         ],
         "responses": {
           "200": {
-            "description": "status_code : 200. Meaning : Thành công \n status_code : 901. Message : Name is not allowed null.  Meaning: name project không thể để rỗng \n status_code : 932. Message :parameters name project exists. Meaning : project này đã tồn tại. ",
+            "description": "status_code : 200. Meaning : Thành công \n status_code : 901. Message : name does not allow null.  Meaning: name project không thể để rỗng \n status_code : 932. Message :parameters name project exist. Meaning : project này đã tồn tại. ",
             "schema": {
               "type": "object",
               "required": [
@@ -2031,7 +2031,7 @@
         ],
         "responses": {
           "200": {
-            "description": "status_code : 200. Meaning: Thành công \n status_code : 903. Message: Name is not allowed null. Meaning: name project không thể để rỗng \n  status_code : 900 . Message: not find project . Meaning: không tìm thấy project \n status_code : 901  . Message: parameters name project exists . Meaning: parameters name không chính xác \n ",
+            "description": "status_code : 200. Meaning: Thành công \n status_code : 903. Message: name does not allow null. Meaning: name project không thể để rỗng \n  status_code : 900 . Message: not find project by id . Meaning: không tìm thấy project \n status_code : 901  . Message: parameters name project exist . Meaning: parameters name không chính xác \n ",
             "schema": {
               "type": "object",
               "required": [
@@ -2161,7 +2161,7 @@
         ],
         "responses": {
           "200": {
-            "description": "200 : Thành công \n 900 : not find -- > không tìm thấy questions ID",
+            "description": "200 : Thành công",
             "schema": {
               "type": "object",
               "required": [
@@ -2284,7 +2284,7 @@
         ],
         "responses": {
           "200": {
-            "description": "200 : Thành công \n 900 : Message: not find. Meaning: Không tìm thấy câu hỏi để update",
+            "description": "200 : Thành công \n 900 : Message: not find. Meaning: Không tìm thấy câu hỏi để update \n status_code : 904. Message: json processing exception. Meaning: Lỗi convert json",
             "schema": {
               "type": "object",
               "properties": {
@@ -2464,7 +2464,7 @@
         ],
         "responses": {
           "200": {
-            "description": "200 : Thành công. \n 900 :  Message: not find. Meaning: not find user",
+            "description": "200 : Thành công. \n 900 :  Message: not find user. Meaning: not find user",
             "schema": {
               "type": "object",
               "required": [
@@ -2803,7 +2803,7 @@
         ],
         "responses": {
           "200": {
-            "description": "901 Message: parameterrole is empty Meaning: mảng roles không thể rỗng \n 900 : Message: not find user  Meaning: không tìm thấy user",
+            "description": "901 Message: parameter role is empty. Meaning: mảng roles không thể rỗng \n 900 : Message: not find user.  Meaning: không tìm thấy user",
             "schema": {
               "type": "object",
               "required": [
