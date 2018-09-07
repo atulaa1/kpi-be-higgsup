@@ -1,13 +1,17 @@
 /**
 date: 2018-09-06 15:00
 author: ThanhLV, anhpth
-purpose: change column event and event_user
-purpose: create table check latetime and table month
+purpose: add new column updated_date for kpi_event table
+purpose: add new column address for kpi_event table
+purpose: add new event_additional_config for kpi_event table
+purpose: change column name to event_name for kpi_event table
+purpose: MODIFY column status from varchar to TINYINT for kpi_event table
 purpose: change year_work to name date_start_work
+
+purpose: create table check latetime and table month
 **/
 
 
-/*change column event*/
 ALTER TABLE kpi_event ADD updated_date DATETIME NULL;
 ALTER TABLE kpi_event ADD address TEXT NULL;
 ALTER TABLE kpi_event ADD event_additional_config TEXT NULL COMMENT 'event_additional_config is config for event';
