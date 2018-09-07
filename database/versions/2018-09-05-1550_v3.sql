@@ -97,3 +97,27 @@ CREATE TABLE kpi_project (
   name varchar(255),
   PRIMARY KEY (id)
 );
+
+-- Create table to checking latetime
+CREATE TABLE `kpi_latetime_check` (
+  `id` int(10) PRIMARY KEY AUTO_INCREMENT,
+  `user_name` varchar(50) CHARACTER SET utf8 NOT NULL,
+  `late_times` varchar(20) NOT NULL,
+  `month_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Add foreign key for table latetime_check
+ALTER TABLE `kpi_latetime_check`
+  ADD KEY `fk_foreign_key_name` (`user_name`),
+  ADD KEY `fk_month` (`month_id`);
+
+-- Add constraint for table latetime_check
+ALTER TABLE `kpi_latetime_check`
+  ADD CONSTRAINT `fk_foreign_key_name` FOREIGN KEY (`user_name`) REFERENCES `kpi_user` (`user_name`),
+  ADD CONSTRAINT `fk_month` FOREIGN KEY (`month_id`) REFERENCES `kpi_month` (`id`);
+
+-- create table month
+CREATE TABLE `kpi_month` (
+  `id` int PRIMARY KEY AUTO_INCREMENT,
+  `month` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
