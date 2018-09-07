@@ -33,4 +33,5 @@ public final class ErrorMessage {
     public final static String TEAM_BUILDING_ORGANIZERS_SCORE_CAN_NOT_NULL = "the organizer score can not be null";
     public final static String GROUP_TYPE_ID_CAN_NOT_NULL = "group type ID can not be null";
     public final static String GROUP_TYPE_CAN_NOT_NULL = "group type can not be null";
+    public final static String NOT_FIND_PROJECT= "not find project by id";
 }

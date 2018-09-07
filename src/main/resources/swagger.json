@@ -1,0 +1,3351 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Higgsup KPI APIS",
+    "title": "Higgsup KPI APIS",
+    "version": "2.0"
+  },
+  "host": "${host}",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "group-controller",
+      "description": "Group Activities"
+    },
+    {
+      "name": "group-type-controller",
+      "description": "Group Types"
+    },
+    {
+      "name": "login-controller",
+      "description": "Login user"
+    },
+    {
+      "name": "project-controller",
+      "description": "Projects of company"
+    },
+    {
+      "name": "survey-question-controller",
+      "description": "Survey Questions"
+    },
+    {
+      "name": "user-controller",
+      "description": "Users"
+    }
+  ],
+  "security": [
+    {
+      "Authorization": []
+    }
+  ],
+  "securityDefinitions": {
+    "Authorization": {
+      "description": "Get token at API with URI '/api/login' in login-controller ",
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "paths": {
+    "/api/groups/club": {
+      "post": {
+        "tags": [
+          "group-controller"
+        ],
+        "summary": "Create a club activity",
+        "operationId": "createClubUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "groupDTO",
+            "description": "groupDTO",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "name",
+                "groupType",
+                "additionalConfig"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "groupType": {
+                  "required": [
+                    "id"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "additionalConfig": {
+                  "type": "object",
+                  "required": [
+                    "host",
+                    "minNumberOfSessions",
+                    "participationPoint",
+                    "effectivePoint"
+                  ],
+                  "properties": {
+                    "host": {
+                      "type": "string"
+                    },
+                    "minNumberOfSessions": {
+                      "type": "number"
+                    },
+                    "participationPoint": {
+                      "type": "number"
+                    },
+                    "effectivePoint": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "name": "Câu lạc bố Đá Bóng",
+                "groupType": {
+                  "id": 2
+                },
+                "additionalConfig": {
+                  "host": "kpi.man",
+                  "minNumberOfSessions": 2,
+                  "participationPoint": 3,
+                  "effectivePoint": 4
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "status_code : 200. Meaning: Thành công \n status_code : 904. Message: json processing exception. Meaning: Lỗi convert json \n status_code : 903. Message: parameter name is not valid. Meaning: Tên câu lạc bộ không hợp lệ \n status_code : 901. Message: parameter min number of sessions is not valid. Meaning: Số lần tổi thiểu đăng ký không hợp lệ \n status_code : 901. Message: parameter point is not valid. Meaning: Điểm không hợp lệ \n status_code : 901. Message: group type does not exist. Meaning: Loại group không tồn tại \n  status_code : 932. Message: group name already exist. Meaning:  Tên group đã tồn tại \n ",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id",
+                "name",
+                "groupType",
+                "additionalConfig"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "groupType": {
+                  "required": [
+                    "id"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "createdDate": {
+                  "type": "string"
+                },
+                "additionalConfig": {
+                  "type": "object",
+                  "required": [
+                    "host",
+                    "minNumberOfSessions",
+                    "participationPoint",
+                    "effectivePoint"
+                  ],
+                  "properties": {
+                    "host": {
+                      "type": "string"
+                    },
+                    "minNumberOfSessions": {
+                      "type": "number"
+                    },
+                    "participationPoint": {
+                      "type": "number"
+                    },
+                    "effectivePoint": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "data": {
+                  "id": 10,
+                  "name": "Câu lạc bố Đá Bóng",
+                  "description": null,
+                  "groupType": {
+                    "id": 2
+                  },
+                  "createdDate": "07-09-2018 11:35",
+                  "additionalConfig": {
+                    "host": "kpi.man",
+                    "minNumberOfSessions": 2,
+                    "participationPoint": 3,
+                    "effectivePoint": 4
+                  },
+                  "status_code": 200
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/group-types": {
+      "get": {
+        "tags": [
+          "group-type-controller"
+        ],
+        "summary": "All group types",
+        "operationId": "getAllUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "status_code : 200. Meaning: Thành công",
+            "schema": {
+              "type": "object",
+              "required": [
+                "status_code",
+                "data"
+              ],
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "name"
+                    ],
+                    "properties": {
+                      "id": {
+                        "type": "number"
+                      },
+                      "name": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "message": {
+                  "type": "string"
+                },
+                "status_code": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "example": {
+                "data": [
+                  {
+                    "id": 1,
+                    "name": "Seminar"
+                  },
+                  {
+                    "id": 2,
+                    "name": "Câu lạc bộ"
+                  },
+                  {
+                    "id": 3,
+                    "name": "Team building"
+                  },
+                  {
+                    "id": 4,
+                    "name": "Support chung"
+                  }
+                ],
+                "status_code": 200
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/groups": {
+      "get": {
+        "tags": [
+          "group-controller"
+        ],
+        "summary": "All groups",
+        "operationId": "getAllGroupUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "status_code : 200. Meaning: Thành công \n status_code : 930. Message: Error IOException. Meaning: Lỗi IOException",
+            "schema": {
+              "type": "object",
+              "required": [
+                "status_code"
+              ],
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "name",
+                      "active",
+                      "createdDate"
+                    ],
+                    "properties": {
+                      "id": {
+                        "type": "number"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "active": {
+                        "type": "number"
+                      },
+                      "createdDate": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "message": {
+                  "type": "string"
+                },
+                "status_code": {
+                  "type": "integer"
+                }
+              },
+              "example": {
+                "data": [
+                  {
+                    "id": 99,
+                    "name": "Seminar thứ 7",
+                    "description": null,
+                    "groupType": {
+                      "id": 1,
+                      "name": "Seminar"
+                    },
+                    "createdDate": "31-08-2018 10:05",
+                    "additionalConfig": {
+                      "host": 5,
+                      "member": 4,
+                      "listener": 0
+                    }
+                  },
+                  {
+                    "id": 101,
+                    "name": "Câu lạc bộ bóng đá",
+                    "description": null,
+                    "groupType": {
+                      "id": 2,
+                      "name": "Câu lạc bộ"
+                    },
+                    "createdDate": "31-08-2018 09:54",
+                    "additionalConfig": {
+                      "host": "test",
+                      "minNumberOfSessions": 5,
+                      "participationPoint": 3,
+                      "effectivePoint": 3
+                    }
+                  },
+                  {
+                    "id": 68,
+                    "name": "Higgsup Teambuilding",
+                    "description": null,
+                    "groupType": {
+                      "id": 3,
+                      "name": "Team building"
+                    },
+                    "createdDate": "28-08-2018 17:22",
+                    "additionalConfig": {
+                      "firstPrize": "5",
+                      "secondPrize": "4",
+                      "thirdPrize": "3",
+                      "organizers": "5"
+                    }
+                  },
+                  {
+                    "id": 87,
+                    "name": "Support",
+                    "description": null,
+                    "groupType": {
+                      "id": 4,
+                      "name": "Support chung"
+                    },
+                    "createdDate": "31-08-2018 09:13",
+                    "additionalConfig": {
+                      "cleanUpPoint": 1,
+                      "buyingStuffPoint": 2,
+                      "supportConferencePoint": 3,
+                      "trainingPoint": 4,
+                      "weeklyCleanUpPoint": 5
+                    }
+                  }
+                ],
+                "status_code": 200
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/groups/club/{id}": {
+      "put": {
+        "tags": [
+          "group-controller"
+        ],
+        "summary": "Update the club activity with an ID",
+        "operationId": "updateClubActivityUsingPUT",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "body",
+            "name": "groupDTO",
+            "description": "groupDTO",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "name",
+                "groupType",
+                "additionalConfig"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "groupType": {
+                  "required": [
+                    "id"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "additionalConfig": {
+                  "type": "object",
+                  "required": [
+                    "host",
+                    "minNumberOfSessions",
+                    "participationPoint",
+                    "effectivePoint"
+                  ],
+                  "properties": {
+                    "host": {
+                      "type": "string"
+                    },
+                    "minNumberOfSessions": {
+                      "type": "number"
+                    },
+                    "participationPoint": {
+                      "type": "number"
+                    },
+                    "effectivePoint": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "name": "Câu lạc bố Đá Bóng",
+                "groupType": {
+                  "id": 2
+                },
+                "additionalConfig": {
+                  "host": "kpi.man",
+                  "minNumberOfSessions": 2,
+                  "participationPoint": 3,
+                  "effectivePoint": 4
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "status_code : 200. Meaning: Thành công \n status_code : 904. Message: json processing exception. Meaning: Lỗi convert josn \n status_code : 903. Message: parameter name is not valid. Meaning: Tên câu lạc bộ không hợp lệ \n status_code : 901. Message: parameter min number of sessions is not valid. Meaning: Số lần tổi thiểu đăng ký không hợp lệ \n status_code : 901. Message: parameter point is not valid. Meaning: Điểm không hợp lệ \n status_code : 901. Message: group type does not exist. Meaning: Loại group không tồn tại \n  status_code : 932. Message: group name already exist. Meaning:  Tên group đã tồn tại \n ",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id",
+                "name",
+                "groupType",
+                "additionalConfig"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "groupType": {
+                  "required": [
+                    "id"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "createdDate": {
+                  "type": "string"
+                },
+                "additionalConfig": {
+                  "type": "object",
+                  "required": [
+                    "host",
+                    "minNumberOfSessions",
+                    "participationPoint",
+                    "effectivePoint"
+                  ],
+                  "properties": {
+                    "host": {
+                      "type": "string"
+                    },
+                    "minNumberOfSessions": {
+                      "type": "number"
+                    },
+                    "participationPoint": {
+                      "type": "number"
+                    },
+                    "effectivePoint": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "data": {
+                  "id": 10,
+                  "name": "Câu lạc bố Đá Bóng",
+                  "description": null,
+                  "groupType": {
+                    "id": 2
+                  },
+                  "createdDate": "07-09-2018 11:35",
+                  "additionalConfig": {
+                    "host": "kpi.man",
+                    "minNumberOfSessions": 2,
+                    "participationPoint": 3,
+                    "effectivePoint": 4
+                  },
+                  "status_code": 200
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/groups/seminar": {
+      "post": {
+        "tags": [
+          "group-controller"
+        ],
+        "summary": "Create a seminar activity",
+        "operationId": "createSeminarUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "groupDTO",
+            "description": "groupDTO",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "name",
+                "groupType",
+                "additionalConfig"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "groupType": {
+                  "required": [
+                    "id"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "additionalConfig": {
+                  "type": "object",
+                  "required": [
+                    "hostPoint",
+                    "listenerPoint",
+                    "memberPoint"
+                  ],
+                  "properties": {
+                    "hostPoint": {
+                      "type": "number"
+                    },
+                    "listenerPoint": {
+                      "type": "number"
+                    },
+                    "memberPoint": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "name": "seminar thứ 7",
+                "groupType": {
+                  "id": 1
+                },
+                "additionalConfig": {
+                  "hostPoint": 7,
+                  "listenerPoint": 3,
+                  "memberPoint": 5
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "status_code : 200. Meaning: Thành công \n status_code : 926 . Message: already created. Meaning: Đã tồn tại seminar này. \n status_code : 900. Message: group type does not exist. Meaning: Nhập sai group type. \n status_code : 901 . Message: parameter point of host is not valid. Meaning: Điểm của host không hợp lệ. \n status_code : 901 . Message: parameter point of member is not valid. Meaning: Điểm của thành viên tham gia không hợp lệ. \n status_code : 901 . Message: parameter point of listener is not valid. Meaning: Điểm của người dự thính không hợp lệ. \n status_code : 901 . Message: host score can not be null. Meaning: Điểm của host không thể để trống hoặc bằng 0. \n status_code : 901 . Message: member score can not be null. Meaning: Điểm của thành viên tham gia seminar không thể để trống hoặc bằng 0.",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id",
+                "name",
+                "groupType",
+                "additionalConfig"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "groupType": {
+                  "required": [
+                    "id"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "createdDate": {
+                  "type": "string"
+                },
+                "additionalConfig": {
+                  "type": "object",
+                  "required": [
+                    "hostPoint",
+                    "listenerPoint",
+                    "memberPoint"
+                  ],
+                  "properties": {
+                    "hostPoint": {
+                      "type": "number"
+                    },
+                    "listenerPoint": {
+                      "type": "number"
+                    },
+                    "memberPoint": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "data": {
+                  "id": 10,
+                  "name": "seminar thứ 7",
+                  "description": null,
+                  "groupType": {
+                    "id": 1
+                  },
+                  "createdDate": "07-09-2018 11:35",
+                  "additionalConfig": {
+                    "hostPoint": 7,
+                    "listenerPoint": 3,
+                    "memberPoint": 5
+                  },
+                  "status_code": 200
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/groups/seminar/{id}": {
+      "put": {
+        "tags": [
+          "group-controller"
+        ],
+        "summary": "Update the seminar activity with an ID",
+        "operationId": "updateSeminarUsingPUT",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "body",
+            "name": "groupDTO",
+            "description": "groupDTO",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "id",
+                "name",
+                "groupType",
+                "additionalConfig"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "groupType": {
+                  "required": [
+                    "id"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "additionalConfig": {
+                  "type": "object",
+                  "required": [
+                    "hostPoint",
+                    "memberPoint",
+                    "listenerPoint"
+                  ],
+                  "properties": {
+                    "hostPoint": {
+                      "type": "number"
+                    },
+                    "memberPoint": {
+                      "type": "number"
+                    },
+                    "listenerPoint": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "name": "seminar thứ 7",
+                "groupType": {
+                  "id": 1
+                },
+                "additionalConfig": {
+                  "hostPoint": 7,
+                  "listenerPoint": 3,
+                  "memberPoint": 5
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "status_code : 200. Meaning: Thành công \n status_code : 926 . Message: already created. Meaning: Đã tồn tại seminar này. \n status_code : 900. Message: group type does not exist. Meaning: Nhập sai group type. \n status_code : 901 . Message: parameter point of host is not valid. Meaning: Điểm của host không hợp lệ. \n status_code : 901 . Message: parameter point of member is not valid. Meaning: Điểm của thành viên tham gia không hợp lệ. \n status_code : 901 . Message: parameter point of listener is not valid. Meaning: Điểm của người dự thính không hợp lệ. \n status_code : 901 . Message: host score can not be null. Meaning: Điểm của host không thể để trống hoặc bằng 0. \n status_code : 901 . Message: member score can not be null. Meaning: Điểm của thành viên tham gia seminar không thể để trống hoặc bằng 0.",
+            "schema": {
+              "type": "object",
+              "required": [
+                "name",
+                "groupType",
+                "additionalConfig"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "groupType": {
+                  "required": [
+                    "id"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "createdDate": {
+                  "type": "string"
+                },
+                "additionalConfig": {
+                  "type": "object",
+                  "required": [
+                    "hostPoint",
+                    "memberPoint",
+                    "listenerPoint"
+                  ],
+                  "properties": {
+                    "hostPoint": {
+                      "type": "number"
+                    },
+                    "listenerPoint": {
+                      "type": "number"
+                    },
+                    "memberPoint": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "data": {
+                  "id": 10,
+                  "name": "seminar thứ 7",
+                  "description": null,
+                  "groupType": {
+                    "id": 1
+                  },
+                  "createdDate": "07-09-2018 11:35",
+                  "additionalConfig": {
+                    "hostPoint": 7,
+                    "listenerPoint": 3,
+                    "memberPoint": 5
+                  },
+                  "status_code": 200
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/groups/support": {
+      "post": {
+        "tags": [
+          "group-controller"
+        ],
+        "summary": "Create a support activity",
+        "operationId": "createSupportUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "groupDTO",
+            "description": "groupDTO",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "name",
+                "groupType",
+                "additionalConfig"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "groupType": {
+                  "required": [
+                    "id"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "additionalConfig": {
+                  "type": "object",
+                  "required": [
+                    "cleanUpPoint",
+                    "buyingStuffPoint",
+                    "trainingPoint",
+                    "weeklyCleanUpPoint",
+                    "supportConferencePoint"
+                  ],
+                  "properties": {
+                    "cleanUpPoint": {
+                      "type": "number"
+                    },
+                    "buyingStuffPoint": {
+                      "type": "number"
+                    },
+                    "supportConferencePoint": {
+                      "type": "number"
+                    },
+                    "trainingPoint": {
+                      "type": "number"
+                    },
+                    "weeklyCleanUpPoint": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "name": "Support",
+                "groupType": {
+                  "id": 4
+                },
+                "additionalConfig": {
+                  "cleanUpPoint": 1,
+                  "buyingStuffPoint": 2,
+                  "supportConferencePoint": 3,
+                  "trainingPoint": 4,
+                  "weeklyCleanUpPoint": 5
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "status_code : 200. Meaning: Thành công \n status_code : 906. Message:  already created. Meaning: Khung config support đã được tạo \n status_code : 901. Message: parameter is not valid. Meaning: Điền điểm sai với quy định \n status_code : 905. Message: not filling all information. Meaning: không điền hết thông tin",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id",
+                "name",
+                "groupType",
+                "additionalConfig"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "groupType": {
+                  "required": [
+                    "id"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "createdDate": {
+                  "type": "string"
+                },
+                "additionalConfig": {
+                  "type": "object",
+                  "required": [
+                    "cleanUpPoint",
+                    "buyingStuffPoint",
+                    "supportConferencePoint",
+                    "weeklyCleanUpPoint",
+                    "trainingPoint"
+                  ],
+                  "properties": {
+                    "cleanUpPoint": {
+                      "type": "number"
+                    },
+                    "buyingStuffPoint": {
+                      "type": "number"
+                    },
+                    "supportConferencePoint": {
+                      "type": "number"
+                    },
+                    "trainingPoint": {
+                      "type": "number"
+                    },
+                    "weeklyCleanUpPoint": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "data": {
+                  "id": 10,
+                  "name": "Support",
+                  "description": null,
+                  "groupType": {
+                    "id": 4
+                  },
+                  "createdDate": "07-09-2018 11:35",
+                  "additionalConfig": {
+                    "cleanUpPoint": 1,
+                    "buyingStuffPoint": 2,
+                    "supportConferencePoint": 3,
+                    "trainingPoint": 4,
+                    "weeklyCleanUpPoint": 5
+                  },
+                  "status_code": 200
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "group-controller"
+        ],
+        "summary": "Update the support activity with an ID",
+        "operationId": "updateSupportUsingPUT",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "groupDTO",
+            "description": "groupDTO",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "name",
+                "groupType",
+                "additionalConfig"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "groupType": {
+                  "required": [
+                    "id"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "additionalConfig": {
+                  "type": "object",
+                  "required": [
+                    "cleanUpPoint",
+                    "buyingStuffPoint",
+                    "trainingPoint",
+                    "weeklyCleanUpPoint",
+                    "supportConferencePoint"
+                  ],
+                  "properties": {
+                    "cleanUpPoint": {
+                      "type": "number"
+                    },
+                    "buyingStuffPoint": {
+                      "type": "number"
+                    },
+                    "supportConferencePoint": {
+                      "type": "number"
+                    },
+                    "trainingPoint": {
+                      "type": "number"
+                    },
+                    "weeklyCleanUpPoint": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "name": "Support",
+                "groupType": {
+                  "id": 4
+                },
+                "additionalConfig": {
+                  "cleanUpPoint": 1,
+                  "buyingStuffPoint": 2,
+                  "supportConferencePoint": 3,
+                  "trainingPoint": 4,
+                  "weeklyCleanUpPoint": 5
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "status_code : 200. Meaning: Thành công \n status_code : 906. Message:  already created. Meaning: Khung config support đã được tạo \n status_code : 901. Message: parameter is not valid. Meaning: Điền điểm sai với quy định \n status_code : 905. Message: not filling all information. Meaning: không điền hết thông tin",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id",
+                "name",
+                "groupType",
+                "additionalConfig"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "groupType": {
+                  "required": [
+                    "id"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "createdDate": {
+                  "type": "string"
+                },
+                "additionalConfig": {
+                  "type": "object",
+                  "required": [
+                    "cleanUpPoint",
+                    "buyingStuffPoint",
+                    "supportConferencePoint",
+                    "weeklyCleanUpPoint",
+                    "trainingPoint"
+                  ],
+                  "properties": {
+                    "cleanUpPoint": {
+                      "type": "number"
+                    },
+                    "buyingStuffPoint": {
+                      "type": "number"
+                    },
+                    "supportConferencePoint": {
+                      "type": "number"
+                    },
+                    "trainingPoint": {
+                      "type": "number"
+                    },
+                    "weeklyCleanUpPoint": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "data": {
+                  "id": 10,
+                  "name": "Support",
+                  "description": null,
+                  "groupType": {
+                    "id": 4
+                  },
+                  "createdDate": "07-09-2018 11:35",
+                  "additionalConfig": {
+                    "cleanUpPoint": 1,
+                    "buyingStuffPoint": 2,
+                    "supportConferencePoint": 3,
+                    "trainingPoint": 4,
+                    "weeklyCleanUpPoint": 5
+                  },
+                  "status_code": 200
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/groups/team-building": {
+      "post": {
+        "tags": [
+          "group-controller"
+        ],
+        "summary": "Create a team building activity",
+        "operationId": "createConfigTeamBuildingUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "groupDTO",
+            "description": "groupDTO",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "name",
+                "groupType",
+                "additionalConfig"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "groupType": {
+                  "required": [
+                    "id"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "additionalConfig": {
+                  "type": "object",
+                  "required": [
+                    "firstPrizePoint",
+                    "secondPrizePoint",
+                    "thirdPrizePoint",
+                    "organizerPoint"
+                  ],
+                  "properties": {
+                    "firstPrizePoint": {
+                      "type": "number"
+                    },
+                    "secondPrizePoint": {
+                      "type": "number"
+                    },
+                    "thirdPrizePoint": {
+                      "type": "number"
+                    },
+                    "organizerPoint": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "name": "Team Building",
+                "groupType": {
+                  "id": 3
+                },
+                "additionalConfig": {
+                  "firstPrizePoint": 7,
+                  "secondPrizePoint": 3,
+                  "thirdPrizePoint": 2,
+                  "organizerPoint": 5
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "status_code : 200. Meaning: Thành công \n status_code : 900. Message: group type does not exist. Meaning: Không tìm thấy group type id. \n status_code : 932. Message: team building activity has been existed. Meaning: Hoạt động team building đã được tạo rồi. \n status_code : 931. Message: the first prize score can not be null. Meaning: Không được để trống điểm của first prize. \n status_code : 931. Message: the second prize score can not be null. Meaning: Không được để trống điểm của second prize . \n status_code : 931. Message: the third prize score can not be null. Meaning: Không được để trống điểm của third prize. \n status_code : 931. Message: the organizer score can not be null. Meaning: Không được để trống điểm của ban tổ chức. \n status_code : 901. Message: invalidated first prize score. Meaning: Điểm của first prize không hợp lệ, điểm nhập vào phải là số. \n status_code : 901. Message: invalidated second prize score. Meaning: Điểm của second prize không hợp lệ, điểm nhập vào phải là số. \n status_code : 901. Message: invalidated third prize score. Meaning: Điểm của third prize không hợp lệ, điểm nhập vào phải là số. \n status_code : 901. Message: invalidated organizer score. Meaning: Điểm của ban tổ chức không hợp lệ, điểm nhập vào phải là số. \n status_code : 901. Message: first prize score has to large than second prize score. Meaning: Điểm của first prize phải lớn hơn điểm của second prize. \n status_code : 901. Message: second prize score has to large than third prize score. Meaning: Điểm của second prize phải lớn hơn điểm của third prize. \n status_code : 901. Message: group type can not be null. Meaning: Không được để trống group type. \n status_code : 901. Message: group type ID can not be null. Meaning: Không được để trống group type.",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id",
+                "name",
+                "groupType",
+                "additionalConfig"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "groupType": {
+                  "required": [
+                    "id"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "createdDate": {
+                  "type": "string"
+                },
+                "additionalConfig": {
+                  "type": "object",
+                  "required": [
+                    "firstPrizePoint",
+                    "secondPrizePoint",
+                    "thirdPrizePoint",
+                    "organizerPoint"
+                  ],
+                  "properties": {
+                    "firstPrizePoint": {
+                      "type": "number"
+                    },
+                    "secondPrizePoint": {
+                      "type": "number"
+                    },
+                    "thirdPrizePoint": {
+                      "type": "number"
+                    },
+                    "organizerPoint": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "data": {
+                  "id": 10,
+                  "name": "Team Building",
+                  "description": null,
+                  "groupType": {
+                    "id": 3
+                  },
+                  "createdDate": "07-09-2018 11:35",
+                  "additionalConfig": {
+                    "firstPrizePoint": 7,
+                    "secondPrizePoint": 3,
+                    "thirdPrizePoint": 2,
+                    "organizerPoint": 5
+                  },
+                  "status_code": 200
+                }
+              }
+            }
+          }
+        },
+        "201": {
+          "description": "Created"
+        },
+        "401": {
+          "description": "Unauthorized"
+        },
+        "403": {
+          "description": "Forbidden"
+        },
+        "404": {
+          "description": "Not Found"
+        }
+      }
+    },
+    "/api/groups/team-building/{id}": {
+      "put": {
+        "tags": [
+          "group-controller"
+        ],
+        "summary": "Update the team building activity with an ID",
+        "operationId": "updateTeamBuildingActivityUsingPUT",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "body",
+            "name": "groupDTO",
+            "description": "groupDTO",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "name",
+                "groupType",
+                "additionalConfig"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "groupType": {
+                  "required": [
+                    "id"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "additionalConfig": {
+                  "type": "object",
+                  "required": [
+                    "firstPrizePoint",
+                    "secondPrizePoint",
+                    "thirdPrizePoint",
+                    "organizerPoint"
+                  ],
+                  "properties": {
+                    "firstPrizePoint": {
+                      "type": "number"
+                    },
+                    "secondPrizePoint": {
+                      "type": "number"
+                    },
+                    "thirdPrizePoint": {
+                      "type": "number"
+                    },
+                    "organizerPoint": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "name": "Team Building",
+                "groupType": {
+                  "id": 3
+                },
+                "additionalConfig": {
+                  "firstPrizePoint": 7,
+                  "secondPrizePoint": 3,
+                  "thirdPrizePoint": 2,
+                  "organizerPoint": 5
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "status_code : 200. Meaning: Thành công \n status_code : 900. Message: group type does not exist. Meaning: Không tìm thấy group type id. \n status_code : 932. Message: team building activity has been existed. Meaning: Hoạt động team building đã được tạo rồi. \n status_code : 931. Message: the first prize score can not be null. Meaning: Không được để trống điểm của first prize. \n status_code : 931. Message: the second prize score can not be null. Meaning: Không được để trống điểm của second prize . \n status_code : 931. Message: the third prize score can not be null. Meaning: Không được để trống điểm của third prize. \n status_code : 931. Message: the organizer score can not be null. Meaning: Không được để trống điểm của ban tổ chức. \n status_code : 901. Message: invalidated first prize score. Meaning: Điểm của first prize không hợp lệ, điểm nhập vào phải là số. \n status_code : 901. Message: invalidated second prize score. Meaning: Điểm của second prize không hợp lệ, điểm nhập vào phải là số. \n status_code : 901. Message: invalidated third prize score. Meaning: Điểm của third prize không hợp lệ, điểm nhập vào phải là số. \n status_code : 901. Message: invalidated organizer score. Meaning: Điểm của ban tổ chức không hợp lệ, điểm nhập vào phải là số. \n status_code : 901. Message: first prize score has to large than second prize score. Meaning: Điểm của first prize phải lớn hơn điểm của second prize. \n status_code : 901. Message: second prize score has to large than third prize score. Meaning: Điểm của second prize phải lớn hơn điểm của third prize. \n status_code : 901. Message: group type can not be null. Meaning: Không được để trống group type. \n status_code : 901. Message: group type ID can not be null. Meaning: Không được để trống group type.",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id",
+                "name",
+                "groupType",
+                "additionalConfig"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "groupType": {
+                  "required": [
+                    "id"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "createdDate": {
+                  "type": "string"
+                },
+                "additionalConfig": {
+                  "type": "object",
+                  "required": [
+                    "firstPrizePoint",
+                    "secondPrizePoint",
+                    "thirdPrizePoint",
+                    "organizerPoint"
+                  ],
+                  "properties": {
+                    "firstPrizePoint": {
+                      "type": "number"
+                    },
+                    "secondPrizePoint": {
+                      "type": "number"
+                    },
+                    "thirdPrizePoint": {
+                      "type": "number"
+                    },
+                    "organizerPoint": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "data": {
+                  "id": 10,
+                  "name": "Team Building",
+                  "description": null,
+                  "groupType": {
+                    "id": 3
+                  },
+                  "createdDate": "07-09-2018 11:35",
+                  "additionalConfig": {
+                    "firstPrizePoint": 7,
+                    "secondPrizePoint": 3,
+                    "thirdPrizePoint": 2,
+                    "organizerPoint": 5
+                  },
+                  "status_code": 200
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/login": {
+      "post": {
+        "security": [],
+        "tags": [
+          "login-controller"
+        ],
+        "summary": "login",
+        "operationId": "loginUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "loginRequest",
+            "description": "loginRequest",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "username",
+                "password"
+              ],
+              "properties": {
+                "username": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              },
+              "example": {
+                "username": "kpi.admin",
+                "password": "test"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "required": [
+                "username"
+              ],
+              "properties": {
+                "username": {
+                  "type": "string"
+                }
+              },
+              "example": {
+                "username": "kpi.admin"
+              }
+            },
+            "headers": {
+              "authorization": {
+                "type": "string",
+                "description": "Token authorization"
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/projects": {
+      "get": {
+        "tags": [
+          "project-controller"
+        ],
+        "summary": "All projects",
+        "operationId": "getProjectListUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "200 : Thành công ",
+            "schema": {
+              "type": "object",
+              "required": [
+                "status_code",
+                "data"
+              ],
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "name",
+                      "active",
+                      "createdDate"
+                    ],
+                    "properties": {
+                      "id": {
+                        "type": "number"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "active": {
+                        "type": "number"
+                      },
+                      "createdDate": {
+                        "type": "string"
+                      },
+                      "updatedDate": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "message": {
+                  "type": "string"
+                },
+                "status_code": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "example": {
+                "status_code": 200,
+                "data": [
+                  {
+                    "id": 8,
+                    "name": "VNTRIP",
+                    "active": 1,
+                    "createdDate": "29-08-2018 03:36",
+                    "updatedDate": "29-08-2018 03:36"
+                  },
+                  {
+                    "id": 7,
+                    "name": "KPI",
+                    "active": 1,
+                    "createdDate": "23-08-2018 09:45",
+                    "updatedDate": "29-08-2018 03:36"
+
+                  }
+                ]
+              },
+              "title": "Response"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "project-controller"
+        ],
+        "summary": "Create a project",
+        "operationId": "createProjectUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "projectDTO",
+            "description": "projectDTO",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "name",
+                "active"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "active": {
+                  "type": "number"
+                }
+              },
+              "example": {
+                "name": "VNTRIP",
+                "active": 1
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "status_code : 200. Meaning : Thành công \n status_code : 901. Message : name does not allow null.  Meaning: name project không thể để rỗng \n status_code : 932. Message :parameters name project exist. Meaning : project này đã tồn tại. ",
+            "schema": {
+              "type": "object",
+              "required": [
+                "data",
+                "status_code"
+              ],
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "name",
+                    "active",
+                    "createdDate"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "active": {
+                      "type": "number"
+                    },
+                    "createdDate": {
+                      "type": "string"
+                    },
+                    "updatedDate": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "message": {
+                  "type": "string"
+                },
+                "status_code": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "example": {
+                "data": {
+                  "id": 8,
+                  "name": "VNTRIP",
+                  "active": 1,
+                  "createdDate": "29-08-2018 03:36",
+                  "updatedDate": "29-08-2018 03:36"
+                },
+                "status_code": 200
+              },
+              "title": "Response"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/projects/{id}": {
+      "put": {
+        "tags": [
+          "project-controller"
+        ],
+        "summary": "Update the project with an ID",
+        "operationId": "updateProjectUsingPUT",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "body",
+            "name": "projectDTO",
+            "description": "projectDTO",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "name",
+                "active"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "active": {
+                  "type": "number"
+                }
+              },
+              "example": {
+                "name": "VNTRIP",
+                "active": 1
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "status_code : 200. Meaning: Thành công \n status_code : 903. Message: name does not allow null. Meaning: name project không thể để rỗng \n  status_code : 900 . Message: not find project by id . Meaning: không tìm thấy project \n status_code : 901  . Message: parameters name project exist . Meaning: parameters name không chính xác \n ",
+            "schema": {
+              "type": "object",
+              "required": [
+                "data",
+                "status_code"
+              ],
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "name",
+                    "active",
+                    "createdDate"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "active": {
+                      "type": "number"
+                    },
+                    "createdDate": {
+                      "type": "string"
+                    },
+                    "updatedDate": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "message": {
+                  "type": "string"
+                },
+                "status_code": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "example": {
+                "data": {
+                  "id": 8,
+                  "name": "VNTRIP",
+                  "active": 1,
+                  "createdDate": "29-08-2018 03:36",
+                  "updatedDate": "29-08-2018 03:36"
+                },
+                "status_code": 200
+              },
+              "title": "Response"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "project-controller"
+        ],
+        "summary": "Delete the project with an ID",
+        "operationId": "deleteProjectUsingDELETE",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "status_code : 200. Meaning: Thành công \n status_code : 900. Message: not find project by id. Meaning: không tìm thấy project với id này",
+            "schema": {
+              "type": "object",
+              "required": [
+                "status_code"
+              ],
+              "properties": {
+                "status_code": {
+                  "type": "number"
+                }
+              },
+              "example": {
+                "status_code": 200
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/api/survey/questions-man": {
+      "get": {
+        "tags": [
+          "survey-question-controller"
+        ],
+        "summary": "All survey questions",
+        "operationId": "getAllUsingGET_1",
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "200 : Thành công",
+            "schema": {
+              "type": "object",
+              "required": [
+                "status_code",
+                "data"
+              ],
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "number",
+                      "question"
+                    ],
+                    "properties": {
+                      "id": {
+                        "type": "number"
+                      },
+                      "number": {
+                        "type": "number"
+                      },
+                      "question": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "message": {
+                  "type": "string"
+                },
+                "status_code": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "example": {
+                "status_code": 200,
+                "data": [
+                  {
+                    "id": 2,
+                    "number": 2,
+                    "question": "Thái độ chung trong công việc của nhân viên này?"
+                  },
+                  {
+                    "id": 3,
+                    "number": 3,
+                    "question": "Nhân viên này có quan tâm hoặc giúp đỡ đồng nghiệp"
+                  }
+                ]
+              },
+              "title": "Response"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "survey-question-controller"
+        ],
+        "summary": "Update the survey questions with IDs",
+        "operationId": "updateSurveyQuestionOfManUsingPUT",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "surveyQuestionManDTOs",
+            "description": "surveyQuestionManDTOs",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "number",
+                  "question"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "number"
+                  },
+                  "number": {
+                    "type": "number"
+                  },
+                  "question": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": [
+                {
+                  "id": 2,
+                  "number": 2,
+                  "question": "Thái độ chung trong công việc của nhân viên này?"
+                },
+                {
+                  "id": 3,
+                  "number": 3,
+                  "question": "Nhân viên này có quan tâm hoặc giúp đỡ đồng nghiệp"
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 : Thành công \n 900 : Message: not find. Meaning: Không tìm thấy câu hỏi để update \n status_code : 904. Message: json processing exception. Meaning: Lỗi convert json",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status_code": {
+                  "type": "number"
+                }
+              },
+              "example": {
+                "status_code": 200
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/users": {
+      "get": {
+        "tags": [
+          "user-controller"
+        ],
+        "summary": "List of users",
+        "operationId": "getListUsersUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "description": "name",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 : Thành công \n 900 : not find user -- > không tìm thấy bầt kỳ user nào",
+            "schema": {
+              "type": "object",
+              "required": [
+                "data",
+                "status_code"
+              ],
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "username",
+                      "lastName",
+                      "firstName",
+                      "fullName",
+                      "email",
+                      "userRole"
+                    ],
+                    "properties": {
+                      "username": {
+                        "type": "string"
+                      },
+                      "lastName": {
+                        "type": "string"
+                      },
+                      "firstName": {
+                        "type": "string"
+                      },
+                      "fullName": {
+                        "type": "string"
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "userRole": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "avatar": {
+                        "type": "string"
+                      },
+                      "birthday": {
+                        "type": "date"
+                      },
+                      "numberPhone": {
+                        "type": "string"
+                      },
+                      "gmail": {
+                        "type": "string"
+                      },
+                      "skype": {
+                        "type": "string"
+                      },
+                      "yearWork": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                },
+                "message": {
+                  "type": "string"
+                },
+                "status_code": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "example": {
+                "message": "OK",
+                "status_code": 200,
+                "data": [
+                  {
+                    "username": "kpi.admin",
+                    "lastName": "kpi",
+                    "firstName": "admin",
+                    "fullName": "kpi test. admin",
+                    "email": "kpi.admin@higgsup.com",
+                    "userRole": [
+                      "ROLE_ADMIN",
+                      "ROLE_EMPLOYEE"
+                    ],
+                    "address": "null",
+                    "avatar": "null",
+                    "birthday": "null",
+                    "gmail": "null",
+                    "numberPhone": "null",
+                    "skype": "null",
+                    "yearWork": 1
+                  }
+                ]
+              },
+              "title": "Response"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/users/{username}": {
+      "get": {
+        "tags": [
+          "user-controller"
+        ],
+        "summary": "User Information",
+        "operationId": "getUserInfoUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "description": "username",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 : Thành công. \n 900 :  Message: not find user. Meaning: not find user",
+            "schema": {
+              "type": "object",
+              "required": [
+                "data",
+                "status_code"
+              ],
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "required": [
+                    "username",
+                    "lastName",
+                    "firstName",
+                    "fullName",
+                    "email",
+                    "userRole",
+                    "avatar",
+                    "birthday",
+                    "numberPhone",
+                    "address",
+                    "gmail",
+                    "skype",
+                    "yearWork"
+                  ],
+                  "properties": {
+                    "username": {
+                      "type": "string"
+                    },
+                    "lastName": {
+                      "type": "string"
+                    },
+                    "firstName": {
+                      "type": "string"
+                    },
+                    "fullName": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "userRole": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "avatar": {
+                      "type": "string"
+                    },
+                    "birthday": {
+                      "type": "date"
+                    },
+                    "numberPhone": {
+                      "type": "string"
+                    },
+                    "gmail": {
+                      "type": "string"
+                    },
+                    "skype": {
+                      "type": "string"
+                    },
+                    "yearWork": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "message": {
+                  "type": "string"
+                },
+                "status_code": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "example": {
+                "status_code": 200,
+                "data": {
+                  "username": "kpi.admin",
+                  "lastName": "kpi",
+                  "firstName": "admin",
+                  "fullName": "kpi test. admin",
+                  "email": "kpi.admin@higgsup.com",
+                  "userRole": [
+                    "ROLE_ADMIN",
+                    "ROLE_EMPLOYEE"
+                  ],
+                  "address": "Lê văn Thành",
+                  "avatar": "1220000261",
+                  "birthday": "2018-08-15",
+                  "gmail": "lethanh9398@gmail.com",
+                  "numberPhone": "0966211618",
+                  "skype": "solitarysp@gmail.com",
+                  "yearWork": 1
+                }
+              },
+              "title": "Response"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "user-controller"
+        ],
+        "summary": "Update Information of the user with a username",
+        "operationId": "updateInfoUsingPUT",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "description": "username",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "userDTO",
+            "description": "userDTO",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "birthday",
+                "numberPhone",
+                "address",
+                "gmail",
+                "skype",
+                "yearWork"
+              ],
+              "properties": {
+                "avatar": {
+                  "type": "string"
+                },
+                "birthday": {
+                  "type": "number"
+                },
+                "numberPhone": {
+                  "type": "string"
+                },
+                "address": {
+                  "type": "string"
+                },
+                "gmail": {
+                  "type": "string"
+                },
+                "skype": {
+                  "type": "string"
+                },
+                "yearWork": {
+                  "type": "number"
+                }
+              },
+              "example": {
+                "avatar": "base 64",
+                "birthday": 1000000000,
+                "numberPhone": "+84966211618",
+                "address": "ha noi",
+                "gmail": "lethanh9398@gmail.com",
+                "skype": "skype",
+                "yearWork": 1
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "403 Message: Forbidden.  Meaning: bạn không có quyền sửa thông tin cho người dùng này.",
+            "schema": {
+              "type": "object",
+              "required": [
+                "data",
+                "status_code"
+              ],
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "required": [
+                    "username",
+                    "lastName",
+                    "firstName",
+                    "fullName",
+                    "email",
+                    "userRole",
+                    "avatar",
+                    "birthday",
+                    "numberPhone",
+                    "address",
+                    "gmail",
+                    "skype",
+                    "yearWork"
+                  ],
+                  "properties": {
+                    "username": {
+                      "type": "string"
+                    },
+                    "lastName": {
+                      "type": "string"
+                    },
+                    "firstName": {
+                      "type": "number"
+                    },
+                    "fullName": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "userRole": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "avatar": {
+                      "type": "string"
+                    },
+                    "birthday": {
+                      "type": "date"
+                    },
+                    "numberPhone": {
+                      "type": "string"
+                    },
+                    "address": {
+                      "type": "string"
+                    },
+                    "gmail": {
+                      "type": "string"
+                    },
+                    "skype": {
+                      "type": "string"
+                    },
+                    "yearWork": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "message": {
+                  "type": "string"
+                },
+                "status_code": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "example": {
+                "data": {
+                  "username": "kpi.admin",
+                  "lastName": "kpi",
+                  "firstName": "admin",
+                  "fullName": "kpi test. admin",
+                  "email": "kpi.admin@higgsup.com",
+                  "userRole": [
+                    "ROLE_ADMIN",
+                    "ROLE_EMPLOYEE"
+                  ],
+                  "avatar": "1220000261",
+                  "birthday": "2018-08-15",
+                  "numberPhone": "0966211618",
+                  "address": "Lê văn Thành",
+                  "gmail": "lethanh9398@gmail.com",
+                  "skype": "solitarysp@gmail.com",
+                  "yearWork": 1
+                },
+                "status_code": 200
+              },
+              "title": "Response"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/users/{username}/roles": {
+      "put": {
+        "tags": [
+          "user-controller"
+        ],
+        "summary": "Update a user role",
+        "operationId": "updateUserRoleUsingPUT",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "username",
+            "description": "username",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "roles",
+            "description": "roles",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "spring"
+              },
+              "example": [
+                "ROLE_ADMIN",
+                "ROLE_EMPLOYEE"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "901 Message: parameter role is empty. Meaning: mảng roles không thể rỗng \n 900 : Message: not find user.  Meaning: không tìm thấy user",
+            "schema": {
+              "type": "object",
+              "required": [
+                "data",
+                "status_code"
+              ],
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "required": [
+                    "username",
+                    "lastName",
+                    "firstName",
+                    "fullName",
+                    "email",
+                    "userRole",
+                    "avatar",
+                    "birthday",
+                    "numberPhone",
+                    "address",
+                    "gmail",
+                    "skype",
+                    "yearWork"
+                  ],
+                  "properties": {
+                    "username": {
+                      "type": "string"
+                    },
+                    "lastName": {
+                      "type": "string"
+                    },
+                    "firstName": {
+                      "type": "number"
+                    },
+                    "fullName": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "userRole": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "avatar": {
+                      "type": "string"
+                    },
+                    "birthday": {
+                      "type": "date"
+                    },
+                    "numberPhone": {
+                      "type": "string"
+                    },
+                    "address": {
+                      "type": "string"
+                    },
+                    "gmail": {
+                      "type": "string"
+                    },
+                    "skype": {
+                      "type": "string"
+                    },
+                    "yearWork": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "message": {
+                  "type": "string"
+                },
+                "status_code": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "example": {
+                "message": "Thành Công",
+                "status_code": 200,
+                "data": {
+                  "username": "kpi.admin",
+                  "lastName": "kpi",
+                  "firstName": "admin",
+                  "fullName": "kpi test. admin",
+                  "email": "kpi.admin@higgsup.com",
+                  "userRole": [
+                    "ROLE_ADMIN",
+                    "ROLE_EMPLOYEE"
+                  ],
+                  "address": "Lê văn Thành",
+                  "avatar": "1220000261",
+                  "birthday": "2018-08-15",
+                  "errorCode": 0,
+                  "gmail": "lethanh9398@gmail.com",
+                  "message": "null",
+                  "numberPhone": "0966211618",
+                  "skype": "solitarysp@gmail.com",
+                  "yearWork": 1
+                }
+              },
+              "title": "Response"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "GroupClubDetail": {
+      "type": "object",
+      "properties": {
+        "effectivePoint": {
+          "type": "number",
+          "format": "float"
+        },
+        "host": {
+          "type": "string"
+        },
+        "minNumberOfSessions": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "participationPoint": {
+          "type": "number",
+          "format": "float"
+        }
+      },
+      "title": "GroupClubDetail"
+    },
+    "GroupDTO.GroupClubDetail": {
+      "type": "object",
+      "properties": {
+        "additionalConfig": {
+          "$ref": "#/definitions/GroupClubDetail"
+        },
+        "createdData": {
+          "$ref": "#/definitions/Timestamp"
+        },
+        "description": {
+          "type": "string"
+        },
+        "errorCode": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "groupType": {
+          "$ref": "#/definitions/GroupTypeDTO"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "title": "GroupDTO.GroupClubDetail"
+    },
+    "GroupDTO.GroupSeminarDetail": {
+      "type": "object",
+      "properties": {
+        "additionalConfig": {
+          "$ref": "#/definitions/GroupSeminarDetail"
+        },
+        "createdData": {
+          "$ref": "#/definitions/Timestamp"
+        },
+        "description": {
+          "type": "string"
+        },
+        "errorCode": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "groupType": {
+          "$ref": "#/definitions/GroupTypeDTO"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "title": "GroupDTO.GroupSeminarDetail"
+    },
+    "GroupDTO.GroupSupportDetail": {
+      "type": "object",
+      "properties": {
+        "additionalConfig": {
+          "$ref": "#/definitions/GroupSupportDetail"
+        },
+        "createdData": {
+          "$ref": "#/definitions/Timestamp"
+        },
+        "description": {
+          "type": "string"
+        },
+        "errorCode": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "groupType": {
+          "$ref": "#/definitions/GroupTypeDTO"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "title": "GroupDTO.GroupSupportDetail"
+    },
+    "GroupDTO.TeamBuildingDTO": {
+      "type": "object",
+      "properties": {
+        "additionalConfig": {
+          "$ref": "#/definitions/TeamBuildingDTO"
+        },
+        "createdData": {
+          "$ref": "#/definitions/Timestamp"
+        },
+        "description": {
+          "type": "string"
+        },
+        "errorCode": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "groupType": {
+          "$ref": "#/definitions/GroupTypeDTO"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "title": "GroupDTO.TeamBuildingDTO"
+    },
+    "GroupSeminarDetail": {
+      "type": "object",
+      "properties": {
+        "host": {
+          "type": "number",
+          "format": "float"
+        },
+        "listener": {
+          "type": "number",
+          "format": "float"
+        },
+        "member": {
+          "type": "number",
+          "format": "float"
+        }
+      },
+      "title": "GroupSeminarDetail"
+    },
+    "GroupSupportDetail": {
+      "type": "object",
+      "properties": {
+        "buyingStuffPoint": {
+          "type": "number",
+          "format": "float"
+        },
+        "cleanUpPoint": {
+          "type": "number",
+          "format": "float"
+        },
+        "supportConferencePoint": {
+          "type": "number",
+          "format": "float"
+        },
+        "trainingPoint": {
+          "type": "number",
+          "format": "float"
+        },
+        "weeklyCleanUpPoint": {
+          "type": "number",
+          "format": "float"
+        }
+      },
+      "title": "GroupSupportDetail"
+    },
+    "GroupTypeDTO": {
+      "type": "object",
+      "properties": {
+        "errorCode": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "title": "GroupTypeDTO"
+    },
+    "LoginRequestDTO": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        }
+      },
+      "title": "LoginRequestDTO"
+    },
+    "LoginResponseDTO": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string"
+        }
+      },
+      "title": "LoginResponseDTO"
+    },
+    "ProjectDTO": {
+      "type": "object",
+      "properties": {
+        "active": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "errorCode": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "title": "ProjectDTO"
+    },
+    "Response": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object"
+        },
+        "message": {
+          "type": "string"
+        },
+        "status_code": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "Response"
+    },
+    "SurveyQuestionManDTO": {
+      "type": "object",
+      "properties": {
+        "errorCode": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "number": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "question": {
+          "type": "string"
+        }
+      },
+      "title": "SurveyQuestionManDTO"
+    },
+    "TeamBuildingDTO": {
+      "type": "object",
+      "properties": {
+        "firstPrize": {
+          "type": "string"
+        },
+        "organizers": {
+          "type": "string"
+        },
+        "secondPrize": {
+          "type": "string"
+        },
+        "thirdPrize": {
+          "type": "string"
+        }
+      },
+      "title": "TeamBuildingDTO"
+    },
+    "Timestamp": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "day": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "hours": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "minutes": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "month": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "nanos": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "seconds": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "time": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "timezoneOffset": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "year": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "Timestamp"
+    },
+    "UserDTO": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string"
+        },
+        "avatar": {
+          "type": "string"
+        },
+        "birthday": {
+          "type": "string",
+          "format": "date"
+        },
+        "email": {
+          "type": "string"
+        },
+        "errorCode": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "fullName": {
+          "type": "string"
+        },
+        "gmail": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "numberPhone": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "skype": {
+          "type": "string"
+        },
+        "userRole": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "username": {
+          "type": "string"
+        },
+        "yearWork": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "UserDTO"
+    }
+  }
+}
