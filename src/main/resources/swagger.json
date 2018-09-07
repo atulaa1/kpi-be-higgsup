@@ -1821,6 +1821,9 @@
                       },
                       "createdDate": {
                         "type": "string"
+                      },
+                      "updatedDate": {
+                        "type": "string"
                       }
                     }
                   }
@@ -1840,13 +1843,16 @@
                     "id": 8,
                     "name": "VNTRIP",
                     "active": 1,
-                    "createdDate": "29-08-2018 03:36"
+                    "createdDate": "29-08-2018 03:36",
+                    "updatedDate": "29-08-2018 03:36"
                   },
                   {
                     "id": 7,
                     "name": "KPI",
                     "active": 1,
-                    "createdDate": "23-08-2018 09:45"
+                    "createdDate": "23-08-2018 09:45",
+                    "updatedDate": "29-08-2018 03:36"
+
                   }
                 ]
               },
@@ -1933,6 +1939,9 @@
                     },
                     "createdDate": {
                       "type": "string"
+                    },
+                    "updatedDate": {
+                      "type": "string"
                     }
                   }
                 },
@@ -1949,7 +1958,8 @@
                   "id": 8,
                   "name": "VNTRIP",
                   "active": 1,
-                  "createdDate": "29-08-2018 03:36"
+                  "createdDate": "29-08-2018 03:36",
+                  "updatedDate": "29-08-2018 03:36"
                 },
                 "status_code": 200
               },
@@ -2049,6 +2059,9 @@
                     },
                     "createdDate": {
                       "type": "string"
+                    },
+                    "updatedDate": {
+                      "type": "string"
                     }
                   }
                 },
@@ -2065,7 +2078,8 @@
                   "id": 8,
                   "name": "VNTRIP",
                   "active": 1,
-                  "createdDate": "29-08-2018 03:36"
+                  "createdDate": "29-08-2018 03:36",
+                  "updatedDate": "29-08-2018 03:36"
                 },
                 "status_code": 200
               },
