@@ -29,6 +29,11 @@ public class KpiProject implements Serializable {
     @CreationTimestamp
     private Timestamp createdDate;
 
+    @Basic
+    @Column(name = "updated_date")
+    @CreationTimestamp
+    private Timestamp updatedDate;
+
     public Integer getId() {
         return id;
     }
@@ -59,5 +64,13 @@ public class KpiProject implements Serializable {
 
     public void setCreatedDate(Timestamp createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public Timestamp getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(Timestamp updateDate) {
+        this.updatedDate = updateDate;
     }
 }
