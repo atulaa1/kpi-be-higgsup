@@ -13,10 +13,10 @@ public class KpiEvent implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
-
     private Integer id;
+
     @Basic
-    @Column(name = "name")
+    @Column(name = "event_name")
     private String name;
 
     @Basic
@@ -25,7 +25,11 @@ public class KpiEvent implements Serializable {
 
     @Basic
     @Column(name = "status")
-    private String status;
+    private Integer status;
+
+    @Basic
+    @Column(name = "created_date")
+    private Timestamp createdDate;
 
     @Basic
     @Column(name = "begin_date")
@@ -35,12 +39,24 @@ public class KpiEvent implements Serializable {
     @Column(name = "end_date")
     private Timestamp endDate;
 
+    @Basic
+    @Column(name = "updated_date")
+    private Timestamp updatedDate;
+
     @JoinColumn(name = "group_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
     private KpiGroup group;
 
+    @Basic
+    @Column(name = "address")
+    private String address;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "kpiEvent", fetch = FetchType.LAZY)
     private List<KpiEventUser> kpiEventUserList;
+
+    @Basic
+    @Column(name = "event_additional_config")
+    private String additionalConfig;
 
     public Integer getId() {
         return id;
@@ -66,28 +82,20 @@ public class KpiEvent implements Serializable {
         this.description = description;
     }
 
-    public KpiGroup getGroup() {
-        return group;
-    }
-
-    public void setGroup(KpiGroup group) {
-        this.group = group;
-    }
-
-    public List<KpiEventUser> getKpiEventUserList() {
-        return kpiEventUserList;
-    }
-
-    public void setKpiEventUserList(List<KpiEventUser> kpiEventUserList) {
-        this.kpiEventUserList = kpiEventUserList;
-    }
-
-    public String getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Timestamp getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Timestamp createdDate) {
+        this.createdDate = createdDate;
     }
 
     public Timestamp getBeginDate() {
@@ -104,5 +112,45 @@ public class KpiEvent implements Serializable {
 
     public void setEndDate(Timestamp endDate) {
         this.endDate = endDate;
+    }
+
+    public Timestamp getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(Timestamp updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+
+    public KpiGroup getGroup() {
+        return group;
+    }
+
+    public void setGroup(KpiGroup group) {
+        this.group = group;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public List<KpiEventUser> getKpiEventUserList() {
+        return kpiEventUserList;
+    }
+
+    public void setKpiEventUserList(List<KpiEventUser> kpiEventUserList) {
+        this.kpiEventUserList = kpiEventUserList;
+    }
+
+    public String getAdditionalConfig() {
+        return additionalConfig;
+    }
+
+    public void setAdditionalConfig(String additionalConfig) {
+        this.additionalConfig = additionalConfig;
     }
 }
