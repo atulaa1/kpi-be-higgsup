@@ -12,6 +12,8 @@ public class EventDTO<T> {
 
     private Timestamp updatedDate;
 
+    private GroupDTO group;
+
     private String address;
 
     private T eventAdditionalConfig;
@@ -102,5 +104,13 @@ public class EventDTO<T> {
 
     public void setEndDate(Timestamp endDate) {
         this.endDate = endDate;
+    }
+
+    public GroupDTO getGroup() {
+        return group;
+    }
+
+    public void setGroup(GroupDTO group) {
+        this.group = group;
     }
 }
