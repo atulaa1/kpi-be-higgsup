@@ -33,7 +33,7 @@ public class UserDTO extends BaseDTO {
 
     private String skype;
 
-    private Integer yearWork;
+    private Date dateStartWork;
 
     public UserDTO() {
     }
@@ -153,11 +153,11 @@ public class UserDTO extends BaseDTO {
         this.skype = skype;
     }
 
-    public Integer getYearWork() {
-        return yearWork;
+    public Date getDateStartWork() {
+        return dateStartWork;
     }
 
-    public void setYearWork(Integer yearWork) {
-        this.yearWork = yearWork;
+    public void setDateStartWork(Date dateStartWork) {
+        this.dateStartWork = dateStartWork;
     }
 }

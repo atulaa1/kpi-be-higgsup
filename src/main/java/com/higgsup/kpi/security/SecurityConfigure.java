@@ -83,7 +83,6 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, BaseConfiguration.BASE_API_URL + "/login").permitAll()
                 .antMatchers(BaseConfiguration.BASE_API_URL + "/**").fullyAuthenticated()
-                .anyRequest().fullyAuthenticated()
                 .and()
                 .addFilterBefore(new JWTLoginFilter(BaseConfiguration.BASE_API_URL + "/login", authenticationManager()),
                         UsernamePasswordAuthenticationFilter.class)

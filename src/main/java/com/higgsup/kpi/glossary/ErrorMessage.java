@@ -35,4 +35,5 @@ public final class ErrorMessage {
     public final static String GROUP_TYPE_CAN_NOT_NULL = "group type can not be null";
     public final static String HOST_SCORE_CAN_NOT_NULL = "host score can be not null";
     public final static String MEMBER_SCORE_CAN_NOT_NULL = "member score can be not null";
+    public final static String NOT_FIND_PROJECT= "not find project by id";
 }
