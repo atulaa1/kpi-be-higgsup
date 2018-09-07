@@ -56,7 +56,7 @@ public class ProjectServiceImpl implements ProjectService {
 
             } else {
                 projectDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
-                projectDTO.setMessage(ErrorMessage.NOT_FIND_GROUP);
+                projectDTO.setMessage(ErrorMessage.NOT_FIND_PROJECT);
             }
         } else {
             projectDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
@@ -77,7 +77,7 @@ public class ProjectServiceImpl implements ProjectService {
             return new ProjectDTO();
         } else {
             projectDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
-            projectDTO.setMessage(ErrorMessage.NOT_FIND_GROUP);
+            projectDTO.setMessage(ErrorMessage.NOT_FIND_PROJECT);
             return projectDTO;
 
         }
