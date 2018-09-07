@@ -143,7 +143,10 @@ public class GroupServiceImpl implements GroupService {
 
         Optional<KpiGroup> kpiGroupOptional = kpiGroupRepo.findById(groupDTO.getId());
 
-        if (validateSeminar(groupDTO, validatedGroupDTO)) {
+        if(kpiGroupOptional == null){
+            validatedGroupDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
+            validatedGroupDTO.setMessage(ErrorMessage.NOT_FIND_SEMINAR);
+        } else if ( validateSeminar(groupDTO, validatedGroupDTO)) {
             KpiGroup kpiGroup = kpiGroupOptional.get();
             groupDTO.setId(kpiGroup.getId());
 
@@ -166,9 +169,6 @@ public class GroupServiceImpl implements GroupService {
                 validatedGroupDTO.setMessage(ErrorMessage.NOT_FIND_GROUP_TYPE);
                 validatedGroupDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
             }
-        } else {
-            validatedGroupDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
-            validatedGroupDTO.setMessage(ErrorMessage.NOT_FIND_SEMINAR);
         }
         return validatedGroupDTO;
     }
@@ -461,6 +461,12 @@ public class GroupServiceImpl implements GroupService {
             validatedGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
         } else if (!isValidPoint(String.valueOf(listenerPoint))) {
             validatedGroupDTO.setMessage(ErrorMessage.POINT_LISTENER_IS_NOT_VALIDATE);
+            validatedGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+        } else if (groupDTO.getAdditionalConfig().getHostPoint() == 0){
+            validatedGroupDTO.setMessage(ErrorMessage.HOST_SCORE_CAN_NOT_NULL);
+            validatedGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+        } else if (groupDTO.getAdditionalConfig().getMemberPoint() == 0) {
+            validatedGroupDTO.setMessage(ErrorMessage.MEMBER_SCORE_CAN_NOT_NULL);
             validatedGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
         } else {
             validate = true;
