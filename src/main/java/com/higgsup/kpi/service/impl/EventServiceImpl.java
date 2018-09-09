@@ -36,11 +36,11 @@ public class EventServiceImpl implements EventService {
     public EventDTO createClubEvent(EventDTO<EventClubDetail> eventDTO) throws JsonProcessingException {
         EventDTO<EventClubDetail> validatedEventDTO = new EventDTO<>();
 
-        if (kpiEventRepo.findByName(eventDTO.getName()) == null){
+        if (kpiEventRepo.findByName(eventDTO.getName()) == null) {
             KpiEvent kpiEvent = new KpiEvent();
             ObjectMapper mapper = new ObjectMapper();
 
-            if (validateClubEvent(eventDTO, validatedEventDTO)){
+            if (validateClubEvent(eventDTO, validatedEventDTO)) {
                 String clubJson = mapper.writeValueAsString(eventDTO.getAdditionalConfig());
                 BeanUtils.copyProperties(eventDTO, kpiEvent);
 
@@ -48,11 +48,11 @@ public class EventServiceImpl implements EventService {
                 kpiEvent.setCreatedDate(new Timestamp(System.currentTimeMillis()));
                 Optional<KpiGroup> groupOptional = kpiGroupRepo.findById(eventDTO.getGroup().getId());
 
-                if (groupOptional.isPresent()){
+                if (groupOptional.isPresent()) {
                     kpiEvent.setGroup(groupOptional.get());
                     kpiEvent = kpiEventRepo.save(kpiEvent);
 
-                    for (KpiEventUser participant : kpiEvent.getParticipants()){
+                    for (KpiEventUser participant : kpiEvent.getParticipants()) {
                         kpiEventUserRepo.save(participant);
                     }
                     BeanUtils.copyProperties(kpiEvent, validatedEventDTO);
@@ -71,22 +71,28 @@ public class EventServiceImpl implements EventService {
         return validatedEventDTO;
     }
 
-    private Boolean validateClubEvent(EventDTO<EventClubDetail> eventDTO, EventDTO validatedEventDTO){
+    private Boolean validateClubEvent(EventDTO<EventClubDetail> eventDTO, EventDTO validatedEventDTO) {
         Boolean validate = false;
 
-        if (eventDTO.getName() == null){
+        if (eventDTO.getName() == null) {
             validatedEventDTO.setMessage(ErrorMessage.NAME_DOES_NOT_ALLOW_NULL);
             validatedEventDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
-        } else if (eventDTO.getAdditionalConfig().getPointInfo() == null){
+        } else if (eventDTO.getAdditionalConfig().getPointInfo() == null) {
             validatedEventDTO.setMessage(ErrorMessage.POINT_INFO_CAN_NOT_NULL);
             validatedEventDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
-        } else if (eventDTO.getParticipants().size() == 0){
+        } else if (eventDTO.getParticipants().size() == 0) {
             validatedEventDTO.setMessage(ErrorMessage.LIST_OF_PARTICIPANTS_CAN_NOT_NULL);
             validatedEventDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
-        } else if (eventDTO.getBeginDate().after(eventDTO.getEndDate())){
+        } else if (eventDTO.getBeginDate() == null) {
+            validatedEventDTO.setMessage(ErrorMessage.BEGIN_DATE_CAN_NOT_NULL);
+            validatedEventDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
+        } else if (eventDTO.getEndDate() == null) {
+            validatedEventDTO.setMessage(ErrorMessage.END_DATE_CAN_NOT_NULL);
+            validatedEventDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
+        } else if (eventDTO.getBeginDate().after(eventDTO.getEndDate())) {
             validatedEventDTO.setMessage(ErrorCode.BEGIN_DATE_IS_NOT_AFTER_END_DATE.getDescription());
             validatedEventDTO.setErrorCode(ErrorCode.BEGIN_DATE_IS_NOT_AFTER_END_DATE.getValue());
-        } else{
+        } else {
             validate = true;
         }
         return validate;
