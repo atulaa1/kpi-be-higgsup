@@ -5,10 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.higgsup.kpi.dto.EventClubDetail;
 import com.higgsup.kpi.dto.EventDTO;
 import com.higgsup.kpi.entity.KpiEvent;
+import com.higgsup.kpi.entity.KpiEventUser;
 import com.higgsup.kpi.entity.KpiGroup;
 import com.higgsup.kpi.glossary.ErrorCode;
 import com.higgsup.kpi.glossary.ErrorMessage;
 import com.higgsup.kpi.repository.KpiEventRepo;
+import com.higgsup.kpi.repository.KpiEventUserRepo;
 import com.higgsup.kpi.repository.KpiGroupRepo;
 import com.higgsup.kpi.service.EventService;
 import org.springframework.beans.BeanUtils;
@@ -26,6 +28,9 @@ public class EventServiceImpl implements EventService {
 
     @Autowired
     private KpiGroupRepo kpiGroupRepo;
+
+    @Autowired
+    private KpiEventUserRepo kpiEventUserRepo;
 
     @Override
     public EventDTO createClubEvent(EventDTO<EventClubDetail> eventDTO) throws JsonProcessingException {
@@ -47,6 +52,9 @@ public class EventServiceImpl implements EventService {
                     kpiEvent.setGroup(groupOptional.get());
                     kpiEvent = kpiEventRepo.save(kpiEvent);
 
+                    for (KpiEventUser participant : kpiEvent.getParticipants()){
+                        kpiEventUserRepo.save(participant);
+                    }
                     BeanUtils.copyProperties(kpiEvent, validatedEventDTO);
                     validatedEventDTO.setGroup(eventDTO.getGroup());
                     validatedEventDTO.setAdditionalConfig(eventDTO.getAdditionalConfig());
