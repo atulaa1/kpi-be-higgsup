@@ -39,4 +39,6 @@ public final class ErrorMessage {
     public final static String EVENT_ALREADY_EXISTS = "event name already exists";
     public final static String POINT_INFO_CAN_NOT_NULL = "point information cannot null";
     public final static String LIST_OF_PARTICIPANTS_CAN_NOT_NULL = "list of participants cannot null";
+    public final static String BEGIN_DATE_CAN_NOT_NULL = "begin date cannot null";
+    public final static String END_DATE_CAN_NOT_NULL = "end date cannot null";
 }
