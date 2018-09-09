@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Objects;
 
 @RestController
-@RequestMapping(BaseConfiguration.BASE_API_URL +"/events")
+@RequestMapping(BaseConfiguration.BASE_API_URL + "/events")
 public class EventController {
 
     @Autowired
@@ -26,7 +26,7 @@ public class EventController {
 
     @PreAuthorize("hasAnyRole('MAN','EMPLOYEE')")
     @PostMapping("/club")
-    public Response createClub(@RequestBody EventDTO<EventClubDetail> eventDTO){
+    public Response createClub(@RequestBody EventDTO<EventClubDetail> eventDTO) {
         Response<EventDTO> response = new Response<>(HttpStatus.OK.value());
         try {
             EventDTO eventDTOResponse = eventService.createClubEvent(eventDTO);
