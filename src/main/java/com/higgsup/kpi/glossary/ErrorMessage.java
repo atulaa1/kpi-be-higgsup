@@ -44,9 +44,11 @@ public final class ErrorMessage {
     public final static String GROUP_ID_CAN_NOT_NULL = "group ID can not be null";
     public final static String LIST_SUPPORT_CAN_NOT_EMPTY = "list support can not empty";
     public final static String NAME_AT_INDEX_CAN_NOT_NULL = "nam at index %s not null";
-    public final static String NAME_SUPPORT_AT_INDEX_CAN_NOT_EXISTS = "nam support at index %s not exists";
+    public final static String NAME_SUPPORT_AT_INDEX_CAN_NOT_INCORRECT = "nam support at index %s not incorrect";
     public final static String QUANTITY_AT_INDEX_CAN_NOT_NULL = "quantity at index %s not null";
+    public final static String QUANTITY_AT_INDEX_CAN_NOT_LESS_ONE = "quantity at index %s not less one";
     public final static String GROUP_ID_NOT_IS_SUPPORT = "group ID not is support";
-
+    public final static String ID_NOT_INCORRECT = "id not incorrect";
+    public final static String GROUP_NOT_IS_SUPPORT = "group not is support";
 
 }
