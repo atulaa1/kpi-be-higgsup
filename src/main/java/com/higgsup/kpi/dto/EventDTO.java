@@ -114,12 +114,12 @@ public class EventDTO<T> extends BaseDTO {
         this.group = group;
     }
 
-    public List<EventUserDTO> getParticipants() {
+    public List<EventUserDTO> getEventUserList() {
         return eventUserList;
     }
 
-    public void setParticipants(List<EventUserDTO> participants) {
-        this.eventUserList = participants;
+    public void setEventUserList(List<EventUserDTO> eventUserList) {
+        this.eventUserList = eventUserList;
     }
 
     public T getAdditionalConfig() {

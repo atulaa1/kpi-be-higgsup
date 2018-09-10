@@ -138,12 +138,12 @@ public class KpiEvent implements Serializable {
         this.address = address;
     }
 
-    public List<KpiEventUser> getParticipants() {
+    public List<KpiEventUser> getKpiEventUserList() {
         return kpiEventUserList;
     }
 
-    public void setParticipants(List<KpiEventUser> participants) {
-        this.kpiEventUserList = participants;
+    public void setKpiEventUserList(List<KpiEventUser> kpiEventUserList) {
+        this.kpiEventUserList = kpiEventUserList;
     }
 
     public String getAdditionalConfig() {
