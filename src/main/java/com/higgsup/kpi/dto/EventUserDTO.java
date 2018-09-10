@@ -1,29 +1,26 @@
 package com.higgsup.kpi.dto;
 
-import com.higgsup.kpi.entity.KpiEvent;
-import com.higgsup.kpi.entity.KpiUser;
-
 public class EventUserDTO {
-    private KpiUser kpiUser;
+    private UserDTO user;
 
-    private KpiEvent kpiEvent;
+    private EventDTO event;
 
     private Integer type;
 
-    public KpiUser getKpiUser() {
-        return kpiUser;
+    public UserDTO getUser() {
+        return user;
     }
 
-    public void setKpiUser(KpiUser kpiUser) {
-        this.kpiUser = kpiUser;
+    public void setUser(UserDTO user) {
+        this.user = user;
     }
 
-    public KpiEvent getKpiEvent() {
-        return kpiEvent;
+    public EventDTO getEvent() {
+        return event;
     }
 
-    public void setKpiEvent(KpiEvent kpiEvent) {
-        this.kpiEvent = kpiEvent;
+    public void setEvent(EventDTO event) {
+        this.event = event;
     }
 
     public Integer getType() {

@@ -57,7 +57,7 @@ public class SwaggerJsonConfiguration {
                 try {
                     istream = loader.getResource(scheme + location).getInputStream();
                 } catch (IOException e) {
-                // write log
+                    // write log
                 }
                 if (istream != null) {
                     return istream;
