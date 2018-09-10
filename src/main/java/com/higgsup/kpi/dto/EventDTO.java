@@ -29,7 +29,7 @@ public class EventDTO<T> extends BaseDTO {
     @JsonFormat(pattern = "dd-MM-yyy HH:mm")
     private Timestamp endDate;
 
-    private KpiGroup group;
+    private GroupDTO group;
 
     private List<EventUserDTO> participants;
 
@@ -107,11 +107,11 @@ public class EventDTO<T> extends BaseDTO {
         this.endDate = endDate;
     }
 
-    public KpiGroup getGroup() {
+    public GroupDTO getGroup() {
         return group;
     }
 
-    public void setGroup(KpiGroup group) {
+    public void setGroup(GroupDTO group) {
         this.group = group;
     }
 
