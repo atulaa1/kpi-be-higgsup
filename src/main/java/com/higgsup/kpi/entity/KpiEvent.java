@@ -52,7 +52,7 @@ public class KpiEvent implements Serializable {
     private String address;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "kpiEvent", fetch = FetchType.LAZY)
-    private List<KpiEventUser> kpiEventUserList;
+    private List<KpiEventUser> participants;
 
     @Basic
     @Column(name = "event_additional_config")
@@ -138,12 +138,12 @@ public class KpiEvent implements Serializable {
         this.address = address;
     }
 
-    public List<KpiEventUser> getKpiEventUserList() {
-        return kpiEventUserList;
+    public List<KpiEventUser> getParticipants() {
+        return participants;
     }
 
-    public void setKpiEventUserList(List<KpiEventUser> kpiEventUserList) {
-        this.kpiEventUserList = kpiEventUserList;
+    public void setParticipants(List<KpiEventUser> participants) {
+        this.participants = participants;
     }
 
     public String getAdditionalConfig() {

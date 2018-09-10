@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(BaseConfiguration.BASE_API_URL +"/events")
+@RequestMapping(BaseConfiguration.BASE_API_URL + "/events")
 public class EventController {
 
     @Autowired

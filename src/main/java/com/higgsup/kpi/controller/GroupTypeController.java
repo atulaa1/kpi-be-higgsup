@@ -19,7 +19,7 @@ public class GroupTypeController {
     @Autowired
     GroupTypeService groupTypeService;
 
-    @RequestMapping(value = "/group-types",method = RequestMethod.GET)
+    @RequestMapping(value = "/group-types", method = RequestMethod.GET)
     @PreAuthorize("hasRole('ADMIN')")
     public Response getAll() {
         Response<List<GroupTypeDTO>> response = new Response<>(HttpStatus.OK.value());
