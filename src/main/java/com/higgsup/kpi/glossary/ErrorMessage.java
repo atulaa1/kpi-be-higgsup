@@ -41,4 +41,5 @@ public final class ErrorMessage {
     public final static String LIST_OF_PARTICIPANTS_CAN_NOT_NULL = "list of participants cannot null";
     public final static String BEGIN_DATE_CAN_NOT_NULL = "begin date cannot null";
     public final static String END_DATE_CAN_NOT_NULL = "end date cannot null";
+    public final static String MEMBER_TYPE_DOES_NOT_EXIST = "member type does not exist";
 }
