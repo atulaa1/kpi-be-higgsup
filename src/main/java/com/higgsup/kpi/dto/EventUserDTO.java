@@ -1,6 +1,12 @@
 package com.higgsup.kpi.dto;
 
 public class EventUserDTO {
+    private UserDTO user;
+
+    private EventDTO event;
+
+    private Integer type;
+
     public UserDTO getUser() {
         return user;
     }
@@ -24,11 +30,4 @@ public class EventUserDTO {
     public void setType(Integer type) {
         this.type = type;
     }
-
-    private UserDTO user;
-
-    private EventDTO event;
-
-    private Integer type;
-
 }
