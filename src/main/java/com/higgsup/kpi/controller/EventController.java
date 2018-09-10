@@ -34,7 +34,7 @@ public class EventController {
                 response.setStatus(eventDTO.getErrorCode());
                 response.setMessage(eventDTO.getMessage());
                 if (eventDTO.getErrorDTOS().size() > 0) {
-                    response.setData(eventDTO.getErrorDTOS());
+                    response.setErrors(eventDTO.getErrorDTOS());
                 }
             } else {
                 response.setData(eventDTO);
@@ -57,7 +57,7 @@ public class EventController {
                 response.setStatus(eventDTO.getErrorCode());
                 response.setMessage(eventDTO.getMessage());
                 if (eventDTO.getErrorDTOS().size() > 0) {
-                    response.setData(eventDTO.getErrorDTOS());
+                    response.setErrors(eventDTO.getErrorDTOS());
                 }
             } else {
                 response.setData(eventDTO);

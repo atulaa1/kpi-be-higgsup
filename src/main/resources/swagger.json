@@ -279,6 +279,19 @@
                 "status_code": {
                   "type": "integer",
                   "format": "int32"
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "errorCode": {
+                        "type": "number"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
                 }
               },
               "example": {
@@ -584,6 +597,18 @@
                 },
                 "message": {
                   "type": "string"
+                },"errors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "errorCode": {
+                        "type": "number"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
                 },
                 "status_code": {
                   "type": "integer",
@@ -882,6 +907,18 @@
                 },
                 "message": {
                   "type": "string"
+                },"errors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "errorCode": {
+                        "type": "number"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
                 },
                 "status_code": {
                   "type": "integer",
@@ -970,6 +1007,18 @@
                 },
                 "message": {
                   "type": "string"
+                },"errors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "errorCode": {
+                        "type": "number"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
                 },
                 "status_code": {
                   "type": "integer"
@@ -2444,6 +2493,18 @@
                 },
                 "message": {
                   "type": "string"
+                },"errors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "errorCode": {
+                        "type": "number"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
                 },
                 "status_code": {
                   "type": "integer",
@@ -2560,6 +2621,18 @@
                 },
                 "message": {
                   "type": "string"
+                },"errors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "errorCode": {
+                        "type": "number"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
                 },
                 "status_code": {
                   "type": "integer",
@@ -2680,6 +2753,18 @@
                 },
                 "message": {
                   "type": "string"
+                },"errors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "errorCode": {
+                        "type": "number"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
                 },
                 "status_code": {
                   "type": "integer",
@@ -2806,6 +2891,18 @@
                 },
                 "message": {
                   "type": "string"
+                },"errors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "errorCode": {
+                        "type": "number"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
                 },
                 "status_code": {
                   "type": "integer",
@@ -3003,14 +3100,26 @@
                       "skype": {
                         "type": "string"
                       },
-                      "yearWork": {
-                        "type": "number"
+                      "dateStartWork": {
+                        "type": "string"
                       }
                     }
                   }
                 },
                 "message": {
                   "type": "string"
+                },"errors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "errorCode": {
+                        "type": "number"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
                 },
                 "status_code": {
                   "type": "integer",
@@ -3037,7 +3146,7 @@
                     "gmail": "null",
                     "numberPhone": "null",
                     "skype": "null",
-                    "yearWork": 1
+                    "dateStartWork": "2018-09-29"
                   }
                 ]
               },
@@ -3139,13 +3248,25 @@
                     "skype": {
                       "type": "string"
                     },
-                    "yearWork": {
-                      "type": "number"
+                    "dateStartWork": {
+                      "type": "string"
                     }
                   }
                 },
                 "message": {
                   "type": "string"
+                },"errors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "errorCode": {
+                        "type": "number"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
                 },
                 "status_code": {
                   "type": "integer",
@@ -3170,7 +3291,7 @@
                   "gmail": "lethanh9398@gmail.com",
                   "numberPhone": "0966211618",
                   "skype": "solitarysp@gmail.com",
-                  "yearWork": 1
+                  "dateStartWork": "2018-09-29"
                 }
               },
               "title": "Response"
@@ -3220,7 +3341,7 @@
                 "address",
                 "gmail",
                 "skype",
-                "yearWork"
+                "dateStartWork"
               ],
               "properties": {
                 "avatar": {
@@ -3241,8 +3362,8 @@
                 "skype": {
                   "type": "string"
                 },
-                "yearWork": {
-                  "type": "number"
+                "dateStartWork": {
+                  "type": "string"
                 }
               },
               "example": {
@@ -3252,7 +3373,7 @@
                 "address": "ha noi",
                 "gmail": "lethanh9398@gmail.com",
                 "skype": "skype",
-                "yearWork": 1
+                "dateStartWork": "2018-09-29"
               }
             }
           }
@@ -3282,7 +3403,7 @@
                     "address",
                     "gmail",
                     "skype",
-                    "yearWork"
+                    "dateStartWork"
                   ],
                   "properties": {
                     "username": {
@@ -3324,13 +3445,25 @@
                     "skype": {
                       "type": "string"
                     },
-                    "yearWork": {
-                      "type": "number"
+                    "dateStartWork": {
+                      "type": "string"
                     }
                   }
                 },
                 "message": {
                   "type": "string"
+                },"errors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "errorCode": {
+                        "type": "number"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
                 },
                 "status_code": {
                   "type": "integer",
@@ -3354,7 +3487,7 @@
                   "address": "Lê văn Thành",
                   "gmail": "lethanh9398@gmail.com",
                   "skype": "solitarysp@gmail.com",
-                  "yearWork": 1
+                  "dateStartWork": "2018-09-29"
                 },
                 "status_code": 200
               },
@@ -3439,7 +3572,7 @@
                     "address",
                     "gmail",
                     "skype",
-                    "yearWork"
+                    "dateStartWork"
                   ],
                   "properties": {
                     "username": {
@@ -3481,13 +3614,25 @@
                     "skype": {
                       "type": "string"
                     },
-                    "yearWork": {
-                      "type": "number"
+                    "dateStartWork": {
+                      "type": "string"
                     }
                   }
                 },
                 "message": {
                   "type": "string"
+                },"errors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "errorCode": {
+                        "type": "number"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
                 },
                 "status_code": {
                   "type": "integer",
@@ -3515,7 +3660,7 @@
                   "message": "null",
                   "numberPhone": "0966211618",
                   "skype": "solitarysp@gmail.com",
-                  "yearWork": 1
+                  "dateStartWork": "2018-09-29"
                 }
               },
               "title": "Response"
@@ -3953,8 +4098,8 @@
         "username": {
           "type": "string"
         },
-        "yearWork": {
-          "type": "integer",
+        "dateStartWork": {
+          "type": "string",
           "format": "int32"
         }
       },

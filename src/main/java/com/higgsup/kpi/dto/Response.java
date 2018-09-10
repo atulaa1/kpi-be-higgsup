@@ -3,6 +3,8 @@ package com.higgsup.kpi.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.List;
+
 public class Response<T> {
     @JsonProperty("status_code")
     private Integer status;
@@ -13,11 +15,22 @@ public class Response<T> {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String message;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private List<ErrorDTO> errors;
+
     public Response() {
     }
 
     public Response(Integer status) {
         this.status = status;
+    }
+
+    public List<ErrorDTO> getErrors() {
+        return errors;
+    }
+
+    public void setErrors(List<ErrorDTO> errors) {
+        this.errors = errors;
     }
 
     public Integer getStatus() {
