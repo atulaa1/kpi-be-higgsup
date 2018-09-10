@@ -122,8 +122,19 @@ public class EventServiceImpl implements EventService {
         } else if (eventDTO.getBeginDate().after(eventDTO.getEndDate())) {
             validatedEventDTO.setMessage(ErrorCode.BEGIN_DATE_IS_NOT_AFTER_END_DATE.getDescription());
             validatedEventDTO.setErrorCode(ErrorCode.BEGIN_DATE_IS_NOT_AFTER_END_DATE.getValue());
+        } else if (!kpiGroupRepo.findById(eventDTO.getGroup().getId()).isPresent()) {
+            validatedEventDTO.setMessage(ErrorMessage.NOT_FIND_GROUP);
+            validatedEventDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
         } else {
-            validate = true;
+
+           for(EventUserDTO eventUserDTO : eventDTO.getEventUserList() ) {
+                if (eventUserDTO.getType() != 1 && eventUserDTO.getType() != 2 && eventUserDTO.getType() != 3) {
+                    validatedEventDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
+                    validatedEventDTO.setMessage(ErrorMessage.MEMBER_TYPE_DOES_NOT_EXIST);
+                }else {
+                    validate = true;
+                }
+            }
         }
         return validate;
     }
