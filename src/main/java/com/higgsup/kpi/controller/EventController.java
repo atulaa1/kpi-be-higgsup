@@ -29,7 +29,7 @@ public class EventController {
     public Response createClub(@RequestBody EventDTO<EventClubDetail> eventDTO) {
         Response<EventDTO> response = new Response<>(HttpStatus.OK.value());
         try {
-            EventDTO eventDTOResponse = eventService.createClubEvent(eventDTO);
+            EventDTO eventDTOResponse = eventService.createClub(eventDTO);
             if (Objects.nonNull(eventDTOResponse.getErrorCode())) {
                 response.setStatus(eventDTOResponse.getErrorCode());
                 response.setMessage(eventDTOResponse.getMessage());

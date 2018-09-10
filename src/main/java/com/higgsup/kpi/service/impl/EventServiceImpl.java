@@ -33,14 +33,14 @@ public class EventServiceImpl implements EventService {
     private KpiEventUserRepo kpiEventUserRepo;
 
     @Override
-    public EventDTO createClubEvent(EventDTO<EventClubDetail> eventDTO) throws JsonProcessingException {
+    public EventDTO createClub(EventDTO<EventClubDetail> eventDTO) throws JsonProcessingException {
         EventDTO<EventClubDetail> validatedEventDTO = new EventDTO<>();
 
         if (kpiEventRepo.findByName(eventDTO.getName()) == null) {
             KpiEvent kpiEvent = new KpiEvent();
             ObjectMapper mapper = new ObjectMapper();
 
-            if (validateClubEvent(eventDTO, validatedEventDTO)) {
+            if (validateClub(eventDTO, validatedEventDTO)) {
                 String clubJson = mapper.writeValueAsString(eventDTO.getAdditionalConfig());
                 BeanUtils.copyProperties(eventDTO, kpiEvent);
 
@@ -71,7 +71,7 @@ public class EventServiceImpl implements EventService {
         return validatedEventDTO;
     }
 
-    private Boolean validateClubEvent(EventDTO<EventClubDetail> eventDTO, EventDTO validatedEventDTO) {
+    private Boolean validateClub(EventDTO<EventClubDetail> eventDTO, EventDTO validatedEventDTO) {
         Boolean validate = false;
 
         if (eventDTO.getName() == null) {

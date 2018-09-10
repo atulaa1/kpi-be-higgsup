@@ -5,5 +5,5 @@ import com.higgsup.kpi.dto.EventClubDetail;
 import com.higgsup.kpi.dto.EventDTO;
 
 public interface EventService {
-    EventDTO createClubEvent(EventDTO<EventClubDetail> eventDTO) throws JsonProcessingException;
+    EventDTO createClub(EventDTO<EventClubDetail> eventDTO) throws JsonProcessingException;
 }
