@@ -39,7 +39,7 @@ public class EventServiceImpl implements EventService {
     private KpiEventUserRepo kpiEventUserRepo;
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Override
     @Transactional
@@ -84,6 +84,7 @@ public class EventServiceImpl implements EventService {
 
     private List<KpiEventUser> convertEventUsersToEntity(KpiEvent kpiEvent, List<EventUserDTO> eventUserList) {
         List<KpiEventUser> kpiEventUsers = new ArrayList<>();
+
         for (EventUserDTO eventUserDTO : eventUserList) {
             KpiEventUser kpiEventUser = new KpiEventUser();
             KpiEventUserPK kpiEventUserPK = new KpiEventUserPK();
