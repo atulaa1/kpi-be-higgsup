@@ -76,12 +76,20 @@
             "required": true,
             "schema": {
               "type": "object",
+              "required": [
+                "beginDate",
+                "group",
+                "additionalConfig"
+              ],
               "properties": {
                 "beginDate": {
                   "type": "string"
                 },
                 "group": {
                   "type": "object",
+                  "required": [
+                    "id"
+                  ],
                   "properties": {
                     "id": {
                       "type": "number"
@@ -92,6 +100,10 @@
                   "type": "array",
                   "items": {
                     "type": "object",
+                    "required": [
+                      "name",
+                      "quantity"
+                    ],
                     "properties": {
                       "name": {
                         "type": "string"
@@ -398,12 +410,20 @@
             "required": true,
             "schema": {
               "type": "object",
+              "required": [
+                "beginDate",
+                "group",
+                "additionalConfig"
+              ],
               "properties": {
                 "beginDate": {
                   "type": "string"
                 },
                 "group": {
                   "type": "object",
+                  "required": [
+                    "id"
+                  ],
                   "properties": {
                     "id": {
                       "type": "number"
@@ -414,6 +434,10 @@
                   "type": "array",
                   "items": {
                     "type": "object",
+                    "required": [
+                      "name",
+                      "quantity"
+                    ],
                     "properties": {
                       "name": {
                         "type": "string"
@@ -597,7 +621,8 @@
                 },
                 "message": {
                   "type": "string"
-                },"errors": {
+                },
+                "errors": {
                   "type": "array",
                   "items": {
                     "properties": {
@@ -907,7 +932,8 @@
                 },
                 "message": {
                   "type": "string"
-                },"errors": {
+                },
+                "errors": {
                   "type": "array",
                   "items": {
                     "properties": {
@@ -1007,7 +1033,8 @@
                 },
                 "message": {
                   "type": "string"
-                },"errors": {
+                },
+                "errors": {
                   "type": "array",
                   "items": {
                     "properties": {
@@ -2493,7 +2520,8 @@
                 },
                 "message": {
                   "type": "string"
-                },"errors": {
+                },
+                "errors": {
                   "type": "array",
                   "items": {
                     "properties": {
@@ -2621,7 +2649,8 @@
                 },
                 "message": {
                   "type": "string"
-                },"errors": {
+                },
+                "errors": {
                   "type": "array",
                   "items": {
                     "properties": {
@@ -2753,7 +2782,8 @@
                 },
                 "message": {
                   "type": "string"
-                },"errors": {
+                },
+                "errors": {
                   "type": "array",
                   "items": {
                     "properties": {
@@ -2891,7 +2921,8 @@
                 },
                 "message": {
                   "type": "string"
-                },"errors": {
+                },
+                "errors": {
                   "type": "array",
                   "items": {
                     "properties": {
@@ -3108,7 +3139,8 @@
                 },
                 "message": {
                   "type": "string"
-                },"errors": {
+                },
+                "errors": {
                   "type": "array",
                   "items": {
                     "properties": {
@@ -3255,7 +3287,8 @@
                 },
                 "message": {
                   "type": "string"
-                },"errors": {
+                },
+                "errors": {
                   "type": "array",
                   "items": {
                     "properties": {
@@ -3452,7 +3485,8 @@
                 },
                 "message": {
                   "type": "string"
-                },"errors": {
+                },
+                "errors": {
                   "type": "array",
                   "items": {
                     "properties": {
@@ -3621,7 +3655,8 @@
                 },
                 "message": {
                   "type": "string"
-                },"errors": {
+                },
+                "errors": {
                   "type": "array",
                   "items": {
                     "properties": {
