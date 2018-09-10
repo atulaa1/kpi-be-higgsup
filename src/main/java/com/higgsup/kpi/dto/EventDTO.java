@@ -1,7 +1,6 @@
 package com.higgsup.kpi.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.higgsup.kpi.entity.KpiGroup;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -31,7 +30,7 @@ public class EventDTO<T> extends BaseDTO {
 
     private GroupDTO group;
 
-    private List<EventUserDTO> participants;
+    private List<EventUserDTO> eventUserList;
 
     private T additionalConfig;
 
@@ -116,11 +115,11 @@ public class EventDTO<T> extends BaseDTO {
     }
 
     public List<EventUserDTO> getParticipants() {
-        return participants;
+        return eventUserList;
     }
 
     public void setParticipants(List<EventUserDTO> participants) {
-        this.participants = participants;
+        this.eventUserList = participants;
     }
 
     public T getAdditionalConfig() {

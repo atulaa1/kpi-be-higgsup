@@ -143,7 +143,7 @@ public class GroupServiceImpl implements GroupService {
 
         Optional<KpiGroup> kpiGroupOptional = kpiGroupRepo.findById(groupDTO.getId());
 
-        if (kpiGroupOptional == null) {
+        if (!kpiGroupOptional.isPresent()) {
             validatedGroupDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
             validatedGroupDTO.setMessage(ErrorMessage.NOT_FIND_SEMINAR);
         } else if (validateSeminar(groupDTO, validatedGroupDTO)) {
