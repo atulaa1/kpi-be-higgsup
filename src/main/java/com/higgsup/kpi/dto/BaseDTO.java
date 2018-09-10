@@ -2,7 +2,7 @@ package com.higgsup.kpi.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import java.util.Objects;
+import java.util.List;
 
 public abstract class BaseDTO {
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -10,6 +10,17 @@ public abstract class BaseDTO {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String message;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private List<ErrorDTO> errorDTOS;
+
+    public List<ErrorDTO> getErrorDTOS() {
+        return errorDTOS;
+    }
+
+    public void setErrorDTOS(List<ErrorDTO> errorDTOS) {
+        this.errorDTOS = errorDTOS;
+    }
 
     public Integer getErrorCode() {
         return errorCode;
