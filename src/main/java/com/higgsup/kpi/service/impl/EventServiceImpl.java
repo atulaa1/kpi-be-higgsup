@@ -14,6 +14,7 @@ import com.higgsup.kpi.service.EventService;
 import com.higgsup.kpi.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -201,6 +202,7 @@ public class EventServiceImpl implements EventService {
         List<ErrorDTO> errors = new ArrayList<>();
         if (Objects.isNull(supportDTO.getBeginDate())) {
             ErrorDTO errorDTO = new ErrorDTO();
+
             errorDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
             errorDTO.setMessage(ErrorMessage.START_DATE_CAN_NOT_NULL);
 
@@ -209,6 +211,7 @@ public class EventServiceImpl implements EventService {
 
         if (Objects.isNull(supportDTO.getGroup())) {
             ErrorDTO errorDTO = new ErrorDTO();
+
             errorDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
             errorDTO.setMessage(ErrorMessage.GROUP_CAN_NOT_NULL);
 
@@ -216,6 +219,7 @@ public class EventServiceImpl implements EventService {
         } else {
             if (Objects.isNull(supportDTO.getGroup().getId())) {
                 ErrorDTO errorDTO = new ErrorDTO();
+
                 errorDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
                 errorDTO.setMessage(ErrorMessage.GROUP_ID_CAN_NOT_NULL);
 
@@ -224,16 +228,17 @@ public class EventServiceImpl implements EventService {
                 Optional<KpiGroup> kpiGroup = kpiGroupRepo.findById(supportDTO.getGroup().getId());
                 if (!kpiGroup.isPresent() || !Objects.equals(kpiGroup.get().getGroupType().getId(), GroupType.SUPPORT.getId())) {
                     ErrorDTO errorDTO = new ErrorDTO();
+
                     errorDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
                     errorDTO.setMessage(ErrorMessage.GROUP_ID_NOT_IS_SUPPORT);
                     errors.add(errorDTO);
                 }
             }
-
         }
 
         if (CollectionUtils.isEmpty(supportDTO.getAdditionalConfig())) {
             ErrorDTO errorDTO = new ErrorDTO();
+
             errorDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
             errorDTO.setMessage(ErrorMessage.LIST_SUPPORT_CAN_NOT_EMPTY);
 
@@ -244,29 +249,37 @@ public class EventServiceImpl implements EventService {
 
                 if (Objects.isNull(supportDetail.getName())) {
                     ErrorDTO errorDTO = new ErrorDTO();
+
                     errorDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
                     errorDTO.setMessage(String.format(ErrorMessage.NAME_AT_INDEX_CAN_NOT_NULL, i));
+
                     errors.add(errorDTO);
                 } else {
                     try {
                         GroupSupportDetail.class.getDeclaredField(supportDetail.getName());
                     } catch (NoSuchFieldException e) {
                         ErrorDTO errorDTO = new ErrorDTO();
+
                         errorDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
                         errorDTO.setMessage(String.format(ErrorMessage.NAME_SUPPORT_AT_INDEX_CAN_NOT_INCORRECT, i));
+
                         errors.add(errorDTO);
                     }
                 }
                 if (Objects.isNull(supportDetail.getQuantity())) {
                     ErrorDTO errorDTO = new ErrorDTO();
+
                     errorDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
                     errorDTO.setMessage(String.format(ErrorMessage.QUANTITY_AT_INDEX_CAN_NOT_NULL, i));
+
                     errors.add(errorDTO);
                 } else {
                     if (supportDetail.getQuantity() <= 0) {
                         ErrorDTO errorDTO = new ErrorDTO();
+
                         errorDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
                         errorDTO.setMessage(String.format(ErrorMessage.QUANTITY_AT_INDEX_CAN_NOT_LESS_ONE, i));
+
                         errors.add(errorDTO);
                     }
                 }
@@ -276,20 +289,37 @@ public class EventServiceImpl implements EventService {
         //for update
         if (Objects.nonNull(supportDTO.getId())) {
             Optional<KpiEvent> kpiEventOptional = kpiEventRepo.findById(supportDTO.getId());
-            ErrorDTO errorDTO = new ErrorDTO();
 
             if (kpiEventOptional.isPresent()) {
                 KpiEvent kpiEvent = kpiEventOptional.get();
                 if (!Objects.equals(kpiEvent.getGroup().getGroupType().getId(), GroupType.SUPPORT.getId())) {
+                    ErrorDTO errorDTO = new ErrorDTO();
+
                     errorDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-                    errorDTO.setMessage(ErrorMessage.GROUP_NOT_IS_SUPPORT);
+                    errorDTO.setMessage(ErrorMessage.GROUP_WITH_ID_NOT_IS_SUPPORT);
+
+                    errors.add(errorDTO);
+                }
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                List<KpiEventUser> kpiEventUsers = kpiEventUserRepo.findByKpiEventId(supportDTO.getId());
+                if (!(kpiEventUsers.size() > 1)
+                        && !(kpiEventUsers.get(0).getKpiEventUserPK().getUserName().equals(authentication.getPrincipal()))) {
+                    ErrorDTO errorDTO = new ErrorDTO();
+
+                    errorDTO.setErrorCode(HttpStatus.FORBIDDEN.value());
+                    errorDTO.setMessage(HttpStatus.FORBIDDEN.getReasonPhrase());
+
                     errors.add(errorDTO);
                 }
             } else {
+                ErrorDTO errorDTO = new ErrorDTO();
+
                 errorDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
                 errorDTO.setMessage(ErrorMessage.ID_NOT_INCORRECT);
+
                 errors.add(errorDTO);
             }
+
         }
 
         return errors;

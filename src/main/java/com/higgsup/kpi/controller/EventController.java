@@ -10,6 +10,7 @@ import com.higgsup.kpi.glossary.ErrorMessage;
 import com.higgsup.kpi.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -23,7 +24,8 @@ public class EventController {
     @Autowired
     private EventService eventService;
 
-    @PostMapping("/supports")
+    @PostMapping("/support")
+    @PreAuthorize("hasRole('EMPLOYEE')")
     public Response createSupport(@RequestBody EventDTO<List<EventSupportDetail>> supportDTO) {
         Response response = new Response<>(HttpStatus.OK.value());
         try {
@@ -37,20 +39,15 @@ public class EventController {
             } else {
                 response.setData(eventDTO);
             }
-        } catch (JsonProcessingException e) {
-            response.setMessage(ErrorCode.JSON_PROCESSING_EXCEPTION.getDescription());
-            response.setStatus(ErrorCode.JSON_PROCESSING_EXCEPTION.getValue());
-        } catch (NoSuchFieldException e) {
-            response.setStatus(ErrorCode.ERROR_NO_SUCH_FIELD_EXCEPTION.getValue());
-            response.setMessage(ErrorCode.ERROR_NO_SUCH_FIELD_EXCEPTION.getDescription());
-        } catch (IOException e) {
-            response.setStatus(ErrorCode.ERROR_IO_EXCEPTION.getValue());
-            response.setMessage(ErrorMessage.ERROR_IO_EXCEPTION);
+        } catch (NoSuchFieldException | IOException e) {
+            response.setStatus(ErrorCode.SYSTEM_ERROR.getValue());
+            response.setMessage(ErrorCode.SYSTEM_ERROR.getDescription());
         }
         return response;
     }
 
-    @PutMapping("/supports/{id}")
+    @PutMapping("/support/{id}")
+    @PreAuthorize("hasRole('EMPLOYEE')")
     public Response updateSupport(@PathVariable Integer id, @RequestBody EventDTO<List<EventSupportDetail>> supportDTO) {
         Response response = new Response<>(HttpStatus.OK.value());
         try {
@@ -65,15 +62,9 @@ public class EventController {
             } else {
                 response.setData(eventDTO);
             }
-        } catch (JsonProcessingException e) {
-            response.setMessage(ErrorCode.JSON_PROCESSING_EXCEPTION.getDescription());
-            response.setStatus(ErrorCode.JSON_PROCESSING_EXCEPTION.getValue());
-        } catch (NoSuchFieldException e) {
-            response.setStatus(ErrorCode.ERROR_NO_SUCH_FIELD_EXCEPTION.getValue());
-            response.setMessage(ErrorCode.ERROR_NO_SUCH_FIELD_EXCEPTION.getDescription());
-        } catch (IOException e) {
-            response.setStatus(ErrorCode.ERROR_IO_EXCEPTION.getValue());
-            response.setMessage(ErrorMessage.ERROR_IO_EXCEPTION);
+        } catch (NoSuchFieldException | IOException e) {
+            response.setStatus(ErrorCode.SYSTEM_ERROR.getValue());
+            response.setMessage(ErrorCode.SYSTEM_ERROR.getDescription());
         }
         return response;
     }
