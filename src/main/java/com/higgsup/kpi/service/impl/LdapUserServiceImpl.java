@@ -43,7 +43,6 @@ public class LdapUserServiceImpl implements LdapUserService {
     public List<UserDTO> getAllUsers() {
         LdapQuery query = query().where("objectclass").is("user").and("roleForKpi").isPresent();
         List<UserDTO> result = ldapTemplate.search(query, new UserAttributesMapper());
-        result.sort(Comparator.comparing(UserDTO::getUsername));
 
         List<UserDTO> userDTOList = new ArrayList<>();
         for (UserDTO userDTO : result) {
@@ -53,7 +52,8 @@ public class LdapUserServiceImpl implements LdapUserService {
         }
 
         userDTOList = userDTOList.stream()
-                .sorted(Comparator.comparingInt(u -> u.getUserRole().contains("ROLE_MAN") ? 0 : 1))
+                .sorted(Comparator.<UserDTO>comparingInt(u -> u.getUserRole().contains("ROLE_MAN") ? 0 : 1)
+                                          .thenComparing(UserDTO::getUsername))
                 .collect(Collectors.toList());
         return userDTOList;
     }
