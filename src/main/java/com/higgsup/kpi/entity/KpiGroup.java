@@ -73,6 +73,10 @@ public class KpiGroup implements Serializable {
         return createdDate;
     }
 
+    public void setCreatedDate(Timestamp createdDate) {
+        this.createdDate = createdDate;
+    }
+
     public String getAdditionalConfig() {
         return additionalConfig;
     }
