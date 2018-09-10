@@ -1,5 +1,7 @@
 package com.higgsup.kpi.entity;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -28,6 +30,7 @@ public class KpiGroup implements Serializable {
 
     @Basic
     @Column(name = "created_date")
+    @CreationTimestamp
     private Timestamp createdDate;
 
     @Basic
