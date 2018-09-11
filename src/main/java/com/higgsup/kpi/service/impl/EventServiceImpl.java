@@ -5,16 +5,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.higgsup.kpi.dto.EventClubDetail;
 import com.higgsup.kpi.dto.EventDTO;
 import com.higgsup.kpi.dto.EventUserDTO;
-import com.higgsup.kpi.entity.KpiEvent;
-import com.higgsup.kpi.entity.KpiEventUser;
-import com.higgsup.kpi.entity.KpiEventUserPK;
-import com.higgsup.kpi.entity.KpiGroup;
+import com.higgsup.kpi.dto.UserDTO;
+import com.higgsup.kpi.entity.*;
 import com.higgsup.kpi.glossary.ErrorCode;
 import com.higgsup.kpi.glossary.ErrorMessage;
-import com.higgsup.kpi.repository.KpiEventRepo;
-import com.higgsup.kpi.repository.KpiEventUserRepo;
-import com.higgsup.kpi.repository.KpiGroupRepo;
+import com.higgsup.kpi.repository.*;
 import com.higgsup.kpi.service.EventService;
+import com.higgsup.kpi.service.LdapUserService;
 import com.higgsup.kpi.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +37,12 @@ public class EventServiceImpl implements EventService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private LdapUserService ldapUserService;
+
+    @Autowired
+    KpiUserRepo kpiUserRepo;
 
     @Override
     @Transactional
@@ -78,6 +81,49 @@ public class EventServiceImpl implements EventService {
         } else {
             validatedEventDTO.setMessage(ErrorMessage.EVENT_ALREADY_EXISTS);
             validatedEventDTO.setErrorCode(ErrorCode.PARAMETERS_ALREADY_EXIST.getValue());
+        }
+        return validatedEventDTO;
+    }
+
+    @Override
+    public EventDTO updateClub(EventDTO<EventClubDetail> eventDTO) throws JsonProcessingException {
+        EventDTO<EventClubDetail> validatedEventDTO = new EventDTO<>();
+
+        Optional<KpiEvent> kpiEventOptional = kpiEventRepo.findById(eventDTO.getId());
+
+        if (kpiEventOptional.isPresent()) {
+            if (validateClub(eventDTO, validatedEventDTO)) {
+                KpiEvent kpiEvent = kpiEventOptional.get();
+                eventDTO.setId(kpiEvent.getId());
+
+                ObjectMapper mapper = new ObjectMapper();
+                String clubJson = mapper.writeValueAsString(eventDTO.getAdditionalConfig());
+                BeanUtils.copyProperties(eventDTO, kpiEvent);
+
+                kpiEvent.setAdditionalConfig(clubJson);
+                kpiEvent.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
+                Optional<KpiGroup> groupOptional = kpiGroupRepo.findById(eventDTO.getGroup().getId());
+
+                if (groupOptional.isPresent()) {
+                    kpiEvent.setGroup(groupOptional.get());
+                    kpiEvent = kpiEventRepo.save(kpiEvent);
+
+                    List<KpiEventUser> eventUsers = convertEventUsersToEntity(kpiEvent, eventDTO.getEventUserList());
+                    kpiEventUserRepo.saveAll(eventUsers);
+
+                    BeanUtils.copyProperties(kpiEvent, validatedEventDTO);
+                    validatedEventDTO.setGroup(eventDTO.getGroup());
+                    validatedEventDTO.setAdditionalConfig(eventDTO.getAdditionalConfig());
+                    validatedEventDTO.setEventUserList(eventDTO.getEventUserList());
+                } else {
+                    validatedEventDTO.setMessage(ErrorMessage.NOT_FIND_GROUP);
+                    validatedEventDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
+                }
+            }
+
+        } else {
+            validatedEventDTO.setMessage(ErrorCode.NOT_FIND.getDescription());
+            validatedEventDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
         }
         return validatedEventDTO;
     }
@@ -127,15 +173,43 @@ public class EventServiceImpl implements EventService {
             validatedEventDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
         } else {
 
-           for(EventUserDTO eventUserDTO : eventDTO.getEventUserList() ) {
-                if (eventUserDTO.getType() != 1 && eventUserDTO.getType() != 2 && eventUserDTO.getType() != 3) {
+            for (EventUserDTO eventUserDTO : eventDTO.getEventUserList()) {
+                Integer userType = eventUserDTO.getType();
+                if (userType == null) {
+                    validatedEventDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
+                    validatedEventDTO.setMessage(ErrorMessage.USER_TYPE_CAN_NOT_NULL);
+                } else if (userType < 1 || userType > 3) {
                     validatedEventDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
                     validatedEventDTO.setMessage(ErrorMessage.MEMBER_TYPE_DOES_NOT_EXIST);
-                }else {
+                    validate = false;
+                } else if (!validateUser(eventDTO)) {
+                    validatedEventDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
+                    validatedEventDTO.setMessage(ErrorMessage.USER_DOES_NOT_EXIST);
+                    validate = false;
+                } else {
                     validate = true;
                 }
             }
         }
         return validate;
+    }
+
+    private Boolean validateUser(EventDTO<EventClubDetail> eventDTO) {
+        List<UserDTO> ldapUserList = ldapUserService.getAllUsers();
+        List<UserDTO> ldapUserListClone = new ArrayList<>(ldapUserList);
+        List<KpiUser> dbUserList = (List<KpiUser>) kpiUserRepo.findAll();
+
+        ldapUserList.removeIf(userDTO -> dbUserList.stream()
+                .anyMatch(kpiUser -> kpiUser.getUserName().equals(userDTO.getUsername())));
+
+        ldapUserList.forEach(userDTO -> userService.registerUser(userDTO.getUsername()));
+
+        for (EventUserDTO eventUserDTO : eventDTO.getEventUserList()) {
+            if (!ldapUserListClone.stream().anyMatch(
+                    userDTO -> userDTO.getUsername().equals(eventUserDTO.getUser().getUsername()))) {
+                return false;
+            }
+        }
+        return true;
     }
 }
