@@ -71,7 +71,7 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "status_code : 200. Meaning: Thành công",
             "schema": {
               "type": "object",
               "required": [
