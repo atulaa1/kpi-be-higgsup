@@ -73,9 +73,7 @@ public class EventServiceImpl implements EventService {
         } else {
             eventSupportDTO.setErrorCode(validates.get(0).getErrorCode());
             eventSupportDTO.setMessage(validates.get(0).getMessage());
-            if (validates.size() > 0) {
-                eventSupportDTO.setErrorDTOS(validates);
-            }
+            eventSupportDTO.setErrorDTOS(validates);
         }
         return eventSupportDTO;
     }
@@ -92,9 +90,7 @@ public class EventServiceImpl implements EventService {
         } else {
             eventSupportDTO.setErrorCode(validates.get(0).getErrorCode());
             eventSupportDTO.setMessage(validates.get(0).getMessage());
-            if (validates.size() > 0) {
-                eventSupportDTO.setErrorDTOS(validates);
-            }
+            eventSupportDTO.setErrorDTOS(validates);
         }
         return eventSupportDTO;
     }

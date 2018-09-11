@@ -1,12 +1,10 @@
 package com.higgsup.kpi.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.higgsup.kpi.configure.BaseConfiguration;
 import com.higgsup.kpi.dto.EventDTO;
 import com.higgsup.kpi.dto.EventSupportDetail;
 import com.higgsup.kpi.dto.Response;
 import com.higgsup.kpi.glossary.ErrorCode;
-import com.higgsup.kpi.glossary.ErrorMessage;
 import com.higgsup.kpi.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,9 +31,7 @@ public class EventController {
             if (Objects.nonNull(eventDTO.getErrorCode())) {
                 response.setStatus(eventDTO.getErrorCode());
                 response.setMessage(eventDTO.getMessage());
-                if (eventDTO.getErrorDTOS().size() > 0) {
-                    response.setErrors(eventDTO.getErrorDTOS());
-                }
+                response.setErrors(eventDTO.getErrorDTOS());
             } else {
                 response.setData(eventDTO);
             }
@@ -56,9 +52,7 @@ public class EventController {
             if (Objects.nonNull(eventDTO.getErrorCode())) {
                 response.setStatus(eventDTO.getErrorCode());
                 response.setMessage(eventDTO.getMessage());
-                if (eventDTO.getErrorDTOS().size() > 0) {
-                    response.setErrors(eventDTO.getErrorDTOS());
-                }
+                response.setErrors(eventDTO.getErrorDTOS());
             } else {
                 response.setData(eventDTO);
             }
