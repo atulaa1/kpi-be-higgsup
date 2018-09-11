@@ -9,6 +9,8 @@ public interface LdapUserService {
 
     List<UserDTO> getAllUsers();
 
+    List<UserDTO> getAllEmployeeUsers();
+
     UserDTO updateUserRole(String username, List<String> role);
 
     List<UserDTO> findUsersByName(String name);
