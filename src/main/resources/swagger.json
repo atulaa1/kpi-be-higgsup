@@ -35,6 +35,10 @@
     {
       "name": "event-controller",
       "description": "event-controller"
+    },
+    {
+      "name": "late-time-check-controller",
+      "description": "late-time-check-controller"
     }
   ],
   "security": [
@@ -55,6 +59,178 @@
     "https"
   ],
   "paths": {
+    "/api/late-times": {
+      "get": {
+        "tags": [
+          "late-time-check-controller"
+        ],
+        "summary": "getALLLateTimeCheckCurrent",
+        "operationId": "getALLLateTimeCheckCurrentUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "required": [
+                "status_code",
+                "data"
+              ],
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "lateTimes",
+                      "user"
+                    ],
+                    "properties": {
+                      "id": {
+                        "type": "number"
+                      },
+                      "lateTimes": {
+                        "type": "number"
+                      },
+                      "user": {
+                        "type": "object",
+                        "required": [
+                          "username",
+                          "lastName",
+                          "firstName",
+                          "birthday",
+                          "numberPhone",
+                          "address",
+                          "gmail",
+                          "skype",
+                          "dateStartWork"
+                        ],
+                        "properties": {
+                          "username": {
+                            "type": "string"
+                          },
+                          "lastName": {
+                            "type": "string"
+                          },
+                          "firstName": {
+                            "type": "string"
+                          },
+                          "fullName": {
+                            "type": "string"
+                          },
+                          "email": {
+                            "type": "string"
+                          },
+                          "userRole": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "avatar": {
+                            "type": "string"
+                          },
+                          "birthday": {
+                            "type": "date"
+                          },
+                          "numberPhone": {
+                            "type": "string"
+                          },
+                          "gmail": {
+                            "type": "string"
+                          },
+                          "skype": {
+                            "type": "string"
+                          },
+                          "dateStartWork": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "message": {
+                  "type": "string"
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "errorCode": {
+                        "type": "number"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "status_code": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "example":{
+                "data": [
+                  {
+                    "id": 37,
+                    "lateTimes": 1,
+                    "user": {
+                      "username": "kpi.employee",
+                      "lastName": "kpi",
+                      "firstName": "employee",
+                      "fullName": null,
+                      "email": "kpi.employee@higgsup.com",
+                      "userRole": null,
+                      "avatar": null,
+                      "birthday": "2018-09-25",
+                      "numberPhone": "0966211618",
+                      "address": "Lê văn Thành ",
+                      "gmail": "lethanh9398@gmail.com",
+                      "skype": "solitarysp@gmail.com",
+                      "dateStartWork": "2018-09-29"
+                    }
+                  },
+                  {
+                    "id": 38,
+                    "lateTimes": 3,
+                    "user": {
+                      "username": "kpi.test02",
+                      "lastName": "kpi",
+                      "firstName": "test02",
+                      "fullName": null,
+                      "email": "kpi.test02@higgsup.com",
+                      "userRole": null,
+                      "avatar": null,
+                      "birthday": null,
+                      "numberPhone": null,
+                      "address": null,
+                      "gmail": null,
+                      "skype": null,
+                      "dateStartWork": null
+                    }
+                  }
+                ],
+                "status_code": 200
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/events/support": {
       "post": {
         "tags": [
