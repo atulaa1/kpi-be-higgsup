@@ -1,5 +1,6 @@
 package com.higgsup.kpi.service.impl;
 
+import com.higgsup.kpi.dto.LateTimeCheckDTO;
 import com.higgsup.kpi.dto.UserDTO;
 import com.higgsup.kpi.entity.KpiLateTimeCheck;
 import com.higgsup.kpi.entity.KpiMonth;
@@ -10,6 +11,7 @@ import com.higgsup.kpi.repository.KpiUserRepo;
 import com.higgsup.kpi.service.LateTimeCheckService;
 import com.higgsup.kpi.service.LdapUserService;
 import com.higgsup.kpi.service.UserService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +42,29 @@ public class LateTimeCheckServiceImpl implements LateTimeCheckService {
     public List<KpiLateTimeCheck> createDataNewMonthOrUpdate() {
         KpiMonth kpiMonth = getAndCreateNewMonth();
         return createNewDataOrUpdateDate(kpiMonth);
+    }
+
+    @Override
+
+    public List<LateTimeCheckDTO> getALLLateTimeCheckCurrent() {
+        List<KpiLateTimeCheck> lateTimeChecksInDB = createDataNewMonthOrUpdate();
+        return convertEntityLateTimeCheckToDTO(lateTimeChecksInDB);
+    }
+
+    private List<LateTimeCheckDTO> convertEntityLateTimeCheckToDTO(List<KpiLateTimeCheck> lateTimeChecksInDB) {
+        List<LateTimeCheckDTO> lateTimeCheckDTOS = new ArrayList<>();
+        for (KpiLateTimeCheck lateTimeCheck : lateTimeChecksInDB) {
+            LateTimeCheckDTO lateTimeCheckDTO = new LateTimeCheckDTO();
+            UserDTO user = new UserDTO();
+
+            BeanUtils.copyProperties(lateTimeCheck, lateTimeCheckDTO, "user");
+            BeanUtils.copyProperties(lateTimeCheck.getUser(), user,"avatar");
+            user.setUsername(lateTimeCheck.getUser().getUserName());
+            lateTimeCheckDTO.setUser(user);
+
+            lateTimeCheckDTOS.add(lateTimeCheckDTO);
+        }
+        return lateTimeCheckDTOS;
     }
 
     private List<KpiLateTimeCheck> createNewDataOrUpdateDate(KpiMonth kpiMonth) {
