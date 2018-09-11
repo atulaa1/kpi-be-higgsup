@@ -11,6 +11,7 @@ import com.higgsup.kpi.repository.KpiEventUserRepo;
 import com.higgsup.kpi.repository.KpiGroupRepo;
 import com.higgsup.kpi.repository.KpiUserRepo;
 import com.higgsup.kpi.service.EventService;
+import com.higgsup.kpi.service.LdapUserService;
 import com.higgsup.kpi.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,9 +50,6 @@ public class EventServiceImpl implements EventService {
 
     @Autowired
     private LdapUserService ldapUserService;
-
-    @Autowired
-    KpiUserRepo kpiUserRepo;
 
     @Override
     @Transactional
