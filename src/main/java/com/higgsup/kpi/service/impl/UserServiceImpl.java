@@ -4,7 +4,7 @@ import com.higgsup.kpi.dto.UserDTO;
 import com.higgsup.kpi.entity.KpiUser;
 import com.higgsup.kpi.glossary.ErrorCode;
 import com.higgsup.kpi.glossary.ErrorMessage;
-import com.higgsup.kpi.repository.UserRepository;
+import com.higgsup.kpi.repository.KpiUserRepo;
 import com.higgsup.kpi.service.LdapUserService;
 import com.higgsup.kpi.service.UserService;
 import org.springframework.beans.BeanUtils;
@@ -18,7 +18,7 @@ import java.util.Objects;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    private UserRepository userRepository;
+    private KpiUserRepo userRepo;
 
     @Autowired
     private LdapUserService ldapUserService;
@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
     public UserDTO getUserDetails(String username) {
         UserDTO user = ldapUserService.getUserDetail(username);
         if (user != null) {
-            KpiUser userFromDB = userRepository.findByUserName(username);
+            KpiUser userFromDB = userRepo.findByUserName(username);
 
             //if has in db then add properties
             if (Objects.nonNull(userFromDB)) {
@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO registerUser(String username) {
         UserDTO userDTO = new UserDTO();
-        KpiUser user = userRepository.findByUserName(username);
+        KpiUser user = userRepo.findByUserName(username);
         if (user == null) {
             UserDTO ldapUser = ldapUserService.getUserDetail(username);
             if (ldapUser != null) {
@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
                 kpiUser.setLastName(ldapUser.getLastName());
                 kpiUser.setActive(1);
 
-                KpiUser kpiUserCreate = userRepository.save(kpiUser);
+                KpiUser kpiUserCreate = userRepo.save(kpiUser);
                 BeanUtils.copyProperties(kpiUserCreate, userDTO);
                 userDTO.setUserRole(ldapUser.getUserRole());
             } else {
@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService {
     public UserDTO updateInfoUser(String username, UserDTO user) {
         UserDTO userDTO = registerUser(username);
         if (Objects.isNull(userDTO.getErrorCode()) || Objects.equals(userDTO.getErrorCode(), ErrorCode.DATA_EXIST.getValue())) {
-            KpiUser kpiUser = userRepository.findByUserName(username);
+            KpiUser kpiUser = userRepo.findByUserName(username);
             if (Objects.nonNull(kpiUser)) {
                 BeanUtils.copyProperties(user, kpiUser, "username",
                         "password",
@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserService {
                 if (Objects.nonNull(user.getAvatar())) {
                     kpiUser.setAvatar(user.getAvatar());
                 }
-                KpiUser kpiUserRP = userRepository.save(kpiUser);
+                KpiUser kpiUserRP = userRepo.save(kpiUser);
 
                 BeanUtils.copyProperties(kpiUserRP, user);
                 user.setUsername(kpiUserRP.getUserName());

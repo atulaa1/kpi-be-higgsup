@@ -1,8 +1,11 @@
 package com.higgsup.kpi.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 public class EventUserDTO {
     private UserDTO user;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private EventDTO event;
 
     private Integer type;
