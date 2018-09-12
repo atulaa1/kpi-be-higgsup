@@ -46,7 +46,7 @@ public class LateTimeCheckServiceImpl implements LateTimeCheckService {
 
     @Override
 
-    public List<LateTimeCheckDTO> getALLLateTimeCheckCurrent() {
+    public List<LateTimeCheckDTO> getAllLateTimeCheckCurrent() {
         List<KpiLateTimeCheck> lateTimeChecksInDB = createDataNewMonthOrUpdate();
         return convertEntityLateTimeCheckToDTO(lateTimeChecksInDB);
     }
@@ -78,19 +78,19 @@ public class LateTimeCheckServiceImpl implements LateTimeCheckService {
 
         userDTOSInLdap.forEach(userDTO -> userService.registerUser(userDTO.getUsername()));
 
-        List<KpiUser> kpiUsersALL = (List<KpiUser>) kpiUserRepo.findAll();
+        List<KpiUser> kpiUsersAll = (List<KpiUser>) kpiUserRepo.findAll();
 
         //delete if other employee
-        kpiUsersALL.removeIf(
+        kpiUsersAll.removeIf(
                 kpiUser -> userDTOSInLdapClone.stream()
                         .noneMatch(userDTO -> userDTO.getUsername().equals(kpiUser.getUserName())));
         //delete if has in LateTimeChecks
-        kpiUsersALL.removeIf(
+        kpiUsersAll.removeIf(
                 kpiUser -> lateTimeChecksInDB.stream()
                         .anyMatch(userDTO -> userDTO.getUser().getUserName().equals(kpiUser.getUserName())));
 
         List<KpiLateTimeCheck> lateTimeChecksNew = new ArrayList<>();
-        kpiUsersALL.forEach(kpiUser -> {
+        kpiUsersAll.forEach(kpiUser -> {
             KpiLateTimeCheck kpiLateTimeCheck = new KpiLateTimeCheck();
             kpiLateTimeCheck.setUser(kpiUser);
             kpiLateTimeCheck.setMonth(kpiMonth);

@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface LateTimeCheckService {
     List<KpiLateTimeCheck> createDataNewMonthOrUpdate();
-    List<LateTimeCheckDTO> getALLLateTimeCheckCurrent();
+    List<LateTimeCheckDTO> getAllLateTimeCheckCurrent();
 }

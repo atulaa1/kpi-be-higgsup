@@ -21,9 +21,9 @@ public class LateTimeCheckController {
 
     @GetMapping()
     @PreAuthorize("hasRole('ADMIN')")
-    public Response getALLLateTimeCheckCurrent() {
+    public Response getAllLateTimeCheckCurrent() {
         Response<List<LateTimeCheckDTO>> response = new Response<>(HttpStatus.OK.value());
-        List<LateTimeCheckDTO> lateTimeCheckDTOS = lateTimeCheckService.getALLLateTimeCheckCurrent();
+        List<LateTimeCheckDTO> lateTimeCheckDTOS = lateTimeCheckService.getAllLateTimeCheckCurrent();
         response.setData(lateTimeCheckDTOS);
         return response;
     }
