@@ -21,7 +21,7 @@ public class KpiLateTimeCheck implements Serializable {
 
     @JoinColumn(name = "month_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
-    private KpiYearMonth month;
+    private KpiYearMonth yearMonth;
 
     public Integer getId() {
         return id;
@@ -39,12 +39,12 @@ public class KpiLateTimeCheck implements Serializable {
         this.user = user;
     }
 
-    public KpiYearMonth getMonth() {
-        return month;
+    public KpiYearMonth getYearMonth() {
+        return yearMonth;
     }
 
-    public void setMonth(KpiYearMonth month) {
-        this.month = month;
+    public void setYearMonth(KpiYearMonth month) {
+        this.yearMonth = month;
     }
 
     public Integer getLateTimes() {

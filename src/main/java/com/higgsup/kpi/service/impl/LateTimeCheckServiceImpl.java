@@ -100,7 +100,7 @@ public class LateTimeCheckServiceImpl implements LateTimeCheckService {
         kpiUsersAll.forEach(kpiUser -> {
             KpiLateTimeCheck kpiLateTimeCheck = new KpiLateTimeCheck();
             kpiLateTimeCheck.setUser(kpiUser);
-            kpiLateTimeCheck.setMonth(kpiYearMonth);
+            kpiLateTimeCheck.setYearMonth(kpiYearMonth);
             lateTimeChecksNew.add(kpiLateTimeCheck);
         });
         List<KpiLateTimeCheck> lateTimeChecksNewSave = (List<KpiLateTimeCheck>) kpiLateTimeCheckRepo.saveAll(lateTimeChecksNew);

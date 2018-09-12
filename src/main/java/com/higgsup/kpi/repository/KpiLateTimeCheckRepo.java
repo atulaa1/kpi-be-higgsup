@@ -9,6 +9,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface KpiLateTimeCheckRepo extends CrudRepository<KpiLateTimeCheck, Integer> {
-    @Query(value = "SELECT g from KpiLateTimeCheck g where g.month=:month", nativeQuery = false)
-    List<KpiLateTimeCheck> findByMonth(@Param("month") KpiYearMonth month);
+    @Query(value = "SELECT g from KpiLateTimeCheck g where g.yearMonth=:yearMonth", nativeQuery = false)
+    List<KpiLateTimeCheck> findByMonth(@Param("yearMonth") KpiYearMonth yearMonth);
 }
