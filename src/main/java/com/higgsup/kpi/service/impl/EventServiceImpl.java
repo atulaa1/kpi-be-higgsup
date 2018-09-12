@@ -486,7 +486,7 @@ public class EventServiceImpl implements EventService {
         ldapUserList.forEach(userDTO -> userService.registerUser(userDTO.getUsername()));
 
         for (EventUserDTO eventUserDTO : eventDTO.getEventUserList()) {
-            if (!ldapUserListClone.stream().anyMatch(
+            if (ldapUserListClone.stream().noneMatch(
                     userDTO -> userDTO.getUsername().equals(eventUserDTO.getUser().getUsername()))) {
                 return false;
             }
