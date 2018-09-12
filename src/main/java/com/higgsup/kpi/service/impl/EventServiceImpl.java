@@ -11,6 +11,7 @@ import com.higgsup.kpi.repository.KpiEventUserRepo;
 import com.higgsup.kpi.repository.KpiGroupRepo;
 import com.higgsup.kpi.repository.KpiUserRepo;
 import com.higgsup.kpi.service.EventService;
+import com.higgsup.kpi.service.LdapUserService;
 import com.higgsup.kpi.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,10 @@ public class EventServiceImpl implements EventService {
 
     @Autowired
     private KpiUserRepo kpiUserRepo;
+
+    @Autowired
+    private LdapUserService ldapUserService;
+
 
     @Override
     @Transactional
@@ -93,6 +98,92 @@ public class EventServiceImpl implements EventService {
             eventSupportDTO.setErrorDTOS(validates);
         }
         return eventSupportDTO;
+    }
+
+    @Override
+    public EventDTO createSeminar(EventDTO<EventSeminarDetail> eventDTO) throws JsonProcessingException {
+        EventDTO validateSeminarDTO = new EventDTO();
+        if (kpiEventRepo.findByName(eventDTO.getName()) == null) {
+            KpiEvent kpiEvent = new KpiEvent();
+            ObjectMapper mapper = new ObjectMapper();
+
+            if (validateDataSeminarEvent(eventDTO, validateSeminarDTO)) {
+                String seminarEventConfig = mapper.writeValueAsString(eventDTO.getAdditionalConfig());
+                BeanUtils.copyProperties(eventDTO, kpiEvent);
+
+                kpiEvent.setAdditionalConfig(seminarEventConfig);
+                kpiEvent.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+
+                Optional<KpiGroup> kpiGroup = kpiGroupRepo.findById(eventDTO.getGroup().getId());
+
+                if (kpiGroup.isPresent()) {
+                    kpiEvent.setGroup(kpiGroup.get());
+                    kpiEvent = kpiEventRepo.save(kpiEvent);
+
+                    List<KpiEventUser> eventUsers = convertEventUsersToEntity(kpiEvent, eventDTO.getEventUserList());
+                    kpiEventUserRepo.saveAll(eventUsers);
+
+                    BeanUtils.copyProperties(kpiEvent, validateSeminarDTO);
+                    validateSeminarDTO.setGroup(eventDTO.getGroup());
+                    validateSeminarDTO.setAdditionalConfig(eventDTO.getAdditionalConfig());
+                    validateSeminarDTO.setEventUserList(eventDTO.getEventUserList());
+                } else {
+                    validateSeminarDTO.setMessage(ErrorMessage.NOT_FIND_GROUP_TYPE);
+                    validateSeminarDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
+                }
+            }
+        } else {
+            validateSeminarDTO.setMessage(ErrorMessage.EVENT_ALREADY_EXISTS);
+            validateSeminarDTO.setErrorCode(ErrorCode.ALREADY_CREATED.getValue());
+        }
+        return validateSeminarDTO;
+    }
+
+    @Override
+    public EventDTO updateSeminar(EventDTO<EventSeminarDetail> eventDTO) throws JsonProcessingException {
+        EventDTO validateSeminarDTO = new EventDTO();
+        Optional<KpiEvent> kpiEventOptional = kpiEventRepo.findById(eventDTO.getId());
+        if (kpiEventOptional.isPresent()) {
+            if (validateDataSeminarEvent(eventDTO, validateSeminarDTO)) {
+                KpiEvent kpiEvent = kpiEventOptional.get();
+                eventDTO.setId(kpiEvent.getId());
+
+                ObjectMapper mapper = new ObjectMapper();
+                BeanUtils.copyProperties(eventDTO, kpiEvent);
+                String seminarEventConfig = mapper.writeValueAsString(eventDTO.getAdditionalConfig());
+
+                kpiEvent.setAdditionalConfig(seminarEventConfig);
+                kpiEvent.setCreatedDate(kpiEvent.getCreatedDate());
+                kpiEvent.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
+                if (kpiEvent.getUpdatedDate().after(eventDTO.getEndDate())) {
+                    validateSeminarDTO.setMessage(ErrorMessage.END_DATE_AFTER_UPDATE_DATE);
+                    validateSeminarDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+                } else {
+                    Optional<KpiGroup> kpiGroupOptional = kpiGroupRepo.findById(eventDTO.getGroup().getId());
+
+                    if (kpiGroupOptional.isPresent()) {
+                        kpiEvent.setGroup(kpiGroupOptional.get());
+                        kpiEvent = kpiEventRepo.save(kpiEvent);
+
+                        List<KpiEventUser> eventUsers = convertEventUsersToEntity(kpiEvent,
+                                eventDTO.getEventUserList());
+                        kpiEventUserRepo.saveAll(eventUsers);
+
+                        BeanUtils.copyProperties(kpiEvent, validateSeminarDTO);
+                        validateSeminarDTO.setGroup(eventDTO.getGroup());
+                        validateSeminarDTO.setAdditionalConfig(eventDTO.getAdditionalConfig());
+                        validateSeminarDTO.setEventUserList(eventDTO.getEventUserList());
+                    } else {
+                        validateSeminarDTO.setMessage(ErrorMessage.NOT_FIND_GROUP_TYPE);
+                        validateSeminarDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
+                    }
+                }
+            }
+        } else {
+            validateSeminarDTO.setMessage(ErrorMessage.NOT_FIND_SEMINAR);
+            validateSeminarDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
+        }
+        return validateSeminarDTO;
     }
 
     private KpiEvent convertEventSupportDTOToEntityForUpdate(EventDTO<List<EventSupportDetail>> supportDTO) throws
@@ -319,5 +410,108 @@ public class EventServiceImpl implements EventService {
         }
 
         return errors;
+    }
+
+    private List<KpiEventUser> convertEventUsersToEntity(KpiEvent kpiEvent, List<EventUserDTO> eventUserList) {
+        List<KpiEventUser> kpiEventUsers = new ArrayList<>();
+        for (EventUserDTO eventUserDTO : eventUserList) {
+            KpiEventUser kpiEventUser = new KpiEventUser();
+            KpiEventUserPK kpiEventUserPK = new KpiEventUserPK();
+            userService.registerUser(eventUserDTO.getUser().getUsername());
+
+            kpiEventUserPK.setEventId(kpiEvent.getId());
+            kpiEventUserPK.setUserName(eventUserDTO.getUser().getUsername());
+            kpiEventUser.setKpiEventUserPK(kpiEventUserPK);
+
+            kpiEventUser.setType(eventUserDTO.getType());
+            kpiEventUsers.add(kpiEventUser);
+
+        }
+        return kpiEventUsers;
+    }
+
+    public Boolean validateDataSeminarEvent(EventDTO<EventSeminarDetail> eventDTO, EventDTO validateDTO) {
+        Boolean validateResult = false;
+
+        if (Objects.isNull(eventDTO)) {
+            validateDTO.setMessage(ErrorMessage.EVENT_CAN_NOT_NULL);
+            validateDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
+        } else if (Objects.isNull(eventDTO.getGroup())) {
+            validateDTO.setMessage(ErrorMessage.GROUP_CAN_NOT_NULL);
+            validateDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
+        } else if (Objects.isNull(eventDTO.getEventUserList())) {
+            validateDTO.setMessage(ErrorMessage.EVENT_USER_LIST_CAN_NOT_NULL);
+            validateDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
+        } else if (eventDTO.getAdditionalConfig().getHostDescription().length() == 0) {
+            validateDTO.setMessage(ErrorMessage.HOST_DESCRIPTION_CAN_NOT_NULL);
+            validateDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+        } else if (eventDTO.getAdditionalConfig().getMemberDescription().length() == 0) {
+            validateDTO.setMessage(ErrorMessage.MEMBER_DESCRIPTION_CAN_NOT_NULL);
+            validateDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+        } else if (eventDTO.getAdditionalConfig().getListenerDescription().length() == 0) {
+            validateDTO.setMessage(ErrorMessage.LISTENER_DESCRIPTION_CAN_NOT_NULL);
+            validateDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+        } else if (eventDTO.getName() == null) {
+            validateDTO.setMessage(ErrorMessage.EVENT_NAME_CAN_NOT_NULL);
+            validateDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+        } else if (eventDTO.getStatus() == null) {
+            validateDTO.setMessage(ErrorMessage.STATUS_CAN_NOT_NULL);
+            validateDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+        } else if ((eventDTO.getStatus() < 1) || (eventDTO.getStatus() > 3)) {
+            validateDTO.setMessage(ErrorMessage.INVALIDATED_STATUS_OF_EVENT);
+            validateDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+        } else if (eventDTO.getBeginDate() == null) {
+            validateDTO.setMessage(ErrorMessage.BEGIN_DATE_CAN_NOT_NULL);
+            validateDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+        } else if (eventDTO.getEndDate() == null) {
+            validateDTO.setMessage(ErrorMessage.END_DATE_CAN_NOT_NULL);
+            validateDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+        } else if (!eventDTO.getBeginDate().before(eventDTO.getEndDate())) {
+            validateDTO.setMessage(ErrorMessage.END_DATE_AFTER_BEGIN_DATE);
+            validateDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+        } else {
+            {
+                for (EventUserDTO eventUserDTO : eventDTO.getEventUserList()) {
+                    if (eventUserDTO.getUser().getUsername() == "") {
+                        validateDTO.setMessage(ErrorMessage.USERNAME_CAN_NOT_NULL);
+                        validateDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
+                    } else if (eventUserDTO.getType() == null) {
+                        validateDTO.setMessage(ErrorMessage.MEMBER_TYPE_CAN_NOT_NULL);
+                        validateDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
+                        validateResult = false;
+                    } else if ((eventUserDTO.getType() < 1) || (eventUserDTO.getType() > 3)) {
+                        validateDTO.setMessage(ErrorMessage.INVALIDATED_MEMBER_TYPE);
+                        validateDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+                        validateResult = false;
+                    } else if (!validateUser(eventDTO)) {
+                        validateDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
+                        validateDTO.setMessage(ErrorMessage.NOT_FIND_USER);
+                        validateResult = false;
+                    } else {
+                        validateResult = true;
+                    }
+                }
+            }
+        }
+        return validateResult;
+    }
+
+    private Boolean validateUser(EventDTO<EventSeminarDetail> eventDTO) {
+        List<UserDTO> ldapUserList = ldapUserService.getAllUsers();
+        List<UserDTO> ldapUserListClone = new ArrayList<>(ldapUserList);
+        List<KpiUser> dbUserList = (List<KpiUser>) kpiUserRepo.findAll();
+
+        ldapUserList.removeIf(userDTO -> dbUserList.stream()
+                .anyMatch(kpiUser -> kpiUser.getUserName().equals(userDTO.getUsername())));
+
+        ldapUserList.forEach(userDTO -> userService.registerUser(userDTO.getUsername()));
+
+        for (EventUserDTO eventUserDTO : eventDTO.getEventUserList()) {
+            if (!ldapUserListClone.stream().anyMatch(
+                    userDTO -> userDTO.getUsername().equals(eventUserDTO.getUser().getUsername()))) {
+                return false;
+            }
+        }
+        return true;
     }
 }
