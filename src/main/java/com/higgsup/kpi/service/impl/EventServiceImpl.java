@@ -330,11 +330,58 @@ public class EventServiceImpl implements EventService {
     public EventDTO createClub(EventDTO<EventClubDetail> eventDTO) throws JsonProcessingException {
         EventDTO<EventClubDetail> validatedEventDTO = new EventDTO<>();
 
-        if (kpiEventRepo.findByName(eventDTO.getName()) == null) {
-            KpiEvent kpiEvent = new KpiEvent();
+        KpiEvent kpiEvent = new KpiEvent();
 
-            ObjectMapper mapper = new ObjectMapper();
-            if (validateClub(eventDTO, validatedEventDTO)) {
+        ObjectMapper mapper = new ObjectMapper();
+
+        List<ErrorDTO> validates = validateClub(eventDTO);
+
+        if (CollectionUtils.isEmpty(validates)) {
+            String clubJson = mapper.writeValueAsString(eventDTO.getAdditionalConfig());
+            BeanUtils.copyProperties(eventDTO, kpiEvent);
+
+            kpiEvent.setAdditionalConfig(clubJson);
+            kpiEvent.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+            Optional<KpiGroup> groupOptional = kpiGroupRepo.findById(eventDTO.getGroup().getId());
+
+            if (groupOptional.isPresent()) {
+                kpiEvent.setGroup(groupOptional.get());
+                kpiEvent = kpiEventRepo.save(kpiEvent);
+
+                List<KpiEventUser> eventUsers = convertEventUsersToEntity(kpiEvent, eventDTO.getEventUserList());
+                kpiEventUserRepo.saveAll(eventUsers);
+
+                BeanUtils.copyProperties(kpiEvent, validatedEventDTO);
+                validatedEventDTO.setGroup(eventDTO.getGroup());
+                validatedEventDTO.setAdditionalConfig(eventDTO.getAdditionalConfig());
+                validatedEventDTO.setEventUserList(eventDTO.getEventUserList());
+            } else {
+                validatedEventDTO.setMessage(ErrorMessage.NOT_FIND_GROUP);
+                validatedEventDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
+            }
+        } else {
+            validatedEventDTO.setErrorCode(validates.get(0).getErrorCode());
+            validatedEventDTO.setMessage(validates.get(0).getMessage());
+            validatedEventDTO.setErrorDTOS(validates);
+        }
+        return validatedEventDTO;
+    }
+
+    @Override
+    public EventDTO updateClub(EventDTO<EventClubDetail> eventDTO) throws JsonProcessingException {
+        EventDTO<EventClubDetail> validatedEventDTO = new EventDTO<>();
+
+        List<ErrorDTO> validates = validateClub(eventDTO);
+
+        Optional<KpiEvent> kpiEventOptional = kpiEventRepo.findById(eventDTO.getId());
+
+        if (kpiEventOptional.isPresent()) {
+            if (CollectionUtils.isEmpty(validates)) {
+
+                KpiEvent kpiEvent = kpiEventOptional.get();
+                eventDTO.setId(kpiEvent.getId());
+
+                ObjectMapper mapper = new ObjectMapper();
                 String clubJson = mapper.writeValueAsString(eventDTO.getAdditionalConfig());
                 BeanUtils.copyProperties(eventDTO, kpiEvent);
 
@@ -357,22 +404,25 @@ public class EventServiceImpl implements EventService {
                     validatedEventDTO.setMessage(ErrorMessage.NOT_FIND_GROUP);
                     validatedEventDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
                 }
+            } else {
+                validatedEventDTO.setErrorCode(validates.get(0).getErrorCode());
+                validatedEventDTO.setMessage(validates.get(0).getMessage());
+                validatedEventDTO.setErrorDTOS(validates);
             }
-
-        } else {
-            validatedEventDTO.setMessage(ErrorMessage.EVENT_ALREADY_EXISTS);
-            validatedEventDTO.setErrorCode(ErrorCode.PARAMETERS_ALREADY_EXIST.getValue());
         }
-        return validatedEventDTO;
+
+
+        return null;
     }
 
-    @Override
+    /*@Override
     public EventDTO updateClub(EventDTO<EventClubDetail> eventDTO) throws JsonProcessingException {
         EventDTO<EventClubDetail> validatedEventDTO = new EventDTO<>();
 
         Optional<KpiEvent> kpiEventOptional = kpiEventRepo.findById(eventDTO.getId());
 
         if (kpiEventOptional.isPresent()) {
+
             if (validateClub(eventDTO, validatedEventDTO)) {
                 KpiEvent kpiEvent = kpiEventOptional.get();
                 eventDTO.setId(kpiEvent.getId());
@@ -407,7 +457,7 @@ public class EventServiceImpl implements EventService {
             validatedEventDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
         }
         return validatedEventDTO;
-    }
+    }*/
 
     private List<KpiEventUser> convertEventUsersToEntity(KpiEvent kpiEvent, List<EventUserDTO> eventUserList) {
         List<KpiEventUser> kpiEventUsers = new ArrayList<>();
@@ -428,51 +478,142 @@ public class EventServiceImpl implements EventService {
         return kpiEventUsers;
     }
 
-    private Boolean validateClub(EventDTO<EventClubDetail> eventDTO, EventDTO validatedEventDTO) {
-        Boolean validate = false;
+    private List<ErrorDTO> validateClub(EventDTO<EventClubDetail> eventDTO) {
+        List<ErrorDTO> errors = new ArrayList<>();
+
+        if (kpiEventRepo.findByName(eventDTO.getName()) != null) {
+            ErrorDTO errorDTO = new ErrorDTO();
+
+            errorDTO.setMessage(ErrorMessage.EVENT_ALREADY_EXISTS);
+            errorDTO.setErrorCode(ErrorCode.PARAMETERS_ALREADY_EXIST.getValue());
+
+            errors.add(errorDTO);
+        }
 
         if (eventDTO.getName() == null) {
-            validatedEventDTO.setMessage(ErrorMessage.NAME_DOES_NOT_ALLOW_NULL);
-            validatedEventDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
-        } else if (eventDTO.getAdditionalConfig().getPointInfo() == null) {
-            validatedEventDTO.setMessage(ErrorMessage.POINT_INFO_CAN_NOT_NULL);
-            validatedEventDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
-        } else if (eventDTO.getEventUserList().size() == 0) {
-            validatedEventDTO.setMessage(ErrorMessage.LIST_OF_PARTICIPANTS_CAN_NOT_NULL);
-            validatedEventDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
-        } else if (eventDTO.getBeginDate() == null) {
-            validatedEventDTO.setMessage(ErrorMessage.BEGIN_DATE_CAN_NOT_NULL);
-            validatedEventDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
-        } else if (eventDTO.getEndDate() == null) {
-            validatedEventDTO.setMessage(ErrorMessage.END_DATE_CAN_NOT_NULL);
-            validatedEventDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
-        } else if (eventDTO.getBeginDate().after(eventDTO.getEndDate())) {
-            validatedEventDTO.setMessage(ErrorCode.BEGIN_DATE_IS_NOT_AFTER_END_DATE.getDescription());
-            validatedEventDTO.setErrorCode(ErrorCode.BEGIN_DATE_IS_NOT_AFTER_END_DATE.getValue());
-        } else if (!kpiGroupRepo.findById(eventDTO.getGroup().getId()).isPresent()) {
-            validatedEventDTO.setMessage(ErrorMessage.NOT_FIND_GROUP);
-            validatedEventDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
+            ErrorDTO errorDTO = new ErrorDTO();
+
+            errorDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
+            errorDTO.setMessage(ErrorMessage.NAME_DOES_NOT_ALLOW_NULL);
+
+            errors.add(errorDTO);
+        }
+
+        if (eventDTO.getStatus() == null) {
+            ErrorDTO errorDTO = new ErrorDTO();
+
+            errorDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
+            errorDTO.setMessage(ErrorMessage.STATUS_OF_EVENT_CAN_NOT_NULL);
+
+            errors.add(errorDTO);
         } else {
 
+            if (eventDTO.getStatus() < 1 || eventDTO.getStatus() > 3) {
+                ErrorDTO errorDTO = new ErrorDTO();
+
+                errorDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
+                errorDTO.setMessage(ErrorMessage.STATUS_OF_EVENT_DOES_NOT_EXIST);
+
+                errors.add(errorDTO);
+            }
+        }
+        if (eventDTO.getBeginDate() == null) {
+            ErrorDTO errorDTO = new ErrorDTO();
+
+            errorDTO.setMessage(ErrorMessage.BEGIN_DATE_CAN_NOT_NULL);
+            errorDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
+
+            errors.add(errorDTO);
+        }
+
+        if (eventDTO.getEndDate() == null) {
+            ErrorDTO errorDTO = new ErrorDTO();
+
+            errorDTO.setMessage(ErrorMessage.END_DATE_CAN_NOT_NULL);
+            errorDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
+
+            errors.add(errorDTO);
+        }
+
+
+        if (eventDTO.getAdditionalConfig().getPointInfo() == null) {
+            ErrorDTO errorDTO = new ErrorDTO();
+            errorDTO.setMessage(ErrorMessage.POINT_INFO_CAN_NOT_NULL);
+            errorDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
+
+            errors.add(errorDTO);
+        }
+
+
+        if (eventDTO.getEventUserList().size() == 0) {
+            ErrorDTO errorDTO = new ErrorDTO();
+
+            errorDTO.setMessage(ErrorMessage.LIST_OF_PARTICIPANTS_CAN_NOT_NULL);
+            errorDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
+
+            errors.add(errorDTO);
+        }
+
+        if (eventDTO.getBeginDate().after(eventDTO.getEndDate())) {
+            ErrorDTO errorDTO = new ErrorDTO();
+
+            errorDTO.setMessage(ErrorCode.BEGIN_DATE_IS_NOT_AFTER_END_DATE.getDescription());
+            errorDTO.setErrorCode(ErrorCode.BEGIN_DATE_IS_NOT_AFTER_END_DATE.getValue());
+
+            errors.add(errorDTO);
+        }
+
+        if (!kpiGroupRepo.findById(eventDTO.getGroup().getId()).isPresent()) {
+            ErrorDTO errorDTO = new ErrorDTO();
+
+            errorDTO.setMessage(ErrorMessage.NOT_FIND_GROUP);
+            errorDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
+
+            errors.add(errorDTO);
+        } else {
             for (EventUserDTO eventUserDTO : eventDTO.getEventUserList()) {
                 Integer userType = eventUserDTO.getType();
                 if (userType == null) {
-                    validatedEventDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
-                    validatedEventDTO.setMessage(ErrorMessage.USER_TYPE_CAN_NOT_NULL);
+                    ErrorDTO errorDTO = new ErrorDTO();
+
+                    errorDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
+                    errorDTO.setMessage(ErrorMessage.USER_TYPE_CAN_NOT_NULL);
+
+                    errors.add(errorDTO);
                 } else if (userType < 1 || userType > 3) {
-                    validatedEventDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
-                    validatedEventDTO.setMessage(ErrorMessage.MEMBER_TYPE_DOES_NOT_EXIST);
-                    validate = false;
+                    ErrorDTO errorDTO = new ErrorDTO();
+
+                    errorDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
+                    errorDTO.setMessage(ErrorMessage.MEMBER_TYPE_DOES_NOT_EXIST);
+
+                    errors.add(errorDTO);
                 } else if (!validateUser(eventDTO)) {
-                    validatedEventDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
-                    validatedEventDTO.setMessage(ErrorMessage.USER_DOES_NOT_EXIST);
-                    validate = false;
-                } else {
-                    validate = true;
+                    ErrorDTO errorDTO = new ErrorDTO();
+
+                    errorDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
+                    errorDTO.setMessage(ErrorMessage.USER_DOES_NOT_EXIST);
+
+                    errors.add(errorDTO);
                 }
             }
         }
-        return validate;
+
+        //Validate update
+        if (Objects.nonNull(eventDTO.getId())) {
+            Optional<KpiEvent> kpiEventOptional = kpiEventRepo.findById(eventDTO.getId());
+
+            if (!kpiEventOptional.isPresent()) {
+                ErrorDTO errorDTO = new ErrorDTO();
+
+                errorDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
+                errorDTO.setMessage(ErrorMessage.NOT_FIND_EVENT);
+
+                errors.add(errorDTO);
+            }
+        }
+
+
+        return errors;
     }
 
     private Boolean validateUser(EventDTO<EventClubDetail> eventDTO) {
