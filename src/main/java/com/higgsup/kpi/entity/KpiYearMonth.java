@@ -1,14 +1,11 @@
 package com.higgsup.kpi.entity;
 
-import org.hibernate.annotations.CreationTimestamp;
-
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Timestamp;
 
 @Entity
-@Table(name = "kpi_month")
-public class KpiMonth implements Serializable {
+@Table(name = "kpi_year_month")
+public class KpiYearMonth implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -17,9 +14,8 @@ public class KpiMonth implements Serializable {
     private Integer id;
 
     @Basic
-    @Column(name = "month")
-    @CreationTimestamp
-    private Timestamp month;
+    @Column(name = "yearmonth")
+    private Integer yearMonth;
 
     public Integer getId() {
         return id;
@@ -29,11 +25,11 @@ public class KpiMonth implements Serializable {
         this.id = id;
     }
 
-    public Timestamp getMonth() {
-        return month;
+    public Integer getYearMonth() {
+        return yearMonth;
     }
 
-    public void setMonth(Timestamp month) {
-        this.month = month;
+    public void setYearMonth(Integer yearMonth) {
+        this.yearMonth = yearMonth;
     }
 }

@@ -3,19 +3,23 @@ package com.higgsup.kpi.service.impl;
 import com.higgsup.kpi.dto.LateTimeCheckDTO;
 import com.higgsup.kpi.dto.UserDTO;
 import com.higgsup.kpi.entity.KpiLateTimeCheck;
-import com.higgsup.kpi.entity.KpiMonth;
 import com.higgsup.kpi.entity.KpiUser;
+import com.higgsup.kpi.entity.KpiYearMonth;
 import com.higgsup.kpi.repository.KpiLateTimeCheckRepo;
 import com.higgsup.kpi.repository.KpiMonthRepo;
 import com.higgsup.kpi.repository.KpiUserRepo;
 import com.higgsup.kpi.service.LateTimeCheckService;
 import com.higgsup.kpi.service.LdapUserService;
 import com.higgsup.kpi.service.UserService;
+import com.higgsup.kpi.util.UtilsConvert;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -37,11 +41,14 @@ public class LateTimeCheckServiceImpl implements LateTimeCheckService {
     @Autowired
     KpiLateTimeCheckRepo kpiLateTimeCheckRepo;
 
+    @Autowired
+    private Environment environment;
+
     @Override
     @Transactional
     public List<KpiLateTimeCheck> createDataNewMonthOrUpdate() {
-        KpiMonth kpiMonth = getAndCreateNewMonth();
-        return createNewDataOrUpdateDate(kpiMonth);
+        KpiYearMonth kpiYearMonth = getAndCreateNewMonth();
+        return createNewDataOrUpdateDate(kpiYearMonth);
     }
 
     @Override
@@ -58,7 +65,7 @@ public class LateTimeCheckServiceImpl implements LateTimeCheckService {
             UserDTO user = new UserDTO();
 
             BeanUtils.copyProperties(lateTimeCheck, lateTimeCheckDTO, "user");
-            BeanUtils.copyProperties(lateTimeCheck.getUser(), user,"avatar");
+            BeanUtils.copyProperties(lateTimeCheck.getUser(), user, "avatar");
             user.setUsername(lateTimeCheck.getUser().getUserName());
             lateTimeCheckDTO.setUser(user);
 
@@ -67,8 +74,8 @@ public class LateTimeCheckServiceImpl implements LateTimeCheckService {
         return lateTimeCheckDTOS;
     }
 
-    private List<KpiLateTimeCheck> createNewDataOrUpdateDate(KpiMonth kpiMonth) {
-        List<KpiLateTimeCheck> lateTimeChecksInDB = kpiLateTimeCheckRepo.findByMonth(kpiMonth);
+    private List<KpiLateTimeCheck> createNewDataOrUpdateDate(KpiYearMonth kpiYearMonth) {
+        List<KpiLateTimeCheck> lateTimeChecksInDB = kpiLateTimeCheckRepo.findByMonth(kpiYearMonth);
         List<UserDTO> userDTOSInLdap = ldapUserService.getAllEmployeeUsers();
         List<UserDTO> userDTOSInLdapClone = new ArrayList<>(userDTOSInLdap);
         List<KpiUser> kpiUsersInDB = (List<KpiUser>) kpiUserRepo.findAll();
@@ -93,7 +100,7 @@ public class LateTimeCheckServiceImpl implements LateTimeCheckService {
         kpiUsersAll.forEach(kpiUser -> {
             KpiLateTimeCheck kpiLateTimeCheck = new KpiLateTimeCheck();
             kpiLateTimeCheck.setUser(kpiUser);
-            kpiLateTimeCheck.setMonth(kpiMonth);
+            kpiLateTimeCheck.setMonth(kpiYearMonth);
             lateTimeChecksNew.add(kpiLateTimeCheck);
         });
         List<KpiLateTimeCheck> lateTimeChecksNewSave = (List<KpiLateTimeCheck>) kpiLateTimeCheckRepo.saveAll(lateTimeChecksNew);
@@ -102,15 +109,26 @@ public class LateTimeCheckServiceImpl implements LateTimeCheckService {
         return lateTimeChecksInDB;
     }
 
-    private KpiMonth getAndCreateNewMonth() {
-        KpiMonth kpiMonth = null;
-        Optional<KpiMonth> kpiMonthFromDB = kpiMonthRepo.findByMonthCurrent();
+    private KpiYearMonth getAndCreateNewMonth() {
+        KpiYearMonth kpiYearMonth = null;
+        Optional<KpiYearMonth> kpiMonthFromDB = kpiMonthRepo.findByMonthCurrent();
         if (kpiMonthFromDB.isPresent()) {
-            kpiMonth = kpiMonthFromDB.get();
+            kpiYearMonth = kpiMonthFromDB.get();
+            Timestamp dateCun = new Timestamp(System.currentTimeMillis());
+            java.util.Date date = UtilsConvert.convertYearMonthIntToDate(kpiYearMonth.getYearMonth());
+            if (date.getMonth() < dateCun.getMonth() && dateCun.getDate() >= Integer.valueOf(
+                    environment.getProperty("config.day.new.year.month")) && dateCun.getHours() >= Integer.valueOf(
+                    environment.getProperty("config.hour.new.year.month"))) {
+                KpiYearMonth kpiYearMonthCreate = new KpiYearMonth();
+                kpiYearMonthCreate.setYearMonth(UtilsConvert.convertDateToYearMonthInt(dateCun));
+                kpiYearMonth = kpiMonthRepo.save(kpiYearMonthCreate);
+            }
         } else {
-            KpiMonth kpiMonthCreate = new KpiMonth();
-            kpiMonth = kpiMonthRepo.save(kpiMonthCreate);
+            java.util.Date dateCun = new Date(System.currentTimeMillis());
+            KpiYearMonth kpiYearMonthCreate = new KpiYearMonth();
+            kpiYearMonthCreate.setYearMonth(UtilsConvert.convertDateToYearMonthInt(dateCun));
+            kpiYearMonth = kpiMonthRepo.save(kpiYearMonthCreate);
         }
-        return kpiMonth;
+        return kpiYearMonth;
     }
 }
