@@ -39,4 +39,16 @@ public final class ErrorMessage {
     public final static String EVENT_ALREADY_EXISTS = "event name already exists";
     public final static String POINT_INFO_CAN_NOT_NULL = "point information cannot null";
     public final static String LIST_OF_PARTICIPANTS_CAN_NOT_NULL = "list of participants cannot null";
+    public final static String START_DATE_CAN_NOT_NULL = "start date cannot null";
+    public final static String GROUP_CAN_NOT_NULL = "group cannot null";
+    public final static String GROUP_ID_CAN_NOT_NULL = "group ID can not be null";
+    public final static String LIST_SUPPORT_CAN_NOT_EMPTY = "list support can not empty";
+    public final static String NAME_AT_INDEX_CAN_NOT_NULL = "name at index %s can not null";
+    public final static String NAME_SUPPORT_AT_INDEX_CAN_NOT_INCORRECT = "name support at index %s not incorrect";
+    public final static String QUANTITY_AT_INDEX_CAN_NOT_NULL = "quantity at index %s can not null";
+    public final static String QUANTITY_AT_INDEX_CAN_NOT_LESS_ONE = "quantity at index %s can not less one";
+    public final static String GROUP_ID_NOT_IS_SUPPORT = "group ID  not is support";
+    public final static String ID_NOT_INCORRECT = "id not incorrect";
+    public final static String GROUP_WITH_ID_NOT_IS_SUPPORT = "group with id not is support";
+
 }

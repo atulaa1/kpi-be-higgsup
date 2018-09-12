@@ -31,6 +31,10 @@
     {
       "name": "user-controller",
       "description": "Users"
+    },
+    {
+      "name": "event-controller",
+      "description": "event-controller"
     }
   ],
   "security": [
@@ -51,6 +55,666 @@
     "https"
   ],
   "paths": {
+    "/api/events/support": {
+      "post": {
+        "tags": [
+          "event-controller"
+        ],
+        "summary": "createSupport",
+        "operationId": "createSupportUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "supportDTO",
+            "description": "supportDTO",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "beginDate",
+                "group",
+                "additionalConfig"
+              ],
+              "properties": {
+                "beginDate": {
+                  "type": "string"
+                },
+                "group": {
+                  "type": "object",
+                  "required": [
+                    "id"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "additionalConfig": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "name",
+                      "quantity"
+                    ],
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "quantity": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "beginDate": "10-09-2018 11:00",
+                "group": {
+                  "id": 2
+                },
+                "additionalConfig": [
+                  {
+                    "name": "cleanUpPoint",
+                    "quantity": 1
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "status_code : 200. Meaning: Thành công \n status_code : 901 \n Message: start date cannot null. Meaning: ngày bắt đầu không được null. \n Message: group cannot null. Meaning: group không thể rỗng \n Message: group ID can not be null. Meaning: ID group không được rỗng \n Message: group ID not is support. Meaning: ID group không phải là support \n Message: list support can not empty. Meaning: danh sách support không được rỗng \n Message: name at index {index} can not null. Meaning: tên tại 1 không thể rỗng \n Message: name support at index {index} not incorrect. Meaning: tên support tại 1 không chính xác \n Message: quantity at index {index} can not null. Meaning: số lượng tại 1 không thể rỗng \n Message: quantity at index {index} can less one. Meaning: số lượng tại 1 không thể nhỏ hơn 1 \n status_code : 999 \n Message: system error. Meaning: Lỗi hệ thống , liên hệ admin.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "address": {
+                      "type": "string"
+                    },
+                    "createdDate": {
+                      "type": "string"
+                    },
+                    "updatedDate": {
+                      "type": "string"
+                    },
+                    "beginDate": {
+                      "type": "string"
+                    },
+                    "endDate": {
+                      "type": "string"
+                    },
+                    "group": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "groupType": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "number"
+                            },
+                            "name": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "createdDate": {
+                          "type": "string"
+                        },
+                        "additionalConfig": {
+                          "type": "object",
+                          "properties": {
+                            "cleanUpPoint": {
+                              "type": "number"
+                            },
+                            "buyingStuffPoint": {
+                              "type": "number"
+                            },
+                            "supportConferencePoint": {
+                              "type": "number"
+                            },
+                            "trainingPoint": {
+                              "type": "number"
+                            },
+                            "weeklyCleanUpPoint": {
+                              "type": "number"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "eventUserList": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "user": {
+                            "type": "object",
+                            "properties": {
+                              "user": {
+                                "type": "object",
+                                "properties": {
+                                  "username": {
+                                    "type": "string"
+                                  },
+                                  "lastName": {
+                                    "type": "string"
+                                  },
+                                  "firstName": {
+                                    "type": "string"
+                                  },
+                                  "fullName": {
+                                    "type": "string"
+                                  },
+                                  "email": {
+                                    "type": "string"
+                                  },
+                                  "userRole": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "avatar": {
+                                    "type": "string"
+                                  },
+                                  "birthday": {
+                                    "type": "date"
+                                  },
+                                  "numberPhone": {
+                                    "type": "string"
+                                  },
+                                  "gmail": {
+                                    "type": "string"
+                                  },
+                                  "skype": {
+                                    "type": "string"
+                                  },
+                                  "dateStartWork": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "event": {
+                                "type": "object"
+                              },
+                              "type": {
+                                "type": "number"
+                              }
+                            }
+                          },
+                          "event": {
+                            "type": "object"
+                          },
+                          "type": {
+                            "type": "number"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "message": {
+                  "type": "string"
+                },
+                "status_code": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "errorCode": {
+                        "type": "number"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "data": {
+                  "id": 32,
+                  "name": "Support",
+                  "description": null,
+                  "status": 1,
+                  "address": null,
+                  "createdDate": "10-09-2018 15:36",
+                  "updatedDate": "10-09-2018 15:36",
+                  "beginDate": "10-09-2018 11:00",
+                  "endDate": null,
+                  "group": {
+                    "id": 2,
+                    "name": "Support",
+                    "description": null,
+                    "groupType": {
+                      "id": 4,
+                      "name": "Support chung"
+                    },
+                    "createdDate": "07-09-2018 18:02",
+                    "additionalConfig": {
+                      "cleanUpPoint": 1,
+                      "buyingStuffPoint": 2,
+                      "supportConferencePoint": 3,
+                      "trainingPoint": 4,
+                      "weeklyCleanUpPoint": 5
+                    }
+                  },
+                  "eventUserList": [
+                    {
+                      "user": {
+                        "username": "kpi.admin",
+                        "lastName": "kpi",
+                        "firstName": "admin",
+                        "fullName": null,
+                        "email": "kpi.admin@higgsup.com",
+                        "userRole": null,
+                        "avatar": "1",
+                        "birthday": "2018-09-25",
+                        "numberPhone": "0966211618",
+                        "address": "Lê văn Thành ",
+                        "gmail": "lethanh9398@gmail.com",
+                        "skype": "solitarysp@gmail.com",
+                        "dateStartWork": "2018-09-29"
+                      },
+                      "type": 2
+                    }
+                  ],
+                  "additionalConfig": [
+                    {
+                      "name": "cleanUpPoint",
+                      "point": null,
+                      "quantity": 1
+                    }
+                  ]
+                },
+                "status_code": 200
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/events/support/{id}": {
+      "put": {
+        "tags": [
+          "event-controller"
+        ],
+        "summary": "updateSupport",
+        "operationId": "updateSupportUsingPUT",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "body",
+            "name": "supportDTO",
+            "description": "supportDTO",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "beginDate",
+                "group",
+                "additionalConfig"
+              ],
+              "properties": {
+                "beginDate": {
+                  "type": "string"
+                },
+                "group": {
+                  "type": "object",
+                  "required": [
+                    "id"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "additionalConfig": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "name",
+                      "quantity"
+                    ],
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "quantity": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "beginDate": "10-09-2018 11:00",
+                "group": {
+                  "id": 2
+                },
+                "additionalConfig": [
+                  {
+                    "name": "cleanUpPoint",
+                    "quantity": 1
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "status_code : 200. Meaning: Thành công \n status_code : 901 \n Message: start date cannot null. Meaning: ngày bắt đầu không được null. \n Message: group cannot null. Meaning: group không thể rỗng \n Message: group ID can not be null. Meaning: ID group không được rỗng \n Message: group ID not is support. Meaning: ID group không phải là support \n Message: list support can not empty. Meaning: danh sách support không được rỗng \n Message: name at index {index} can not null. Meaning: tên tại 1 không thể rỗng \n Message: name support at index {index} not incorrect. Meaning: tên support tại 1 không chính xác \n Message: quantity at index {index} can not null. Meaning: số lượng tại 1 không thể rỗng \n Message: quantity at index {index} can less one. Meaning: số lượng tại 1 không thể nhỏ hơn 1 \n Message: group with id not is support. Meaning: group với id này không phải là support \n Message: id not incorrect. Meaning: id không chính xác , không phải là một support \n status_code : 999 \n Message: system error. Meaning: Lỗi hệ thống , liên hệ admin. \n status_code : 403 \n Message: Forbidden. Meaning: bạn không có quyền sửa cho id support này",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "address": {
+                      "type": "string"
+                    },
+                    "createdDate": {
+                      "type": "string"
+                    },
+                    "updatedDate": {
+                      "type": "string"
+                    },
+                    "beginDate": {
+                      "type": "string"
+                    },
+                    "endDate": {
+                      "type": "string"
+                    },
+                    "group": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "groupType": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "number"
+                            },
+                            "name": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "createdDate": {
+                          "type": "string"
+                        },
+                        "additionalConfig": {
+                          "type": "object",
+                          "properties": {
+                            "cleanUpPoint": {
+                              "type": "number"
+                            },
+                            "buyingStuffPoint": {
+                              "type": "number"
+                            },
+                            "supportConferencePoint": {
+                              "type": "number"
+                            },
+                            "trainingPoint": {
+                              "type": "number"
+                            },
+                            "weeklyCleanUpPoint": {
+                              "type": "number"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "eventUserList": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "user": {
+                            "type": "object",
+                            "properties": {
+                              "user": {
+                                "type": "object",
+                                "properties": {
+                                  "username": {
+                                    "type": "string"
+                                  },
+                                  "lastName": {
+                                    "type": "string"
+                                  },
+                                  "firstName": {
+                                    "type": "string"
+                                  },
+                                  "fullName": {
+                                    "type": "string"
+                                  },
+                                  "email": {
+                                    "type": "string"
+                                  },
+                                  "userRole": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "avatar": {
+                                    "type": "string"
+                                  },
+                                  "birthday": {
+                                    "type": "date"
+                                  },
+                                  "numberPhone": {
+                                    "type": "string"
+                                  },
+                                  "gmail": {
+                                    "type": "string"
+                                  },
+                                  "skype": {
+                                    "type": "string"
+                                  },
+                                  "dateStartWork": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "event": {
+                                "type": "object"
+                              },
+                              "type": {
+                                "type": "number"
+                              }
+                            }
+                          },
+                          "event": {
+                            "type": "object"
+                          },
+                          "type": {
+                            "type": "number"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "message": {
+                  "type": "string"
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "errorCode": {
+                        "type": "number"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "status_code": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "example": {
+                "data": {
+                  "id": 32,
+                  "name": "Support",
+                  "description": null,
+                  "status": 1,
+                  "address": null,
+                  "createdDate": "10-09-2018 15:36",
+                  "updatedDate": "10-09-2018 15:36",
+                  "beginDate": "10-09-2018 11:00",
+                  "endDate": null,
+                  "group": {
+                    "id": 2,
+                    "name": "Support",
+                    "description": null,
+                    "groupType": {
+                      "id": 4,
+                      "name": "Support chung"
+                    },
+                    "createdDate": "07-09-2018 18:02",
+                    "additionalConfig": {
+                      "cleanUpPoint": 1,
+                      "buyingStuffPoint": 2,
+                      "supportConferencePoint": 3,
+                      "trainingPoint": 4,
+                      "weeklyCleanUpPoint": 5
+                    }
+                  },
+                  "eventUserList": [
+                    {
+                      "user": {
+                        "username": "kpi.admin",
+                        "lastName": "kpi",
+                        "firstName": "admin",
+                        "fullName": null,
+                        "email": "kpi.admin@higgsup.com",
+                        "userRole": null,
+                        "avatar": "1",
+                        "birthday": "2018-09-25",
+                        "numberPhone": "0966211618",
+                        "address": "Lê văn Thành ",
+                        "gmail": "lethanh9398@gmail.com",
+                        "skype": "solitarysp@gmail.com",
+                        "dateStartWork": "2018-09-29"
+                      },
+                      "type": 2
+                    }
+                  ],
+                  "additionalConfig": [
+                    {
+                      "name": "cleanUpPoint",
+                      "point": null,
+                      "quantity": 1
+                    }
+                  ]
+                },
+                "status_code": 200
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/groups/club": {
       "post": {
         "tags": [
@@ -269,6 +933,19 @@
                 "message": {
                   "type": "string"
                 },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "errorCode": {
+                        "type": "number"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
                 "status_code": {
                   "type": "integer",
                   "format": "int32"
@@ -356,6 +1033,19 @@
                 },
                 "message": {
                   "type": "string"
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "errorCode": {
+                        "type": "number"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
                 },
                 "status_code": {
                   "type": "integer"
@@ -1831,6 +2521,19 @@
                 "message": {
                   "type": "string"
                 },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "errorCode": {
+                        "type": "number"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
                 "status_code": {
                   "type": "integer",
                   "format": "int32"
@@ -1852,7 +2555,6 @@
                     "active": 1,
                     "createdDate": "23-08-2018 09:45",
                     "updatedDate": "29-08-2018 03:36"
-
                   }
                 ]
               },
@@ -1947,6 +2649,19 @@
                 },
                 "message": {
                   "type": "string"
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "errorCode": {
+                        "type": "number"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
                 },
                 "status_code": {
                   "type": "integer",
@@ -2067,6 +2782,19 @@
                 },
                 "message": {
                   "type": "string"
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "errorCode": {
+                        "type": "number"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
                 },
                 "status_code": {
                   "type": "integer",
@@ -2193,6 +2921,19 @@
                 },
                 "message": {
                   "type": "string"
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "errorCode": {
+                        "type": "number"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
                 },
                 "status_code": {
                   "type": "integer",
@@ -2390,14 +3131,27 @@
                       "skype": {
                         "type": "string"
                       },
-                      "yearWork": {
-                        "type": "number"
+                      "dateStartWork": {
+                        "type": "string"
                       }
                     }
                   }
                 },
                 "message": {
                   "type": "string"
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "errorCode": {
+                        "type": "number"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
                 },
                 "status_code": {
                   "type": "integer",
@@ -2424,7 +3178,7 @@
                     "gmail": "null",
                     "numberPhone": "null",
                     "skype": "null",
-                    "yearWork": 1
+                    "dateStartWork": "2018-09-29"
                   }
                 ]
               },
@@ -2526,13 +3280,26 @@
                     "skype": {
                       "type": "string"
                     },
-                    "yearWork": {
-                      "type": "number"
+                    "dateStartWork": {
+                      "type": "string"
                     }
                   }
                 },
                 "message": {
                   "type": "string"
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "errorCode": {
+                        "type": "number"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
                 },
                 "status_code": {
                   "type": "integer",
@@ -2557,7 +3324,7 @@
                   "gmail": "lethanh9398@gmail.com",
                   "numberPhone": "0966211618",
                   "skype": "solitarysp@gmail.com",
-                  "yearWork": 1
+                  "dateStartWork": "2018-09-29"
                 }
               },
               "title": "Response"
@@ -2607,7 +3374,7 @@
                 "address",
                 "gmail",
                 "skype",
-                "yearWork"
+                "dateStartWork"
               ],
               "properties": {
                 "avatar": {
@@ -2628,8 +3395,8 @@
                 "skype": {
                   "type": "string"
                 },
-                "yearWork": {
-                  "type": "number"
+                "dateStartWork": {
+                  "type": "string"
                 }
               },
               "example": {
@@ -2639,7 +3406,7 @@
                 "address": "ha noi",
                 "gmail": "lethanh9398@gmail.com",
                 "skype": "skype",
-                "yearWork": 1
+                "dateStartWork": "2018-09-29"
               }
             }
           }
@@ -2669,7 +3436,7 @@
                     "address",
                     "gmail",
                     "skype",
-                    "yearWork"
+                    "dateStartWork"
                   ],
                   "properties": {
                     "username": {
@@ -2711,13 +3478,26 @@
                     "skype": {
                       "type": "string"
                     },
-                    "yearWork": {
-                      "type": "number"
+                    "dateStartWork": {
+                      "type": "string"
                     }
                   }
                 },
                 "message": {
                   "type": "string"
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "errorCode": {
+                        "type": "number"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
                 },
                 "status_code": {
                   "type": "integer",
@@ -2741,7 +3521,7 @@
                   "address": "Lê văn Thành",
                   "gmail": "lethanh9398@gmail.com",
                   "skype": "solitarysp@gmail.com",
-                  "yearWork": 1
+                  "dateStartWork": "2018-09-29"
                 },
                 "status_code": 200
               },
@@ -2826,7 +3606,7 @@
                     "address",
                     "gmail",
                     "skype",
-                    "yearWork"
+                    "dateStartWork"
                   ],
                   "properties": {
                     "username": {
@@ -2868,13 +3648,26 @@
                     "skype": {
                       "type": "string"
                     },
-                    "yearWork": {
-                      "type": "number"
+                    "dateStartWork": {
+                      "type": "string"
                     }
                   }
                 },
                 "message": {
                   "type": "string"
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "errorCode": {
+                        "type": "number"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
                 },
                 "status_code": {
                   "type": "integer",
@@ -2902,7 +3695,7 @@
                   "message": "null",
                   "numberPhone": "0966211618",
                   "skype": "solitarysp@gmail.com",
-                  "yearWork": 1
+                  "dateStartWork": "2018-09-29"
                 }
               },
               "title": "Response"
@@ -3340,8 +4133,8 @@
         "username": {
           "type": "string"
         },
-        "yearWork": {
-          "type": "integer",
+        "dateStartWork": {
+          "type": "string",
           "format": "int32"
         }
       },

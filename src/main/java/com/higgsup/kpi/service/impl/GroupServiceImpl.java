@@ -47,7 +47,7 @@ public class GroupServiceImpl implements GroupService {
             } else if (validateTeambuildingInfo(groupDTO, validatedGroupDTO)) {
                 KpiGroup kpiGroup = kpiGroupOptional.get();
                 ObjectMapper mapper = new ObjectMapper();
-                BeanUtils.copyProperties(groupDTO, kpiGroup, "id");
+                BeanUtils.copyProperties(groupDTO, kpiGroup, "id", "createdDate");
                 String clubJson = mapper.writeValueAsString(groupDTO.getAdditionalConfig());
 
                 kpiGroup.setAdditionalConfig(clubJson);
@@ -148,7 +148,7 @@ public class GroupServiceImpl implements GroupService {
             groupDTO.setId(kpiGroup.getId());
 
             ObjectMapper mapper = new ObjectMapper();
-            BeanUtils.copyProperties(groupDTO, kpiGroup, "id");
+            BeanUtils.copyProperties(groupDTO, kpiGroup, "id", "createdDate");
             String seminarJson = mapper.writeValueAsString(groupDTO.getAdditionalConfig());
 
             kpiGroup.setAdditionalConfig(seminarJson);
@@ -181,7 +181,7 @@ public class GroupServiceImpl implements GroupService {
                 groupDTO.setId(kpiGroup.getId());
 
                 ObjectMapper mapper = new ObjectMapper();
-                BeanUtils.copyProperties(groupDTO, kpiGroup);
+                BeanUtils.copyProperties(groupDTO, kpiGroup, "createdDate");
                 String clubJson = mapper.writeValueAsString(groupDTO.getAdditionalConfig());
 
                 kpiGroup.setAdditionalConfig(clubJson);
@@ -307,7 +307,7 @@ public class GroupServiceImpl implements GroupService {
                         ObjectMapper mapper = new ObjectMapper();
 
                         String jsonConfigSeminar = mapper.writeValueAsString(groupDTO.getAdditionalConfig());
-                        BeanUtils.copyProperties(groupDTO, kpiGroup);
+                        BeanUtils.copyProperties(groupDTO, kpiGroup, "createdDate");
 
                         kpiGroup.setAdditionalConfig(jsonConfigSeminar);
                         kpiGroup.setGroupType(kpiGroupType.get());
