@@ -715,6 +715,106 @@
         }
       }
     },
+    "/api/events/club": {
+      "post": {
+        "tags": [
+          "event-controller"
+        ],
+        "summary": "createClub",
+        "operationId": "createClubUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "eventDTO",
+            "description": "eventDTO",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EventDTO«EventClubDetail»"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Response"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/events/club/{id}": {
+      "put": {
+        "tags": [
+          "event-controller"
+        ],
+        "summary": "updateClub",
+        "operationId": "updateClubUsingPUT",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "body",
+            "name": "eventDTO",
+            "description": "eventDTO",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EventDTO«EventClubDetail»"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Response"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/groups/club": {
       "post": {
         "tags": [
