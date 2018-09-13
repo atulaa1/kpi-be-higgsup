@@ -539,8 +539,8 @@ public class EventServiceImpl implements EventService {
             if (!kpiEventOptional.isPresent()) {
                 ErrorDTO errorDTO = new ErrorDTO();
 
-                errorDTO.setErrorCode(ErrorCode.CANNOT_UPDATE.getValue());
-                errorDTO.setMessage(ErrorMessage.CAN_NOT_UPDATE_EVENT);
+                errorDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
+                errorDTO.setMessage(ErrorMessage.NOT_FIND_EVENT);
 
                 errors.add(errorDTO);
             }
@@ -550,8 +550,8 @@ public class EventServiceImpl implements EventService {
         if (eventDTO.getStatus() != 1) {
             ErrorDTO errorDTO = new ErrorDTO();
 
-            errorDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
-            errorDTO.setMessage(ErrorMessage.NOT_FIND_EVENT);
+            errorDTO.setErrorCode(ErrorCode.CANNOT_UPDATE.getValue());
+            errorDTO.setMessage(ErrorMessage.CAN_NOT_UPDATE_EVENT);
 
             errors.add(errorDTO);
         }
