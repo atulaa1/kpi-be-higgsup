@@ -8,7 +8,7 @@ purpose: change column name to event_name for kpi_event table
 purpose: MODIFY column status from varchar to TINYINT for kpi_event table
 purpose: change year_work to name date_start_work
 
-purpose: create table check latetime and table month
+purpose: create table check latetime and table kpi_year_month
 **/
 
 
@@ -21,10 +21,10 @@ ALTER TABLE kpi_event MODIFY status TINYINT(4) COMMENT 'status maybe is 1== wait
 /*change column kpi_event_user*/
 ALTER TABLE kpi_event_user CHANGE is_host type TINYINT(4) COMMENT 'type can 1 is host , 2 is member , 3 is listener';
 
--- create table month
-CREATE TABLE `kpi_month` (
+-- create table kpi_year_month
+CREATE TABLE `kpi_year_month` (
   `id` int PRIMARY KEY AUTO_INCREMENT,
-  `month` DATE NOT NULL
+  `year_and_month` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -33,9 +33,9 @@ CREATE TABLE `kpi_latetime_check` (
   `id` int(10) PRIMARY KEY AUTO_INCREMENT,
   `user_name` varchar(50) CHARACTER SET utf8 NOT NULL,
   `late_times` int(11),
-  `month_id` int(11) NOT NULL,
+  `year_month_id` int(11) NOT NULL,
   FOREIGN KEY (user_name) REFERENCES kpi_user(user_name),
-  FOREIGN KEY (month_id) REFERENCES kpi_month(id)
+  FOREIGN KEY (year_month_id) REFERENCES kpi_year_month(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- change year_work to name date_start_work
