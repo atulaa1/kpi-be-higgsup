@@ -50,5 +50,5 @@ public final class ErrorMessage {
     public final static String GROUP_ID_NOT_IS_SUPPORT = "group ID  not is support";
     public final static String ID_NOT_INCORRECT = "id not incorrect";
     public final static String GROUP_WITH_ID_NOT_IS_SUPPORT = "group with id not is support";
-
+    public final static String INCORRECT_FILE_FORMAT = "incorrect file format";
 }

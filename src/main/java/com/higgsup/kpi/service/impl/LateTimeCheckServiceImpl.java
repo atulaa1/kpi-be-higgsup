@@ -1,10 +1,13 @@
 package com.higgsup.kpi.service.impl;
 
+import com.higgsup.kpi.dto.ErrorDTO;
 import com.higgsup.kpi.dto.LateTimeCheckDTO;
 import com.higgsup.kpi.dto.UserDTO;
 import com.higgsup.kpi.entity.KpiLateTimeCheck;
 import com.higgsup.kpi.entity.KpiUser;
 import com.higgsup.kpi.entity.KpiYearMonth;
+import com.higgsup.kpi.glossary.ErrorCode;
+import com.higgsup.kpi.glossary.ErrorMessage;
 import com.higgsup.kpi.repository.KpiLateTimeCheckRepo;
 import com.higgsup.kpi.repository.KpiMonthRepo;
 import com.higgsup.kpi.repository.KpiUserRepo;
@@ -12,12 +15,17 @@ import com.higgsup.kpi.service.LateTimeCheckService;
 import com.higgsup.kpi.service.LdapUserService;
 import com.higgsup.kpi.service.UserService;
 import com.higgsup.kpi.util.UtilsConvert;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -52,10 +60,36 @@ public class LateTimeCheckServiceImpl implements LateTimeCheckService {
     }
 
     @Override
-
     public List<LateTimeCheckDTO> getAllLateTimeCheckCurrent() {
         List<KpiLateTimeCheck> lateTimeChecksInDB = createDataNewMonthOrUpdate();
         return convertEntityLateTimeCheckToDTO(lateTimeChecksInDB);
+    }
+
+    @Override
+    public List<LateTimeCheckDTO> processExcelFile(MultipartFile excelDataFile) throws IOException {
+        if(verifyExcelFile(excelDataFile).isEmpty()) {
+            List<LateTimeCheckDTO> lateTimeCheckDTOS = new ArrayList<>();
+            XSSFWorkbook workbook = new XSSFWorkbook(excelDataFile.getInputStream());
+            XSSFSheet worksheet = workbook.getSheetAt(0);
+            XSSFRow titleRow = worksheet.getRow(1);
+
+            for (int i = 1; i < worksheet.getPhysicalNumberOfRows(); i++) {
+                LateTimeCheckDTO lateTimeCheckDTO = new LateTimeCheckDTO();
+                UserDTO userDTO = new UserDTO();
+                XSSFRow row = worksheet.getRow(i);
+
+                userDTO.setUsername(row.getCell(0).getStringCellValue());
+                userDTO.setEmail(row.getCell(1).getStringCellValue());
+
+                lateTimeCheckDTO.setId(i);
+                lateTimeCheckDTO.setLateTimes((int) row.getCell(2).getNumericCellValue());
+                lateTimeCheckDTO.setUser(userDTO);
+                lateTimeCheckDTOS.add(lateTimeCheckDTO);
+            }
+            return lateTimeCheckDTOS;
+        }else{
+            return null;
+        }
     }
 
     private List<LateTimeCheckDTO> convertEntityLateTimeCheckToDTO(List<KpiLateTimeCheck> lateTimeChecksInDB) {
@@ -137,5 +171,15 @@ public class LateTimeCheckServiceImpl implements LateTimeCheckService {
             kpiYearMonth = kpiMonthRepo.save(kpiYearMonthCreate);
         }
         return kpiYearMonth;
+    }
+
+    private List<ErrorDTO> verifyExcelFile(MultipartFile excelFile){
+        List<ErrorDTO> errorDTOS = new ArrayList<>();
+        if(!excelFile.getName().toLowerCase().endsWith(".xlsx")){
+            ErrorDTO errorDTO = new ErrorDTO();
+            errorDTO.setErrorCode(ErrorCode.INCORRECT_FILE_FORMAT.getValue());
+            errorDTO.setMessage(ErrorMessage.INCORRECT_FILE_FORMAT);
+        }
+        return errorDTOS;
     }
 }
