@@ -174,7 +174,7 @@
                   "format": "int32"
                 }
               },
-              "example":{
+              "example": {
                 "data": [
                   {
                     "id": 37,
@@ -911,15 +911,136 @@
             "description": "eventDTO",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/EventDTO«EventClubDetail»"
+              "type": "object",
+              "required": [
+                "name",
+                "beginDate",
+                "endDate",
+                "group",
+                "eventUserList"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "beginDate": {
+                  "type": "string"
+                },
+                "endDate": {
+                  "type": "string"
+                },
+                "group": {
+                  "type": "object",
+                  "required": [
+                    "id"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "eventUserList": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "user": {
+                        "type": "object",
+                        "properties": {
+                          "user": {
+                            "type": "object",
+                            "properties": {
+                              "username": {
+                                "type": "string"
+                              },
+                              "lastName": {
+                                "type": "string"
+                              },
+                              "firstName": {
+                                "type": "string"
+                              },
+                              "fullName": {
+                                "type": "string"
+                              },
+                              "email": {
+                                "type": "string"
+                              },
+                              "userRole": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              },
+                              "avatar": {
+                                "type": "string"
+                              },
+                              "birthday": {
+                                "type": "date"
+                              },
+                              "numberPhone": {
+                                "type": "string"
+                              },
+                              "gmail": {
+                                "type": "string"
+                              },
+                              "skype": {
+                                "type": "string"
+                              },
+                              "dateStartWork": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "event": {
+                            "type": "object"
+                          },
+                          "type": {
+                            "type": "number"
+                          }
+                        }
+                      },
+                      "event": {
+                        "type": "object"
+                      },
+                      "type": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "name": "Đá bóng",
+                "description": "Đá bóng hàng tuần",
+                "address": "Sân vận động Mỹ Đình",
+                "beginDate": "15-09-2018 18:30",
+                "endDate": "15-09-2018 20:30",
+                "group": {
+                  "id": 1
+                },
+                "eventUserList": [
+                  {
+                    "user": {
+                      "username": "kpi.employee"
+                    },
+                    "type": 1
+                  },
+                  {
+                    "user": {
+                      "username": "kpi.test"
+                    },
+                    "type": 3
+                  }
+                ]
+              }
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "status_code : 200. Message: Success. Meaning: Thành công \n status_code: 903. Message: name does not allow null. Meaning: Tên hoạt động không được để trống \n status_code: 903. Message: begin date cannot null. Meaning: Ngày bắt đầu không được để trống \n status_code: 903. Message: end date cannot null. Meaning: Ngày kết thúc không được để trống \n status_code: 903. Message: list of participants cannot null. Meaning: Danh sách người tham gia không được để trống \n status_code: 932. Message: begin date is not after end date. Meaning: Ngày bắt đầu không được diễn ra sau ngày kết thúc \n status_code: 900. Message: not find group. Meaning: Group không tồn tại ",
             "schema": {
-              "$ref": "#/definitions/Response"
             }
           },
           "201": {
