@@ -58,5 +58,6 @@ public final class ErrorMessage {
     public final static String STATUS_OF_EVENT_CAN_NOT_NULL = "status of event cannot null";
     public final static String STATUS_OF_EVENT_DOES_NOT_EXIST = "status of event does not exist";
     public final static String NOT_FIND_EVENT = "not find event by id";
+    public final static String CAN_NOT_UPDATE_EVENT = "cannot update event";
 }
 
