@@ -10,6 +10,7 @@ import com.higgsup.kpi.repository.KpiEventRepo;
 import com.higgsup.kpi.repository.KpiEventUserRepo;
 import com.higgsup.kpi.repository.KpiGroupRepo;
 import com.higgsup.kpi.repository.KpiUserRepo;
+import com.higgsup.kpi.service.BaseService;
 import com.higgsup.kpi.service.EventService;
 import com.higgsup.kpi.service.UserService;
 import org.springframework.beans.BeanUtils;
@@ -22,15 +23,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class EventServiceImpl implements EventService {
+public class EventServiceImpl extends BaseService implements EventService {
 
     @Autowired
     private KpiEventRepo kpiEventRepo;
@@ -93,6 +92,82 @@ public class EventServiceImpl implements EventService {
             eventSupportDTO.setErrorDTOS(validates);
         }
         return eventSupportDTO;
+    }
+
+    @Override
+    public EventDTO confirmOrCancelEvent(EventDTO eventDTO) throws IOException, NoSuchFieldException, IllegalAccessException {
+        Optional<KpiEvent> event = kpiEventRepo.findById(eventDTO.getId());
+        if (event.isPresent()) {
+            KpiEvent kpiEvent = event.get();
+            Calendar calendar = new GregorianCalendar();
+            if ((kpiEvent.getCreatedDate().getYear() + 1900 == calendar.get(Calendar.YEAR) && kpiEvent.getCreatedDate()
+                    .getMonth() + 1 <= (calendar.get(Calendar.MONTH) + 1) && calendar.get(Calendar.HOUR) <= 10 && calendar.get(
+                    Calendar.DATE) <= 16)
+                    ||
+                    (kpiEvent.getCreatedDate().getYear() + 1900 < calendar.get(Calendar.YEAR) && kpiEvent.getCreatedDate()
+                            .getMonth() + 1 > (calendar.get(Calendar.MONTH) + 1) && calendar.get(Calendar.HOUR) <= 10 && calendar
+                            .get(Calendar.DATE) <= 16)
+                    ) {
+                if (Objects.equals(kpiEvent.getStatus(), StatusEvent.WAITING.getValue())) {
+                    GroupType groupType = GroupType.getGroupType(kpiEvent.getGroup().getGroupType().getId());
+                    switch (groupType) {
+                        case SEMINAR:
+                            break;
+                        case CLUB:
+                            break;
+                        case TEAM_BUILDING:
+                            break;
+                        case SUPPORT:
+                            eventDTO = confirmOrCancelEventSupport(kpiEvent, eventDTO);
+                            break;
+                    }
+                } else {
+                    eventDTO.setErrorCode(ErrorCode.DATA_CAN_NOT_CHANGE.getValue());
+                    eventDTO.setMessage(ErrorMessage.EVENT_CONFIRMED_OR_CANCELED);
+                }
+            }
+        } else {
+            eventDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
+            eventDTO.setMessage(ErrorMessage.NOT_FIND_EVENT_BY_ID);
+        }
+        return eventDTO;
+    }
+
+    private EventDTO confirmOrCancelEventSupport(KpiEvent kpiEvent, EventDTO eventDTO) throws IOException, NoSuchFieldException,
+            IllegalAccessException {
+        if (Objects.equals(eventDTO.getStatus(), StatusEvent.CONFIRMED.getValue())) {
+            kpiEvent.setStatus(StatusEvent.CONFIRMED.getValue());
+        } else {
+            kpiEvent.setStatus(StatusEvent.CONFIRMED.getValue());
+        }
+        Float point = setHistorySupportAndGetAllPoint(kpiEvent);
+        //ad point
+        addPoint(kpiEvent.getKpiEventUserList().get(0).getKpiUser(), point);
+
+        kpiEvent = kpiEventRepo.save(kpiEvent);
+
+        eventDTO = convertSupportEntiyToDTO(kpiEvent);
+        return eventDTO;
+    }
+
+    private Float setHistorySupportAndGetAllPoint(KpiEvent kpiEvent) throws NoSuchFieldException, IllegalAccessException,
+            IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        Float point = 0F;
+        TypeReference<List<EventSupportDetail>> tRefBedType = new TypeReference<List<EventSupportDetail>>() {
+        };
+        List<EventSupportDetail> configEventSupport = mapper.readValue(kpiEvent.getAdditionalConfig(), tRefBedType);
+        GroupSupportDetail groupSupportDetail = mapper.readValue(kpiEvent.getGroup().getAdditionalConfig(),
+                GroupSupportDetail.class);
+        for (EventSupportDetail eventSupportDetail : configEventSupport) {
+            Field field = groupSupportDetail.getClass().getDeclaredField(eventSupportDetail.getName());
+            field.setAccessible(true);
+            Float pointConfig = (Float) field.get(groupSupportDetail);
+            eventSupportDetail.setPoint(pointConfig);
+            point += pointConfig * eventSupportDetail.getQuantity();
+        }
+        kpiEvent.setAdditionalConfig(mapper.writeValueAsString(configEventSupport));
+        return point;
     }
 
     private KpiEvent convertEventSupportDTOToEntityForUpdate(EventDTO<List<EventSupportDetail>> supportDTO) throws
