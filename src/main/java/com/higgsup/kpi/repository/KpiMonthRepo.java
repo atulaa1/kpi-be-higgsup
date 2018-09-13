@@ -1,12 +1,12 @@
 package com.higgsup.kpi.repository;
 
-import com.higgsup.kpi.entity.KpiMonth;
+import com.higgsup.kpi.entity.KpiYearMonth;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
-public interface KpiMonthRepo extends CrudRepository<KpiMonth, Integer> {
-    @Query(value = "SELECT * FROM kpi_month WHERE MONTH(month) = MONTH(CURRENT_DATE()) AND YEAR(month) = YEAR(CURRENT_DATE()) LIMIT 1", nativeQuery = true)
-    Optional<KpiMonth> findByMonthCurrent();
+public interface KpiMonthRepo extends CrudRepository<KpiYearMonth, Integer> {
+    @Query(value = "SELECT * FROM kpi_year_month ORDER BY year_and_month DESC LIMIT 1", nativeQuery = true)
+    Optional<KpiYearMonth> findByMonthCurrent();
 }
