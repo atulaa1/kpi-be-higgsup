@@ -108,6 +108,10 @@
 				<datasource.username>root</datasource.username>
 				<datasource.password>123456</datasource.password>
 				<server.port>8080</server.port>
+				<hibernate.BasicBinder>TRACE</hibernate.BasicBinder>
+				<hibernate.showSql>true</hibernate.showSql>
+				<hibernate.comment>true</hibernate.comment>
+				<hibernate.formatSql>true</hibernate.formatSql>
 			</properties>
 			<dependencies>
 				<dependency>
