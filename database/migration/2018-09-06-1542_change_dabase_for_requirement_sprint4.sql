@@ -24,7 +24,7 @@ ALTER TABLE kpi_event_user CHANGE is_host type TINYINT(4) COMMENT 'type can 1 is
 -- create table kpi_year_month
 CREATE TABLE `kpi_year_month` (
   `id` int PRIMARY KEY AUTO_INCREMENT,
-  `yearmonth` int(11) NOT NULL
+  `year_and_month` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 

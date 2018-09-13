@@ -101,7 +101,7 @@ CREATE TABLE kpi_project (
 -- create table kpi_year_month
 CREATE TABLE `kpi_year_month` (
   `id` int PRIMARY KEY AUTO_INCREMENT,
-  `yearmonth` int(11) NOT NULL
+  `year_and_month` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Create table to checking latetime

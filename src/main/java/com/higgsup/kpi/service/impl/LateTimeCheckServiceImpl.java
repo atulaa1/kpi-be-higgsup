@@ -116,9 +116,16 @@ public class LateTimeCheckServiceImpl implements LateTimeCheckService {
             kpiYearMonth = kpiMonthFromDB.get();
             Timestamp dateCun = new Timestamp(System.currentTimeMillis());
             java.util.Date date = UtilsConvert.convertYearMonthIntToDate(kpiYearMonth.getYearMonth());
-            if (date.getMonth() < dateCun.getMonth() && dateCun.getDate() >= Integer.valueOf(
-                    environment.getProperty("config.day.new.year.month")) && dateCun.getHours() >= Integer.valueOf(
-                    environment.getProperty("config.hour.new.year.month"))) {
+            if (date.getMonth() + 1 < dateCun.getMonth() + 1 && dateCun.getDate() >= Integer.valueOf(
+                    environment.getProperty("config.day.new.year.month")) && (dateCun.getHours() >= Integer.valueOf(
+                    environment.getProperty("config.hour.new.year.month")) || dateCun.getDate() > Integer.valueOf(
+                    environment.getProperty("config.day.new.year.month")))) {
+                KpiYearMonth kpiYearMonthCreate = new KpiYearMonth();
+                kpiYearMonthCreate.setYearMonth(UtilsConvert.convertDateToYearMonthInt(dateCun));
+                kpiYearMonth = kpiMonthRepo.save(kpiYearMonthCreate);
+            } else if (date.getYear() + 1900 < dateCun.getYear() + 1900 &&  (dateCun.getHours() >= Integer.valueOf(
+                    environment.getProperty("config.hour.new.year.month")) || dateCun.getDate() > Integer.valueOf(
+                    environment.getProperty("config.day.new.year.month")))) {
                 KpiYearMonth kpiYearMonthCreate = new KpiYearMonth();
                 kpiYearMonthCreate.setYearMonth(UtilsConvert.convertDateToYearMonthInt(dateCun));
                 kpiYearMonth = kpiMonthRepo.save(kpiYearMonthCreate);

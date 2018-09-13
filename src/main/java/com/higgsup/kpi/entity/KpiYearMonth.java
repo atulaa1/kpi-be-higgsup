@@ -14,7 +14,7 @@ public class KpiYearMonth implements Serializable {
     private Integer id;
 
     @Basic
-    @Column(name = "yearmonth")
+    @Column(name = "year_and_month")
     private Integer yearMonth;
 
     public Integer getId() {

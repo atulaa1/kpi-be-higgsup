@@ -19,7 +19,7 @@ public class KpiLateTimeCheck implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     private KpiUser user;
 
-    @JoinColumn(name = "month_id", referencedColumnName = "id")
+    @JoinColumn(name = "year_month_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
     private KpiYearMonth yearMonth;
 
