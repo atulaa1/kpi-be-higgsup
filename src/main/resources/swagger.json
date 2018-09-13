@@ -1039,8 +1039,237 @@
         ],
         "responses": {
           "200": {
-            "description": "status_code : 200. Message: Success. Meaning: Thành công \n status_code: 903. Message: name does not allow null. Meaning: Tên hoạt động không được để trống \n status_code: 903. Message: begin date cannot null. Meaning: Ngày bắt đầu không được để trống \n status_code: 903. Message: end date cannot null. Meaning: Ngày kết thúc không được để trống \n status_code: 903. Message: list of participants cannot null. Meaning: Danh sách người tham gia không được để trống \n status_code: 932. Message: begin date is not after end date. Meaning: Ngày bắt đầu không được diễn ra sau ngày kết thúc \n status_code: 900. Message: not find group. Meaning: Group không tồn tại ",
+            "description": "status_code: 200. Message: Success. Meaning: Thành công \n status_code: 903. Message: user type can not null. Meaning: Tên hoạt động không được để trống \n status_code: 903. Message: begin date cannot null. Meaning: Ngày bắt đầu không được để trống \n status_code: 903. Message: end date cannot null. Meaning: Ngày kết thúc không được để trống \n status_code: 903. Message: list of participants cannot null. Meaning: Danh sách người tham gia không được để trống \n status_code: 932. Message: begin date is not after end date. Meaning: Ngày bắt đầu không được diễn ra sau ngày kết thúc \n status_code: 900. Message: not find group. Meaning: Group không tồn tại \n status_code: 903. Message: user type cannot null. Meaning: Loại user không được để trống \n status_code: 900. Message: member type does not exist. Meaning: Loại member không tồn tại \n status_code: 900. Message: user does not exist. Meaning: User không tồn tại ",
             "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "address": {
+                      "type": "string"
+                    },
+                    "createdDate": {
+                      "type": "string"
+                    },
+                    "updatedDate": {
+                      "type": "string"
+                    },
+                    "beginDate": {
+                      "type": "string"
+                    },
+                    "endDate": {
+                      "type": "string"
+                    },
+                    "group": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "groupType": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "number"
+                            },
+                            "name": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "createdDate": {
+                          "type": "string"
+                        },
+                        "additionalConfig": {
+                          "type": "object",
+                          "properties": {
+                            "cleanUpPoint": {
+                              "type": "number"
+                            },
+                            "buyingStuffPoint": {
+                              "type": "number"
+                            },
+                            "supportConferencePoint": {
+                              "type": "number"
+                            },
+                            "trainingPoint": {
+                              "type": "number"
+                            },
+                            "weeklyCleanUpPoint": {
+                              "type": "number"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "eventUserList": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "user": {
+                            "type": "object",
+                            "properties": {
+                              "user": {
+                                "type": "object",
+                                "properties": {
+                                  "username": {
+                                    "type": "string"
+                                  },
+                                  "lastName": {
+                                    "type": "string"
+                                  },
+                                  "firstName": {
+                                    "type": "string"
+                                  },
+                                  "fullName": {
+                                    "type": "string"
+                                  },
+                                  "email": {
+                                    "type": "string"
+                                  },
+                                  "userRole": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "avatar": {
+                                    "type": "string"
+                                  },
+                                  "birthday": {
+                                    "type": "date"
+                                  },
+                                  "numberPhone": {
+                                    "type": "string"
+                                  },
+                                  "gmail": {
+                                    "type": "string"
+                                  },
+                                  "skype": {
+                                    "type": "string"
+                                  },
+                                  "dateStartWork": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "event": {
+                                "type": "object"
+                              },
+                              "type": {
+                                "type": "number"
+                              }
+                            }
+                          },
+                          "event": {
+                            "type": "object"
+                          },
+                          "type": {
+                            "type": "number"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "message": {
+                  "type": "string"
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "errorCode": {
+                        "type": "number"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "status_code": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "example": {
+                "data": {
+                  "id": 32,
+                  "name": "Đá bóng giao lưu",
+                  "status": 1,
+                  "description": "Đá bóng hàng tuần",
+                  "address": "Sân vận động Mỹ Đình",
+                  "beginDate": "15-09-2018 18:30",
+                  "endDate": "15-09-2018 20:30",
+                  "group": {
+                    "id": 2,
+                    "name": "Đá bóng",
+                    "description": null,
+                    "groupType": {
+                      "id": 2,
+                      "name": "Câu lạc bộ"
+                    },
+                    "createdDate": "07-09-2018 18:02",
+                    "additionalConfig": {
+                      "host": "Nguyen Huy Hung",
+                      "minNumberOfSessions": 10,
+                      "participationPoint": 5.2,
+                      "effectivePoint": 8.2
+                    }
+                  },
+                  "eventUserList": [
+                    {
+                      "user": {
+                        "username": "kpi.admin",
+                        "lastName": "kpi",
+                        "firstName": "admin",
+                        "fullName": null,
+                        "email": "kpi.admin@higgsup.com",
+                        "userRole": null,
+                        "avatar": "1",
+                        "birthday": "2018-09-25",
+                        "numberPhone": "0966211618",
+                        "address": "Lê văn Thành ",
+                        "gmail": "lethanh9398@gmail.com",
+                        "skype": "solitarysp@gmail.com",
+                        "dateStartWork": "2018-09-29"
+                      },
+                      "type": 2
+                    }
+                  ],
+                  "additionalConfig": [
+                    {
+                      "host": "Nguyen Huy Hung",
+                      "minNumberOfSessions": 10,
+                      "participationPoint": 5.2,
+                      "effectivePoint": 8.2
+                    }
+                  ]
+                },
+                "status_code": 200
+              }
+
             }
           },
           "201": {
@@ -1073,28 +1302,370 @@
         ],
         "parameters": [
           {
-            "name": "id",
-            "in": "path",
-            "description": "id",
-            "required": true,
-            "type": "integer",
-            "format": "int32"
-          },
-          {
             "in": "body",
             "name": "eventDTO",
             "description": "eventDTO",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/EventDTO«EventClubDetail»"
+              "type": "object",
+              "required": [
+                "name",
+                "beginDate",
+                "endDate",
+                "group",
+                "eventUserList"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "beginDate": {
+                  "type": "string"
+                },
+                "endDate": {
+                  "type": "string"
+                },
+                "group": {
+                  "type": "object",
+                  "required": [
+                    "id"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "eventUserList": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "user": {
+                        "type": "object",
+                        "properties": {
+                          "user": {
+                            "type": "object",
+                            "properties": {
+                              "username": {
+                                "type": "string"
+                              },
+                              "lastName": {
+                                "type": "string"
+                              },
+                              "firstName": {
+                                "type": "string"
+                              },
+                              "fullName": {
+                                "type": "string"
+                              },
+                              "email": {
+                                "type": "string"
+                              },
+                              "userRole": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              },
+                              "avatar": {
+                                "type": "string"
+                              },
+                              "birthday": {
+                                "type": "date"
+                              },
+                              "numberPhone": {
+                                "type": "string"
+                              },
+                              "gmail": {
+                                "type": "string"
+                              },
+                              "skype": {
+                                "type": "string"
+                              },
+                              "dateStartWork": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "event": {
+                            "type": "object"
+                          },
+                          "type": {
+                            "type": "number"
+                          }
+                        }
+                      },
+                      "event": {
+                        "type": "object"
+                      },
+                      "type": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "name": "Đá bóng",
+                "description": "Đá bóng hàng tuần",
+                "address": "Sân vận động Mỹ Đình",
+                "beginDate": "15-09-2018 18:30",
+                "endDate": "15-09-2018 20:30",
+                "group": {
+                  "id": 1
+                },
+                "eventUserList": [
+                  {
+                    "user": {
+                      "username": "kpi.employee"
+                    },
+                    "type": 1
+                  },
+                  {
+                    "user": {
+                      "username": "kpi.test"
+                    },
+                    "type": 3
+                  }
+                ]
+              }
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "status_code: 200. Message: Success. Meaning: Thành công \n status_code: 903. Message: user type can not null. Meaning: Tên hoạt động không được để trống \n status_code: 903. Message: begin date cannot null. Meaning: Ngày bắt đầu không được để trống \n status_code: 903. Message: end date cannot null. Meaning: Ngày kết thúc không được để trống \n status_code: 903. Message: list of participants cannot null. Meaning: Danh sách người tham gia không được để trống \n status_code: 932. Message: begin date is not after end date. Meaning: Ngày bắt đầu không được diễn ra sau ngày kết thúc \n status_code: 900. Message: not find group. Meaning: Group không tồn tại \n status_code: 903. Message: user type cannot null. Meaning: Loại user không được để trống \n status_code: 900. Message: member type does not exist. Meaning: Loại member không tồn tại \n status_code: 900. Message: user does not exist. Meaning: User không tồn tại \n status_code: 915. Message: cannot update event. Meaning: Không thể update hoạt động câu lạc bộ \n status_code: 900. Message: not find event by id. Meaning: Không tìm thấy event theo id  ",
             "schema": {
-              "$ref": "#/definitions/Response"
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "address": {
+                      "type": "string"
+                    },
+                    "createdDate": {
+                      "type": "string"
+                    },
+                    "updatedDate": {
+                      "type": "string"
+                    },
+                    "beginDate": {
+                      "type": "string"
+                    },
+                    "endDate": {
+                      "type": "string"
+                    },
+                    "group": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "groupType": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "number"
+                            },
+                            "name": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "createdDate": {
+                          "type": "string"
+                        },
+                        "additionalConfig": {
+                          "type": "object",
+                          "properties": {
+                            "cleanUpPoint": {
+                              "type": "number"
+                            },
+                            "buyingStuffPoint": {
+                              "type": "number"
+                            },
+                            "supportConferencePoint": {
+                              "type": "number"
+                            },
+                            "trainingPoint": {
+                              "type": "number"
+                            },
+                            "weeklyCleanUpPoint": {
+                              "type": "number"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "eventUserList": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "user": {
+                            "type": "object",
+                            "properties": {
+                              "user": {
+                                "type": "object",
+                                "properties": {
+                                  "username": {
+                                    "type": "string"
+                                  },
+                                  "lastName": {
+                                    "type": "string"
+                                  },
+                                  "firstName": {
+                                    "type": "string"
+                                  },
+                                  "fullName": {
+                                    "type": "string"
+                                  },
+                                  "email": {
+                                    "type": "string"
+                                  },
+                                  "userRole": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "avatar": {
+                                    "type": "string"
+                                  },
+                                  "birthday": {
+                                    "type": "date"
+                                  },
+                                  "numberPhone": {
+                                    "type": "string"
+                                  },
+                                  "gmail": {
+                                    "type": "string"
+                                  },
+                                  "skype": {
+                                    "type": "string"
+                                  },
+                                  "dateStartWork": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "event": {
+                                "type": "object"
+                              },
+                              "type": {
+                                "type": "number"
+                              }
+                            }
+                          },
+                          "event": {
+                            "type": "object"
+                          },
+                          "type": {
+                            "type": "number"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "message": {
+                  "type": "string"
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "errorCode": {
+                        "type": "number"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "status_code": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "example": {
+                "data": {
+                  "id": 32,
+                  "name": "Đá bóng giao lưu",
+                  "status": 1,
+                  "description": "Đá bóng hàng tuần",
+                  "address": "Sân vận động Mỹ Đình",
+                  "beginDate": "15-09-2018 18:30",
+                  "endDate": "15-09-2018 20:30",
+                  "group": {
+                    "id": 2,
+                    "name": "Đá bóng",
+                    "description": null,
+                    "groupType": {
+                      "id": 2,
+                      "name": "Câu lạc bộ"
+                    },
+                    "createdDate": "07-09-2018 18:02",
+                    "additionalConfig": {
+                      "host": "Nguyen Huy Hung",
+                      "minNumberOfSessions": 10,
+                      "participationPoint": 5.2,
+                      "effectivePoint": 8.2
+                    }
+                  },
+                  "eventUserList": [
+                    {
+                      "user": {
+                        "username": "kpi.admin",
+                        "lastName": "kpi",
+                        "firstName": "admin",
+                        "fullName": null,
+                        "email": "kpi.admin@higgsup.com",
+                        "userRole": null,
+                        "avatar": "1",
+                        "birthday": "2018-09-25",
+                        "numberPhone": "0966211618",
+                        "address": "Lê văn Thành ",
+                        "gmail": "lethanh9398@gmail.com",
+                        "skype": "solitarysp@gmail.com",
+                        "dateStartWork": "2018-09-29"
+                      },
+                      "type": 2
+                    }
+                  ],
+                  "additionalConfig": [
+                    {
+                      "host": "Nguyen Huy Hung",
+                      "minNumberOfSessions": 10,
+                      "participationPoint": 5.2,
+                      "effectivePoint": 8.2
+                    }
+                  ]
+                },
+                "status_code": 200
+              }
+
             }
           },
           "201": {
