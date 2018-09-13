@@ -468,15 +468,24 @@ public class EventServiceImpl implements EventService {
             errorDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
 
             errors.add(errorDTO);
-        }
 
-        if (eventDTO.getEndDate() == null) {
+        } else if (eventDTO.getEndDate() == null) {
             ErrorDTO errorDTO = new ErrorDTO();
 
             errorDTO.setMessage(ErrorMessage.END_DATE_CAN_NOT_NULL);
             errorDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
 
             errors.add(errorDTO);
+
+        } else {
+            if (eventDTO.getBeginDate().after(eventDTO.getEndDate())) {
+                ErrorDTO errorDTO = new ErrorDTO();
+
+                errorDTO.setMessage(ErrorCode.BEGIN_DATE_IS_NOT_AFTER_END_DATE.getDescription());
+                errorDTO.setErrorCode(ErrorCode.BEGIN_DATE_IS_NOT_AFTER_END_DATE.getValue());
+
+                errors.add(errorDTO);
+            }
         }
 
         if (eventDTO.getEventUserList().size() == 0) {
@@ -484,15 +493,6 @@ public class EventServiceImpl implements EventService {
 
             errorDTO.setMessage(ErrorMessage.LIST_OF_PARTICIPANTS_CAN_NOT_NULL);
             errorDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
-
-            errors.add(errorDTO);
-        }
-
-        if (eventDTO.getBeginDate().after(eventDTO.getEndDate())) {
-            ErrorDTO errorDTO = new ErrorDTO();
-
-            errorDTO.setMessage(ErrorCode.BEGIN_DATE_IS_NOT_AFTER_END_DATE.getDescription());
-            errorDTO.setErrorCode(ErrorCode.BEGIN_DATE_IS_NOT_AFTER_END_DATE.getValue());
 
             errors.add(errorDTO);
         }
