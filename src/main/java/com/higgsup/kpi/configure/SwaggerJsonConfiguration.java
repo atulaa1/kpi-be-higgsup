@@ -4,6 +4,7 @@ import com.higgsup.kpi.dto.SwaggerJson;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ResourceLoader;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Configuration
+@EnableSwagger2
 public class SwaggerJsonConfiguration {
 
     @Bean
