@@ -75,6 +75,7 @@ public class EventController {
             if (Objects.nonNull(eventDTOResponse.getErrorCode())) {
                 response.setStatus(eventDTOResponse.getErrorCode());
                 response.setMessage(eventDTOResponse.getMessage());
+                response.setErrors(eventDTOResponse.getErrorDTOS());
             } else {
                 response.setData(eventDTOResponse);
             }
@@ -97,6 +98,8 @@ public class EventController {
             if (Objects.nonNull(eventDTOResponse.getErrorCode())) {
                 response.setStatus(eventDTOResponse.getErrorCode());
                 response.setMessage(eventDTOResponse.getMessage());
+                response.setErrors(eventDTOResponse.getErrorDTOS());
+
             } else {
                 response.setData(eventDTOResponse);
             }

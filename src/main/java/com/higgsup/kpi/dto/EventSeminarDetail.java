@@ -1,31 +1,31 @@
 package com.higgsup.kpi.dto;
 
 public class EventSeminarDetail {
-    private String hostDescription;
-    private String memberDescription;
-    private String listenerDescription;
+    private String hostPoint;
+    private String memberPoint;
+    private String listenerPoint;
 
-    public String getHostDescription() {
-        return hostDescription;
+    public String getHostPoint() {
+        return hostPoint;
     }
 
-    public void setHostDescription(String hostDescription) {
-        this.hostDescription = hostDescription;
+    public void setHostPoint(String hostPoint) {
+        this.hostPoint = hostPoint;
     }
 
-    public String getMemberDescription() {
-        return memberDescription;
+    public String getMemberPoint() {
+        return memberPoint;
     }
 
-    public void setMemberDescription(String memberDescription) {
-        this.memberDescription = memberDescription;
+    public void setMemberPoint(String memberPoint) {
+        this.memberPoint = memberPoint;
     }
 
-    public String getListenerDescription() {
-        return listenerDescription;
+    public String getListenerPoint() {
+        return listenerPoint;
     }
 
-    public void setListenerDescription(String listenerDescription) {
-        this.listenerDescription = listenerDescription;
+    public void setListenerPoint(String listenerPoint) {
+        this.listenerPoint = listenerPoint;
     }
 }
