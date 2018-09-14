@@ -454,13 +454,7 @@ public class GroupServiceImpl implements GroupService {
         } else if (!isValidPoint(String.valueOf(listenerPoint))) {
             validatedGroupDTO.setMessage(ErrorMessage.POINT_LISTENER_IS_NOT_VALIDATE);
             validatedGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-        } else if (groupDTO.getAdditionalConfig().getHostPoint() == 0) {
-            validatedGroupDTO.setMessage(ErrorMessage.HOST_SCORE_CAN_NOT_NULL);
-            validatedGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-        } else if (groupDTO.getAdditionalConfig().getMemberPoint() == 0) {
-            validatedGroupDTO.setMessage(ErrorMessage.MEMBER_SCORE_CAN_NOT_NULL);
-            validatedGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-        } else {
+        }else {
             validate = true;
         }
         return validate;
