@@ -20,10 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class LateTimeCheckServiceImpl implements LateTimeCheckService {
@@ -55,7 +52,9 @@ public class LateTimeCheckServiceImpl implements LateTimeCheckService {
 
     public List<LateTimeCheckDTO> getAllLateTimeCheckCurrent() {
         List<KpiLateTimeCheck> lateTimeChecksInDB = createDataNewMonthOrUpdate();
-        return convertEntityLateTimeCheckToDTO(lateTimeChecksInDB);
+        List<LateTimeCheckDTO> lateTimeCheckDTOS = convertEntityLateTimeCheckToDTO(lateTimeChecksInDB);
+        lateTimeCheckDTOS.sort(Comparator.comparing(o -> o.getUser().getFullName()));
+        return lateTimeCheckDTOS;
     }
 
     private List<LateTimeCheckDTO> convertEntityLateTimeCheckToDTO(List<KpiLateTimeCheck> lateTimeChecksInDB) {
@@ -123,7 +122,7 @@ public class LateTimeCheckServiceImpl implements LateTimeCheckService {
                 KpiYearMonth kpiYearMonthCreate = new KpiYearMonth();
                 kpiYearMonthCreate.setYearMonth(UtilsConvert.convertDateToYearMonthInt(dateCun));
                 kpiYearMonth = kpiMonthRepo.save(kpiYearMonthCreate);
-            } else if (date.getYear() + 1900 < dateCun.getYear() + 1900 &&  (dateCun.getHours() >= Integer.valueOf(
+            } else if (date.getYear() + 1900 < dateCun.getYear() + 1900 && (dateCun.getHours() >= Integer.valueOf(
                     environment.getProperty("config.hour.new.year.month")) || dateCun.getDate() > Integer.valueOf(
                     environment.getProperty("config.day.new.year.month")))) {
                 KpiYearMonth kpiYearMonthCreate = new KpiYearMonth();

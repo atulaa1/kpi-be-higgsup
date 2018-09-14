@@ -40,3 +40,5 @@ CREATE TABLE `kpi_latetime_check` (
 
 -- change year_work to name date_start_work
 ALTER TABLE kpi_user CHANGE year_work date_start_work DATE;
+
+ALTER TABLE kpi_user ADD full_name VARCHAR(400) NULL;
