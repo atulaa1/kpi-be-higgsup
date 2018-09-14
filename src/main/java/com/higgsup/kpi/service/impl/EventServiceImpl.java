@@ -340,7 +340,7 @@ public class EventServiceImpl implements EventService {
     @Override
     @Transactional
     public EventDTO createClub(EventDTO<EventClubDetail> eventDTO) throws IOException {
-        eventDTO.setStatus(1);
+        eventDTO.setStatus(StatusEvent.WAITING.getValue());
 
         EventDTO<EventClubDetail> validatedEventDTO = new EventDTO<>();
 
@@ -414,6 +414,8 @@ public class EventServiceImpl implements EventService {
                     validatedEventDTO.setGroup(convertGroupEntityToDTO(kpiEvent.getGroup()));
                     validatedEventDTO.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
                     validatedEventDTO.setAdditionalConfig(eventDTO.getAdditionalConfig());
+
+                    //List<EventUserDTO> eventUserDTOS = convertUserEntityListToDTO(eventUsers, eventDTO.getEventUserList());
                     validatedEventDTO.setEventUserList(eventDTO.getEventUserList());
 
                 } else {
@@ -429,6 +431,20 @@ public class EventServiceImpl implements EventService {
 
         return validatedEventDTO;
     }
+
+   /* private List<EventUserDTO> convertUserEntityListToDTO(List<KpiEventUser> eventUsers, List<EventUserDTO> eventUserList) {
+
+        eventUserList.forEach(eventUserDTO -> {
+            Optional<KpiEventUser> kpiEventUser = eventUsers.stream().filter(
+                    kpiEventUser1 -> kpiEventUser1.getKpiUser().getUserName().equals(eventUserDTO.getUser().getUsername()))
+
+                    .findFirst();
+
+
+            BeanUtils.copyProperties(kpiEventUser.get().getKpiUser(), eventUserDTO.getUser(), "userName");
+        });
+        return eventUserList;
+    }*/
 
     private List<KpiEventUser> convertEventUsersToEntity(KpiEvent kpiEvent, List<EventUserDTO> eventUserList) {
         List<KpiEventUser> kpiEventUsers = new ArrayList<>();
