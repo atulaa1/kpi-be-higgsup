@@ -431,7 +431,6 @@ public class EventServiceImpl implements EventService {
     }
 
 
-
     private List<KpiEventUser> convertEventUsersToEntity(KpiEvent kpiEvent, List<EventUserDTO> eventUserList) {
         List<KpiEventUser> kpiEventUsers = new ArrayList<>();
 
