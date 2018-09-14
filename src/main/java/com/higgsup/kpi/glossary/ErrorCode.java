@@ -16,7 +16,11 @@ public enum ErrorCode {
     BEGIN_DATE_IS_NOT_AFTER_END_DATE(932, "begin date is not after end date"),
     SYSTEM_ERROR(999, "system error"),
     TEAM_BUILDING_PRIZE_SCORE_CAN_NOT_NULL(931, "team building prize score can not be null"),
-    INCORRECT_FILE_FORMAT(910, "incorrect file format");
+    INCORRECT_FILE_FORMAT(910, "incorrect file format"),
+    INVALID_MEMBER_NAME(911, "incorrect member name"),
+    INVALID_EMAIL(912, "invalid email"),
+    INVALID_LATE_TIME(913, "invalid late time"),
+    INCORRECT_DATA(914, "incorrect data");
 
     private Integer value;
 
