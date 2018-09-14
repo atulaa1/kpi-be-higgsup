@@ -1241,21 +1241,39 @@
                   "eventUserList": [
                     {
                       "user": {
-                        "username": "kpi.admin",
-                        "lastName": "kpi",
-                        "firstName": "admin",
+                        "username": "kpi.employee",
+                        "lastName": null,
+                        "firstName": null,
                         "fullName": null,
-                        "email": "kpi.admin@higgsup.com",
+                        "email": null,
                         "userRole": null,
-                        "avatar": "1",
-                        "birthday": "2018-09-25",
-                        "numberPhone": "0966211618",
-                        "address": "Lê văn Thành ",
-                        "gmail": "lethanh9398@gmail.com",
-                        "skype": "solitarysp@gmail.com",
-                        "dateStartWork": "2018-09-29"
+                        "avatar": null,
+                        "birthday": null,
+                        "numberPhone": null,
+                        "address": null,
+                        "gmail": null,
+                        "skype": null,
+                        "dateStartWork": null
                       },
-                      "type": 2
+                      "type": 1
+                    },
+                    {
+                      "user": {
+                        "username": "kpi.test",
+                        "lastName": null,
+                        "firstName": null,
+                        "fullName": null,
+                        "email": null,
+                        "userRole": null,
+                        "avatar": null,
+                        "birthday": null,
+                        "numberPhone": null,
+                        "address": null,
+                        "gmail": null,
+                        "skype": null,
+                        "dateStartWork": null
+                      },
+                      "type": 3
                     }
                   ],
                   "additionalConfig": [
@@ -1269,7 +1287,6 @@
                 },
                 "status_code": 200
               }
-
             }
           },
           "201": {
@@ -1637,21 +1654,39 @@
                   "eventUserList": [
                     {
                       "user": {
-                        "username": "kpi.admin",
-                        "lastName": "kpi",
-                        "firstName": "admin",
+                        "username": "kpi.employee",
+                        "lastName": null,
+                        "firstName": null,
                         "fullName": null,
-                        "email": "kpi.admin@higgsup.com",
+                        "email": null,
                         "userRole": null,
-                        "avatar": "1",
-                        "birthday": "2018-09-25",
-                        "numberPhone": "0966211618",
-                        "address": "Lê văn Thành ",
-                        "gmail": "lethanh9398@gmail.com",
-                        "skype": "solitarysp@gmail.com",
-                        "dateStartWork": "2018-09-29"
+                        "avatar": null,
+                        "birthday": null,
+                        "numberPhone": null,
+                        "address": null,
+                        "gmail": null,
+                        "skype": null,
+                        "dateStartWork": null
                       },
-                      "type": 2
+                      "type": 1
+                    },
+                    {
+                      "user": {
+                        "username": "kpi.test",
+                        "lastName": null,
+                        "firstName": null,
+                        "fullName": null,
+                        "email": null,
+                        "userRole": null,
+                        "avatar": null,
+                        "birthday": null,
+                        "numberPhone": null,
+                        "address": null,
+                        "gmail": null,
+                        "skype": null,
+                        "dateStartWork": null
+                      },
+                      "type": 3
                     }
                   ],
                   "additionalConfig": [
@@ -1665,7 +1700,6 @@
                 },
                 "status_code": 200
               }
-
             }
           },
           "201": {
