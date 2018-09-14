@@ -425,8 +425,11 @@ public class GroupServiceImpl implements GroupService {
             validatedGroupDTO.setMessage(ErrorMessage.PARAMETERS_NAME_IS_NOT_VALID);
             validatedGroupDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
         } else if (minNumberOfSessions.length() == 0 || minNumberOfSessions.length() > 2) {
-            validatedGroupDTO.setMessage(ErrorMessage.PARAMETERS_MIN_NUMBER_OF_SESSIONS_IS_NOT_VALID);
+            validatedGroupDTO.setMessage(ErrorMessage.PARAMETERS_NAME_IS_NOT_VALID);
             validatedGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+        } else if(groupDTO.getAdditionalConfig().getMinNumberOfSessions() <= 0) {
+            validatedGroupDTO.setMessage(ErrorMessage.MIN_SESSION_MUST_BIGGER_THAN_ZERO);
+            validatedGroupDTO.setErrorCode(ErrorCode.MIN_SESSION_MUST_BIGGER_THAN_ZERO.getValue());
         } else if (!isValidPoint(participationPoint) || participationPoint.length() == 0) {
             validatedGroupDTO.setMessage(ErrorMessage.PARAMETERS_POINT_IS_NOT_VALID);
             validatedGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
