@@ -82,6 +82,9 @@ public class EventController {
         } catch (JsonProcessingException e) {
             response.setMessage(ErrorCode.JSON_PROCESSING_EXCEPTION.getDescription());
             response.setStatus(ErrorCode.JSON_PROCESSING_EXCEPTION.getValue());
+        } catch (IOException e) {
+            response.setStatus(ErrorCode.SYSTEM_ERROR.getValue());
+            response.setMessage(ErrorCode.SYSTEM_ERROR.getDescription());
         }
         return response;
     }
@@ -106,6 +109,9 @@ public class EventController {
         } catch (JsonProcessingException e) {
             response.setMessage(ErrorCode.JSON_PROCESSING_EXCEPTION.getDescription());
             response.setStatus(ErrorCode.JSON_PROCESSING_EXCEPTION.getValue());
+        } catch (IOException e) {
+            response.setStatus(ErrorCode.SYSTEM_ERROR.getValue());
+            response.setMessage(ErrorCode.SYSTEM_ERROR.getDescription());
         }
         return response;
     }

@@ -12,6 +12,6 @@ public interface EventService {
     EventDTO createSupportEvent(EventDTO<List<EventSupportDetail>> supportDTO) throws IOException, NoSuchFieldException;
     EventDTO updateSupportEvent(EventDTO<List<EventSupportDetail>> supportDTO) throws IOException, NoSuchFieldException;
 
-    EventDTO createSeminar(EventDTO<EventSeminarDetail> eventDTO) throws JsonProcessingException;
-    EventDTO updateSeminar(EventDTO<EventSeminarDetail> eventDTO) throws JsonProcessingException;
+    EventDTO createSeminar(EventDTO<EventSeminarDetail> eventDTO) throws IOException;
+    EventDTO updateSeminar(EventDTO<EventSeminarDetail> eventDTO) throws IOException;
 }

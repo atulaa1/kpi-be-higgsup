@@ -55,17 +55,13 @@ public final class ErrorMessage {
     public final static String EVENT_USER_LIST_CAN_NOT_NULL = "event user list can not be null";
     public final static String USERNAME_CAN_NOT_NULL = "username can not be null";
     public final static String MEMBER_TYPE_CAN_NOT_NULL = "member type of event can not be null";
-    public final static String INVALIDATED_MEMBER_TYPE = "member type of event is invalidated";
-    public final static String HOST_DESCRIPTION_CAN_NOT_NULL = "host description can not be null";
-    public final static String MEMBER_DESCRIPTION_CAN_NOT_NULL = "member description can not be null";
-    public final static String LISTENER_DESCRIPTION_CAN_NOT_NULL = "listener description can not be null";
+    public final static String INVALIDATED_MEMBER_TYPE = "member type of event is invalidated";;
     public final static String EVENT_NAME_CAN_NOT_NULL = "name of event can not be null";
-    public final static String STATUS_CAN_NOT_NULL = "status of event can not null";
-    public final static String INVALIDATED_STATUS_OF_EVENT = "invalid status of event";
     public final static String BEGIN_DATE_CAN_NOT_NULL = "begin date of event can not be null";
     public final static String END_DATE_CAN_NOT_NULL = "end date of event can not be null";
     public final static String END_DATE_AFTER_UPDATE_DATE = "end date has to be after update date";
     public final static String END_DATE_AFTER_BEGIN_DATE = "end date has to be after begin date";
+    public final static String CAN_NOT_UPDATE_EVENT = "cannot update event";
 
 
 }
