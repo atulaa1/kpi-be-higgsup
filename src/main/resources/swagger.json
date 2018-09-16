@@ -953,42 +953,6 @@
                             "properties": {
                               "username": {
                                 "type": "string"
-                              },
-                              "lastName": {
-                                "type": "string"
-                              },
-                              "firstName": {
-                                "type": "string"
-                              },
-                              "fullName": {
-                                "type": "string"
-                              },
-                              "email": {
-                                "type": "string"
-                              },
-                              "userRole": {
-                                "type": "array",
-                                "items": {
-                                  "type": "string"
-                                }
-                              },
-                              "avatar": {
-                                "type": "string"
-                              },
-                              "birthday": {
-                                "type": "date"
-                              },
-                              "numberPhone": {
-                                "type": "string"
-                              },
-                              "gmail": {
-                                "type": "string"
-                              },
-                              "skype": {
-                                "type": "string"
-                              },
-                              "dateStartWork": {
-                                "type": "string"
                               }
                             }
                           },
@@ -1365,42 +1329,6 @@
                             "type": "object",
                             "properties": {
                               "username": {
-                                "type": "string"
-                              },
-                              "lastName": {
-                                "type": "string"
-                              },
-                              "firstName": {
-                                "type": "string"
-                              },
-                              "fullName": {
-                                "type": "string"
-                              },
-                              "email": {
-                                "type": "string"
-                              },
-                              "userRole": {
-                                "type": "array",
-                                "items": {
-                                  "type": "string"
-                                }
-                              },
-                              "avatar": {
-                                "type": "string"
-                              },
-                              "birthday": {
-                                "type": "date"
-                              },
-                              "numberPhone": {
-                                "type": "string"
-                              },
-                              "gmail": {
-                                "type": "string"
-                              },
-                              "skype": {
-                                "type": "string"
-                              },
-                              "dateStartWork": {
                                 "type": "string"
                               }
                             }

@@ -158,7 +158,7 @@ public class EventServiceImpl implements EventService {
         return eventSupportDTO;
     }
 
-    private GroupDTO convertGroupEntityToDTO(KpiGroup kpiGroup) throws IOException {
+    private GroupDTO convertClubEntityToDTO(KpiGroup kpiGroup) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
 
         GroupDTO groupDTO = new GroupDTO();
@@ -365,7 +365,7 @@ public class EventServiceImpl implements EventService {
                 kpiEventUserRepo.saveAll(eventUsers);
 
                 BeanUtils.copyProperties(kpiEvent, validatedEventDTO);
-                validatedEventDTO.setGroup(convertGroupEntityToDTO(kpiEvent.getGroup()));
+                validatedEventDTO.setGroup(convertClubEntityToDTO(kpiEvent.getGroup()));
                 validatedEventDTO.setEventUserList(eventDTO.getEventUserList());
             } else {
                 validatedEventDTO.setMessage(ErrorMessage.NOT_FIND_GROUP);
@@ -411,7 +411,7 @@ public class EventServiceImpl implements EventService {
                     kpiEventUserRepo.saveAll(eventUsers);
 
                     BeanUtils.copyProperties(kpiEvent, validatedEventDTO);
-                    validatedEventDTO.setGroup(convertGroupEntityToDTO(kpiEvent.getGroup()));
+                    validatedEventDTO.setGroup(convertClubEntityToDTO(kpiEvent.getGroup()));
                     validatedEventDTO.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
                     validatedEventDTO.setAdditionalConfig(eventDTO.getAdditionalConfig());
                     validatedEventDTO.setEventUserList(eventDTO.getEventUserList());
@@ -505,7 +505,7 @@ public class EventServiceImpl implements EventService {
             errorDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
 
             errors.add(errorDTO);
-        } else {
+        } else if (eventDTO.getEventUserList().size() != 0)  {
             for (EventUserDTO eventUserDTO : eventDTO.getEventUserList()) {
                 Integer userType = eventUserDTO.getType();
                 if (userType == null) {
@@ -515,7 +515,7 @@ public class EventServiceImpl implements EventService {
                     errorDTO.setMessage(ErrorMessage.USER_TYPE_CAN_NOT_NULL);
 
                     errors.add(errorDTO);
-                } else if (userType < 1 || userType > 3) {
+                } else if (userType < EventUserType.HOST.getValue() || userType > EventUserType.LISTEN.getValue()) {
                     ErrorDTO errorDTO = new ErrorDTO();
 
                     errorDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());

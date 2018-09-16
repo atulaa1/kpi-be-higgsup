@@ -51,7 +51,6 @@ public class GroupServiceImpl implements GroupService {
                 String clubJson = mapper.writeValueAsString(groupDTO.getAdditionalConfig());
 
                 kpiGroup.setAdditionalConfig(clubJson);
-                kpiGroup.setCreatedDate(new Timestamp(System.currentTimeMillis()));
                 Optional<KpiGroupType> kpiGroupType = kpiGroupTypeRepo.findById(groupDTO.getGroupType().getId());
                 if (kpiGroupType.isPresent()) {
                     kpiGroupOptional.get().setGroupType(kpiGroupType.get());
@@ -84,7 +83,6 @@ public class GroupServiceImpl implements GroupService {
             BeanUtils.copyProperties(groupDTO, kpiGroup);
 
             kpiGroup.setAdditionalConfig(jsonConfigSeminar);
-            kpiGroup.setCreatedDate(new Timestamp(System.currentTimeMillis()));
             Optional<KpiGroupType> kpiGroupType = kpiGroupTypeRepo.findById(groupDTO.getGroupType().getId());
 
             if (kpiGroupType.isPresent()) {
@@ -115,7 +113,6 @@ public class GroupServiceImpl implements GroupService {
                 BeanUtils.copyProperties(groupDTO, kpiGroup);
 
                 kpiGroup.setAdditionalConfig(clubJson);
-                kpiGroup.setCreatedDate(new Timestamp(System.currentTimeMillis()));
                 Optional<KpiGroupType> kpiGroupType = kpiGroupTypeRepo.findById(groupDTO.getGroupType().getId());
 
                 if (kpiGroupType.isPresent()) {
@@ -155,7 +152,6 @@ public class GroupServiceImpl implements GroupService {
             String seminarJson = mapper.writeValueAsString(groupDTO.getAdditionalConfig());
 
             kpiGroup.setAdditionalConfig(seminarJson);
-            kpiGroup.setCreatedDate(new Timestamp(System.currentTimeMillis()));
             Optional<KpiGroupType> kpiGroupType = kpiGroupTypeRepo.findById(groupDTO.getGroupType().getId());
 
             if (kpiGroupType.isPresent()) {
