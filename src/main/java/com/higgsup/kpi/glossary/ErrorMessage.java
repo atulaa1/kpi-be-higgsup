@@ -50,6 +50,7 @@ public final class ErrorMessage {
     public final static String GROUP_ID_NOT_IS_SUPPORT = "group ID  not is support";
     public final static String ID_NOT_INCORRECT = "id not incorrect";
     public final static String GROUP_WITH_ID_NOT_IS_SUPPORT = "group with id not is support";
+    public final static String MIN_SESSION_MUST_BIGGER_THAN_ZERO = "minimum session must be bigger than zero";
     public final static String BEGIN_DATE_CAN_NOT_NULL = "begin date cannot null";
     public final static String END_DATE_CAN_NOT_NULL = "end date cannot null";
     public final static String MEMBER_TYPE_DOES_NOT_EXIST = "member type does not exist";
@@ -60,4 +61,3 @@ public final class ErrorMessage {
     public final static String NOT_FIND_EVENT = "not find event by id";
     public final static String CAN_NOT_UPDATE_EVENT = "cannot update event";
 }
-
