@@ -185,7 +185,6 @@ public class GroupServiceImpl implements GroupService {
                 String clubJson = mapper.writeValueAsString(groupDTO.getAdditionalConfig());
 
                 kpiGroup.setAdditionalConfig(clubJson);
-                kpiGroup.setCreatedDate(new Timestamp(System.currentTimeMillis()));
                 Optional<KpiGroupType> kpiGroupType = kpiGroupTypeRepo.findById(groupDTO.getGroupType().getId());
 
                 if (kpiGroupType.isPresent()) {
