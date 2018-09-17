@@ -174,7 +174,7 @@
                   "format": "int32"
                 }
               },
-              "example": {
+              "example":{
                 "data": [
                   {
                     "id": 37,
@@ -997,6 +997,698 @@
                 "status_code": 200
               }
             }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+
+    "/api/events/seminar": {
+      "post": {
+        "tags": [
+          "event-controller"
+        ],
+        "summary": "createSeminar",
+        "operationId": "createSeminarUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "seminarDetailEventDTO",
+            "description": "seminarDetailEventDTO",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "name",
+                "beginDate",
+                "endDate",
+                "group",
+                "eventUserList"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "address": {
+                  "type": "string"
+                },
+                "beginDate": {
+                  "type": "string"
+                },
+                "endDate": {
+                  "type": "string"
+                },
+                "group": {
+                  "type": "object",
+                  "required": [
+                    "id"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "eventUserList": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "user",
+                      "type"
+                    ],
+                    "properties": {
+                      "user": {
+                        "type": "object",
+                        "required": [
+                          "username"
+                        ],
+                        "properties": {
+                          "username": {
+                            "type": "String"
+                          }
+                        }
+                      },
+                      "type": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "name": "seminar test 4",
+                "address":"Ha Noi",
+                "beginDate":"20-09-2018 16:24",
+                "endDate":"21-09-2018 16:24",
+                "group": {
+                  "id":1
+                },
+                "eventUserList":[
+                  {
+                    "user":{
+                      "username":"kpi.test01"
+                    },
+                    "type": 1
+                  },
+                  {
+                    "user": {
+                      "username":"kpi.test"
+                    },
+                    "type": 2
+                  },
+                  {
+                    "user": {
+                      "username":"kpi.employee"
+                    },
+                    "type": 3
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Status_code:200.Message: OK. Meaning: Thành công \n Status code:900.Message:group type does not exist. Meaning: Không tìm thấy group type \n Message:group: not find user. Meaning: Không tìm thấy user \n Status_code: 903.Message: event can not be null. Meaning: Không được để trống event. \n Message: group cannot null. Meaning: Không được để trống group. \n Message: event user list can not be null. Meaning: Không được để trống các thành viên tham gia seminar \n Message: username can not be null. Meaning: Không được để trống username \n Message: member type of event can not be null. Meaning: Không được để trống member type \n Message: name of event can not be null. Meaning: Không được để trống tên event \n Message: begin date of event can not be null. Meaning: Không được để trống ngày tạo event \n Message: end date of event can not be null. Meaning: không được để trống ngày kết thúc event \n Status_code: 901.Message: member type of event is invalidated. Meaning: member type không hợp lệ. \n Message: end date has to be after begin date. Meaning: Ngày tạo event phải bắt đầu trước ngày kết thúc event",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "address": {
+                      "type": "string"
+                    },
+                    "createdDate": {
+                      "type": "string"
+                    },
+                    "updatedDate": {
+                      "type": "string"
+                    },
+                    "beginDate": {
+                      "type": "string"
+                    },
+                    "endDate": {
+                      "type": "string"
+                    },
+                    "group": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "groupType": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "number"
+                            },
+                            "name": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "createdDate": {
+                          "type": "string"
+                        },
+                        "additionalConfig": {
+                          "type": "object",
+                          "properties": {
+                            "hostPoint": {
+                              "type": "number"
+                            },
+                            "memberPoint": {
+                              "type": "number"
+                            },
+                            "listenerPoint": {
+                              "type": "number"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "eventUserList": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "user",
+                        "type"
+                      ],
+                      "properties": {
+                        "user": {
+                          "type": "object",
+                          "required": [
+                            "username"
+                          ],
+                          "properties": {
+                            "username": {
+                              "type": "String"
+                            }
+                          }
+                        },
+                        "type": {
+                          "type": "number"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+                "message": {
+                  "type": "string"
+                },
+                "status_code": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "errorCode": {
+                        "type": "number"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+            },
+              "example": {
+                "data": {
+                  "id": 23,
+                  "name": "seminar test 4",
+                  "description": null,
+                  "status": 1,
+                  "address": "Ha noi",
+                  "createdDate": "14-09-2018 09:34",
+                  "updatedDate": "14-09-2018 09:34",
+                  "beginDate": "14-08-2018 16:24",
+                  "endDate": "05-09-2018 16:24",
+                  "group": {
+                    "id": 1,
+                    "name": "seminar",
+                    "description": null,
+                    "groupType": {
+                      "id": 1,
+                      "name": "Seminar"
+                    },
+                    "createdDate": null,
+                    "additionalConfig": {
+                      "hostPoint": 13.6,
+                      "memberPoint": 13.4,
+                      "listenerPoint": 11
+                    }
+                  },
+                  "eventUserList": [
+                    {
+                      "user": {
+                        "username": "kpi.employee",
+                        "lastName": null,
+                        "firstName": null,
+                        "fullName": null,
+                        "email": null,
+                        "userRole": null,
+                        "avatar": null,
+                        "birthday": null,
+                        "numberPhone": null,
+                        "address": null,
+                        "gmail": null,
+                        "skype": null,
+                        "dateStartWork": null
+                      },
+                      "type": 1
+                    },
+                    {
+                      "user": {
+                        "username": "kpi.man",
+                        "lastName": null,
+                        "firstName": null,
+                        "fullName": null,
+                        "email": null,
+                        "userRole": null,
+                        "avatar": null,
+                        "birthday": null,
+                        "numberPhone": null,
+                        "address": null,
+                        "gmail": null,
+                        "skype": null,
+                        "dateStartWork": null
+                      },
+                      "type": 2
+                    },
+                    {
+                      "user": {
+                        "username": "kpi.man",
+                        "lastName": null,
+                        "firstName": null,
+                        "fullName": null,
+                        "email": null,
+                        "userRole": null,
+                        "avatar": null,
+                        "birthday": null,
+                        "numberPhone": null,
+                        "address": null,
+                        "gmail": null,
+                        "skype": null,
+                        "dateStartWork": null
+                      },
+                      "type": 3
+                    }
+                  ],
+                  "additionalConfig": "null"
+                },
+                "status_code": 200
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/events/seminar/{id}": {
+      "put": {
+        "tags": [
+          "event-controller"
+        ],
+        "summary": "updateSeminar",
+        "operationId": "updateSeminarUsingPUT",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "body",
+            "name": "seminarDetailEventDTO",
+            "description": "seminarDetailEventDTO",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "id",
+                "name",
+                "beginDate",
+                "endDate",
+                "group",
+                "eventUserList"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "address": {
+                  "type": "string"
+                },
+                "beginDate": {
+                  "type": "string"
+                },
+                "endDate": {
+                  "type": "string"
+                },
+                "group": {
+                  "type": "object",
+                  "required": [
+                    "id"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "eventUserList": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "user",
+                      "type"
+                    ],
+                    "properties": {
+                      "user": {
+                        "type": "object",
+                        "required": [
+                          "username"
+                        ],
+                        "properties": {
+                          "username": {
+                            "type": "String"
+                          }
+                        }
+                      },
+                      "type": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "name": "seminar test 4 - updated",
+                "address":"Ha Noi",
+                "beginDate":"20-09-2018 16:24",
+                "endDate":"21-09-2018 16:24",
+                "group": {
+                  "id":1
+                },
+                "eventUserList":[
+                  {
+                    "user":{
+                      "username":"kpi.test01"
+                    },
+                    "type": 1
+                  },
+                  {
+                    "user": {
+                      "username":"kpi.test"
+                    },
+                    "type": 2
+                  },
+                  {
+                    "user": {
+                      "username":"kpi.employee"
+                    },
+                    "type": 3
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Status_code:200.\n Message: OK. Meaning: Thành công \n Status code:900. \n Message:group type does not exist. Meaning: Không tìm thấy group type \n Message:group: not find user. Meaning: Không tìm thấy user. \n Message: not find seminar. Meaning: Không tìm thấy hoạt động seminar \n Status_code: 903. Message: event can not be null. Meaning: Không được để trống event. \n Message: group cannot null. Meaning: Không được để trống group. \n Message: event user list can not be null. Meaning: Không được để trống các thành viên tham gia seminar \n Message: username can not be null. Meaning: Không được để trống username \n Message: member type of event can not be null. Meaning: Không được để trống member type \n Message: name of event can not be null. Meaning: Không được để trống tên event \n Message: begin date of event can not be null. Meaning: Không được để trống ngày tạo event \n Message: end date of event can not be null. Meaning: không được để trống ngày kết thúc event \n Message: not find seminar. Meaning: Không tìm thấy hoạt động seminar \n Status_code: 901. Message: member type of event is invalidated. Meaning: member type không hợp lệ. \n Message: end date has to be after begin date. Meaning: Ngày tạo event phải bắt đầu trước ngày kết thúc event \n Message: cannot update event. Meaning: Không thể update event ",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "address": {
+                      "type": "string"
+                    },
+                    "createdDate": {
+                      "type": "string"
+                    },
+                    "updatedDate": {
+                      "type": "string"
+                    },
+                    "beginDate": {
+                      "type": "string"
+                    },
+                    "endDate": {
+                      "type": "string"
+                    },
+                    "group": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "groupType": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "number"
+                            },
+                            "name": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "createdDate": {
+                          "type": "string"
+                        },
+                        "additionalConfig": {
+                          "type": "object",
+                          "properties": {
+                            "hostPoint": {
+                              "type": "number"
+                            },
+                            "memberPoint": {
+                              "type": "number"
+                            },
+                            "listenerPoint": {
+                              "type": "number"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "eventUserList": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "user",
+                        "type"
+                      ],
+                      "properties": {
+                        "user": {
+                          "type": "object",
+                          "required": [
+                            "username"
+                          ],
+                          "properties": {
+                            "username": {
+                              "type": "String"
+                            }
+                          }
+                        },
+                        "type": {
+                          "type": "number"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "message": {
+              "type": "string"
+            },
+            "status_code": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "errors": {
+              "type": "array",
+              "items": {
+                "properties": {
+                  "errorCode": {
+                    "type": "number"
+                  },
+                  "message": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "example": {
+            "data": {
+              "id": 23,
+              "name": "seminar test 4",
+              "description": null,
+              "status": 1,
+              "address": "Ha noi",
+              "createdDate": "14-09-2018 09:34",
+              "updatedDate": "14-09-2018 09:34",
+              "beginDate": "14-08-2018 16:24",
+              "endDate": "05-09-2018 16:24",
+              "group": {
+                "id": 1,
+                "name": "seminar",
+                "description": null,
+                "groupType": {
+                  "id": 1,
+                  "name": "Seminar"
+                },
+                "createdDate": null,
+                "additionalConfig": {
+                  "hostPoint": 13.6,
+                  "memberPoint": 13.4,
+                  "listenerPoint": 11
+                }
+              },
+              "eventUserList": [
+                {
+                  "user": {
+                    "username": "kpi.employee",
+                    "lastName": null,
+                    "firstName": null,
+                    "fullName": null,
+                    "email": null,
+                    "userRole": null,
+                    "avatar": null,
+                    "birthday": null,
+                    "numberPhone": null,
+                    "address": null,
+                    "gmail": null,
+                    "skype": null,
+                    "dateStartWork": null
+                  },
+                  "type": 1
+                },
+                {
+                  "user": {
+                    "username": "kpi.man",
+                    "lastName": null,
+                    "firstName": null,
+                    "fullName": null,
+                    "email": null,
+                    "userRole": null,
+                    "avatar": null,
+                    "birthday": null,
+                    "numberPhone": null,
+                    "address": null,
+                    "gmail": null,
+                    "skype": null,
+                    "dateStartWork": null
+                  },
+                  "type": 2
+                },
+                {
+                  "user": {
+                    "username": "kpi.man",
+                    "lastName": null,
+                    "firstName": null,
+                    "fullName": null,
+                    "email": null,
+                    "userRole": null,
+                    "avatar": null,
+                    "birthday": null,
+                    "numberPhone": null,
+                    "address": null,
+                    "gmail": null,
+                    "skype": null,
+                    "dateStartWork": null
+                  },
+                  "type": 3
+                }
+              ],
+              "additionalConfig": "null"
+            },
+            "status_code": 200
           },
           "201": {
             "description": "Created"
