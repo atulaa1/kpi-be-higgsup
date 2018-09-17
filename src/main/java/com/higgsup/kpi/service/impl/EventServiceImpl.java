@@ -512,7 +512,7 @@ public class EventServiceImpl implements EventService {
             errorDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
 
             errors.add(errorDTO);
-        } else if (eventDTO.getEventUserList().size() != 0)  {
+        } else if (eventDTO.getEventUserList().size() != 0) {
             for (EventUserDTO eventUserDTO : eventDTO.getEventUserList()) {
                 Integer userType = eventUserDTO.getType();
                 if (userType == null) {
