@@ -180,8 +180,7 @@ public class EventServiceImpl implements EventService {
         GroupDTO<GroupSupportDetail> groupSupportDTO = new GroupDTO<>();
 
         BeanUtils.copyProperties(kpiGroup, groupSupportDTO);
-        GroupSupportDetail groupSeminarDetail = mapper.readValue(kpiGroup.getAdditionalConfig(),
-                GroupSupportDetail.class);
+        GroupSupportDetail groupSeminarDetail = mapper.readValue(kpiGroup.getAdditionalConfig(), GroupSupportDetail.class);
 
         groupSupportDTO.setAdditionalConfig(groupSeminarDetail);
         groupSupportDTO.setGroupType(convertGroupTypeEntityToDTO(kpiGroup.getGroupType()));

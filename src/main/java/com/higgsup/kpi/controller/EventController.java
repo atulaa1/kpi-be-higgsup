@@ -65,7 +65,7 @@ public class EventController {
         return response;
     }
 
-    @PreAuthorize("hasAnyRole('MAN','EMPLOYEE')")
+    @PreAuthorize("hasRole('EMPLOYEE')")
     @PostMapping("/club")
     public Response createClub(@RequestBody EventDTO<EventClubDetail> eventDTO) {
         Response<EventDTO> response = new Response<>(HttpStatus.OK.value());
@@ -88,7 +88,7 @@ public class EventController {
         return response;
     }
 
-    @PreAuthorize("hasAnyRole('MAN','EMPLOYEE')")
+    @PreAuthorize("hasRole('EMPLOYEE')")
     @PutMapping("club/{id}")
     public Response updateClub(@PathVariable Integer id, @RequestBody EventDTO<EventClubDetail> eventDTO) {
         Response<EventDTO> response = new Response<>(HttpStatus.OK.value());
