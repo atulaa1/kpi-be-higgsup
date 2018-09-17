@@ -4,6 +4,7 @@ import com.higgsup.kpi.entity.KpiEvent;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface KpiEventRepo extends CrudRepository<KpiEvent, Integer> {

@@ -7,6 +7,7 @@ import com.higgsup.kpi.dto.EventDTO;
 import com.higgsup.kpi.dto.EventSupportDetail;
 import com.higgsup.kpi.dto.Response;
 import com.higgsup.kpi.glossary.ErrorCode;
+import com.higgsup.kpi.glossary.ErrorMessage;
 import com.higgsup.kpi.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,10 +36,15 @@ public class EventController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
-    public Response getAllEvent() {
+    public Response getAllEvent(){
         Response<List<EventDTO>> response = new Response<>(HttpStatus.OK.value());
-        List<EventDTO> eventDTOS = eventService.getAllEvent();
-        response.setData(eventDTOS);
+        try {
+            List<EventDTO> eventDTOS = eventService.getAllEvent();
+            response.setData(eventDTOS);
+        }catch(IOException ex){
+            response.setStatus(ErrorCode.ERROR_IO_EXCEPTION.getValue());
+            response.setMessage(ErrorMessage.ERROR_IO_EXCEPTION);
+        }
         return response;
     }
 

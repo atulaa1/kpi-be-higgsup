@@ -13,7 +13,8 @@ import java.util.List;
 import com.higgsup.kpi.dto.EventClubDetail;
 
 public interface EventService {
-    List<EventDTO> getAllEvent();
+    List<EventDTO> getAllEvent() throws IOException;
+
     EventDTO createSupportEvent(EventDTO<List<EventSupportDetail>> supportDTO) throws IOException, NoSuchFieldException;
 
     EventDTO updateSupportEvent(EventDTO<List<EventSupportDetail>> supportDTO) throws IOException, NoSuchFieldException;
