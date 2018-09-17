@@ -255,7 +255,7 @@
         ],
         "responses": {
           "200": {
-            "description":"status_code : 200. Meaning: Thành công \n status_code : 910 \n Message: incorrect file format. Meaning: không phải file excel. \n status_code : 911. Message: invalid member name. Meaning: Sai định dạng tên cột thành viên. \n Message: invalid email. Meaning: Sai định dạng tên cột email. Message: invalid number of late times. Meaning: Sai định dạng tên cột số lần đi muộn. \n status_code : 915. Message: incorrect email data at line. Meaning: Sai định dạng email tại dòng. \n  Message: incorrect data. Meaning: Sai định dạng số lần đi muộn.",
+            "description":"status_code : 200. Meaning: Thành công \n status_code : 910 \n Message: incorrect file format. Meaning: không phải file excel. \n status_code : 911. Message: invalid member name. Meaning: Sai định dạng tên cột thành viên. \n Message: invalid email. Meaning: Sai định dạng tên cột email. Message: invalid number of late times. Meaning: Sai định dạng tên cột số lần đi muộn. \n status_code : 915. Message: incorrect email data at line. Meaning: Sai định dạng email tại dòng. \n  Message: incorrect late times data at line. Meaning: Sai định dạng số lần đi muộn. \n Message: email not in database at line. Meaning: email không có trong database",
             "schema": {
               "type": "object",
               "required": [

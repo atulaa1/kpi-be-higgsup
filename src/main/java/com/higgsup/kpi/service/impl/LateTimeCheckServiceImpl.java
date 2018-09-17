@@ -70,7 +70,7 @@ public class LateTimeCheckServiceImpl implements LateTimeCheckService {
     @Override
     public List<LateTimeCheckDTO> processExcelFile(MultipartFile excelDataFile) throws IOException {
         List<LateTimeCheckDTO> lateTimeCheckDTOS = new ArrayList<>();
-        if(verifyExcelFile(excelDataFile).isEmpty()) {
+        if(validateExcelFile(excelDataFile).isEmpty()) {
             XSSFWorkbook workbook = new XSSFWorkbook(excelDataFile.getInputStream());
             XSSFSheet worksheet = workbook.getSheetAt(0);
 
@@ -91,7 +91,7 @@ public class LateTimeCheckServiceImpl implements LateTimeCheckService {
             }
         }else{
             LateTimeCheckDTO lateTimeCheckDTO = new LateTimeCheckDTO();
-            lateTimeCheckDTO.setErrorDTOS(verifyExcelFile(excelDataFile));
+            lateTimeCheckDTO.setErrorDTOS(validateExcelFile(excelDataFile));
             lateTimeCheckDTOS.add(lateTimeCheckDTO);
         }
         return lateTimeCheckDTOS;
@@ -186,7 +186,7 @@ public class LateTimeCheckServiceImpl implements LateTimeCheckService {
         return kpiYearMonth;
     }
 
-    private List<ErrorDTO> verifyExcelFile(MultipartFile excelDataFile) throws IOException {
+    private List<ErrorDTO> validateExcelFile(MultipartFile excelDataFile) throws IOException {
         List<ErrorDTO> errorDTOS = new ArrayList<>();
         if (!excelDataFile.getOriginalFilename().endsWith(".xlsx")) {
             ErrorDTO errorDTO = new ErrorDTO();
@@ -226,16 +226,23 @@ public class LateTimeCheckServiceImpl implements LateTimeCheckService {
                         !row.getCell(1).getStringCellValue().endsWith("@higgsup.com")) {
                     ErrorDTO errorDTO = new ErrorDTO();
                     errorDTO.setErrorCode(ErrorCode.INCORRECT_DATA.getValue());
-                    errorDTO.setMessage(ErrorMessage.INCORRECT_EMAIL_DATA_AT_LINE + (i+1));
+                    errorDTO.setMessage(ErrorMessage.INCORRECT_EMAIL_DATA + (i+1));
+                    errorDTOS.add(errorDTO);
+                }
+                if(kpiUserRepo.findByEmail(row.getCell(1).getStringCellValue()) == null){
+                    ErrorDTO errorDTO = new ErrorDTO();
+                    errorDTO.setErrorCode(ErrorCode.INCORRECT_DATA.getValue());
+                    errorDTO.setMessage(ErrorMessage.EMAIL_NOT_IN_DATABASE + (i+1));
                     errorDTOS.add(errorDTO);
                 }
                 if (String.valueOf(row.getCell(2).toString()).isEmpty() ||
                         !UtilsValidate.isValidLateTimeNumber((row.getCell(2).toString()))){
                     ErrorDTO errorDTO = new ErrorDTO();
                     errorDTO.setErrorCode(ErrorCode.INCORRECT_DATA.getValue());
-                    errorDTO.setMessage(ErrorMessage.INCORRECT_LATE_TIMES_DATA_AT_LINE + (i+1));
+                    errorDTO.setMessage(ErrorMessage.INCORRECT_LATE_TIMES_DATA + (i+1));
                     errorDTOS.add(errorDTO);
                 }
+
             }
         }
         return errorDTOS;
