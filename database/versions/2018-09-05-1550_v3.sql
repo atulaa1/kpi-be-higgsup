@@ -12,6 +12,7 @@ CREATE TABLE kpi_user (
   active       TINYINT(1)   DEFAULT NULL,
   first_name   VARCHAR(50)  DEFAULT NULL,
   last_name    VARCHAR(50)  DEFAULT NULL,
+  full_name    VARCHAR(400) DEFAULT NULL,
   email        VARCHAR(50)  DEFAULT NULL,
   birthday     DATE         NULL,
   number_phone VARCHAR(20)  NULL,

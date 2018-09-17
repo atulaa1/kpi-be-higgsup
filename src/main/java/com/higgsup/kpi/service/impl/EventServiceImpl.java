@@ -388,42 +388,50 @@ public class EventServiceImpl implements EventService {
         Optional<KpiEvent> kpiEventOptional = kpiEventRepo.findById(eventDTO.getId());
 
         if (kpiEventOptional.isPresent()) {
-            if (CollectionUtils.isEmpty(validates)) {
 
-                KpiEvent kpiEvent = kpiEventOptional.get();
-                eventDTO.setId(kpiEvent.getId());
+            KpiEvent kpiEvent = kpiEventOptional.get();
 
+            if (StatusEvent.WAITING.getValue().equals(kpiEvent.getStatus())) {
 
-                ObjectMapper mapper = new ObjectMapper();
-                String clubJson = mapper.writeValueAsString(eventDTO.getAdditionalConfig());
-                BeanUtils.copyProperties(eventDTO, kpiEvent, "createdDate", "updatedDate");
+                if (CollectionUtils.isEmpty(validates)) {
+                    eventDTO.setId(kpiEvent.getId());
+                    eventDTO.setStatus(kpiEvent.getStatus());
 
-                kpiEvent.setAdditionalConfig(clubJson);
-                Optional<KpiGroup> groupOptional = kpiGroupRepo.findById(eventDTO.getGroup().getId());
+                    ObjectMapper mapper = new ObjectMapper();
+                    String clubJson = mapper.writeValueAsString(eventDTO.getAdditionalConfig());
+                    BeanUtils.copyProperties(eventDTO, kpiEvent, "createdDate", "updatedDate", "status");
 
-                if (groupOptional.isPresent()) {
-                    kpiEvent.setGroup(groupOptional.get());
-                    kpiEvent.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
-                    kpiEvent = kpiEventRepo.save(kpiEvent);
+                    kpiEvent.setAdditionalConfig(clubJson);
+                    Optional<KpiGroup> groupOptional = kpiGroupRepo.findById(eventDTO.getGroup().getId());
 
-                    List<KpiEventUser> eventUsers = convertEventUsersToEntity(kpiEvent, eventDTO.getEventUserList());
-                    kpiEventUserRepo.saveAll(eventUsers);
+                    if (groupOptional.isPresent()) {
+                        kpiEvent.setGroup(groupOptional.get());
+                        kpiEvent.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
+                        kpiEvent = kpiEventRepo.save(kpiEvent);
 
-                    BeanUtils.copyProperties(kpiEvent, validatedEventDTO);
-                    validatedEventDTO.setGroup(convertClubEntityToDTO(kpiEvent.getGroup()));
-                    validatedEventDTO.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
-                    validatedEventDTO.setAdditionalConfig(eventDTO.getAdditionalConfig());
-                    validatedEventDTO.setEventUserList(eventDTO.getEventUserList());
+                        List<KpiEventUser> eventUsers = convertEventUsersToEntity(kpiEvent, eventDTO.getEventUserList());
+                        kpiEventUserRepo.saveAll(eventUsers);
 
+                        BeanUtils.copyProperties(kpiEvent, validatedEventDTO);
+                        validatedEventDTO.setGroup(convertClubEntityToDTO(kpiEvent.getGroup()));
+                        validatedEventDTO.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
+                        validatedEventDTO.setAdditionalConfig(eventDTO.getAdditionalConfig());
+                        validatedEventDTO.setEventUserList(eventDTO.getEventUserList());
+
+                    } else {
+                        validatedEventDTO.setMessage(ErrorMessage.NOT_FIND_GROUP);
+                        validatedEventDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
+                    }
                 } else {
-                    validatedEventDTO.setMessage(ErrorMessage.NOT_FIND_GROUP);
-                    validatedEventDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
+                    validatedEventDTO.setErrorCode(validates.get(0).getErrorCode());
+                    validatedEventDTO.setMessage(validates.get(0).getMessage());
+                    validatedEventDTO.setErrorDTOS(validates);
                 }
             } else {
-                validatedEventDTO.setErrorCode(validates.get(0).getErrorCode());
-                validatedEventDTO.setMessage(validates.get(0).getMessage());
-                validatedEventDTO.setErrorDTOS(validates);
+                validatedEventDTO.setMessage(ErrorMessage.CAN_NOT_UPDATE_EVENT);
+                validatedEventDTO.setErrorCode(ErrorCode.CANNOT_UPDATE.getValue());
             }
+
         }
 
         return validatedEventDTO;
@@ -504,7 +512,7 @@ public class EventServiceImpl implements EventService {
             errorDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
 
             errors.add(errorDTO);
-        } else if (eventDTO.getEventUserList().size() != 0)  {
+        } else if (eventDTO.getEventUserList().size() != 0) {
             for (EventUserDTO eventUserDTO : eventDTO.getEventUserList()) {
                 Integer userType = eventUserDTO.getType();
                 if (userType == null) {
@@ -545,17 +553,6 @@ public class EventServiceImpl implements EventService {
                 errors.add(errorDTO);
             }
         }
-
-
-        if (eventDTO.getStatus() != 1) {
-            ErrorDTO errorDTO = new ErrorDTO();
-
-            errorDTO.setErrorCode(ErrorCode.CANNOT_UPDATE.getValue());
-            errorDTO.setMessage(ErrorMessage.CAN_NOT_UPDATE_EVENT);
-
-            errors.add(errorDTO);
-        }
-
 
         return errors;
     }

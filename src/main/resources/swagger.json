@@ -386,6 +386,128 @@
         }
       }
     },
+    "/api/late-times/import-file":{
+      "post":{
+        "tags":[
+          "event-controller"
+        ],
+        "summary":"processLateTimeExcelFile",
+        "operationId":"processExcelFileUsingPOST",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces":[
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name":"file",
+            "in":"formData",
+            "description":"file",
+            "required":true,
+            "type":"file"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description":"status_code : 200. Meaning: Thành công \n status_code : 910 \n Message: incorrect file format. Meaning: không phải file excel. \n status_code : 911. Message: invalid member name. Meaning: Sai định dạng tên cột thành viên. \n Message: invalid email. Meaning: Sai định dạng tên cột email. Message: invalid number of late times. Meaning: Sai định dạng tên cột số lần đi muộn. \n status_code : 915. Message: incorrect email data at line. Meaning: Sai định dạng email tại dòng. \n  Message: incorrect late times data at line. Meaning: Sai định dạng số lần đi muộn. \n Message: email not in database at line. Meaning: email không có trong database",
+            "schema": {
+              "type": "object",
+              "required": [
+                "status_code",
+                "data"
+              ],
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "lateTimes",
+                      "user"
+                    ],
+                    "properties": {
+                      "id": {
+                        "type": "number"
+                      },
+                      "lateTimes": {
+                        "type": "number"
+                      },
+                      "user": {
+                        "type": "object",
+                        "required": [
+                          "username",
+                          "email"
+                        ],
+                        "properties": {
+                          "username": {
+                            "type": "string"
+                          },
+                          "email": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "message": {
+                  "type": "string"
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "errorCode": {
+                        "type": "number"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "status_code": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "example":{
+                "data": [
+                  {
+                    "id": 37,
+                    "lateTimes": 1,
+                    "user": {
+                      "username": "kpi.employee",
+                      "email": "lethanh9398@higgsup.com"
+                    }
+                  },
+                  {
+                    "id": 38,
+                    "lateTimes": 3,
+                    "user": {
+                      "username": "kpi.test02",
+                      "email": "testt@higgsup.com"
+                    }
+                  }
+                ],
+                "status_code": 200
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/events/support": {
       "post": {
         "tags": [
@@ -1437,6 +1559,14 @@
           "*/*"
         ],
         "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
           {
             "in": "body",
             "name": "eventDTO",

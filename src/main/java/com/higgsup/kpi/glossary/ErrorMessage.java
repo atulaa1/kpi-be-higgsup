@@ -63,4 +63,11 @@ public final class ErrorMessage {
     public final static String STATUS_OF_EVENT_DOES_NOT_EXIST = "status of event does not exist";
     public final static String NOT_FIND_EVENT = "not find event by id";
     public final static String CAN_NOT_UPDATE_EVENT = "cannot update event";
+    public final static String INCORRECT_FILE_FORMAT = "incorrect file format";
+    public final static String INVALID_MEMBER_NAME = "invalid member name";
+    public final static String INVALID_EMAIL = "invalid email";
+    public final static String INVALID_NUMBER_OF_LATE_TIMES = "invalid number of late times";
+    public final static String INCORRECT_EMAIL_DATA = "incorrect email data at line ";
+    public final static String INCORRECT_LATE_TIMES_DATA = "incorrect late times data at line ";
+    public final static String EMAIL_NOT_IN_DATABASE = "email not in database at line ";
 }
