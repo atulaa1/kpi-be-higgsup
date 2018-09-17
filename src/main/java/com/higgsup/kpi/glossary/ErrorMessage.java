@@ -63,5 +63,6 @@ public final class ErrorMessage {
     public final static String EVENT_STATUS_CAN_NOT_NULL = "event status can not null";
     public final static String NOT_FIND_EVENT_BY_ID = "not find event by id";
     public final static String EVENT_CONFIRMED_OR_CANCELED = "event confirmed or canceled";
+    public final static String CAN_NOT_CHANGE_STATUS_EVENT_LAST_MONTH = "can not change status event last month";
 
 }

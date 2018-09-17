@@ -16,6 +16,7 @@ import com.higgsup.kpi.service.LdapUserService;
 import com.higgsup.kpi.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,7 +27,10 @@ import org.springframework.util.CollectionUtils;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -49,6 +53,9 @@ public class EventServiceImpl extends BaseService implements EventService {
 
     @Autowired
     private LdapUserService ldapUserService;
+
+    @Autowired
+    private Environment environment;
 
     @Override
     @Transactional
@@ -103,23 +110,12 @@ public class EventServiceImpl extends BaseService implements EventService {
         Optional<KpiEvent> event = kpiEventRepo.findById(eventDTO.getId());
         if (event.isPresent()) {
             KpiEvent kpiEvent = event.get();
-            Calendar calendar = new GregorianCalendar();
-            if ((kpiEvent.getCreatedDate().getYear() + 1900 == calendar.get(Calendar.YEAR) && kpiEvent.getCreatedDate()
-                    .getMonth() + 1 <= (calendar.get(Calendar.MONTH) + 1) && calendar.get(Calendar.HOUR) <= 10 && calendar.get(
-                    Calendar.DATE) <= 16)
-                    ||
-                    (kpiEvent.getCreatedDate().getYear() + 1900 < calendar.get(Calendar.YEAR) && kpiEvent.getCreatedDate()
-                            .getMonth() + 1 > (calendar.get(Calendar.MONTH) + 1) && calendar.get(Calendar.HOUR) <= 10 && calendar
-                            .get(Calendar.DATE) <= 16)
-                    ) {
+            if (validateYearMonth(kpiEvent.getCreatedDate())) {
                 if (Objects.equals(kpiEvent.getStatus(), StatusEvent.WAITING.getValue())) {
                     GroupType groupType = GroupType.getGroupType(kpiEvent.getGroup().getGroupType().getId());
                     switch (groupType) {
-                        case SEMINAR:
-                            break;
                         case CLUB:
-                            break;
-                        case TEAM_BUILDING:
+                            eventDTO = confirmOrCancelEventClub(kpiEvent, eventDTO);
                             break;
                         case SUPPORT:
                             eventDTO = confirmOrCancelEventSupport(kpiEvent, eventDTO);
@@ -129,6 +125,9 @@ public class EventServiceImpl extends BaseService implements EventService {
                     eventDTO.setErrorCode(ErrorCode.DATA_CAN_NOT_CHANGE.getValue());
                     eventDTO.setMessage(ErrorMessage.EVENT_CONFIRMED_OR_CANCELED);
                 }
+            } else {
+                eventDTO.setErrorCode(ErrorCode.DATA_CAN_NOT_CHANGE.getValue());
+                eventDTO.setMessage(ErrorMessage.CAN_NOT_CHANGE_STATUS_EVENT_LAST_MONTH);
             }
         } else {
             eventDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
@@ -137,16 +136,118 @@ public class EventServiceImpl extends BaseService implements EventService {
         return eventDTO;
     }
 
+    private EventDTO confirmOrCancelEventClub(KpiEvent kpiEvent, EventDTO eventDTO) throws IOException {
+        if (Objects.equals(eventDTO.getStatus(), StatusEvent.CONFIRMED.getValue())) {
+            kpiEvent.setStatus(StatusEvent.CONFIRMED.getValue());
+        } else {
+            kpiEvent.setStatus(StatusEvent.CANCEL.getValue());
+        }
+        kpiEvent.setAdditionalConfig(kpiEvent.getGroup().getAdditionalConfig());
+
+        kpiEvent = kpiEventRepo.save(kpiEvent);
+        if (Objects.equals(kpiEvent.getStatus(), StatusEvent.CONFIRMED.getValue())) {
+            addPointWhenConfirmClub(kpiEvent);
+        }
+        eventDTO = convertEventClubEntityToDTO(kpiEvent);
+        return eventDTO;
+    }
+
+    private EventDTO convertEventClubEntityToDTO(KpiEvent kpiEvent) throws IOException {
+        EventDTO<EventClubDetail> clubDetailEventDTO = new EventDTO<>();
+        EventClubDetail eventClubDetail;
+        ObjectMapper mapper = new ObjectMapper();
+
+        BeanUtils.copyProperties(kpiEvent, clubDetailEventDTO);
+
+        eventClubDetail = mapper.readValue(kpiEvent.getAdditionalConfig(), EventClubDetail.class);
+        clubDetailEventDTO.setAdditionalConfig(eventClubDetail);
+
+        List<KpiEventUser> kpiEventUsers = kpiEventUserRepo.findByKpiEventId(kpiEvent.getId());
+
+        List<EventUserDTO> eventUserDTOS = convertListEventUserEntityToDTO(kpiEventUsers);
+        clubDetailEventDTO.setEventUserList(eventUserDTOS);
+        clubDetailEventDTO.setGroup(convertConfigEventToDTO(kpiEvent.getGroup()));
+
+        return clubDetailEventDTO;
+    }
+
+    private List<EventUserDTO> convertListEventUserEntityToDTO(List<KpiEventUser> kpiEventUsers) {
+        List<EventUserDTO> eventUserDTOS = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(kpiEventUsers)) {
+            List<String> namesUser = kpiEventUsers.stream().map(kpiEventUser -> kpiEventUser.getKpiEventUserPK().getUserName())
+                    .collect(Collectors.toList());
+            List<KpiUser> usersEvent = (List<KpiUser>) kpiUserRepo.findAllById(namesUser);
+
+            for (KpiEventUser kpiEventUser : kpiEventUsers) {
+                EventUserDTO eventUserDTO = new EventUserDTO();
+                eventUserDTO.setType(kpiEventUser.getType());
+                Optional<KpiUser> kpiUser = usersEvent.stream().filter(
+                        kpiUserTemp -> kpiUserTemp.getUserName().equals(kpiEventUser.getKpiEventUserPK().getUserName()))
+                        .findFirst();
+                if (kpiUser.isPresent()) {
+                    UserDTO userDTO = new UserDTO();
+                    KpiUser userDB = kpiUser.get();
+
+                    BeanUtils.copyProperties(userDB, userDTO);
+                    userDTO.setUsername(userDB.getUserName());
+                    eventUserDTO.setUser(userDTO);
+
+                    eventUserDTOS.add(eventUserDTO);
+                }
+            }
+        }
+        return eventUserDTOS;
+    }
+
+    private void addPointWhenConfirmClub(KpiEvent kpiEvent) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        GroupClubDetail groupClubDetail = mapper.readValue(kpiEvent.getGroup().getAdditionalConfig(), GroupClubDetail.class);
+        for (KpiEventUser kpiEventUser : kpiEvent.getKpiEventUserList()) {
+            addPoint(kpiEventUser.getKpiUser(), groupClubDetail.getParticipationPoint());
+        }
+    }
+
+    private boolean validateYearMonth(java.util.Date yearMonth) {
+        //is true if in month old , is false if la new
+        Timestamp dateCun = new Timestamp(System.currentTimeMillis());
+        if (dateCun.getYear() + 1900 == yearMonth.getYear() + 1900
+                && dateCun.getMonth() + 1 == yearMonth.getMonth() + 1
+                && dateCun.getDate() >= Integer.valueOf(
+                environment.getProperty("config.day.new.year.month"))
+                ) {
+            return true;
+        } else if (dateCun.getYear() + 1900 == yearMonth.getYear() + 1900
+                && dateCun.getMonth() + 1 > yearMonth.getMonth() + 1
+                && (dateCun.getDate() < Integer.valueOf(
+                environment.getProperty("config.day.new.year.month"))
+                || (dateCun.getDate() == Integer.valueOf(
+                environment.getProperty("config.day.new.year.month"))
+                && dateCun.getHours() < Integer.valueOf(
+                environment.getProperty("config.hour.new.year.month"))))) {
+            return true;
+        } else if (dateCun.getYear() + 1900 > yearMonth.getYear() + 1900 && (dateCun.getDate() <= Integer.valueOf(
+                environment.getProperty("config.day.new.year.month"))
+                || (dateCun.getDate() == Integer.valueOf(
+                environment.getProperty("config.day.new.year.month"))
+                && dateCun.getHours() < Integer.valueOf(
+                environment.getProperty("config.hour.new.year.month"))))) {
+            return true;
+        }
+        return false;
+    }
+
     private EventDTO confirmOrCancelEventSupport(KpiEvent kpiEvent, EventDTO eventDTO) throws IOException, NoSuchFieldException,
             IllegalAccessException {
         if (Objects.equals(eventDTO.getStatus(), StatusEvent.CONFIRMED.getValue())) {
             kpiEvent.setStatus(StatusEvent.CONFIRMED.getValue());
         } else {
-            kpiEvent.setStatus(StatusEvent.CONFIRMED.getValue());
+            kpiEvent.setStatus(StatusEvent.CANCEL.getValue());
         }
         Float point = setHistorySupportAndGetAllPoint(kpiEvent);
         //ad point
-        addPoint(kpiEvent.getKpiEventUserList().get(0).getKpiUser(), point);
+        if (Objects.equals(kpiEvent.getStatus(), StatusEvent.CONFIRMED.getValue())) {
+            addPoint(kpiEvent.getKpiEventUserList().get(0).getKpiUser(), point);
+        }
 
         kpiEvent = kpiEventRepo.save(kpiEvent);
 
@@ -193,7 +294,6 @@ public class EventServiceImpl extends BaseService implements EventService {
         EventDTO<List<EventSupportDetail>> eventSupportDTO = new EventDTO<>();
         List<EventSupportDetail> detailsConfigSupport;
         ObjectMapper mapper = new ObjectMapper();
-        List<EventUserDTO> eventUserDTOS = new ArrayList<>();
 
         BeanUtils.copyProperties(kpiEvent, eventSupportDTO);
 
@@ -204,31 +304,9 @@ public class EventServiceImpl extends BaseService implements EventService {
 
         List<KpiEventUser> kpiEventUsers = kpiEventUserRepo.findByKpiEventId(kpiEvent.getId());
 
-        if (!CollectionUtils.isEmpty(kpiEventUsers)) {
-            List<String> namesUser = kpiEventUsers.stream().map(kpiEventUser -> kpiEventUser.getKpiEventUserPK().getUserName())
-                    .collect(Collectors.toList());
-            List<KpiUser> usersEvent = (List<KpiUser>) kpiUserRepo.findAllById(namesUser);
-
-            for (KpiEventUser kpiEventUser : kpiEventUsers) {
-                EventUserDTO eventUserDTO = new EventUserDTO();
-                eventUserDTO.setType(kpiEventUser.getType());
-                Optional<KpiUser> kpiUser = usersEvent.stream().filter(
-                        kpiUserTemp -> kpiUserTemp.getUserName().equals(kpiEventUser.getKpiEventUserPK().getUserName()))
-                        .findFirst();
-                if (kpiUser.isPresent()) {
-                    UserDTO userDTO = new UserDTO();
-                    KpiUser userDB = kpiUser.get();
-
-                    BeanUtils.copyProperties(userDB, userDTO);
-                    userDTO.setUsername(userDB.getUserName());
-                    eventUserDTO.setUser(userDTO);
-
-                    eventUserDTOS.add(eventUserDTO);
-                }
-            }
-        }
+        List<EventUserDTO> eventUserDTOS = convertListEventUserEntityToDTO(kpiEventUsers);
         eventSupportDTO.setEventUserList(eventUserDTOS);
-        eventSupportDTO.setGroup(convertConfigSupportToDTO(kpiEvent.getGroup()));
+        eventSupportDTO.setGroup(convertConfigEventToDTO(kpiEvent.getGroup()));
 
         return eventSupportDTO;
     }
@@ -250,16 +328,32 @@ public class EventServiceImpl extends BaseService implements EventService {
         return groupTypeDTO;
     }
 
-    public GroupDTO convertConfigSupportToDTO(KpiGroup kpiGroup) throws IOException {
+    public GroupDTO convertConfigEventToDTO(KpiGroup kpiGroup) throws IOException {
+        GroupDTO groupDTO = new GroupDTO<>();
         ObjectMapper mapper = new ObjectMapper();
-        GroupDTO<GroupSupportDetail> groupSupportDTO = new GroupDTO<>();
 
-        BeanUtils.copyProperties(kpiGroup, groupSupportDTO);
-        GroupSupportDetail groupSeminarDetail = mapper.readValue(kpiGroup.getAdditionalConfig(), GroupSupportDetail.class);
+        switch (GroupType.getGroupType(kpiGroup.getGroupType().getId())) {
+            case SUPPORT:
 
-        groupSupportDTO.setAdditionalConfig(groupSeminarDetail);
-        groupSupportDTO.setGroupType(convertGroupTypeEntityToDTO(kpiGroup.getGroupType()));
-        return groupSupportDTO;
+                BeanUtils.copyProperties(kpiGroup, groupDTO);
+                GroupSupportDetail groupSeminarDetail = mapper.readValue(kpiGroup.getAdditionalConfig(),
+                        GroupSupportDetail.class);
+
+                groupDTO.setAdditionalConfig(groupSeminarDetail);
+                groupDTO.setGroupType(convertGroupTypeEntityToDTO(kpiGroup.getGroupType()));
+                break;
+            case CLUB:
+
+                BeanUtils.copyProperties(kpiGroup, groupDTO);
+                EventClubDetail eventClubDetail = mapper.readValue(kpiGroup.getAdditionalConfig(),
+                        EventClubDetail.class);
+
+                groupDTO.setAdditionalConfig(eventClubDetail);
+                groupDTO.setGroupType(convertGroupTypeEntityToDTO(kpiGroup.getGroupType()));
+                break;
+        }
+
+        return groupDTO;
     }
 
     private KpiEvent convertEventSupportDTOToEntityForCreate(EventDTO<List<EventSupportDetail>> supportDTO) throws
@@ -410,7 +504,6 @@ public class EventServiceImpl extends BaseService implements EventService {
         return errors;
     }
 
-
     @Override
     @Transactional
     public EventDTO createClub(EventDTO<EventClubDetail> eventDTO) throws IOException {
@@ -468,7 +561,6 @@ public class EventServiceImpl extends BaseService implements EventService {
                 KpiEvent kpiEvent = kpiEventOptional.get();
                 eventDTO.setId(kpiEvent.getId());
 
-
                 ObjectMapper mapper = new ObjectMapper();
                 String clubJson = mapper.writeValueAsString(eventDTO.getAdditionalConfig());
                 BeanUtils.copyProperties(eventDTO, kpiEvent, "createdDate", "updatedDate");
@@ -503,7 +595,6 @@ public class EventServiceImpl extends BaseService implements EventService {
 
         return validatedEventDTO;
     }
-
 
     private List<KpiEventUser> convertEventUsersToEntity(KpiEvent kpiEvent, List<EventUserDTO> eventUserList) {
         List<KpiEventUser> kpiEventUsers = new ArrayList<>();
@@ -579,7 +670,7 @@ public class EventServiceImpl extends BaseService implements EventService {
             errorDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
 
             errors.add(errorDTO);
-        } else if (eventDTO.getEventUserList().size() != 0)  {
+        } else if (eventDTO.getEventUserList().size() != 0) {
             for (EventUserDTO eventUserDTO : eventDTO.getEventUserList()) {
                 Integer userType = eventUserDTO.getType();
                 if (userType == null) {
@@ -621,7 +712,6 @@ public class EventServiceImpl extends BaseService implements EventService {
             }
         }
 
-
         if (eventDTO.getStatus() != 1) {
             ErrorDTO errorDTO = new ErrorDTO();
 
@@ -630,7 +720,6 @@ public class EventServiceImpl extends BaseService implements EventService {
 
             errors.add(errorDTO);
         }
-
 
         return errors;
     }
