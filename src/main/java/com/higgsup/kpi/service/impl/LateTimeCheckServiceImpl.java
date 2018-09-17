@@ -126,27 +126,27 @@ public class LateTimeCheckServiceImpl implements LateTimeCheckService {
 
     private boolean validateYearMonth(java.util.Date yearMonth) {
         //is true if in month old , is false if la new
-        Timestamp dateCun = new Timestamp(System.currentTimeMillis());
-        if (dateCun.getYear() + 1900 == yearMonth.getYear() + 1900
-                && dateCun.getMonth() + 1 == yearMonth.getMonth() + 1
-                && dateCun.getDate() >= Integer.valueOf(
+        Timestamp dateCurrent = new Timestamp(System.currentTimeMillis());
+        if (dateCurrent.getYear() + 1900 == yearMonth.getYear() + 1900
+                && dateCurrent.getMonth() + 1 == yearMonth.getMonth() + 1
+                && dateCurrent.getDate() >= Integer.valueOf(
                 environment.getProperty("config.day.new.year.month"))
                 ) {
             return true;
-        } else if (dateCun.getYear() + 1900 == yearMonth.getYear() + 1900
-                && dateCun.getMonth() + 1 > yearMonth.getMonth() + 1
-                && (dateCun.getDate() <= Integer.valueOf(
+        } else if (dateCurrent.getYear() + 1900 == yearMonth.getYear() + 1900
+                && dateCurrent.getMonth() + 1 > yearMonth.getMonth() + 1
+                && (dateCurrent.getDate() <= Integer.valueOf(
                 environment.getProperty("config.day.new.year.month"))
-                || (dateCun.getDate() == Integer.valueOf(
+                || (dateCurrent.getDate() == Integer.valueOf(
                 environment.getProperty("config.day.new.year.month"))
-                && dateCun.getHours() < Integer.valueOf(
+                && dateCurrent.getHours() < Integer.valueOf(
                 environment.getProperty("config.hour.new.year.month"))))) {
             return true;
-        } else if (dateCun.getYear() + 1900 > yearMonth.getYear() + 1900 && (dateCun.getDate() <= Integer.valueOf(
+        } else if (dateCurrent.getYear() + 1900 > yearMonth.getYear() + 1900 && (dateCurrent.getDate() <= Integer.valueOf(
                 environment.getProperty("config.day.new.year.month"))
-                || (dateCun.getDate() == Integer.valueOf(
+                || (dateCurrent.getDate() == Integer.valueOf(
                 environment.getProperty("config.day.new.year.month"))
-                && dateCun.getHours() < Integer.valueOf(
+                && dateCurrent.getHours() < Integer.valueOf(
                 environment.getProperty("config.hour.new.year.month"))))) {
             return true;
         }
