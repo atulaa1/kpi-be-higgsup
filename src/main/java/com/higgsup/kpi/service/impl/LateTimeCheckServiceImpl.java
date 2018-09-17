@@ -82,10 +82,12 @@ public class LateTimeCheckServiceImpl implements LateTimeCheckService {
                 userDTO.setUsername(row.getCell(0).getStringCellValue());
                 userDTO.setEmail(row.getCell(1).getStringCellValue());
 
-                lateTimeCheckDTO.setId(i);
                 lateTimeCheckDTO.setLateTimes((int) row.getCell(2).getNumericCellValue());
                 lateTimeCheckDTO.setUser(userDTO);
                 lateTimeCheckDTOS.add(lateTimeCheckDTO);
+
+                KpiLateTimeCheck kpiLateTimeCheck = convertLateTimeCheckDTOToEntity(lateTimeCheckDTO);
+                kpiLateTimeCheckRepo.save(kpiLateTimeCheck);
             }
         }else{
             LateTimeCheckDTO lateTimeCheckDTO = new LateTimeCheckDTO();
@@ -109,6 +111,14 @@ public class LateTimeCheckServiceImpl implements LateTimeCheckService {
             lateTimeCheckDTOS.add(lateTimeCheckDTO);
         }
         return lateTimeCheckDTOS;
+    }
+
+    private KpiLateTimeCheck convertLateTimeCheckDTOToEntity(LateTimeCheckDTO lateTimeCheckDTO){
+        KpiLateTimeCheck kpiLateTimeCheck = new KpiLateTimeCheck();
+        kpiLateTimeCheck.setLateTimes(lateTimeCheckDTO.getLateTimes());
+        kpiLateTimeCheck.setUser(kpiUserRepo.findByEmail(lateTimeCheckDTO.getUser().getEmail()));
+        kpiLateTimeCheck.setYearMonth(getAndCreateNewMonth());
+        return kpiLateTimeCheck;
     }
 
     private List<KpiLateTimeCheck> createNewDataOrUpdateDate(KpiYearMonth kpiYearMonth) {
@@ -178,8 +188,7 @@ public class LateTimeCheckServiceImpl implements LateTimeCheckService {
 
     private List<ErrorDTO> verifyExcelFile(MultipartFile excelDataFile) throws IOException {
         List<ErrorDTO> errorDTOS = new ArrayList<>();
-        String fileName = excelDataFile.getOriginalFilename();
-        if (!fileName.endsWith(".xlsx")) {
+        if (!excelDataFile.getOriginalFilename().endsWith(".xlsx")) {
             ErrorDTO errorDTO = new ErrorDTO();
             errorDTO.setErrorCode(ErrorCode.INCORRECT_FILE_FORMAT.getValue());
             errorDTO.setMessage(ErrorMessage.INCORRECT_FILE_FORMAT);
