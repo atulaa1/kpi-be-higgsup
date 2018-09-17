@@ -462,7 +462,7 @@ public class EventServiceImpl implements EventService {
             errors.add(errorDTO);
         }
         for (EventUserDTO eventUserDTO : eventDTO.getEventUserList()) {
-            if (eventUserDTO.getUser().getUsername() == "") {
+            if (eventUserDTO.getUser().getUsername() == null) {
                 errorDTO.setMessage(ErrorMessage.USERNAME_CAN_NOT_NULL);
                 errorDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
                 errors.add(errorDTO);
