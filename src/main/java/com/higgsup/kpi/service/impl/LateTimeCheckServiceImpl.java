@@ -29,6 +29,7 @@ import java.util.Optional;
 public class LateTimeCheckServiceImpl implements LateTimeCheckService {
     @Autowired
     KpiMonthRepo kpiMonthRepo;
+
     @Autowired
     LdapUserService ldapUserService;
 
@@ -123,7 +124,7 @@ public class LateTimeCheckServiceImpl implements LateTimeCheckService {
                 KpiYearMonth kpiYearMonthCreate = new KpiYearMonth();
                 kpiYearMonthCreate.setYearMonth(UtilsConvert.convertDateToYearMonthInt(dateCun));
                 kpiYearMonth = kpiMonthRepo.save(kpiYearMonthCreate);
-            } else if (date.getYear() + 1900 < dateCun.getYear() + 1900 &&  (dateCun.getHours() >= Integer.valueOf(
+            } else if (date.getYear() + 1900 < dateCun.getYear() + 1900 && (dateCun.getHours() >= Integer.valueOf(
                     environment.getProperty("config.hour.new.year.month")) || dateCun.getDate() > Integer.valueOf(
                     environment.getProperty("config.day.new.year.month")))) {
                 KpiYearMonth kpiYearMonthCreate = new KpiYearMonth();
