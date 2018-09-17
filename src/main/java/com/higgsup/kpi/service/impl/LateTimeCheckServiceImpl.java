@@ -29,10 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class LateTimeCheckServiceImpl implements LateTimeCheckService {
@@ -64,7 +61,9 @@ public class LateTimeCheckServiceImpl implements LateTimeCheckService {
     @Override
     public List<LateTimeCheckDTO> getAllLateTimeCheckCurrent() {
         List<KpiLateTimeCheck> lateTimeChecksInDB = createDataNewMonthOrUpdate();
-        return convertEntityLateTimeCheckToDTO(lateTimeChecksInDB);
+        List<LateTimeCheckDTO> lateTimeCheckDTOS = convertEntityLateTimeCheckToDTO(lateTimeChecksInDB);
+        lateTimeCheckDTOS.sort(Comparator.comparing(o -> o.getUser().getFullName()));
+        return lateTimeCheckDTOS;
     }
 
     @Override
