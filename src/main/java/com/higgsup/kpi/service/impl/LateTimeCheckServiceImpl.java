@@ -97,7 +97,7 @@ public class LateTimeCheckServiceImpl implements LateTimeCheckService {
     }
 
     @Override
-    public LateTimeCheckDTO updateLateTimeCheckMonthCurrent(LateTimeCheckDTO lateTimeCheckDTO) {
+    public LateTimeCheckDTO updateLateTimesOfCurrentMonth(LateTimeCheckDTO lateTimeCheckDTO) {
         if (Objects.nonNull(lateTimeCheckDTO.getLateTimes())) {
             Optional<KpiLateTimeCheck> lateTimeCheckOptional = kpiLateTimeCheckRepo.findById(lateTimeCheckDTO.getId());
             if (lateTimeCheckOptional.isPresent()) {

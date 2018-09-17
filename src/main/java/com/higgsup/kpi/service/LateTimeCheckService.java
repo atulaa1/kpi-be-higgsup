@@ -14,5 +14,5 @@ public interface LateTimeCheckService {
 
     List<LateTimeCheckDTO> processExcelFile(MultipartFile file) throws IOException;
 
-    LateTimeCheckDTO updateLateTimeCheckMonthCurrent(LateTimeCheckDTO lateTimeCheckDTO);
+    LateTimeCheckDTO updateLateTimesOfCurrentMonth(LateTimeCheckDTO lateTimeCheckDTO);
 }
