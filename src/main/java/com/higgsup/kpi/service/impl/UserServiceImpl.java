@@ -56,6 +56,7 @@ public class UserServiceImpl implements UserService {
                 kpiUser.setEmail(ldapUser.getEmail());
                 kpiUser.setFirstName(ldapUser.getFirstName());
                 kpiUser.setLastName(ldapUser.getLastName());
+                kpiUser.setFullName(ldapUser.getFullName());
                 kpiUser.setActive(1);
 
                 KpiUser kpiUserCreate = userRepo.save(kpiUser);

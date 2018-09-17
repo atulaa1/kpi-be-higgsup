@@ -35,6 +35,10 @@ public class KpiUser implements Serializable {
     private String lastName;
 
     @Basic
+    @Column(name = "full_name")
+    private String fullName;
+
+    @Basic
     @Column(name = "email")
     private String email;
 
@@ -179,5 +183,13 @@ public class KpiUser implements Serializable {
 
     public void setDateStartWork(Date workYear) {
         this.dateStartWork = workYear;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 }
