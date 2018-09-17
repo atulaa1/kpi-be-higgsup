@@ -174,7 +174,7 @@
                   "format": "int32"
                 }
               },
-              "example":{
+              "example": {
                 "data": [
                   {
                     "id": 37,
@@ -218,6 +218,161 @@
                 "status_code": 200
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/late-times/{id}": {
+      "put": {
+        "tags": [
+          "late-time-check-controller"
+        ],
+        "summary": "updateLateTimeCheckMonthCurrent",
+        "operationId": "updateLateTimeCheckMonthCurrentUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "body",
+            "name": "lateTimeCheckDTO",
+            "description": "lateTimeCheckDTO",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "lateTimes"
+              ],
+              "properties": {
+                "lateTimes": {
+                  "type": "number"
+                }
+              },
+              "example": {
+                "lateTimes": 3
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "status_code : 200. Meaning: Thành công \n status_code : 903 \n Message: late time can not be empty. Meaning: late time không thể để null. \n Message: id not incorrect. Meaning: id không chính xác \n status_code : 901 \n Message: only the current month can be edited. Meaning: chỉ có thể thay đổi tháng hiện tại.",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id",
+                "lateTimes",
+                "user"
+              ],
+              "properties": {
+                "id": {
+                  "type": "number"
+                },
+                "lateTimes": {
+                  "type": "number"
+                },
+                "user": {
+                  "type": "object",
+                  "required": [
+                    "username",
+                    "lastName",
+                    "firstName",
+                    "birthday",
+                    "numberPhone",
+                    "address",
+                    "gmail",
+                    "skype",
+                    "dateStartWork"
+                  ],
+                  "properties": {
+                    "username": {
+                      "type": "string"
+                    },
+                    "lastName": {
+                      "type": "string"
+                    },
+                    "firstName": {
+                      "type": "string"
+                    },
+                    "fullName": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "userRole": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "avatar": {
+                      "type": "string"
+                    },
+                    "birthday": {
+                      "type": "date"
+                    },
+                    "numberPhone": {
+                      "type": "string"
+                    },
+                    "gmail": {
+                      "type": "string"
+                    },
+                    "skype": {
+                      "type": "string"
+                    },
+                    "dateStartWork": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "data": {
+                  "id": 16,
+                  "lateTimes": 3,
+                  "user": {
+                    "username": "kpi.employee",
+                    "lastName": "kpi",
+                    "firstName": "employee",
+                    "fullName": null,
+                    "email": "kpi.employee@higgsup.com",
+                    "userRole": null,
+                    "avatar": null,
+                    "birthday": null,
+                    "numberPhone": null,
+                    "address": null,
+                    "gmail": null,
+                    "skype": null,
+                    "dateStartWork": null
+                  }
+                },
+                "status_code": 200
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
           },
           "401": {
             "description": "Unauthorized"
