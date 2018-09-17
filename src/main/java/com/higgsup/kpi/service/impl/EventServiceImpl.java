@@ -11,8 +11,6 @@ import com.higgsup.kpi.repository.KpiEventUserRepo;
 import com.higgsup.kpi.repository.KpiGroupRepo;
 import com.higgsup.kpi.repository.KpiUserRepo;
 import com.higgsup.kpi.service.EventService;
-import com.higgsup.kpi.service.GroupService;
-import com.higgsup.kpi.service.LdapUserService;
 import com.higgsup.kpi.service.LdapUserService;
 import com.higgsup.kpi.service.UserService;
 import org.springframework.beans.BeanUtils;
@@ -146,55 +144,51 @@ public class EventServiceImpl implements EventService {
         EventDTO validateSeminarDTO = new EventDTO();
         Optional<KpiEvent> kpiEventOptional = kpiEventRepo.findById(eventDTO.getId());
         List<ErrorDTO> validates = validateDataSeminarEvent(eventDTO);
-        if (eventDTO.getStatus() == StatusEvent.WAITING.getValue()){
             if (kpiEventOptional.isPresent()) {
-                if (CollectionUtils.isEmpty(validates)) {
-                    KpiEvent kpiEvent = kpiEventOptional.get();
-                    eventDTO.setId(kpiEvent.getId());
+                KpiEvent kpiEvent = kpiEventOptional.get();
 
-                    ObjectMapper mapper = new ObjectMapper();
-                    BeanUtils.copyProperties(eventDTO, kpiEvent);
-                    String seminarEventConfig = mapper.writeValueAsString(eventDTO.getAdditionalConfig());
+                if (Objects.equals(kpiEvent.getStatus(), StatusEvent.WAITING.getValue())) {
+                    if (CollectionUtils.isEmpty(validates)) {
 
-                    kpiEvent.setAdditionalConfig(seminarEventConfig);
-                    kpiEvent.setCreatedDate(kpiEvent.getCreatedDate());
-                    kpiEvent.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
-                    if (kpiEvent.getUpdatedDate().before(eventDTO.getEndDate())) {
-                        validateSeminarDTO.setMessage(ErrorMessage.END_DATE_AFTER_UPDATE_DATE);
-                        validateSeminarDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-                    } else {
+                        ObjectMapper mapper = new ObjectMapper();
+
+                        String seminarEventConfig = mapper.writeValueAsString(eventDTO.getAdditionalConfig());
+                        BeanUtils.copyProperties(eventDTO, kpiEvent, "id", "createdDate", "updatedDate", "group", "status");
+
+                        kpiEvent.setAdditionalConfig(seminarEventConfig);
+
+                        kpiEvent.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
                         Optional<KpiGroup> kpiGroupOptional = kpiGroupRepo.findById(eventDTO.getGroup().getId());
-
                         if (kpiGroupOptional.isPresent()) {
                             kpiEvent.setGroup(kpiGroupOptional.get());
                             kpiEvent = kpiEventRepo.save(kpiEvent);
 
-                            List<KpiEventUser> eventUsers = convertEventUsersToEntity(kpiEvent,
-                                    eventDTO.getEventUserList());
+                            List<KpiEventUser> eventUsers = convertEventUsersToEntity(kpiEvent, eventDTO.getEventUserList());
                             kpiEventUserRepo.saveAll(eventUsers);
 
                             BeanUtils.copyProperties(kpiEvent, validateSeminarDTO);
                             validateSeminarDTO.setGroup(convertGroupSeminarToDTO(kpiEvent.getGroup()));
                             validateSeminarDTO.setAdditionalConfig(eventDTO.getAdditionalConfig());
                             validateSeminarDTO.setEventUserList(eventDTO.getEventUserList());
+
                         } else {
                             validateSeminarDTO.setMessage(ErrorMessage.NOT_FIND_GROUP_TYPE);
                             validateSeminarDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
                         }
                     }
+                } else {
+                    validateSeminarDTO.setMessage(ErrorMessage.CAN_NOT_UPDATE_EVENT);
+                    validateSeminarDTO.setErrorCode(ErrorCode.CANNOT_UPDATE.getValue());
                 }
+
             } else {
                 validateSeminarDTO.setMessage(ErrorMessage.NOT_FIND_SEMINAR);
                 validateSeminarDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
-            }
-        } else {
-            validateSeminarDTO.setErrorCode(ErrorCode.CAN_NOT_UPDATE_EVENT.getValue());
-            validateSeminarDTO.setMessage(ErrorMessage.CAN_NOT_UPDATE_EVENT);
 
-            validateSeminarDTO.setErrorCode(validates.get(0).getErrorCode());
-            validateSeminarDTO.setMessage(validates.get(0).getMessage());
-            validateSeminarDTO.setErrorDTOS(validates);
-        }
+                validateSeminarDTO.setErrorCode(validates.get(0).getErrorCode());
+                validateSeminarDTO.setMessage(validates.get(0).getMessage());
+                validateSeminarDTO.setErrorDTOS(validates);
+            }
         return validateSeminarDTO;
     }
 
@@ -603,7 +597,7 @@ public class EventServiceImpl implements EventService {
             errorDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
 
             errors.add(errorDTO);
-        } else if (eventDTO.getEventUserList().size() != 0)  {
+        } else if (eventDTO.getEventUserList().size() != 0) {
             for (EventUserDTO eventUserDTO : eventDTO.getEventUserList()) {
                 Integer userType = eventUserDTO.getType();
                 if (userType == null) {
@@ -678,25 +672,6 @@ public class EventServiceImpl implements EventService {
         return true;
     }
 
-    private List<KpiEventUser> convertEventUsersToEntity(KpiEvent kpiEvent, List<EventUserDTO> eventUserList) {
-        List<KpiEventUser> kpiEventUsers = new ArrayList<>();
-        for (EventUserDTO eventUserDTO : eventUserList) {
-            KpiEventUser kpiEventUser = new KpiEventUser();
-            KpiEventUserPK kpiEventUserPK = new KpiEventUserPK();
-            userService.registerUser(eventUserDTO.getUser().getUsername());
-
-            kpiEventUserPK.setEventId(kpiEvent.getId());
-            kpiEventUserPK.setUserName(eventUserDTO.getUser().getUsername());
-            kpiEventUser.setKpiEventUserPK(kpiEventUserPK);
-
-            kpiEventUser.setType(eventUserDTO.getType());
-            kpiEventUsers.add(kpiEventUser);
-
-        }
-        return kpiEventUsers;
-    }
-
-
     private List<ErrorDTO> validateDataSeminarEvent(EventDTO<EventSeminarDetail> eventDTO) {
         List<ErrorDTO> errors = new ArrayList<>();
         ErrorDTO errorDTO = new ErrorDTO();
@@ -731,7 +706,7 @@ public class EventServiceImpl implements EventService {
                 errorDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
                 errors.add(errorDTO);
             }
-            if (!validateUser(eventDTO)) {
+            if (!validateSeminarUser(eventDTO)) {
                 errorDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
                 errorDTO.setMessage(ErrorMessage.NOT_FIND_USER);
                 errors.add(errorDTO);
@@ -758,11 +733,15 @@ public class EventServiceImpl implements EventService {
             errorDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
             errors.add(errorDTO);
         }
-
+//        if (eventDTO.getStatus() != 1){
+//            errorDTO.setMessage(ErrorMessage.CAN_NOT_UPDATE_EVENT);
+//            errorDTO.setErrorCode(ErrorCode.CAN_NOT_UPDATE_EVENT.getValue());
+//            errors.add(errorDTO);
+//        }
         return errors;
     }
 
-    private Boolean validateUser(EventDTO<EventSeminarDetail> eventDTO) {
+    private Boolean validateSeminarUser(EventDTO<EventSeminarDetail> eventDTO) {
         List<UserDTO> ldapUserList = ldapUserService.getAllUsers();
         List<UserDTO> ldapUserListClone = new ArrayList<>(ldapUserList);
         List<KpiUser> dbUserList = (List<KpiUser>) kpiUserRepo.findAll();
