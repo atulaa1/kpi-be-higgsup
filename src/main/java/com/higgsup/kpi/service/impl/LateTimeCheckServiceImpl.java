@@ -31,6 +31,7 @@ import java.util.Optional;
 public class LateTimeCheckServiceImpl implements LateTimeCheckService {
     @Autowired
     KpiMonthRepo kpiMonthRepo;
+
     @Autowired
     LdapUserService ldapUserService;
 

@@ -1,6 +1,8 @@
 package com.higgsup.kpi.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.higgsup.kpi.configure.BaseConfiguration;
+import com.higgsup.kpi.dto.EventClubDetail;
 import com.higgsup.kpi.dto.EventDTO;
 import com.higgsup.kpi.dto.EventSupportDetail;
 import com.higgsup.kpi.dto.Response;
@@ -57,6 +59,53 @@ public class EventController {
                 response.setData(eventDTO);
             }
         } catch (NoSuchFieldException | IOException e) {
+            response.setStatus(ErrorCode.SYSTEM_ERROR.getValue());
+            response.setMessage(ErrorCode.SYSTEM_ERROR.getDescription());
+        }
+        return response;
+    }
+
+    @PreAuthorize("hasRole('EMPLOYEE')")
+    @PostMapping("/club")
+    public Response createClub(@RequestBody EventDTO<EventClubDetail> eventDTO) {
+        Response<EventDTO> response = new Response<>(HttpStatus.OK.value());
+        try {
+            EventDTO eventDTOResponse = eventService.createClub(eventDTO);
+            if (Objects.nonNull(eventDTOResponse.getErrorCode())) {
+                response.setStatus(eventDTOResponse.getErrorCode());
+                response.setMessage(eventDTOResponse.getMessage());
+                response.setErrors(eventDTOResponse.getErrorDTOS());
+            } else {
+                response.setData(eventDTOResponse);
+            }
+        } catch (JsonProcessingException e) {
+            response.setMessage(ErrorCode.JSON_PROCESSING_EXCEPTION.getDescription());
+            response.setStatus(ErrorCode.JSON_PROCESSING_EXCEPTION.getValue());
+        } catch (IOException e) {
+            response.setStatus(ErrorCode.SYSTEM_ERROR.getValue());
+            response.setMessage(ErrorCode.SYSTEM_ERROR.getDescription());
+        }
+        return response;
+    }
+
+    @PreAuthorize("hasRole('EMPLOYEE')")
+    @PutMapping("club/{id}")
+    public Response updateClub(@PathVariable Integer id, @RequestBody EventDTO<EventClubDetail> eventDTO) {
+        Response<EventDTO> response = new Response<>(HttpStatus.OK.value());
+        try {
+            eventDTO.setId(id);
+            EventDTO eventDTOResponse = eventService.updateClub(eventDTO);
+            if (Objects.nonNull(eventDTOResponse.getErrorCode())) {
+                response.setStatus(eventDTOResponse.getErrorCode());
+                response.setMessage(eventDTOResponse.getMessage());
+                response.setErrors(eventDTOResponse.getErrorDTOS());
+            } else {
+                response.setData(eventDTOResponse);
+            }
+        } catch (JsonProcessingException e) {
+            response.setMessage(ErrorCode.JSON_PROCESSING_EXCEPTION.getDescription());
+            response.setStatus(ErrorCode.JSON_PROCESSING_EXCEPTION.getValue());
+        } catch (IOException e) {
             response.setStatus(ErrorCode.SYSTEM_ERROR.getValue());
             response.setMessage(ErrorCode.SYSTEM_ERROR.getDescription());
         }

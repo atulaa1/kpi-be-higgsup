@@ -39,7 +39,7 @@ public class UserDTO extends BaseDTO {
     }
 
     public UserDTO(String username, String password, String lastName, String firstName, String fullName, String email,
-            List<String> userRole) {
+                   List<String> userRole) {
         this.username = username;
         this.password = password;
         this.lastName = lastName;

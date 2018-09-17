@@ -54,4 +54,13 @@ public final class ErrorMessage {
     public final static String LATE_TIME_CAN_NOT_BE_EMPTY = "late time can not be empty";
 
     public final static String MIN_SESSION_MUST_BIGGER_THAN_ZERO = "minimum session must be bigger than zero";
+    public final static String BEGIN_DATE_CAN_NOT_NULL = "begin date cannot null";
+    public final static String END_DATE_CAN_NOT_NULL = "end date cannot null";
+    public final static String MEMBER_TYPE_DOES_NOT_EXIST = "member type does not exist";
+    public final static String USER_DOES_NOT_EXIST = "user does not exist";
+    public final static String USER_TYPE_CAN_NOT_NULL = "user type can not null";
+    public final static String STATUS_OF_EVENT_CAN_NOT_NULL = "status of event cannot null";
+    public final static String STATUS_OF_EVENT_DOES_NOT_EXIST = "status of event does not exist";
+    public final static String NOT_FIND_EVENT = "not find event by id";
+    public final static String CAN_NOT_UPDATE_EVENT = "cannot update event";
 }
