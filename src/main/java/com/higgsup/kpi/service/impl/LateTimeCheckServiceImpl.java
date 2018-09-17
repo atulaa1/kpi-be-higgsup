@@ -68,48 +68,16 @@ public class LateTimeCheckServiceImpl implements LateTimeCheckService {
 
     @Override
     public List<LateTimeCheckDTO> processExcelFile(MultipartFile excelDataFile) throws IOException {
+        List<LateTimeCheckDTO> lateTimeCheckDTOS = new ArrayList<>();
         if(verifyExcelFile(excelDataFile).isEmpty()) {
-            List<LateTimeCheckDTO> lateTimeCheckDTOS = new ArrayList<>();
-            List<ErrorDTO> errorDTOS = new ArrayList<>();
-            LateTimeCheckDTO lateTimeCheckDTO = new LateTimeCheckDTO();
-
             XSSFWorkbook workbook = new XSSFWorkbook(excelDataFile.getInputStream());
             XSSFSheet worksheet = workbook.getSheetAt(0);
-            XSSFRow titleRow = worksheet.getRow(1);
-            if(!titleRow.getCell(0).getStringCellValue().equals("Team member") ||
-                    titleRow.getCell(0).getStringCellValue() == null){
-                ErrorDTO errorDTO = new ErrorDTO();
-                errorDTO.setErrorCode(ErrorCode.INVALID_MEMBER_NAME.getValue());
-                errorDTO.setMessage(ErrorMessage.INVALID_MEMBER_NAME);
-                errorDTOS.add(errorDTO);
-            }
-            if(!titleRow.getCell(1).getStringCellValue().equals("Email") ||
-                    titleRow.getCell(1).getStringCellValue() == null){
-                ErrorDTO errorDTO = new ErrorDTO();
-                errorDTO.setErrorCode(ErrorCode.INVALID_EMAIL.getValue());
-                errorDTO.setMessage(ErrorMessage.INVALID_EMAIL);
-                errorDTOS.add(errorDTO);
-            }
-            if(!titleRow.getCell(2).getStringCellValue().equals("Score") ||
-                    titleRow.getCell(2).getStringCellValue() == null){
-                ErrorDTO errorDTO = new ErrorDTO();
-                errorDTO.setErrorCode(ErrorCode.INVALID_LATE_TIME.getValue());
-                errorDTO.setMessage(ErrorMessage.INVALID_NUMBER_OF_LATE_TIMES);
-                errorDTOS.add(errorDTO);
-            }
 
-            for (int i = 2; i < worksheet.getPhysicalNumberOfRows(); i++) {
+            for (int i = 1; i < worksheet.getPhysicalNumberOfRows(); i++) {
+                LateTimeCheckDTO lateTimeCheckDTO = new LateTimeCheckDTO();
                 UserDTO userDTO = new UserDTO();
                 XSSFRow row = worksheet.getRow(i);
 
-                if(!UtilsValidate.isValidEmail(row.getCell(1).getStringCellValue()) ||
-                    row.getCell(1).getStringCellValue().isEmpty()){
-                    ErrorDTO errorDTO = new ErrorDTO();
-                    errorDTO.setErrorCode(ErrorCode.INVALID_LATE_TIME.getValue());
-                    errorDTO.setMessage(ErrorMessage.INVALID_NUMBER_OF_LATE_TIMES);
-                }
-
-                
                 userDTO.setUsername(row.getCell(0).getStringCellValue());
                 userDTO.setEmail(row.getCell(1).getStringCellValue());
 
@@ -118,10 +86,12 @@ public class LateTimeCheckServiceImpl implements LateTimeCheckService {
                 lateTimeCheckDTO.setUser(userDTO);
                 lateTimeCheckDTOS.add(lateTimeCheckDTO);
             }
-            return lateTimeCheckDTOS;
         }else{
-            return null;
+            LateTimeCheckDTO lateTimeCheckDTO = new LateTimeCheckDTO();
+            lateTimeCheckDTO.setErrorDTOS(verifyExcelFile(excelDataFile));
+            lateTimeCheckDTOS.add(lateTimeCheckDTO);
         }
+        return lateTimeCheckDTOS;
     }
 
     private List<LateTimeCheckDTO> convertEntityLateTimeCheckToDTO(List<KpiLateTimeCheck> lateTimeChecksInDB) {
@@ -205,12 +175,58 @@ public class LateTimeCheckServiceImpl implements LateTimeCheckService {
         return kpiYearMonth;
     }
 
-    private List<ErrorDTO> verifyExcelFile(MultipartFile excelFile){
+    private List<ErrorDTO> verifyExcelFile(MultipartFile excelDataFile) throws IOException {
         List<ErrorDTO> errorDTOS = new ArrayList<>();
-        if(!excelFile.getName().toLowerCase().endsWith(".xlsx")){
+        String fileName = excelDataFile.getOriginalFilename();
+        if (!fileName.endsWith(".xlsx")) {
             ErrorDTO errorDTO = new ErrorDTO();
             errorDTO.setErrorCode(ErrorCode.INCORRECT_FILE_FORMAT.getValue());
             errorDTO.setMessage(ErrorMessage.INCORRECT_FILE_FORMAT);
+            errorDTOS.add(errorDTO);
+        } else {
+            XSSFWorkbook workbook = new XSSFWorkbook(excelDataFile.getInputStream());
+            XSSFSheet worksheet = workbook.getSheetAt(0);
+            XSSFRow titleRow = worksheet.getRow(0);
+            if (!titleRow.getCell(0).getStringCellValue().toLowerCase().contains("team member") ||
+                    titleRow.getCell(0).getStringCellValue().isEmpty()) {
+                ErrorDTO errorDTO = new ErrorDTO();
+                errorDTO.setErrorCode(ErrorCode.INVALID_MEMBER_NAME.getValue());
+                errorDTO.setMessage(ErrorMessage.INVALID_MEMBER_NAME);
+                errorDTOS.add(errorDTO);
+            }
+            if (!titleRow.getCell(1).getStringCellValue().toLowerCase().contains("email") ||
+                    titleRow.getCell(1).getStringCellValue() == null) {
+                ErrorDTO errorDTO = new ErrorDTO();
+                errorDTO.setErrorCode(ErrorCode.INVALID_EMAIL.getValue());
+                errorDTO.setMessage(ErrorMessage.INVALID_EMAIL);
+                errorDTOS.add(errorDTO);
+            }
+            if (!titleRow.getCell(2).getStringCellValue().toLowerCase().contains("score") ||
+                    titleRow.getCell(2).getStringCellValue() == null) {
+                ErrorDTO errorDTO = new ErrorDTO();
+                errorDTO.setErrorCode(ErrorCode.INVALID_LATE_TIME.getValue());
+                errorDTO.setMessage(ErrorMessage.INVALID_NUMBER_OF_LATE_TIMES);
+                errorDTOS.add(errorDTO);
+            }
+
+            for (int i = 1; i < worksheet.getPhysicalNumberOfRows(); i++) {
+                XSSFRow row = worksheet.getRow(i);
+
+                if (!row.getCell(1).getStringCellValue().endsWith("@higgsup.com") ||
+                        row.getCell(1).getStringCellValue().isEmpty()) {
+                    ErrorDTO errorDTO = new ErrorDTO();
+                    errorDTO.setErrorCode(ErrorCode.INCORRECT_DATA.getValue());
+                    errorDTO.setMessage(ErrorMessage.INCORRECT_EMAIL_DATA_AT_LINE + (i+1));
+                    errorDTOS.add(errorDTO);
+                }
+                if (String.valueOf(row.getCell(2).toString()).isEmpty() ||
+                        !UtilsValidate.isValidLateTimeNumber((row.getCell(2).toString()))){
+                    ErrorDTO errorDTO = new ErrorDTO();
+                    errorDTO.setErrorCode(ErrorCode.INCORRECT_DATA.getValue());
+                    errorDTO.setMessage(ErrorMessage.INCORRECT_LATE_TIMES_DATA_AT_LINE + (i+1));
+                    errorDTOS.add(errorDTO);
+                }
+            }
         }
         return errorDTOS;
     }
