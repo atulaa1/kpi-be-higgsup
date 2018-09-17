@@ -113,7 +113,7 @@ public class EventController {
         return response;
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id}/status")
     @PreAuthorize("hasRole('ADMIN')")
     public Response confirmOrCancelEvent(@PathVariable Integer id, @RequestBody EventDTO eventParam) {
         Response response = new Response<>(HttpStatus.OK.value());
