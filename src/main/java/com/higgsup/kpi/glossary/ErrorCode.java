@@ -16,7 +16,8 @@ public enum ErrorCode {
     BEGIN_DATE_IS_NOT_AFTER_END_DATE(932, "begin date is not after end date"),
     CAN_NOT_UPDATE_EVENT(915, "cannot update"),
     SYSTEM_ERROR(999, "system error"),
-    TEAM_BUILDING_PRIZE_SCORE_CAN_NOT_NULL(931, "team building prize score can not be null");
+    TEAM_BUILDING_PRIZE_SCORE_CAN_NOT_NULL(931, "team building prize score can not be null"),
+    MIN_SESSION_MUST_BIGGER_THAN_ZERO(914, "minimum session must be bigger than zero"); 
 
     private Integer value;
 
