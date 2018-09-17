@@ -20,6 +20,7 @@ public enum ErrorCode {
     INVALID_MEMBER_NAME(911, "incorrect member name"),
     INVALID_EMAIL(912, "invalid email"),
     INVALID_LATE_TIME(913, "invalid late time"),
+    MIN_SESSION_MUST_BIGGER_THAN_ZERO(914, "minimum session must be bigger than zero"),
     INCORRECT_DATA(914, "incorrect data");
 
     private Integer value;

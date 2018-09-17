@@ -427,6 +427,9 @@ public class GroupServiceImpl implements GroupService {
         } else if (minNumberOfSessions.length() == 0 || minNumberOfSessions.length() > 2) {
             validatedGroupDTO.setMessage(ErrorMessage.PARAMETERS_MIN_NUMBER_OF_SESSIONS_IS_NOT_VALID);
             validatedGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+        } else if(groupDTO.getAdditionalConfig().getMinNumberOfSessions() <= 0) {
+            validatedGroupDTO.setMessage(ErrorMessage.MIN_SESSION_MUST_BIGGER_THAN_ZERO);
+            validatedGroupDTO.setErrorCode(ErrorCode.MIN_SESSION_MUST_BIGGER_THAN_ZERO.getValue());
         } else if (!isValidPoint(participationPoint) || participationPoint.length() == 0) {
             validatedGroupDTO.setMessage(ErrorMessage.PARAMETERS_POINT_IS_NOT_VALID);
             validatedGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
@@ -454,13 +457,7 @@ public class GroupServiceImpl implements GroupService {
         } else if (!isValidPoint(String.valueOf(listenerPoint))) {
             validatedGroupDTO.setMessage(ErrorMessage.POINT_LISTENER_IS_NOT_VALIDATE);
             validatedGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-        } else if (groupDTO.getAdditionalConfig().getHostPoint() == 0) {
-            validatedGroupDTO.setMessage(ErrorMessage.HOST_SCORE_CAN_NOT_NULL);
-            validatedGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-        } else if (groupDTO.getAdditionalConfig().getMemberPoint() == 0) {
-            validatedGroupDTO.setMessage(ErrorMessage.MEMBER_SCORE_CAN_NOT_NULL);
-            validatedGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-        } else {
+        }else {
             validate = true;
         }
         return validate;

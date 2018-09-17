@@ -50,6 +50,7 @@ public final class ErrorMessage {
     public final static String GROUP_ID_NOT_IS_SUPPORT = "group ID  not is support";
     public final static String ID_NOT_INCORRECT = "id not incorrect";
     public final static String GROUP_WITH_ID_NOT_IS_SUPPORT = "group with id not is support";
+    public final static String MIN_SESSION_MUST_BIGGER_THAN_ZERO = "minimum session must be bigger than zero";
     public final static String INCORRECT_FILE_FORMAT = "incorrect file format";
     public final static String INVALID_MEMBER_NAME = "invalid member name";
     public final static String INVALID_EMAIL = "invalid email";
