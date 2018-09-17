@@ -223,7 +223,6 @@ public class GroupServiceImpl implements GroupService {
                     BeanUtils.copyProperties(groupDTO, kpiGroup);
 
                     kpiGroup.setAdditionalConfig(jsonConfigTeamBuilding);
-                    kpiGroup.setCreatedDate(new Timestamp(System.currentTimeMillis()));
                     Optional<KpiGroupType> kpiGroupType = kpiGroupTypeRepo.findById(groupDTO.getGroupType().getId());
 
                     if (kpiGroupType.isPresent()) {
@@ -269,7 +268,6 @@ public class GroupServiceImpl implements GroupService {
                         BeanUtils.copyProperties(groupDTO, kpiGroup);
 
                         kpiGroup.setAdditionalConfig(jsonConfigSeminar);
-                        kpiGroup.setCreatedDate(new Timestamp(System.currentTimeMillis()));
                         kpiGroup.setGroupType(kpiGroupType.get());
 
                         kpiGroup = kpiGroupRepo.save(kpiGroup);
@@ -312,7 +310,6 @@ public class GroupServiceImpl implements GroupService {
                         BeanUtils.copyProperties(groupDTO, kpiGroup, "createdDate");
 
                         kpiGroup.setAdditionalConfig(jsonConfigSeminar);
-                        kpiGroup.setCreatedDate(new Timestamp(System.currentTimeMillis()));
                         kpiGroup.setGroupType(kpiGroupType.get());
 
                         kpiGroup = kpiGroupRepo.save(kpiGroup);
