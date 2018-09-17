@@ -21,7 +21,8 @@ public enum ErrorCode {
     INVALID_EMAIL(912, "invalid email"),
     INVALID_LATE_TIME(913, "invalid late time"),
     MIN_SESSION_MUST_BIGGER_THAN_ZERO(914, "minimum session must be bigger than zero"),
-    INCORRECT_DATA(915, "incorrect data");
+    INCORRECT_DATA(916, "incorrect data"),
+    CANNOT_UPDATE(915, "cannot update");
 
     private Integer value;
 
@@ -33,7 +34,7 @@ public enum ErrorCode {
     }
 
     public Integer getValue() {
-         return value;
+        return value;
     }
 
     public void setValue(Integer value) {

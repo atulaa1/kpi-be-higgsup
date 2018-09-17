@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface LateTimeCheckService {
     List<KpiLateTimeCheck> createDataNewMonthOrUpdate();
+
     List<LateTimeCheckDTO> getAllLateTimeCheckCurrent();
     List<LateTimeCheckDTO> processExcelFile(MultipartFile file) throws IOException;
 }
