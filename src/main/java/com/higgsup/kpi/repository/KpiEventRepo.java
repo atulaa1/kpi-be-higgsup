@@ -7,6 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface KpiEventRepo extends CrudRepository<KpiEvent, Integer> {
+    KpiEvent findByName(String name);
 
     @Query("SELECT e from KpiEvent e order by e.status asc, e.createdDate desc, e.updatedDate asc")
     List<KpiEvent> findAllEvent();

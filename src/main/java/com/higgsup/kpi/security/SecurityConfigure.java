@@ -54,7 +54,7 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter {
 
             @Override
             public UserDetails mapUserFromContext(DirContextOperations ctx, String username,
-                    Collection<? extends GrantedAuthority> authorities) {
+                                                  Collection<? extends GrantedAuthority> authorities) {
 
                 UserDetails userDetail = userDetailsService.loadUserByUsername(username);
                 return userDetail;
