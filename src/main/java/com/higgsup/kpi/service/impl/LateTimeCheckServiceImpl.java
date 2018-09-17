@@ -96,6 +96,70 @@ public class LateTimeCheckServiceImpl implements LateTimeCheckService {
         return lateTimeCheckDTOS;
     }
 
+    @Override
+    public LateTimeCheckDTO updateLateTimesOfCurrentMonth(LateTimeCheckDTO lateTimeCheckDTO) {
+        if (Objects.nonNull(lateTimeCheckDTO.getLateTimes())) {
+            Optional<KpiLateTimeCheck> lateTimeCheckOptional = kpiLateTimeCheckRepo.findById(lateTimeCheckDTO.getId());
+            if (lateTimeCheckOptional.isPresent()) {
+                KpiLateTimeCheck lateTimeCheck = lateTimeCheckOptional.get();
+                java.util.Date yearMonth = UtilsConvert.convertYearMonthIntToDate(lateTimeCheck.getYearMonth().getYearMonth());
+                if (validateYearMonth(yearMonth)) {
+                    lateTimeCheck.setLateTimes(lateTimeCheckDTO.getLateTimes());
+                    lateTimeCheck = kpiLateTimeCheckRepo.save(lateTimeCheck);
+                    lateTimeCheckDTO.setUser(convertUserDTOToEntity(lateTimeCheck.getUser()));
+                } else {
+                    lateTimeCheckDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+                    lateTimeCheckDTO.setMessage(ErrorMessage.ONLY_THE_CURRENT_MONTH_CAN_BE_EDITED);
+                }
+
+            } else {
+                lateTimeCheckDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
+                lateTimeCheckDTO.setMessage(ErrorMessage.ID_NOT_INCORRECT);
+            }
+        } else {
+            lateTimeCheckDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
+            lateTimeCheckDTO.setMessage(ErrorMessage.LATE_TIME_CAN_NOT_BE_EMPTY);
+        }
+
+        return lateTimeCheckDTO;
+    }
+
+    private boolean validateYearMonth(java.util.Date yearMonth) {
+        //is true if in month old , is false if la new
+        Timestamp dateCurrent = new Timestamp(System.currentTimeMillis());
+        if (dateCurrent.getYear() + 1900 == yearMonth.getYear() + 1900
+                && dateCurrent.getMonth() + 1 == yearMonth.getMonth() + 1
+                && dateCurrent.getDate() >= Integer.valueOf(
+                environment.getProperty("config.day.new.year.month"))
+                ) {
+            return true;
+        } else if (dateCurrent.getYear() + 1900 == yearMonth.getYear() + 1900
+                && dateCurrent.getMonth() + 1 > yearMonth.getMonth() + 1
+                && (dateCurrent.getDate() <= Integer.valueOf(
+                environment.getProperty("config.day.new.year.month"))
+                || (dateCurrent.getDate() == Integer.valueOf(
+                environment.getProperty("config.day.new.year.month"))
+                && dateCurrent.getHours() < Integer.valueOf(
+                environment.getProperty("config.hour.new.year.month"))))) {
+            return true;
+        } else if (dateCurrent.getYear() + 1900 > yearMonth.getYear() + 1900 && (dateCurrent.getDate() <= Integer.valueOf(
+                environment.getProperty("config.day.new.year.month"))
+                || (dateCurrent.getDate() == Integer.valueOf(
+                environment.getProperty("config.day.new.year.month"))
+                && dateCurrent.getHours() < Integer.valueOf(
+                environment.getProperty("config.hour.new.year.month"))))) {
+            return true;
+        }
+        return false;
+    }
+
+    private UserDTO convertUserDTOToEntity(KpiUser user) {
+        UserDTO userDTO = new UserDTO();
+        BeanUtils.copyProperties(user, userDTO);
+        userDTO.setUsername(user.getUserName());
+        return userDTO;
+    }
+
     private List<LateTimeCheckDTO> convertEntityLateTimeCheckToDTO(List<KpiLateTimeCheck> lateTimeChecksInDB) {
         List<LateTimeCheckDTO> lateTimeCheckDTOS = new ArrayList<>();
         for (KpiLateTimeCheck lateTimeCheck : lateTimeChecksInDB) {
@@ -162,16 +226,7 @@ public class LateTimeCheckServiceImpl implements LateTimeCheckService {
             kpiYearMonth = kpiMonthFromDB.get();
             Timestamp dateCun = new Timestamp(System.currentTimeMillis());
             java.util.Date date = UtilsConvert.convertYearMonthIntToDate(kpiYearMonth.getYearMonth());
-            if (date.getMonth() + 1 < dateCun.getMonth() + 1 && dateCun.getDate() >= Integer.valueOf(
-                    environment.getProperty("config.day.new.year.month")) && (dateCun.getHours() >= Integer.valueOf(
-                    environment.getProperty("config.hour.new.year.month")) || dateCun.getDate() > Integer.valueOf(
-                    environment.getProperty("config.day.new.year.month")))) {
-                KpiYearMonth kpiYearMonthCreate = new KpiYearMonth();
-                kpiYearMonthCreate.setYearMonth(UtilsConvert.convertDateToYearMonthInt(dateCun));
-                kpiYearMonth = kpiMonthRepo.save(kpiYearMonthCreate);
-            } else if (date.getYear() + 1900 < dateCun.getYear() + 1900 && (dateCun.getHours() >= Integer.valueOf(
-                    environment.getProperty("config.hour.new.year.month")) || dateCun.getDate() > Integer.valueOf(
-                    environment.getProperty("config.day.new.year.month")))) {
+            if (!validateYearMonth(date)) {
                 KpiYearMonth kpiYearMonthCreate = new KpiYearMonth();
                 kpiYearMonthCreate.setYearMonth(UtilsConvert.convertDateToYearMonthInt(dateCun));
                 kpiYearMonth = kpiMonthRepo.save(kpiYearMonthCreate);

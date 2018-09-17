@@ -31,16 +31,31 @@ public class LateTimeCheckController {
         return response;
     }
 
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public Response updateLateTimesOfCurrentMonth(@PathVariable Integer id,
+            @RequestBody(required = true) LateTimeCheckDTO lateTimeCheckDTO) {
+        Response response = new Response<>(HttpStatus.OK.value());
+        lateTimeCheckDTO.setId(id);
+        LateTimeCheckDTO lateTimeCheckDTOS = lateTimeCheckService.updateLateTimesOfCurrentMonth(lateTimeCheckDTO);
+        if (Objects.nonNull(lateTimeCheckDTOS.getErrorCode())) {
+            response.setStatus(lateTimeCheckDTOS.getErrorCode());
+            response.setMessage(lateTimeCheckDTOS.getMessage());
+        } else {
+            response.setData(lateTimeCheckDTOS);
+        }
+        return response;
+    }
+
     @PostMapping("/import-file")
     @PreAuthorize("hasRole('ADMIN')")
-    public Response processExcelFile(@RequestParam("file")MultipartFile file)
-    {
+    public Response processExcelFile(@RequestParam("file") MultipartFile file) {
         Response<List<LateTimeCheckDTO>> response = new Response<>(HttpStatus.OK.value());
         try {
             List<LateTimeCheckDTO> lateTimeCheckDTOS = lateTimeCheckService.processExcelFile(file);
-            if(Objects.nonNull(lateTimeCheckDTOS.get(0).getErrorDTOS())){
+            if (Objects.nonNull(lateTimeCheckDTOS.get(0).getErrorDTOS())) {
                 response.setErrors(lateTimeCheckDTOS.get(0).getErrorDTOS());
-            }else{
+            } else {
                 response.setData(lateTimeCheckDTOS);
             }
         } catch (IOException e) {

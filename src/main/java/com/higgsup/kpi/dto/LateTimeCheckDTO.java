@@ -1,6 +1,6 @@
 package com.higgsup.kpi.dto;
 
-public class LateTimeCheckDTO extends BaseDTO{
+public class LateTimeCheckDTO extends BaseDTO {
     private Integer id;
     private Integer lateTimes;
     private UserDTO user;

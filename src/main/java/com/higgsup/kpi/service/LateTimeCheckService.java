@@ -11,5 +11,8 @@ public interface LateTimeCheckService {
     List<KpiLateTimeCheck> createDataNewMonthOrUpdate();
 
     List<LateTimeCheckDTO> getAllLateTimeCheckCurrent();
+
     List<LateTimeCheckDTO> processExcelFile(MultipartFile file) throws IOException;
+
+    LateTimeCheckDTO updateLateTimesOfCurrentMonth(LateTimeCheckDTO lateTimeCheckDTO);
 }
