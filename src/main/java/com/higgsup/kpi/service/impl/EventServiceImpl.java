@@ -701,7 +701,8 @@ public class EventServiceImpl implements EventService {
                 errorDTO.setMessage(ErrorMessage.MEMBER_TYPE_CAN_NOT_NULL);
                 errorDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
                 errors.add(errorDTO);
-            } else if ((eventUserDTO.getType() < 1) || (eventUserDTO.getType() > 3)) {
+            } else if ((eventUserDTO.getType() < EventUserType.HOST.getValue()) || (eventUserDTO.getType() >
+                    EventUserType.LISTEN.getValue())) {
                 errorDTO.setMessage(ErrorMessage.INVALIDATED_MEMBER_TYPE);
                 errorDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
                 errors.add(errorDTO);
@@ -712,7 +713,7 @@ public class EventServiceImpl implements EventService {
                 errors.add(errorDTO);
             }
         }
-        if (eventDTO.getName() == null || eventDTO.getName().length() == 0) {
+        if (eventDTO.getName() == null) {
             errorDTO.setMessage(ErrorMessage.EVENT_NAME_CAN_NOT_NULL);
             errorDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
             errors.add(errorDTO);
@@ -733,11 +734,6 @@ public class EventServiceImpl implements EventService {
             errorDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
             errors.add(errorDTO);
         }
-//        if (eventDTO.getStatus() != 1){
-//            errorDTO.setMessage(ErrorMessage.CAN_NOT_UPDATE_EVENT);
-//            errorDTO.setErrorCode(ErrorCode.CAN_NOT_UPDATE_EVENT.getValue());
-//            errors.add(errorDTO);
-//        }
         return errors;
     }
 
