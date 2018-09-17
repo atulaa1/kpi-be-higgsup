@@ -14,7 +14,6 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Configuration
-@EnableSwagger2
 public class SwaggerJsonConfiguration {
 
     @Bean
