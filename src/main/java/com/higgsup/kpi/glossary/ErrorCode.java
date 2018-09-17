@@ -17,9 +17,7 @@ public enum ErrorCode {
     SYSTEM_ERROR(999, "system error"),
     TEAM_BUILDING_PRIZE_SCORE_CAN_NOT_NULL(931, "team building prize score can not be null"),
     INCORRECT_FILE_FORMAT(910, "incorrect file format"),
-    INVALID_MEMBER_NAME(911, "invalid member name"),
-    INVALID_EMAIL(912, "invalid email"),
-    INVALID_LATE_TIME(913, "invalid late time"),
+    INVALID_COLUMN_NAME(911, "invalid column name"),
     MIN_SESSION_MUST_BIGGER_THAN_ZERO(914, "minimum session must be bigger than zero"),
     INCORRECT_DATA(916, "incorrect data"),
     CANNOT_UPDATE(915, "cannot update");
