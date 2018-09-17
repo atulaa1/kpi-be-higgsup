@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping(BaseConfiguration.BASE_API_URL + "/late-times")
@@ -37,7 +38,11 @@ public class LateTimeCheckController {
         Response<List<LateTimeCheckDTO>> response = new Response<>(HttpStatus.OK.value());
         try {
             List<LateTimeCheckDTO> lateTimeCheckDTOS = lateTimeCheckService.processExcelFile(file);
-            response.setData(lateTimeCheckDTOS);
+            if(Objects.nonNull(lateTimeCheckDTOS.get(0).getErrorDTOS())){
+                response.setErrors(lateTimeCheckDTOS.get(0).getErrorDTOS());
+            }else{
+                response.setData(lateTimeCheckDTOS);
+            }
         } catch (IOException e) {
             response.setStatus(ErrorCode.ERROR_IO_EXCEPTION.getValue());
             response.setMessage(ErrorMessage.ERROR_IO_EXCEPTION);
