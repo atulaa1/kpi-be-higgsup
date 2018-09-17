@@ -1283,6 +1283,14 @@
         ],
         "parameters": [
           {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
             "in": "body",
             "name": "eventDTO",
             "description": "eventDTO",
