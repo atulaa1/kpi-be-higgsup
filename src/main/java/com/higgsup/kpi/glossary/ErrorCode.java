@@ -14,6 +14,7 @@ public enum ErrorCode {
     ERROR_IO_EXCEPTION(930, "error IOException"),
     ERROR_NO_SUCH_FIELD_EXCEPTION(930, "error no such field exception"),
     BEGIN_DATE_IS_NOT_AFTER_END_DATE(932, "begin date is not after end date"),
+    CAN_NOT_UPDATE_EVENT(915, "cannot update"),
     SYSTEM_ERROR(999, "system error"),
     TEAM_BUILDING_PRIZE_SCORE_CAN_NOT_NULL(931, "team building prize score can not be null"),
     INCORRECT_FILE_FORMAT(910, "incorrect file format"),
