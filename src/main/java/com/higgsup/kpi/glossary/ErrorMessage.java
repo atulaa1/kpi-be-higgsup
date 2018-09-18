@@ -75,6 +75,10 @@ public final class ErrorMessage {
     public final static String INVALID_EMAIL = "invalid email";
     public final static String INVALID_NUMBER_OF_LATE_TIMES = "invalid number of late times";
     public final static String INCORRECT_EMAIL_DATA = "incorrect email data at line ";
+    public final static String EVENT_STATUS_CAN_NOT_NULL = "event status can not null";
+    public final static String NOT_FIND_EVENT_BY_ID = "not find event by id";
+    public final static String EVENT_CONFIRMED_OR_CANCELED = "event confirmed or canceled";
+    public final static String CAN_NOT_CHANGE_STATUS_EVENT_LAST_MONTH = "can not change status event last month";
     public final static String INCORRECT_LATE_TIMES_DATA = "incorrect late times data at line ";
     public final static String EMAIL_NOT_IN_DATABASE = "email not in database at line ";
 }
