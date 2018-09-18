@@ -183,7 +183,7 @@ public class GroupController {
         return response;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('EMPLOYEE')")
     @RequestMapping(value = "/groups", method = RequestMethod.GET)
     public Response getAllGroup() {
         Response<List<GroupDTO>> response = new Response<>(HttpStatus.OK.value());
