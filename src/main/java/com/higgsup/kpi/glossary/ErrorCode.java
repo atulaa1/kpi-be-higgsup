@@ -16,6 +16,7 @@ public enum ErrorCode {
     BEGIN_DATE_IS_NOT_AFTER_END_DATE(932, "begin date is not after end date"),
     CAN_NOT_UPDATE_EVENT(915, "cannot update"),
     SYSTEM_ERROR(999, "system error"),
+    DATA_CAN_NOT_CHANGE(907, "data can not change"),
     TEAM_BUILDING_PRIZE_SCORE_CAN_NOT_NULL(931, "team building prize score can not be null"),
     INCORRECT_FILE_FORMAT(910, "incorrect file format"),
     INVALID_COLUMN_NAME(911, "invalid column name"),
