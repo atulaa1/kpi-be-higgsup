@@ -57,6 +57,12 @@ public class EventServiceImpl implements EventService {
         return convertEventEntityToDTO(eventList);
     }
 
+    @Override
+    public List<EventDTO> getEventCreatedByUser() throws IOException {
+        List<KpiEvent> eventList = kpiEventRepo.findEventCreatedByUser();
+        return convertEventEntityToDTO(eventList);
+    }
+
     private List<EventDTO> convertEventEntityToDTO(List<KpiEvent> kpiEventEntities) throws IOException {
         List<EventDTO> eventDTOS = new ArrayList<>();
         if (!CollectionUtils.isEmpty(kpiEventEntities)) {
@@ -68,6 +74,8 @@ public class EventServiceImpl implements EventService {
                     case SUPPORT:
                         eventDTOS.add(convertSupportEntiyToDTO(kpiEvent));
                         break;
+                    case SEMINAR:
+                        eventDTOS.add(convertSeminarEntityToDTO(kpiEvent));
                 }
             }
         }
@@ -148,7 +156,7 @@ public class EventServiceImpl implements EventService {
                 kpiEventUserRepo.saveAll(eventUsers);
 
                 BeanUtils.copyProperties(kpiEvent, validateSeminarDTO);
-                validateSeminarDTO.setGroup(convertGroupSeminarToDTO(kpiEvent.getGroup()));
+                validateSeminarDTO.setGroup(convertConfigEventToDTO(kpiEvent.getGroup()));
                 validateSeminarDTO.setEventUserList(eventDTO.getEventUserList());
             } else {
                 validateSeminarDTO.setMessage(ErrorMessage.NOT_FIND_GROUP_TYPE);
@@ -190,7 +198,7 @@ public class EventServiceImpl implements EventService {
                             kpiEventUserRepo.saveAll(eventUsers);
 
                             BeanUtils.copyProperties(kpiEvent, validateSeminarDTO);
-                            validateSeminarDTO.setGroup(convertGroupSeminarToDTO(kpiEvent.getGroup()));
+                            validateSeminarDTO.setGroup(convertConfigEventToDTO(kpiEvent.getGroup()));
                             validateSeminarDTO.setAdditionalConfig(eventDTO.getAdditionalConfig());
                             validateSeminarDTO.setEventUserList(eventDTO.getEventUserList());
 
@@ -270,6 +278,23 @@ public class EventServiceImpl implements EventService {
         return clubDetailEventDTO;
     }
 
+    private EventDTO convertSeminarEntityToDTO(KpiEvent kpiEvent) throws IOException {
+        EventDTO<EventSeminarDetail> seminarDetailEventDTO = new EventDTO<>();
+        ObjectMapper mapper = new ObjectMapper();
+
+        BeanUtils.copyProperties(kpiEvent, seminarDetailEventDTO);
+        EventSeminarDetail eventSeminarDetail = mapper.readValue(kpiEvent.getAdditionalConfig(), EventSeminarDetail.class);
+        seminarDetailEventDTO.setAdditionalConfig(eventSeminarDetail);
+
+        List<KpiEventUser> kpiEventUsers = kpiEventUserRepo.findByKpiEventId(kpiEvent.getId());
+
+        List<EventUserDTO> eventUserDTOS = convertListEventUserEntityToDTO(kpiEventUsers);
+        seminarDetailEventDTO.setEventUserList(eventUserDTOS);
+        seminarDetailEventDTO.setGroup(convertConfigEventToDTO(kpiEvent.getGroup()));
+
+        return seminarDetailEventDTO;
+    }
+
     private GroupDTO convertConfigEventToDTO(KpiGroup kpiGroup) throws IOException {
         GroupDTO groupDTO = new GroupDTO<>();
         ObjectMapper mapper = new ObjectMapper();
@@ -293,6 +318,13 @@ public class EventServiceImpl implements EventService {
                 groupDTO.setAdditionalConfig(eventClubDetail);
                 groupDTO.setGroupType(convertGroupTypeEntityToDTO(kpiGroup.getGroupType()));
                 break;
+            case SEMINAR:
+
+                BeanUtils.copyProperties(kpiGroup, groupDTO);
+                EventSeminarDetail eventSeminarDetail = mapper.readValue(kpiGroup.getAdditionalConfig(), EventSeminarDetail.class);
+
+                groupDTO.setAdditionalConfig(eventSeminarDetail);
+                groupDTO.setGroupType(convertGroupTypeEntityToDTO(kpiGroup.getGroupType()));
         }
 
         return groupDTO;
@@ -324,17 +356,6 @@ public class EventServiceImpl implements EventService {
             }
         }
         return eventUserDTOS;
-    }
-
-    private GroupDTO convertClubEntityToDTO(KpiGroup kpiGroup) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-
-        GroupDTO groupDTO = new GroupDTO();
-        BeanUtils.copyProperties(kpiGroup, groupDTO);
-
-        groupDTO.setAdditionalConfig(mapper.readValue(kpiGroup.getAdditionalConfig(), GroupClubDetail.class));
-        groupDTO.setGroupType(convertGroupTypeEntityToDTO(kpiGroup.getGroupType()));
-        return groupDTO;
     }
 
     private GroupTypeDTO convertGroupTypeEntityToDTO(KpiGroupType kpiGroupType) {
@@ -520,7 +541,7 @@ public class EventServiceImpl implements EventService {
                 kpiEventUserRepo.saveAll(eventUsers);
 
                 BeanUtils.copyProperties(kpiEvent, validatedEventDTO);
-                validatedEventDTO.setGroup(convertClubEntityToDTO(kpiEvent.getGroup()));
+                validatedEventDTO.setGroup(convertConfigEventToDTO(kpiEvent.getGroup()));
                 validatedEventDTO.setEventUserList(eventDTO.getEventUserList());
             } else {
                 validatedEventDTO.setMessage(ErrorMessage.NOT_FIND_GROUP);
@@ -569,7 +590,7 @@ public class EventServiceImpl implements EventService {
                         kpiEventUserRepo.saveAll(eventUsers);
 
                         BeanUtils.copyProperties(kpiEvent, validatedEventDTO);
-                        validatedEventDTO.setGroup(convertClubEntityToDTO(kpiEvent.getGroup()));
+                        validatedEventDTO.setGroup(convertConfigEventToDTO(kpiEvent.getGroup()));
                         validatedEventDTO.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
                         validatedEventDTO.setAdditionalConfig(eventDTO.getAdditionalConfig());
                         validatedEventDTO.setEventUserList(eventDTO.getEventUserList());
@@ -816,13 +837,4 @@ public class EventServiceImpl implements EventService {
         return true;
     }
 
-    private GroupDTO convertGroupSeminarToDTO(KpiGroup kpiGroup) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        GroupDTO groupDTO = new GroupDTO();
-
-        BeanUtils.copyProperties(kpiGroup, groupDTO);
-        groupDTO.setAdditionalConfig(mapper.readValue(kpiGroup.getAdditionalConfig(), GroupSeminarDetail.class));
-        groupDTO.setGroupType(convertGroupTypeEntityToDTO(kpiGroup.getGroupType()));
-        return groupDTO;
-    }
 }
