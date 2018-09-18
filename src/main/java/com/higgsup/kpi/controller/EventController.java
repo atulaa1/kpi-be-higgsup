@@ -185,4 +185,28 @@ public class EventController {
         }
         return response;
     }
+    @PutMapping("/{id}/status")
+    @PreAuthorize("hasRole('ADMIN')")
+    public Response confirmOrCancelEvent(@PathVariable Integer id, @RequestBody EventDTO eventParam) {
+        Response response = new Response<>(HttpStatus.OK.value());
+        try {
+            if (Objects.nonNull(eventParam.getStatus())) {
+                eventParam.setId(id);
+                EventDTO eventDTO = eventService.confirmOrCancelEvent(eventParam);
+                if (Objects.nonNull(eventDTO.getErrorCode())) {
+                    response.setStatus(eventDTO.getErrorCode());
+                    response.setMessage(eventDTO.getMessage());
+                } else {
+                    response.setData(eventDTO);
+                }
+            } else {
+                response.setStatus(ErrorCode.NOT_NULL.getValue());
+                response.setMessage(ErrorMessage.EVENT_STATUS_CAN_NOT_NULL);
+            }
+        } catch (Exception e) {
+            response.setStatus(ErrorCode.SYSTEM_ERROR.getValue());
+            response.setMessage(ErrorCode.SYSTEM_ERROR.getDescription());
+        }
+        return response;
+    }
 }

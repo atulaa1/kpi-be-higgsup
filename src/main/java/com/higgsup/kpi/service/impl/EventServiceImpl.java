@@ -10,11 +10,13 @@ import com.higgsup.kpi.repository.KpiEventRepo;
 import com.higgsup.kpi.repository.KpiEventUserRepo;
 import com.higgsup.kpi.repository.KpiGroupRepo;
 import com.higgsup.kpi.repository.KpiUserRepo;
+import com.higgsup.kpi.service.BaseService;
 import com.higgsup.kpi.service.EventService;
 import com.higgsup.kpi.service.LdapUserService;
 import com.higgsup.kpi.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +34,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class EventServiceImpl implements EventService {
+public class EventServiceImpl extends BaseService implements EventService {
 
     @Autowired
     private KpiEventRepo kpiEventRepo;
@@ -51,8 +54,11 @@ public class EventServiceImpl implements EventService {
     @Autowired
     private LdapUserService ldapUserService;
 
+    @Autowired
+    private Environment environment;
+
     @Override
-    public List<EventDTO> getAllEvent() throws IOException{
+    public List<EventDTO> getAllEvent() throws IOException {
         List<KpiEvent> eventList = kpiEventRepo.findAllEvent();
         return convertEventEntityToDTO(eventList);
     }
@@ -213,6 +219,127 @@ public class EventServiceImpl implements EventService {
                 validateSeminarDTO.setErrorDTOS(validates);
             }
         return validateSeminarDTO;
+    }
+
+    @Override
+    public EventDTO confirmOrCancelEvent(EventDTO eventDTO) throws IOException, NoSuchFieldException, IllegalAccessException {
+        Optional<KpiEvent> event = kpiEventRepo.findById(eventDTO.getId());
+        if (event.isPresent()) {
+            KpiEvent kpiEvent = event.get();
+            if (validateYearMonth(kpiEvent.getCreatedDate())) {
+                if (Objects.equals(kpiEvent.getStatus(), StatusEvent.WAITING.getValue())) {
+                    GroupType groupType = GroupType.getGroupType(kpiEvent.getGroup().getGroupType().getId());
+                    switch (groupType) {
+                        case CLUB:
+                            eventDTO = confirmOrCancelEventClub(kpiEvent, eventDTO);
+                            break;
+                        case SUPPORT:
+                            eventDTO = confirmOrCancelEventSupport(kpiEvent, eventDTO);
+                            break;
+                    }
+                } else {
+                    eventDTO.setErrorCode(ErrorCode.DATA_CAN_NOT_CHANGE.getValue());
+                    eventDTO.setMessage(ErrorMessage.EVENT_CONFIRMED_OR_CANCELED);
+                }
+            } else {
+                eventDTO.setErrorCode(ErrorCode.DATA_CAN_NOT_CHANGE.getValue());
+                eventDTO.setMessage(ErrorMessage.CAN_NOT_CHANGE_STATUS_EVENT_LAST_MONTH);
+            }
+        } else {
+            eventDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
+            eventDTO.setMessage(ErrorMessage.NOT_FIND_EVENT_BY_ID);
+        }
+        return eventDTO;
+    }
+
+    private EventDTO confirmOrCancelEventClub(KpiEvent kpiEvent, EventDTO eventDTO) throws IOException {
+        if (Objects.equals(eventDTO.getStatus(), StatusEvent.CONFIRMED.getValue())) {
+            kpiEvent.setStatus(StatusEvent.CONFIRMED.getValue());
+        } else {
+            kpiEvent.setStatus(StatusEvent.CANCEL.getValue());
+        }
+        kpiEvent.setAdditionalConfig(kpiEvent.getGroup().getAdditionalConfig());
+
+        kpiEvent = kpiEventRepo.save(kpiEvent);
+        if (Objects.equals(kpiEvent.getStatus(), StatusEvent.CONFIRMED.getValue())) {
+            addPointWhenConfirmClub(kpiEvent);
+        }
+        eventDTO = convertEventClubEntityToDTO(kpiEvent);
+        return eventDTO;
+    }
+
+    private void addPointWhenConfirmClub(KpiEvent kpiEvent) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        GroupClubDetail groupClubDetail = mapper.readValue(kpiEvent.getGroup().getAdditionalConfig(), GroupClubDetail.class);
+        for (KpiEventUser kpiEventUser : kpiEvent.getKpiEventUserList()) {
+            addPoint(kpiEventUser.getKpiUser(), groupClubDetail.getParticipationPoint());
+        }
+    }
+
+    private boolean validateYearMonth(java.util.Date yearMonth) {
+        //is true if in month old , is false if la new
+        Timestamp dateCun = new Timestamp(System.currentTimeMillis());
+        if (dateCun.getYear() + 1900 == yearMonth.getYear() + 1900
+                && dateCun.getMonth() + 1 == yearMonth.getMonth() + 1
+                && dateCun.getDate() >= Integer.valueOf(
+                environment.getProperty("config.day.new.year.month"))
+                ) {
+            return true;
+        } else if (dateCun.getYear() + 1900 == yearMonth.getYear() + 1900
+                && dateCun.getMonth() + 1 > yearMonth.getMonth() + 1
+                && (dateCun.getDate() < Integer.valueOf(
+                environment.getProperty("config.day.new.year.month"))
+                || (dateCun.getDate() == Integer.valueOf(
+                environment.getProperty("config.day.new.year.month"))
+                && dateCun.getHours() < Integer.valueOf(
+                environment.getProperty("config.hour.new.year.month"))))) {
+            return true;
+        } else if (dateCun.getYear() + 1900 > yearMonth.getYear() + 1900 && (dateCun.getDate() <= Integer.valueOf(
+                environment.getProperty("config.day.new.year.month"))
+                || (dateCun.getDate() == Integer.valueOf(
+                environment.getProperty("config.day.new.year.month"))
+                && dateCun.getHours() < Integer.valueOf(
+                environment.getProperty("config.hour.new.year.month"))))) {
+            return true;
+        }
+        return false;
+    }
+
+    private EventDTO confirmOrCancelEventSupport(KpiEvent kpiEvent, EventDTO eventDTO) throws IOException, NoSuchFieldException,
+            IllegalAccessException {
+        if (Objects.equals(eventDTO.getStatus(), StatusEvent.CONFIRMED.getValue())) {
+            kpiEvent.setStatus(StatusEvent.CONFIRMED.getValue());
+        } else {
+            kpiEvent.setStatus(StatusEvent.CANCEL.getValue());
+        }
+        Float point = setHistorySupportAndGetAllPoint(kpiEvent);
+        //ad point
+        if (Objects.equals(kpiEvent.getStatus(), StatusEvent.CONFIRMED.getValue())) {
+            addPoint(kpiEvent.getKpiEventUserList().get(0).getKpiUser(), point);
+        }
+        kpiEvent = kpiEventRepo.save(kpiEvent);
+        eventDTO = convertSupportEntiyToDTO(kpiEvent);
+        return eventDTO;
+    }
+
+    private Float setHistorySupportAndGetAllPoint(KpiEvent kpiEvent) throws NoSuchFieldException, IllegalAccessException,
+            IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        Float point = 0F;
+        TypeReference<List<EventSupportDetail>> tRefBedType = new TypeReference<List<EventSupportDetail>>() {
+        };
+        List<EventSupportDetail> configEventSupport = mapper.readValue(kpiEvent.getAdditionalConfig(), tRefBedType);
+        GroupSupportDetail groupSupportDetail = mapper.readValue(kpiEvent.getGroup().getAdditionalConfig(),
+                GroupSupportDetail.class);
+        for (EventSupportDetail eventSupportDetail : configEventSupport) {
+            Field field = groupSupportDetail.getClass().getDeclaredField(eventSupportDetail.getName());
+            field.setAccessible(true);
+            Float pointConfig = (Float) field.get(groupSupportDetail);
+            eventSupportDetail.setPoint(pointConfig);
+            point += pointConfig * eventSupportDetail.getQuantity();
+        }
+        kpiEvent.setAdditionalConfig(mapper.writeValueAsString(configEventSupport));
+        return point;
     }
 
     private KpiEvent convertEventSupportDTOToEntityForUpdate(EventDTO<List<EventSupportDetail>> supportDTO) throws
@@ -491,7 +618,6 @@ public class EventServiceImpl implements EventService {
         return errors;
     }
 
-
     @Override
     @Transactional
     public EventDTO createClub(EventDTO<EventClubDetail> eventDTO) throws IOException {
@@ -592,7 +718,6 @@ public class EventServiceImpl implements EventService {
 
         return validatedEventDTO;
     }
-
 
     private List<KpiEventUser> convertEventUsersToEntity(KpiEvent kpiEvent, List<EventUserDTO> eventUserList) {
         List<KpiEventUser> kpiEventUsers = new ArrayList<>();
