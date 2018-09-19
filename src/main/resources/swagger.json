@@ -5588,6 +5588,14 @@
             "description": "name",
             "required": false,
             "type": "string"
+          },
+          {
+            "name": "roles",
+            "in": "query",
+            "description": "roles",
+            "required": false,
+            "type": "string",
+            "example":"man,employee"
           }
         ],
         "responses": {
