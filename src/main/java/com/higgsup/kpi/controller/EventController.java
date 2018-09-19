@@ -6,8 +6,6 @@ import com.higgsup.kpi.dto.*;
 import com.higgsup.kpi.glossary.ErrorCode;
 import com.higgsup.kpi.glossary.ErrorMessage;
 import com.higgsup.kpi.service.EventService;
-import javafx.application.Application;
-import org.apache.catalina.core.ApplicationContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
