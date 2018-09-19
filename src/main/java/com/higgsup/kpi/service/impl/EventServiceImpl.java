@@ -64,8 +64,8 @@ public class EventServiceImpl extends BaseService implements EventService {
     }
 
     @Override
-    public List<EventDTO> getEventCreatedByUser() throws IOException {
-        List<KpiEvent> eventList = kpiEventRepo.findEventCreatedByUser();
+    public List<EventDTO> getEventCreatedByUser(String username) throws IOException {
+        List<KpiEvent> eventList = kpiEventRepo.findEventCreatedByUser(username);
         return convertEventEntityToDTO(eventList);
     }
 
@@ -181,51 +181,51 @@ public class EventServiceImpl extends BaseService implements EventService {
         EventDTO validateSeminarDTO = new EventDTO();
         Optional<KpiEvent> kpiEventOptional = kpiEventRepo.findById(eventDTO.getId());
         List<ErrorDTO> validates = validateDataSeminarEvent(eventDTO);
-            if (kpiEventOptional.isPresent()) {
-                KpiEvent kpiEvent = kpiEventOptional.get();
+        if (kpiEventOptional.isPresent()) {
+            KpiEvent kpiEvent = kpiEventOptional.get();
 
-                if (Objects.equals(kpiEvent.getStatus(), StatusEvent.WAITING.getValue())) {
-                    if (CollectionUtils.isEmpty(validates)) {
+            if (Objects.equals(kpiEvent.getStatus(), StatusEvent.WAITING.getValue())) {
+                if (CollectionUtils.isEmpty(validates)) {
 
-                        ObjectMapper mapper = new ObjectMapper();
+                    ObjectMapper mapper = new ObjectMapper();
 
-                        String seminarEventConfig = mapper.writeValueAsString(eventDTO.getAdditionalConfig());
-                        BeanUtils.copyProperties(eventDTO, kpiEvent, "id", "createdDate", "updatedDate", "group", "status");
+                    String seminarEventConfig = mapper.writeValueAsString(eventDTO.getAdditionalConfig());
+                    BeanUtils.copyProperties(eventDTO, kpiEvent, "id", "createdDate", "updatedDate", "group", "status");
 
-                        kpiEvent.setAdditionalConfig(seminarEventConfig);
+                    kpiEvent.setAdditionalConfig(seminarEventConfig);
 
-                        kpiEvent.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
-                        Optional<KpiGroup> kpiGroupOptional = kpiGroupRepo.findById(eventDTO.getGroup().getId());
-                        if (kpiGroupOptional.isPresent()) {
-                            kpiEvent.setGroup(kpiGroupOptional.get());
-                            kpiEvent = kpiEventRepo.save(kpiEvent);
+                    kpiEvent.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
+                    Optional<KpiGroup> kpiGroupOptional = kpiGroupRepo.findById(eventDTO.getGroup().getId());
+                    if (kpiGroupOptional.isPresent()) {
+                        kpiEvent.setGroup(kpiGroupOptional.get());
+                        kpiEvent = kpiEventRepo.save(kpiEvent);
 
-                            List<KpiEventUser> eventUsers = convertEventUsersToEntity(kpiEvent, eventDTO.getEventUserList());
-                            kpiEventUserRepo.saveAll(eventUsers);
+                        List<KpiEventUser> eventUsers = convertEventUsersToEntity(kpiEvent, eventDTO.getEventUserList());
+                        kpiEventUserRepo.saveAll(eventUsers);
 
-                            BeanUtils.copyProperties(kpiEvent, validateSeminarDTO);
-                            validateSeminarDTO.setGroup(convertConfigEventToDTO(kpiEvent.getGroup()));
-                            validateSeminarDTO.setAdditionalConfig(eventDTO.getAdditionalConfig());
-                            validateSeminarDTO.setEventUserList(eventDTO.getEventUserList());
+                        BeanUtils.copyProperties(kpiEvent, validateSeminarDTO);
+                        validateSeminarDTO.setGroup(convertConfigEventToDTO(kpiEvent.getGroup()));
+                        validateSeminarDTO.setAdditionalConfig(eventDTO.getAdditionalConfig());
+                        validateSeminarDTO.setEventUserList(eventDTO.getEventUserList());
 
-                        } else {
-                            validateSeminarDTO.setMessage(ErrorMessage.NOT_FIND_GROUP_TYPE);
-                            validateSeminarDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
-                        }
+                    } else {
+                        validateSeminarDTO.setMessage(ErrorMessage.NOT_FIND_GROUP_TYPE);
+                        validateSeminarDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
                     }
-                } else {
-                    validateSeminarDTO.setMessage(ErrorMessage.CAN_NOT_UPDATE_EVENT);
-                    validateSeminarDTO.setErrorCode(ErrorCode.CANNOT_UPDATE.getValue());
                 }
-
             } else {
-                validateSeminarDTO.setMessage(ErrorMessage.NOT_FIND_SEMINAR);
-                validateSeminarDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
-
-                validateSeminarDTO.setErrorCode(validates.get(0).getErrorCode());
-                validateSeminarDTO.setMessage(validates.get(0).getMessage());
-                validateSeminarDTO.setErrorDTOS(validates);
+                validateSeminarDTO.setMessage(ErrorMessage.CAN_NOT_UPDATE_EVENT);
+                validateSeminarDTO.setErrorCode(ErrorCode.CANNOT_UPDATE.getValue());
             }
+
+        } else {
+            validateSeminarDTO.setMessage(ErrorMessage.NOT_FIND_SEMINAR);
+            validateSeminarDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
+
+            validateSeminarDTO.setErrorCode(validates.get(0).getErrorCode());
+            validateSeminarDTO.setMessage(validates.get(0).getMessage());
+            validateSeminarDTO.setErrorDTOS(validates);
+        }
         return validateSeminarDTO;
     }
 

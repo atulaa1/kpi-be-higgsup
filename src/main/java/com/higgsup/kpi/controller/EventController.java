@@ -6,9 +6,13 @@ import com.higgsup.kpi.dto.*;
 import com.higgsup.kpi.glossary.ErrorCode;
 import com.higgsup.kpi.glossary.ErrorMessage;
 import com.higgsup.kpi.service.EventService;
+import javafx.application.Application;
+import org.apache.catalina.core.ApplicationContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,7 +36,8 @@ public class EventController {
     public Response getEventCreatedByUser() {
         Response<List<EventDTO>> response = new Response<>(HttpStatus.OK.value());
         try {
-            List<EventDTO> eventDTOS = eventService.getEventCreatedByUser();
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            List<EventDTO> eventDTOS = eventService.getEventCreatedByUser(authentication.getPrincipal().toString());
             response.setData(eventDTOS);
         } catch (IOException e) {
             response.setStatus(ErrorCode.ERROR_IO_EXCEPTION.getValue());
@@ -43,12 +48,12 @@ public class EventController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/admin")
-    public Response getAllEvent(){
+    public Response getAllEvent() {
         Response<List<EventDTO>> response = new Response<>(HttpStatus.OK.value());
         try {
             List<EventDTO> eventDTOS = eventService.getAllEvent();
             response.setData(eventDTOS);
-        }catch(IOException ex){
+        } catch (IOException ex) {
             response.setStatus(ErrorCode.ERROR_IO_EXCEPTION.getValue());
             response.setMessage(ErrorMessage.ERROR_IO_EXCEPTION);
         }
@@ -144,7 +149,6 @@ public class EventController {
     }
 
 
-
     @RequestMapping(value = "/seminar", method = RequestMethod.POST)
     @PreAuthorize("hasRole('EMPLOYEE')")
     public Response createSeminar(@RequestBody EventDTO<EventSeminarDetail> seminarDetailEventDTO) {
@@ -195,6 +199,7 @@ public class EventController {
         }
         return response;
     }
+
     @PutMapping("/{id}/status")
     @PreAuthorize("hasRole('ADMIN')")
     public Response confirmOrCancelEvent(@PathVariable Integer id, @RequestBody EventDTO eventParam) {

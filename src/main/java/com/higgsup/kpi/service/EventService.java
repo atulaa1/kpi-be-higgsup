@@ -11,7 +11,7 @@ import java.util.List;
 public interface EventService {
     List<EventDTO> getAllEvent() throws IOException;
 
-    List<EventDTO> getEventCreatedByUser() throws IOException;
+    List<EventDTO> getEventCreatedByUser(String username) throws IOException;
 
     EventDTO createSupportEvent(EventDTO<List<EventSupportDetail>> supportDTO) throws IOException, NoSuchFieldException;
 
