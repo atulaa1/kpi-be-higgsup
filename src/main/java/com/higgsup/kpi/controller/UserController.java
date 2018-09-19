@@ -53,7 +53,7 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(BaseConfiguration.BASE_API_URL + "/users")
     public Response getListUsers(@RequestParam(value = "name", required = false) String name,
-            @RequestParam(value = "role", required = false) String role) {
+            @RequestParam(value = "roles", required = false) String roles) {
         Response<List<UserDTO>> response = new Response<>(HttpStatus.OK.value());
         List<UserDTO> listUsers=new ArrayList<>();
         // search by name
@@ -71,9 +71,9 @@ public class UserController {
                 response.setMessage(ErrorMessage.PARAMETERS_NAME_IS_NOT_VALID);
                 response.setStatus(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
             }
-        } else if (Objects.nonNull(role)) {
-            List<String> roles = new ArrayList<>(Arrays.asList(role.split(",")));
-            if (roles.contains("man") && roles.contains("employee")) {
+        } else if (Objects.nonNull(roles)) {
+            List<String> roleList = new ArrayList<>(Arrays.asList(roles.split(",")));
+            if (roleList.contains("man") && roleList.contains("employee")) {
                 listUsers = userService.getAllEmployeeAndManUsers();
 
             }
