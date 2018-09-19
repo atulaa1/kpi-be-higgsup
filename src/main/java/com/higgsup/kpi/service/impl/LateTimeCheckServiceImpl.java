@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class LateTimeCheckServiceImpl implements LateTimeCheckService {
@@ -69,26 +70,38 @@ public class LateTimeCheckServiceImpl implements LateTimeCheckService {
     @Override
     public List<LateTimeCheckDTO> processExcelFile(MultipartFile excelDataFile) throws IOException {
         List<LateTimeCheckDTO> lateTimeCheckDTOS = new ArrayList<>();
-        if(validateExcelFile(excelDataFile).isEmpty()) {
+        if (validateExcelFile(excelDataFile).isEmpty()) {
             XSSFWorkbook workbook = new XSSFWorkbook(excelDataFile.getInputStream());
             XSSFSheet worksheet = workbook.getSheetAt(0);
+            KpiYearMonth kpiYearMonth = getAndCreateNewMonth();
+            List<KpiLateTimeCheck> lateTimeChecksInDB = kpiLateTimeCheckRepo.findByMonth(kpiYearMonth);
+            List<KpiLateTimeCheck> kpiLateTimeChecks = new ArrayList<>();
 
             for (int i = 1; i < worksheet.getPhysicalNumberOfRows(); i++) {
                 LateTimeCheckDTO lateTimeCheckDTO = new LateTimeCheckDTO();
                 UserDTO userDTO = new UserDTO();
                 XSSFRow row = worksheet.getRow(i);
 
-                userDTO.setUsername(row.getCell(0).getStringCellValue());
+                userDTO.setFullName(row.getCell(0).getStringCellValue());
                 userDTO.setEmail(row.getCell(1).getStringCellValue());
 
                 lateTimeCheckDTO.setLateTimes((int) row.getCell(2).getNumericCellValue());
                 lateTimeCheckDTO.setUser(userDTO);
-                lateTimeCheckDTOS.add(lateTimeCheckDTO);
 
-                KpiLateTimeCheck kpiLateTimeCheck = convertLateTimeCheckDTOToEntity(lateTimeCheckDTO);
-                kpiLateTimeCheckRepo.save(kpiLateTimeCheck);
+                Optional<KpiLateTimeCheck> timeCheckOptional = lateTimeChecksInDB.stream().filter(
+                        kpiLateTimeCheck1 -> kpiLateTimeCheck1.getUser().getEmail().equals(lateTimeCheckDTO.getUser().getEmail()))
+                        .findFirst();
+                if (timeCheckOptional.isPresent()) {
+                    KpiLateTimeCheck kpiLateTimeCheck = timeCheckOptional.get();
+                    kpiLateTimeCheck.setLateTimes(lateTimeCheckDTO.getLateTimes());
+                    kpiLateTimeChecks.add(kpiLateTimeCheck);
+                    lateTimeCheckDTOS.add(lateTimeCheckDTO);
+                }
             }
-        }else{
+            Iterable<KpiLateTimeCheck> kpiLateTimeChecks1 = kpiLateTimeCheckRepo.saveAll(kpiLateTimeChecks);
+            return convertEntityLateTimeCheckToDTO((List<KpiLateTimeCheck>) kpiLateTimeChecks1);
+
+        } else {
             LateTimeCheckDTO lateTimeCheckDTO = new LateTimeCheckDTO();
             lateTimeCheckDTO.setErrorDTOS(validateExcelFile(excelDataFile));
             lateTimeCheckDTOS.add(lateTimeCheckDTO);
@@ -176,30 +189,29 @@ public class LateTimeCheckServiceImpl implements LateTimeCheckService {
         return lateTimeCheckDTOS;
     }
 
-    private KpiLateTimeCheck convertLateTimeCheckDTOToEntity(LateTimeCheckDTO lateTimeCheckDTO){
-        KpiLateTimeCheck kpiLateTimeCheck = new KpiLateTimeCheck();
-        kpiLateTimeCheck.setLateTimes(lateTimeCheckDTO.getLateTimes());
-        kpiLateTimeCheck.setUser(kpiUserRepo.findByEmail(lateTimeCheckDTO.getUser().getEmail()));
-        kpiLateTimeCheck.setYearMonth(getAndCreateNewMonth());
-        return kpiLateTimeCheck;
-    }
-
     private List<KpiLateTimeCheck> createNewDataOrUpdateDate(KpiYearMonth kpiYearMonth) {
         List<KpiLateTimeCheck> lateTimeChecksInDB = kpiLateTimeCheckRepo.findByMonth(kpiYearMonth);
-        List<UserDTO> userDTOSInLdap = ldapUserService.getAllEmployeeUsers();
-        List<UserDTO> userDTOSInLdapClone = new ArrayList<>(userDTOSInLdap);
+
+        List<UserDTO> userDTOSInLdap = ldapUserService.getAllEmployeeAndManUsers();
         List<KpiUser> kpiUsersInDB = (List<KpiUser>) kpiUserRepo.findAll();
 
+        //delete when has user in db
         userDTOSInLdap.removeIf(kpiUser -> kpiUsersInDB.stream().anyMatch(kpiUser1 -> Objects
                 .equals(kpiUser1.getUserName(), kpiUser.getUsername())));
-
+        //registerUser if not has
         userDTOSInLdap.forEach(userDTO -> userService.registerUser(userDTO.getUsername()));
 
+        // get all Employee
+        List<UserDTO> userDTOEmployeesInLdap = userDTOSInLdap.stream().filter(userDTO -> userDTO.getUserRole().size() == 1)
+                .collect(
+                        Collectors.toList());
+
+        //get new after update
         List<KpiUser> kpiUsersAll = (List<KpiUser>) kpiUserRepo.findAll();
 
         //delete if other employee
         kpiUsersAll.removeIf(
-                kpiUser -> userDTOSInLdapClone.stream()
+                kpiUser -> userDTOEmployeesInLdap.stream()
                         .noneMatch(userDTO -> userDTO.getUsername().equals(kpiUser.getUserName())));
         //delete if has in LateTimeChecks
         kpiUsersAll.removeIf(
@@ -280,20 +292,20 @@ public class LateTimeCheckServiceImpl implements LateTimeCheckService {
                         !row.getCell(1).getStringCellValue().endsWith("@higgsup.com")) {
                     ErrorDTO errorDTO = new ErrorDTO();
                     errorDTO.setErrorCode(ErrorCode.INCORRECT_DATA.getValue());
-                    errorDTO.setMessage(ErrorMessage.INCORRECT_EMAIL_DATA + (i+1));
+                    errorDTO.setMessage(ErrorMessage.INCORRECT_EMAIL_DATA + (i + 1));
                     errorDTOS.add(errorDTO);
                 }
-                if(kpiUserRepo.findByEmail(row.getCell(1).getStringCellValue()) == null){
+                if (kpiUserRepo.findByEmail(row.getCell(1).getStringCellValue()) == null) {
                     ErrorDTO errorDTO = new ErrorDTO();
                     errorDTO.setErrorCode(ErrorCode.INCORRECT_DATA.getValue());
-                    errorDTO.setMessage(ErrorMessage.EMAIL_NOT_IN_DATABASE + (i+1));
+                    errorDTO.setMessage(ErrorMessage.EMAIL_NOT_IN_DATABASE + (i + 1));
                     errorDTOS.add(errorDTO);
                 }
                 if (String.valueOf(row.getCell(2).toString()).isEmpty() ||
-                        !UtilsValidate.isValidLateTimeNumber((row.getCell(2).toString()))){
+                        !UtilsValidate.isValidLateTimeNumber((row.getCell(2).toString()))) {
                     ErrorDTO errorDTO = new ErrorDTO();
                     errorDTO.setErrorCode(ErrorCode.INCORRECT_DATA.getValue());
-                    errorDTO.setMessage(ErrorMessage.INCORRECT_LATE_TIMES_DATA + (i+1));
+                    errorDTO.setMessage(ErrorMessage.INCORRECT_LATE_TIMES_DATA + (i + 1));
                     errorDTOS.add(errorDTO);
                 }
 
