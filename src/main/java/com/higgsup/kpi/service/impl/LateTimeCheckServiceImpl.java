@@ -194,7 +194,7 @@ public class LateTimeCheckServiceImpl implements LateTimeCheckService {
 
         List<UserDTO> userDTOSInLdap = ldapUserService.getAllEmployeeAndManUsers();
         List<KpiUser> kpiUsersInDB = (List<KpiUser>) kpiUserRepo.findAll();
-
+        List<UserDTO> userDTOSInLdapClone = new ArrayList<>(userDTOSInLdap);
         //delete when has user in db
         userDTOSInLdap.removeIf(kpiUser -> kpiUsersInDB.stream().anyMatch(kpiUser1 -> Objects
                 .equals(kpiUser1.getUserName(), kpiUser.getUsername())));
@@ -202,7 +202,7 @@ public class LateTimeCheckServiceImpl implements LateTimeCheckService {
         userDTOSInLdap.forEach(userDTO -> userService.registerUser(userDTO.getUsername()));
 
         // get all Employee
-        List<UserDTO> userDTOEmployeesInLdap = userDTOSInLdap.stream().filter(userDTO -> userDTO.getUserRole().size() == 1)
+        List<UserDTO> userDTOEmployeesInLdap = userDTOSInLdapClone.stream().filter(userDTO -> userDTO.getUserRole().size() == 1)
                 .collect(
                         Collectors.toList());
 
