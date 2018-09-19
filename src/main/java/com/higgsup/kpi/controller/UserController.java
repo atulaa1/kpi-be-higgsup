@@ -16,6 +16,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -50,15 +52,16 @@ public class UserController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(BaseConfiguration.BASE_API_URL + "/users")
-    public Response getListUsers(@RequestParam(value = "name", required = false) String name) {
+    public Response getListUsers(@RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "role", required = false) String role) {
         Response<List<UserDTO>> response = new Response<>(HttpStatus.OK.value());
-
+        List<UserDTO> listUsers=new ArrayList<>();
         // search by name
         if (Objects.nonNull(name)) {
             if (!UtilsValidate.containRegex(name)) {
-                List<UserDTO> listUsersByName = ldapUserService.findUsersByName(name);
-                if (!listUsersByName.isEmpty()) {
-                    response.setData(listUsersByName);
+                listUsers = ldapUserService.findUsersByName(name);
+                if (!listUsers.isEmpty()) {
+                    response.setData(listUsers);
                     response.setMessage(HttpStatus.OK.getReasonPhrase());
                 } else {
                     response.setMessage(ErrorMessage.NOT_FIND_USER);
@@ -68,11 +71,12 @@ public class UserController {
                 response.setMessage(ErrorMessage.PARAMETERS_NAME_IS_NOT_VALID);
                 response.setStatus(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
             }
-            return response;
-        } else {
+        } else if (Objects.nonNull(role)) {
+            List<String> roles = new ArrayList<>(Arrays.asList(role.split(",")));
+            if (roles.contains("man") && roles.contains("employee")) {
+                listUsers = userService.getAllEmployeeAndManUsers();
 
-            //get all user
-            List<UserDTO> listUsers = ldapUserService.getAllUsers();
+            }
             if (!listUsers.isEmpty()) {
                 response.setData(listUsers);
                 response.setMessage(HttpStatus.OK.getReasonPhrase());
@@ -80,9 +84,18 @@ public class UserController {
                 response.setMessage(ErrorMessage.NOT_FIND_USER);
                 response.setStatus(ErrorCode.NOT_FIND.getValue());
             }
-            return response;
+        } else {
+            //get all user
+            listUsers = ldapUserService.getAllUsers();
+            if (!listUsers.isEmpty()) {
+                response.setData(listUsers);
+                response.setMessage(HttpStatus.OK.getReasonPhrase());
+            } else {
+                response.setMessage(ErrorMessage.NOT_FIND_USER);
+                response.setStatus(ErrorCode.NOT_FIND.getValue());
+            }
         }
-
+        return response;
     }
 
     @PreAuthorize("hasRole('ADMIN')")
