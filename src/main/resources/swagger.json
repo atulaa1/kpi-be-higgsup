@@ -803,13 +803,13 @@
         }
       }
     },
-    "/api/events/admin": {
+    "/api/events/club-support": {
       "get": {
         "tags": [
           "event-controller"
         ],
-        "summary": "getAllEvent",
-        "operationId": "getAllEventUsingGET",
+        "summary": "getAllClubAndSupportEvent",
+        "operationId": "getAllClubAndSupportEventUsingGET",
         "produces": [
           "*/*"
         ],

@@ -45,11 +45,11 @@ public class EventController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/admin")
+    @GetMapping("/club-support")
     public Response getAllEvent() {
         Response<List<EventDTO>> response = new Response<>(HttpStatus.OK.value());
         try {
-            List<EventDTO> eventDTOS = eventService.getAllEvent();
+            List<EventDTO> eventDTOS = eventService.getAllClubAndSupportEvent();
             response.setData(eventDTOS);
         } catch (IOException ex) {
             response.setStatus(ErrorCode.ERROR_IO_EXCEPTION.getValue());
