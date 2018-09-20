@@ -75,7 +75,7 @@ CREATE TABLE kpi_event (
 CREATE TABLE kpi_event_user (
   user_name VARCHAR(255) NOT NULL,
   event_id  INT(11)      NOT NULL,
-  status       TINYINT(4)  DEFAULT 0 NULL ,
+  status       TINYINT(4)  DEFAULT 0 NULL  COMMENT 'status can 0 is unfinished , 1 is finish' ,
   type   TINYINT(4) DEFAULT NULL COMMENT 'type can 1 is host , 2 is member , 3 is listener',
   FOREIGN KEY (user_name) REFERENCES kpi_user (user_name),
   FOREIGN KEY (event_id) REFERENCES kpi_event (id),

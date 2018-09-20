@@ -19,4 +19,4 @@ CREATE TABLE `kpi_seminar_survey` (
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-ALTER TABLE kpi_event_user ADD status TINYINT DEFAULT 0 NULL;
+ALTER TABLE kpi_event_user ADD status TINYINT DEFAULT 0 NULL COMMENT 'status can 0 is unfinished , 1 is finish';
