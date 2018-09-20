@@ -174,7 +174,7 @@
                   "format": "int32"
                 }
               },
-              "example":{
+              "example": {
                 "data": [
                   {
                     "id": 37,
@@ -2362,112 +2362,112 @@
                 }
               }
             },
-                "message": {
-                  "type": "string"
-                },
-                "status_code": {
-                  "type": "integer",
-                  "format": "int32"
-                },
-                "errors": {
-                  "type": "array",
-                  "items": {
-                    "properties": {
-                      "errorCode": {
-                        "type": "number"
-                      },
-                      "message": {
-                        "type": "string"
-                      }
-                    }
+            "message": {
+              "type": "string"
+            },
+            "status_code": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "errors": {
+              "type": "array",
+              "items": {
+                "properties": {
+                  "errorCode": {
+                    "type": "number"
+                  },
+                  "message": {
+                    "type": "string"
                   }
                 }
-            },
-              "example": {
-                "data": {
-                  "id": 23,
-                  "name": "seminar test 4",
-                  "description": null,
-                  "status": 1,
-                  "address": "Ha noi",
-                  "createdDate": "14-09-2018 09:34",
-                  "updatedDate": "14-09-2018 09:34",
-                  "beginDate": "14-08-2018 16:24",
-                  "endDate": "05-09-2018 16:24",
-                  "group": {
-                    "id": 1,
-                    "name": "seminar",
-                    "description": null,
-                    "groupType": {
-                      "id": 1,
-                      "name": "Seminar"
-                    },
-                    "createdDate": null,
-                    "additionalConfig": {
-                      "hostPoint": 13.6,
-                      "memberPoint": 13.4,
-                      "listenerPoint": 11
-                    }
-                  },
-                  "eventUserList": [
-                    {
-                      "user": {
-                        "username": "kpi.employee",
-                        "lastName": null,
-                        "firstName": null,
-                        "fullName": null,
-                        "email": null,
-                        "userRole": null,
-                        "avatar": null,
-                        "birthday": null,
-                        "numberPhone": null,
-                        "address": null,
-                        "gmail": null,
-                        "skype": null,
-                        "dateStartWork": null
-                      },
-                      "type": 1
-                    },
-                    {
-                      "user": {
-                        "username": "kpi.man",
-                        "lastName": null,
-                        "firstName": null,
-                        "fullName": null,
-                        "email": null,
-                        "userRole": null,
-                        "avatar": null,
-                        "birthday": null,
-                        "numberPhone": null,
-                        "address": null,
-                        "gmail": null,
-                        "skype": null,
-                        "dateStartWork": null
-                      },
-                      "type": 2
-                    },
-                    {
-                      "user": {
-                        "username": "kpi.man",
-                        "lastName": null,
-                        "firstName": null,
-                        "fullName": null,
-                        "email": null,
-                        "userRole": null,
-                        "avatar": null,
-                        "birthday": null,
-                        "numberPhone": null,
-                        "address": null,
-                        "gmail": null,
-                        "skype": null,
-                        "dateStartWork": null
-                      },
-                      "type": 3
-                    }
-                  ],
-                  "additionalConfig": "null"
+              }
+            }
+          },
+          "example": {
+            "data": {
+              "id": 23,
+              "name": "seminar test 4",
+              "description": null,
+              "status": 1,
+              "address": "Ha noi",
+              "createdDate": "14-09-2018 09:34",
+              "updatedDate": "14-09-2018 09:34",
+              "beginDate": "14-08-2018 16:24",
+              "endDate": "05-09-2018 16:24",
+              "group": {
+                "id": 1,
+                "name": "seminar",
+                "description": null,
+                "groupType": {
+                  "id": 1,
+                  "name": "Seminar"
                 },
-                "status_code": 200
+                "createdDate": null,
+                "additionalConfig": {
+                  "hostPoint": 13.6,
+                  "memberPoint": 13.4,
+                  "listenerPoint": 11
+                }
+              },
+              "eventUserList": [
+                {
+                  "user": {
+                    "username": "kpi.employee",
+                    "lastName": null,
+                    "firstName": null,
+                    "fullName": null,
+                    "email": null,
+                    "userRole": null,
+                    "avatar": null,
+                    "birthday": null,
+                    "numberPhone": null,
+                    "address": null,
+                    "gmail": null,
+                    "skype": null,
+                    "dateStartWork": null
+                  },
+                  "type": 1
+                },
+                {
+                  "user": {
+                    "username": "kpi.man",
+                    "lastName": null,
+                    "firstName": null,
+                    "fullName": null,
+                    "email": null,
+                    "userRole": null,
+                    "avatar": null,
+                    "birthday": null,
+                    "numberPhone": null,
+                    "address": null,
+                    "gmail": null,
+                    "skype": null,
+                    "dateStartWork": null
+                  },
+                  "type": 2
+                },
+                {
+                  "user": {
+                    "username": "kpi.man",
+                    "lastName": null,
+                    "firstName": null,
+                    "fullName": null,
+                    "email": null,
+                    "userRole": null,
+                    "avatar": null,
+                    "birthday": null,
+                    "numberPhone": null,
+                    "address": null,
+                    "gmail": null,
+                    "skype": null,
+                    "dateStartWork": null
+                  },
+                  "type": 3
+                }
+              ],
+              "additionalConfig": "null"
+            },
+            "status_code": 200
           },
           "201": {
             "description": "Created"
@@ -2574,22 +2574,22 @@
               },
               "example": {
                 "name": "seminar test 4 - updated",
-                "address":"Ha Noi",
-                "beginDate":"20-09-2018 16:24",
-                "endDate":"21-09-2018 16:24",
+                "address": "Ha Noi",
+                "beginDate": "20-09-2018 16:24",
+                "endDate": "21-09-2018 16:24",
                 "group": {
-                  "id":1
+                  "id": 1
                 },
-                "eventUserList":[
+                "eventUserList": [
                   {
-                    "user":{
-                      "username":"kpi.test01"
+                    "user": {
+                      "username": "kpi.test01"
                     },
                     "type": 1
                   },
                   {
                     "user": {
-                      "username":"kpi.test"
+                      "username": "kpi.test"
                     },
                     "type": 2
                   },

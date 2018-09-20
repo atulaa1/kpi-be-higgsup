@@ -50,7 +50,7 @@ public class UserController {
         return response;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('EMPLOYEE')")
     @GetMapping(BaseConfiguration.BASE_API_URL + "/users")
     public Response getListUsers(@RequestParam(value = "name", required = false) String name,
             @RequestParam(value = "roles", required = false) String roles) {
