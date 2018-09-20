@@ -55,8 +55,8 @@ public class EventServiceImpl extends BaseService implements EventService {
     private Environment environment;
 
     @Override
-    public List<EventDTO> getAllEvent() throws IOException {
-        List<KpiEvent> eventList = kpiEventRepo.findAllEvent();
+    public List<EventDTO> getAllClubAndSupportEvent() throws IOException {
+        List<KpiEvent> eventList = kpiEventRepo.findClubAndSupportEvent();
         return convertEventEntityToDTO(eventList);
     }
 

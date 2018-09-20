@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface EventService {
-    List<EventDTO> getAllEvent() throws IOException;
+    List<EventDTO> getAllClubAndSupportEvent() throws IOException;
 
     List<EventDTO> getEventCreatedByUser(String username) throws IOException;
 
