@@ -4839,6 +4839,389 @@
         }
       }
     },
+    "/api/groups/support-new": {
+      "post": {
+        "tags": [
+          "group-controller"
+        ],
+        "summary": "Create a support activity",
+        "operationId": "createSupportUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "groupDTO",
+            "description": "groupDTO",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "name",
+                "additionalConfig"
+              ],
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "additionalConfig": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "taskName"
+                        ],
+                        "properties": {
+                          "taskName": {
+                            "type": "string"
+                          },
+                          "point": {
+                            "type": "number"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "message": {
+                  "type": "string"
+                },
+                "status_code": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "example": {
+                "name": "support chung",
+                "additionalConfig": [
+                  {
+                    "taskName": "rọn rác",
+                    "point": 1
+                  },
+                  {
+                    "taskName": "nấu cơm",
+                    "point": 1
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "status_code : 200. Meaning: Thành công \n status_code : 903 \n Message: name does not allow null. Meaning: name không thể để rỗng. \n Message: name task support does not allow null at index {index} . Meaning: name task support không thể để null tại index \n Message: point support does not allow null at index {index} . Meaning: point support không thể để null tại index \n status_code : 901 \n Message: name Task support can not duplicate. Meaning: không tìm thấy event bởi id. \n Message: point support must be bigger than zero at index {index} . Meaning: point phải lớn hơn 0 \n status_code : 902 \n Message: support already exists. Meaning: support đã tồn tại. \n status_code : 999 \n Message: system error. Meaning: Lỗi hệ thống , liên hệ admin",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id",
+                "name",
+                "groupType",
+                "additionalConfig"
+              ],
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "groupType": {
+                      "required": [
+                        "id"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number"
+                        },
+                        "name": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "createdDate": {
+                      "type": "string"
+                    },
+                    "additionalConfig": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "id",
+                          "taskName",
+                          "point",
+                          "createdDate"
+                        ],
+                        "properties": {
+                          "id": {
+                            "type": "number"
+                          },
+                          "taskName": {
+                            "type": "string"
+                          },
+                          "point": {
+                            "type": "number"
+                          },
+                          "createdDate": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "message": {
+                  "type": "string"
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "errorCode": {
+                        "type": "number"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "status_code": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "example": {
+                "data": {
+                  "id": 9,
+                  "name": "support chung",
+                  "description": null,
+                  "groupType": {
+                    "id": 4,
+                    "name": "Support chung"
+                  },
+                  "createdDate": "20-09-2018 16:34",
+                  "additionalConfig": [
+                    {
+                      "id": 18,
+                      "taskName": "rọn rác",
+                      "point": 1,
+                      "createdDate": "20-09-2018 16:34"
+                    },
+                    {
+                      "id": 19,
+                      "taskName": "rọn ráC1",
+                      "point": 1,
+                      "createdDate": "20-09-2018 16:34"
+                    }
+                  ]
+                },
+                "status_code": 200
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/groups/support-new/task": {
+      "post": {
+        "tags": [
+          "group-controller"
+        ],
+        "summary": "Create a support activity",
+        "operationId": "createSupportUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "SupportDTO",
+            "description": "SupportDTO",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "name",
+                "point"
+              ],
+              "properties": {
+                "taskName": {
+                  "type": "string"
+                },
+                "point": {
+                  "type": "number"
+                }
+              },
+              "example": {
+                "taskName": "rọn rác2",
+                "point": 1
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "status_code : 200. Meaning: Thành công \n status_code : 903 \n Message: name task support does not allow null. Meaning: name task support không thể để null \n Message: point support does not allow null. Meaning: point support không thể để null \n status_code : 908 \n Message: support not exists. Meaning: group support không tồn tại.\n status_code : 902 \n Message: name task support already exists. Meaning: group support không tồn tại. \n status_code : 999 \n Message: system error. Meaning: Lỗi hệ thống , liên hệ admin",
+            "schema": {
+              "type": "object",
+              "required": [
+                "data",
+                "message",
+                "status_code",
+                "errors"
+              ],
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "groupType": {
+                      "required": [
+                        "id"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number"
+                        },
+                        "name": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "createdDate": {
+                      "type": "string"
+                    },
+                    "additionalConfig": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "id",
+                          "taskName",
+                          "point",
+                          "createdDate"
+                        ],
+                        "properties": {
+                          "id": {
+                            "type": "number"
+                          },
+                          "taskName": {
+                            "type": "string"
+                          },
+                          "point": {
+                            "type": "number"
+                          },
+                          "createdDate": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "message": {
+                  "type": "string"
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "errorCode": {
+                        "type": "number"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "status_code": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "example": {
+                "data": {
+                  "id": 9,
+                  "name": "support chung",
+                  "description": null,
+                  "groupType": {
+                    "id": 4,
+                    "name": "Support chung"
+                  },
+                  "createdDate": "20-09-2018 16:34",
+                  "additionalConfig": [
+                    {
+                      "id": 18,
+                      "taskName": "rọn rác",
+                      "point": 1,
+                      "createdDate": "20-09-2018 16:34"
+                    },
+                    {
+                      "id": 19,
+                      "taskName": "rọn ráC1",
+                      "point": 1,
+                      "createdDate": "20-09-2018 16:34"
+                    }
+                  ]
+                },
+                "status_code": 200
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/groups/team-building": {
       "post": {
         "tags": [
@@ -5889,7 +6272,7 @@
             "description": "roles",
             "required": false,
             "type": "string",
-            "example":"man,employee"
+            "example": "man,employee"
           }
         ],
         "responses": {

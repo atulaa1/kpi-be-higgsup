@@ -1,11 +1,7 @@
 package com.higgsup.kpi.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.higgsup.kpi.dto.GroupClubDetail;
-import com.higgsup.kpi.dto.GroupDTO;
-import com.higgsup.kpi.dto.GroupSeminarDetail;
-import com.higgsup.kpi.dto.TeamBuildingDTO;
-import com.higgsup.kpi.dto.GroupSupportDetail;
+import com.higgsup.kpi.dto.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -14,6 +10,12 @@ public interface GroupService {
     GroupDTO updateTeamBuilding(GroupDTO<TeamBuildingDTO> groupDTO) throws JsonProcessingException;
 
     GroupDTO createSupport(GroupDTO<GroupSupportDetail> groupDTO) throws JsonProcessingException;
+
+    GroupDTO createSupportNew(GroupDTO<List<SupportDTO>> groupDTO) throws JsonProcessingException;
+
+    SupportDTO createTaskSupport(SupportDTO groupDTO) throws JsonProcessingException;
+
+    SupportDTO updateTaskSupport(SupportDTO groupDTO) throws JsonProcessingException;
 
     GroupDTO updateSupport(GroupDTO<GroupSupportDetail> groupDTO) throws JsonProcessingException;
 

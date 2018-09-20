@@ -40,6 +40,65 @@ public class GroupController {
         }
         return response;
     }
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/groups/support-new")
+    public Response createSupportNew(@RequestBody GroupDTO<List<SupportDTO>> groupDTO) {
+        Response<GroupDTO> response = new Response<>(HttpStatus.OK.value());
+        try {
+            GroupDTO groupDTOResponse = groupService.createSupportNew(groupDTO);
+            if (Objects.nonNull(groupDTOResponse.getErrorCode())) {
+                response.setStatus(groupDTOResponse.getErrorCode());
+                response.setMessage(groupDTOResponse.getMessage());
+                response.setErrors(groupDTOResponse.getErrorDTOS());
+            } else {
+                response.setData(groupDTOResponse);
+            }
+        }catch (Exception e) {
+            response.setStatus(ErrorCode.SYSTEM_ERROR.getValue());
+            response.setMessage(ErrorCode.SYSTEM_ERROR.getDescription());
+        }
+        return response;
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/groups/support-new/task")
+    public Response createSupportNewTask(@RequestBody SupportDTO groupDTO) {
+        Response<SupportDTO> response = new Response<>(HttpStatus.OK.value());
+        try {
+            SupportDTO groupDTOResponse = groupService.createTaskSupport(groupDTO);
+            if (Objects.nonNull(groupDTOResponse.getErrorCode())) {
+                response.setStatus(groupDTOResponse.getErrorCode());
+                response.setMessage(groupDTOResponse.getMessage());
+                response.setErrors(groupDTOResponse.getErrorDTOS());
+            } else {
+                response.setData(groupDTOResponse);
+            }
+        }  catch (Exception e) {
+            response.setStatus(ErrorCode.SYSTEM_ERROR.getValue());
+            response.setMessage(ErrorCode.SYSTEM_ERROR.getDescription());
+        }
+        return response;
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/groups/support-new/task")
+    public Response updateSupportNewTask(@RequestBody SupportDTO groupDTO) {
+        Response<SupportDTO> response = new Response<>(HttpStatus.OK.value());
+        try {
+            SupportDTO groupDTOResponse = groupService.updateTaskSupport(groupDTO);
+            if (Objects.nonNull(groupDTOResponse.getErrorCode())) {
+                response.setStatus(groupDTOResponse.getErrorCode());
+                response.setMessage(groupDTOResponse.getMessage());
+                response.setErrors(groupDTOResponse.getErrorDTOS());
+            } else {
+                response.setData(groupDTOResponse);
+            }
+        } catch (Exception e) {
+            response.setStatus(ErrorCode.SYSTEM_ERROR.getValue());
+            response.setMessage(ErrorCode.SYSTEM_ERROR.getDescription());
+        }
+        return response;
+    }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/groups/support")
