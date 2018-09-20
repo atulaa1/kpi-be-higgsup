@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface EventService {
-    List<EventDTO> getAllEvent() throws IOException;
+    List<EventDTO> getAllClubAndSupportEvent() throws IOException;
 
     List<EventDTO> getEventCreatedByUser(String username) throws IOException;
 
