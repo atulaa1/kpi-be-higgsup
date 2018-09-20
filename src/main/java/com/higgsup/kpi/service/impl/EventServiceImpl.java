@@ -252,6 +252,43 @@ public class EventServiceImpl extends BaseService implements EventService {
         return eventDTO;
     }
 
+    @Override
+    public EventDTO createTeamBuildingEvent(EventDTO<EventTeamBuildingDetail> eventDTO) throws JsonProcessingException {
+        EventDTO validateTeambuildingDTO = new EventDTO();
+        List<ErrorDTO> validates = validateTeambuildingEvent(eventDTO);
+
+        if (CollectionUtils.isEmpty(validates)) {
+            KpiEvent kpiEvent = new KpiEvent();
+            ObjectMapper mapper = new ObjectMapper();
+
+            String teamBuildingEventConfig = mapper.writeValueAsString(eventDTO.getAdditionalConfig());
+            BeanUtils.copyProperties(eventDTO, kpiEvent);
+            kpiEvent.setAdditionalConfig(teamBuildingEventConfig);
+
+            kpiEvent.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+
+            Optional<KpiGroup> kpiGroup = kpiGroupRepo.findById(eventDTO.getGroup().getId());
+            if (kpiGroup.isPresent()) {
+                kpiEvent.setGroup(kpiGroup.get());
+                kpiEvent = kpiEventRepo.save(kpiEvent);
+
+                List<KpiEventUser> eventUsers = convertEventUsersToEntity(kpiEvent, eventDTO.getEventUserList());
+                kpiEventUserRepo.saveAll(eventUsers);
+
+                BeanUtils.copyProperties(kpiEvent, validateTeambuildingDTO);
+                //validateTeambuildingDTO.setGroup(convertGroupSeminarToDTO(kpiEvent.getGroup()));
+                validateTeambuildingDTO.setEventUserList(eventDTO.getEventUserList());
+
+            } else {
+                // khong ton tai group
+            }
+        }
+        return null;
+    }
+
+    private List<ErrorDTO> validateTeambuildingEvent(EventDTO<EventTeamBuildingDetail> eventDTO) {
+        return null;
+    }
     private EventDTO confirmOrCancelEventClub(KpiEvent kpiEvent, EventDTO eventDTO) throws IOException {
         if (Objects.equals(eventDTO.getStatus(), StatusEvent.CONFIRMED.getValue())) {
             kpiEvent.setStatus(StatusEvent.CONFIRMED.getValue());
