@@ -4865,37 +4865,26 @@
                 "additionalConfig"
               ],
               "properties": {
-                "data": {
-                  "type": "object",
-                  "properties": {
-                    "name": {
-                      "type": "string"
-                    },
-                    "additionalConfig": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "required": [
-                          "taskName"
-                        ],
-                        "properties": {
-                          "taskName": {
-                            "type": "string"
-                          },
-                          "point": {
-                            "type": "number"
-                          }
-                        }
+                "name": {
+                  "type": "string"
+                },
+                "additionalConfig": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "taskName",
+                      "point"
+                    ],
+                    "properties": {
+                      "taskName": {
+                        "type": "string"
+                      },
+                      "point": {
+                        "type": "number"
                       }
                     }
                   }
-                },
-                "message": {
-                  "type": "string"
-                },
-                "status_code": {
-                  "type": "integer",
-                  "format": "int32"
                 }
               },
               "example": {
@@ -4920,14 +4909,18 @@
             "schema": {
               "type": "object",
               "required": [
-                "id",
-                "name",
-                "groupType",
-                "additionalConfig"
+                "status_code"
               ],
               "properties": {
                 "data": {
                   "type": "object",
+                  "required": [
+                    "id",
+                    "name",
+                    "groupType",
+                    "createdDate",
+                    "additionalConfig"
+                  ],
                   "properties": {
                     "id": {
                       "type": "string"
@@ -5070,7 +5063,7 @@
             "schema": {
               "type": "object",
               "required": [
-                "name",
+                "taskName",
                 "point"
               ],
               "properties": {
@@ -5094,66 +5087,29 @@
             "schema": {
               "type": "object",
               "required": [
-                "data",
-                "message",
-                "status_code",
-                "errors"
+                "status_code"
               ],
               "properties": {
                 "data": {
                   "type": "object",
+                  "required": [
+                    "id",
+                    "taskName",
+                    "point",
+                    "createdDate"
+                  ],
                   "properties": {
                     "id": {
+                      "type": "number"
+                    },
+                    "taskName": {
                       "type": "string"
                     },
-                    "name": {
-                      "type": "string"
-                    },
-                    "description": {
-                      "type": "string"
-                    },
-                    "groupType": {
-                      "required": [
-                        "id"
-                      ],
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "number"
-                        },
-                        "name": {
-                          "type": "string"
-                        }
-                      }
+                    "point": {
+                      "type": "number"
                     },
                     "createdDate": {
                       "type": "string"
-                    },
-                    "additionalConfig": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "required": [
-                          "id",
-                          "taskName",
-                          "point",
-                          "createdDate"
-                        ],
-                        "properties": {
-                          "id": {
-                            "type": "number"
-                          },
-                          "taskName": {
-                            "type": "string"
-                          },
-                          "point": {
-                            "type": "number"
-                          },
-                          "createdDate": {
-                            "type": "string"
-                          }
-                        }
-                      }
                     }
                   }
                 },
@@ -5180,28 +5136,10 @@
               },
               "example": {
                 "data": {
-                  "id": 9,
-                  "name": "support chung",
-                  "description": null,
-                  "groupType": {
-                    "id": 4,
-                    "name": "Support chung"
-                  },
-                  "createdDate": "20-09-2018 16:34",
-                  "additionalConfig": [
-                    {
-                      "id": 18,
-                      "taskName": "rọn rác",
-                      "point": 1,
-                      "createdDate": "20-09-2018 16:34"
-                    },
-                    {
-                      "id": 19,
-                      "taskName": "rọn ráC1",
-                      "point": 1,
-                      "createdDate": "20-09-2018 16:34"
-                    }
-                  ]
+                  "id": 27,
+                  "taskName": "rọn rác2",
+                  "point": 1,
+                  "createdDate": "20-09-2018 17:21"
                 },
                 "status_code": 200
               }
