@@ -508,7 +508,7 @@
         }
       }
     },
-    "/api/events/employee": {
+    "/api/events/created-by-user": {
       "get": {
         "tags": [
           "event-controller"

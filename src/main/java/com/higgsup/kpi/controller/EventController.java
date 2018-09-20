@@ -30,7 +30,7 @@ public class EventController {
     private EventService eventService;
 
     @PreAuthorize("hasRole('EMPLOYEE')")
-    @GetMapping("/employee")
+    @GetMapping("/created-by-user")
     public Response getEventCreatedByUser() {
         Response<List<EventDTO>> response = new Response<>(HttpStatus.OK.value());
         try {
