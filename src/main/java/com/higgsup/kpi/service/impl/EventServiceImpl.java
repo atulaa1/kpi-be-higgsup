@@ -6,14 +6,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.higgsup.kpi.dto.*;
 import com.higgsup.kpi.entity.*;
 import com.higgsup.kpi.glossary.*;
-import com.higgsup.kpi.repository.KpiEventRepo;
-import com.higgsup.kpi.repository.KpiEventUserRepo;
-import com.higgsup.kpi.repository.KpiGroupRepo;
-import com.higgsup.kpi.repository.KpiUserRepo;
+import com.higgsup.kpi.repository.*;
 import com.higgsup.kpi.service.BaseService;
 import com.higgsup.kpi.service.EventService;
 import com.higgsup.kpi.service.LdapUserService;
 import com.higgsup.kpi.service.UserService;
+import io.swagger.models.auth.In;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -53,6 +51,9 @@ public class EventServiceImpl extends BaseService implements EventService {
 
     @Autowired
     private Environment environment;
+
+    @Autowired
+    private KpiSeminarSurveyRepo kpiseminarSurveyRepo;
 
     @Override
     public List<EventDTO> getAllClubAndSupportEvent() throws IOException {
@@ -259,6 +260,18 @@ public class EventServiceImpl extends BaseService implements EventService {
 
     @Override
     public SeminarSurveyDTO createSeminarSurvey(SeminarSurveyDTO seminarSurveyDTO) {
+        SeminarSurveyDTO validatedSeminarSurveyDTO = new SeminarSurveyDTO();
+        Integer eventId = seminarSurveyDTO.getEvent().getId();
+        List<EventUserDTO> eventUserDTOList = convertListEventUserEntityToDTO(kpiseminarSurveyRepo
+                .findByUserType(EventUserType.HOST.getValue(), eventId));
+
+
+
+
+
+
+
+
 
 
         return null;
