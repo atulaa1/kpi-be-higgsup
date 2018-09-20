@@ -4982,6 +4982,11 @@
                 "errors": {
                   "type": "array",
                   "items": {
+                    "type": "object",
+                    "required": [
+                      "errorCode",
+                      "message"
+                    ],
                     "properties": {
                       "errorCode": {
                         "type": "number"
@@ -5119,6 +5124,11 @@
                 "errors": {
                   "type": "array",
                   "items": {
+                    "type": "object",
+                    "required": [
+                      "errorCode",
+                      "message"
+                    ],
                     "properties": {
                       "errorCode": {
                         "type": "number"
