@@ -90,7 +90,7 @@ CREATE TABLE `kpi_seminar_survey` (
   `evaluating_username` varchar(50) CHARACTER SET utf8 NOT NULL,
   `event_id` int(11),
   `evaluated_username` varchar(50) CHARACTER SET utf8 NOT NULL,
-  `rating` varchar(50) CHARACTER SET utf8 NOT NULL,
+  `rating` int(11),
 
   FOREIGN KEY (evaluating_username) REFERENCES kpi_event_user(user_name),
   FOREIGN KEY (evaluated_username) REFERENCES kpi_event_user(user_name),
