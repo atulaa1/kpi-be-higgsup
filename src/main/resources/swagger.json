@@ -4844,8 +4844,7 @@
         "tags": [
           "group-controller"
         ],
-        "summary": "Create a support activity",
-        "operationId": "createSupportUsingPOST",
+        "summary": "Create new support",
         "consumes": [
           "application/json"
         ],
@@ -5051,8 +5050,7 @@
         "tags": [
           "group-controller"
         ],
-        "summary": "Create a support activity",
-        "operationId": "createSupportUsingPOST",
+        "summary": "Create a task support ",
         "consumes": [
           "application/json"
         ],
@@ -5169,6 +5167,138 @@
           }
         }
       }
+    },
+    "/api/groups/support-new/task/{id}": {
+      "put": {
+        "tags": [
+          "group-controller"
+        ],
+        "summary": "update task support",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "body",
+            "name": "SupportDTO",
+            "description": "SupportDTO",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "taskName",
+                "point"
+              ],
+              "properties": {
+                "taskName": {
+                  "type": "string"
+                },
+                "point": {
+                  "type": "number"
+                }
+              },
+              "example": {
+                "taskName": "rọn rác2",
+                "point": 1
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "status_code : 200. Meaning: Thành công \n status_code : 903 \n Message: name task support does not allow null. Meaning: name task support không thể để null \n Message: point support does not allow null. Meaning: point support không thể để null \n status_code : 908 \n Message: support not exists. Meaning: group support không tồn tại.\n status_code : 902 \n Message: name task support already exists. Meaning: group support không tồn tại. \n status_code : 999 \n Message: system error. Meaning: Lỗi hệ thống , liên hệ admin",
+            "schema": {
+              "type": "object",
+              "required": [
+                "status_code"
+              ],
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "taskName",
+                    "point",
+                    "createdDate"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    },
+                    "taskName": {
+                      "type": "string"
+                    },
+                    "point": {
+                      "type": "number"
+                    },
+                    "createdDate": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "message": {
+                  "type": "string"
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "errorCode",
+                      "message"
+                    ],
+                    "properties": {
+                      "errorCode": {
+                        "type": "number"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "status_code": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "example": {
+                "data": {
+                  "id": 27,
+                  "taskName": "rọn rác2",
+                  "point": 1,
+                  "createdDate": "20-09-2018 17:21"
+                },
+                "status_code": 200
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+
     },
     "/api/groups/team-building": {
       "post": {

@@ -81,10 +81,11 @@ public class GroupController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/groups/support-new/task")
-    public Response updateSupportNewTask(@RequestBody SupportDTO groupDTO) {
+    @PutMapping("/groups/support-new/task/{id}")
+    public Response updateSupportNewTask(@PathVariable Integer id ,@RequestBody SupportDTO groupDTO) {
         Response<SupportDTO> response = new Response<>(HttpStatus.OK.value());
         try {
+            groupDTO.setId(id);
             SupportDTO groupDTOResponse = groupService.updateTaskSupport(groupDTO);
             if (Objects.nonNull(groupDTOResponse.getErrorCode())) {
                 response.setStatus(groupDTOResponse.getErrorCode());
