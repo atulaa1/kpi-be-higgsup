@@ -26,5 +26,5 @@ public interface EventService {
 
     EventDTO confirmOrCancelEvent(EventDTO eventDTO) throws IOException, NoSuchFieldException, IllegalAccessException;
 
-    EventDTO createTeamBuildingEvent(EventDTO<EventTeamBuildingDetail> eventDTO) throws JsonProcessingException;
+    EventDTO createTeamBuildingEvent(EventDTO<EventTeamBuildingDetail> eventDTO) throws IOException;
 }

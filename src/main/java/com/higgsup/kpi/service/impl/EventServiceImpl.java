@@ -14,6 +14,7 @@ import com.higgsup.kpi.service.BaseService;
 import com.higgsup.kpi.service.EventService;
 import com.higgsup.kpi.service.LdapUserService;
 import com.higgsup.kpi.service.UserService;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -261,7 +262,7 @@ public class EventServiceImpl extends BaseService implements EventService {
     }
 
     @Override
-    public EventDTO createTeamBuildingEvent(EventDTO<EventTeamBuildingDetail> eventDTO) throws JsonProcessingException {
+    public EventDTO createTeamBuildingEvent(EventDTO<EventTeamBuildingDetail> eventDTO) throws IOException {
         EventDTO validateTeambuildingDTO = new EventDTO();
         List<ErrorDTO> validates = validateTeambuildingEvent(eventDTO);
 
@@ -278,25 +279,91 @@ public class EventServiceImpl extends BaseService implements EventService {
             Optional<KpiGroup> kpiGroup = kpiGroupRepo.findById(eventDTO.getGroup().getId());
             if (kpiGroup.isPresent()) {
                 kpiEvent.setGroup(kpiGroup.get());
-                kpiEvent = kpiEventRepo.save(kpiEvent);
+                if (kpiEvent.getGroup().getGroupType().getId() == 3) {
+                    kpiEvent = kpiEventRepo.save(kpiEvent);
 
-                List<KpiEventUser> eventUsers = convertEventUsersToEntity(kpiEvent, eventDTO.getEventUserList());
-                kpiEventUserRepo.saveAll(eventUsers);
+                    List<KpiEventUser> eventUsers = convertEventUsersToEntity(kpiEvent, eventDTO.getEventUserList());
+                    kpiEventUserRepo.saveAll(eventUsers);
 
-                BeanUtils.copyProperties(kpiEvent, validateTeambuildingDTO);
-                //validateTeambuildingDTO.setGroup(convertGroupSeminarToDTO(kpiEvent.getGroup()));
-                validateTeambuildingDTO.setEventUserList(eventDTO.getEventUserList());
+                    BeanUtils.copyProperties(kpiEvent, validateTeambuildingDTO);
+                    validateTeambuildingDTO.setGroup(convertConfigEventToDTO(kpiEvent.getGroup()));
+                    validateTeambuildingDTO.setEventUserList(eventDTO.getEventUserList());
+                } else {
+//                    group type khong khop
+                    validateTeambuildingDTO.setMessage(ErrorMessage.GROUP_TYPE_IS_INVALID);
+                    validateTeambuildingDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+                }
+
 
             } else {
                 // khong ton tai group
+                validateTeambuildingDTO.setMessage(ErrorMessage.NOT_FIND_GROUP_TYPE);
+                validateTeambuildingDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
             }
+        } else {
+            validateTeambuildingDTO.setMessage(ErrorMessage.NOT_FIND_SEMINAR);
+            validateTeambuildingDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
+
         }
-        return null;
+        validateTeambuildingDTO.setErrorCode(validates.get(0).getErrorCode());
+        validateTeambuildingDTO.setMessage(validates.get(0).getMessage());
+        validateTeambuildingDTO.setErrorDTOS(validates);
+        return validateTeambuildingDTO;
     }
 
     private List<ErrorDTO> validateTeambuildingEvent(EventDTO<EventTeamBuildingDetail> eventDTO) {
-        return null;
+        List<ErrorDTO> errors = new ArrayList<>();
+        ErrorDTO errorDTO = new ErrorDTO();
+
+        if (Objects.isNull(eventDTO)) {
+            errorDTO.setMessage(ErrorMessage.EVENT_CAN_NOT_NULL);
+            errorDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
+            errors.add(errorDTO);
+        }
+        if (Objects.isNull(eventDTO.getGroup())) {
+            errorDTO.setMessage(ErrorMessage.GROUP_CAN_NOT_NULL);
+            errorDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
+            errors.add(errorDTO);
+        }
+        if (Objects.isNull(eventDTO.getEventUserList())) {
+            errorDTO.setMessage(ErrorMessage.EVENT_USER_LIST_CAN_NOT_NULL);
+            errorDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
+            errors.add(errorDTO);
+        }
+        for (EventUserDTO eventUserDTO : eventDTO.getEventUserList()) {
+            if (eventUserDTO.getUser().getUsername() == null) {
+                ErrorDTO eventUserError = new ErrorDTO();
+                eventUserError.setMessage(ErrorMessage.USERNAME_CAN_NOT_NULL);
+                eventUserError.setErrorCode(ErrorCode.NOT_NULL.getValue());
+                errors.add(eventUserError);
+            }
+            if (eventUserDTO.getType() == null) {
+                ErrorDTO eventUserError = new ErrorDTO();
+                eventUserError.setMessage(ErrorMessage.MEMBER_TYPE_CAN_NOT_NULL);
+                eventUserError.setErrorCode(ErrorCode.NOT_NULL.getValue());
+                errors.add(errorDTO);
+            } else if ((eventUserDTO.getType() < EventUserType.ORGANIZER.getValue())
+                    || (eventUserDTO.getType() > EventUserType.THIRD_PLACE.getValue())) {
+                ErrorDTO eventUserError = new ErrorDTO();
+                eventUserError.setMessage(ErrorMessage.INVALIDATED_MEMBER_TYPE);
+                eventUserError.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+                errors.add(eventUserError);
+            }
+            if (!validateTeamBuildingUser(eventDTO)) {
+                ErrorDTO eventUserError = new ErrorDTO();
+                eventUserError.setErrorCode(ErrorCode.NOT_FIND.getValue());
+                eventUserError.setMessage(ErrorMessage.NOT_FIND_USER);
+                errors.add(eventUserError);
+            }
+        }
+        if (eventDTO.getName() == null) {
+            errorDTO.setMessage(ErrorMessage.EVENT_NAME_CAN_NOT_NULL);
+            errorDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
+            errors.add(errorDTO);
+        }
+        return errors;
     }
+
     private EventDTO confirmOrCancelEventClub(KpiEvent kpiEvent, EventDTO eventDTO) throws IOException {
         if (Objects.equals(eventDTO.getStatus(), StatusEvent.CONFIRMED.getValue())) {
             kpiEvent.setStatus(StatusEvent.CONFIRMED.getValue());
@@ -464,6 +531,7 @@ public class EventServiceImpl extends BaseService implements EventService {
         ObjectMapper mapper = new ObjectMapper();
 
         switch (GroupType.getGroupType(kpiGroup.getGroupType().getId())) {
+
             case SUPPORT:
 
                 BeanUtils.copyProperties(kpiGroup, groupDTO);
@@ -488,6 +556,13 @@ public class EventServiceImpl extends BaseService implements EventService {
                 EventSeminarDetail eventSeminarDetail = mapper.readValue(kpiGroup.getAdditionalConfig(), EventSeminarDetail.class);
 
                 groupDTO.setAdditionalConfig(eventSeminarDetail);
+                groupDTO.setGroupType(convertGroupTypeEntityToDTO(kpiGroup.getGroupType()));
+                break;
+            case TEAM_BUILDING:
+                BeanUtils.copyProperties(kpiGroup, groupDTO);
+                EventTeamBuildingDetail eventTeamBuildingDetail = mapper.readValue(kpiGroup.getAdditionalConfig(), EventTeamBuildingDetail.class);
+
+                groupDTO.setAdditionalConfig(eventTeamBuildingDetail);
                 groupDTO.setGroupType(convertGroupTypeEntityToDTO(kpiGroup.getGroupType()));
         }
 
@@ -999,4 +1074,22 @@ public class EventServiceImpl extends BaseService implements EventService {
         return true;
     }
 
+    private Boolean validateTeamBuildingUser(EventDTO<EventTeamBuildingDetail> eventDTO) {
+        List<UserDTO> ldapUserList = ldapUserService.getAllUsers();
+        List<UserDTO> ldapUserListClone = new ArrayList<>(ldapUserList);
+        List<KpiUser> dbUserList = (List<KpiUser>) kpiUserRepo.findAll();
+
+        ldapUserList.removeIf(userDTO -> dbUserList.stream()
+                .anyMatch(kpiUser -> kpiUser.getUserName().equals(userDTO.getUsername())));
+
+        ldapUserList.forEach(userDTO -> userService.registerUser(userDTO.getUsername()));
+
+        for (EventUserDTO eventUserDTO : eventDTO.getEventUserList()) {
+            if (!ldapUserListClone.stream().anyMatch(
+                    userDTO -> userDTO.getUsername().equals(eventUserDTO.getUser().getUsername()))) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

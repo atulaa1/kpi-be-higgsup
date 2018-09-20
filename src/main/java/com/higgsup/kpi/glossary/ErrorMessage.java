@@ -81,4 +81,5 @@ public final class ErrorMessage {
     public final static String CAN_NOT_CHANGE_STATUS_EVENT_LAST_MONTH = "can not change status event last month";
     public final static String INCORRECT_LATE_TIMES_DATA = "incorrect late times data at line ";
     public final static String EMAIL_NOT_IN_DATABASE = "email not in database at line ";
+    public final static String GROUP_TYPE_IS_INVALID = "group type is invalid";
 }

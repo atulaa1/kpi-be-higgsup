@@ -3,40 +3,43 @@ package com.higgsup.kpi.dto;
 import java.util.List;
 
 public class EventTeamBuildingDetail {
-    private List<EventUserDTO> organizers;
-    private List<EventUserDTO> firstPrize;
-    private List<EventUserDTO> secondPrize;
-    private List<EventUserDTO> thirstPrize;
+    private Float firstPrizePoint;
 
-    public List<EventUserDTO> getOrganizers() {
-        return organizers;
+    private Float secondPrizePoint;
+
+    private Float thirdPrizePoint;
+
+    private Float organizerPoint;
+
+    public Float getFirstPrizePoint() {
+        return firstPrizePoint;
     }
 
-    public void setOrganizers(List<EventUserDTO> organizers) {
-        this.organizers = organizers;
+    public void setFirstPrizePoint(Float firstPrizePoint) {
+        this.firstPrizePoint = firstPrizePoint;
     }
 
-    public List<EventUserDTO> getFirstPrize() {
-        return firstPrize;
+    public Float getSecondPrizePoint() {
+        return secondPrizePoint;
     }
 
-    public void setFirstPrize(List<EventUserDTO> firstPrize) {
-        this.firstPrize = firstPrize;
+    public void setSecondPrizePoint(Float secondPrizePoint) {
+        this.secondPrizePoint = secondPrizePoint;
     }
 
-    public List<EventUserDTO> getSecondPrize() {
-        return secondPrize;
+    public Float getThirdPrizePoint() {
+        return thirdPrizePoint;
     }
 
-    public void setSecondPrize(List<EventUserDTO> secondPrize) {
-        this.secondPrize = secondPrize;
+    public void setThirdPrizePoint(Float thirdPrizePoint) {
+        this.thirdPrizePoint = thirdPrizePoint;
     }
 
-    public List<EventUserDTO> getThirstPrize() {
-        return thirstPrize;
+    public Float getOrganizerPoint() {
+        return organizerPoint;
     }
 
-    public void setThirstPrize(List<EventUserDTO> thirstPrize) {
-        this.thirstPrize = thirstPrize;
+    public void setOrganizerPoint(Float organizerPoint) {
+        this.organizerPoint = organizerPoint;
     }
 }
