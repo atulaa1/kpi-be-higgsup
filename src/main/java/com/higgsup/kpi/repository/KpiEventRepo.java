@@ -12,4 +12,8 @@ public interface KpiEventRepo extends CrudRepository<KpiEvent, Integer> {
 
     @Query("SELECT e from KpiEvent e order by e.status asc, e.createdDate desc, e.updatedDate asc")
     List<KpiEvent> findAllEvent();
+
+    @Query(value = "select * from kpi_event as e join kpi_group as g on g.id = e.group_id" +
+            " where g.group_type_id = 3 order by e.created_date desc", nativeQuery = true)
+    List<KpiEvent> findTeamBuildingEvent();
 }

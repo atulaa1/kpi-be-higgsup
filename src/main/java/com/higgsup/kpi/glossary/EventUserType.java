@@ -3,7 +3,11 @@ package com.higgsup.kpi.glossary;
 public enum EventUserType {
     HOST(1, "host"),
     MEMBER(2, "member"),
-    LISTEN(3, "listen");
+    LISTEN(3, "listen"),
+    ORGANIZER(4, "organizer"),
+    FIRST_PLACE(5, "first place"),
+    SECOND_PLACE(6, "second place"),
+    THIRD_PLACE(7, "third place");
 
     private Integer value;
     private String content;
