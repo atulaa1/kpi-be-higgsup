@@ -69,6 +69,11 @@ public class EventServiceImpl extends BaseService implements EventService {
         return convertEventEntityToDTO(eventList);
     }
 
+    public List<EventDTO> getAllSeminarEvent() throws IOException{
+        List<KpiEvent> seminarEvents = kpiEventRepo.findSeminarEvent();
+        return convertEventEntityToDTO(seminarEvents);
+    }
+
     private List<EventDTO> convertEventEntityToDTO(List<KpiEvent> kpiEventEntities) throws IOException {
         List<EventDTO> eventDTOS = new ArrayList<>();
         if (!CollectionUtils.isEmpty(kpiEventEntities)) {
@@ -82,6 +87,7 @@ public class EventServiceImpl extends BaseService implements EventService {
                         break;
                     case SEMINAR:
                         eventDTOS.add(convertSeminarEntityToDTO(kpiEvent));
+                        break;
                 }
             }
         }
