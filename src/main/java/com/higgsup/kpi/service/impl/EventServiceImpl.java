@@ -27,10 +27,7 @@ import org.springframework.util.CollectionUtils;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -259,6 +256,14 @@ public class EventServiceImpl extends BaseService implements EventService {
         }
         return eventDTO;
     }
+
+    @Override
+    public SeminarSurveyDTO createSeminarSurvey(SeminarSurveyDTO seminarSurveyDTO) {
+
+
+        return null;
+    }
+
 
     private EventDTO confirmOrCancelEventClub(KpiEvent kpiEvent, EventDTO eventDTO) throws IOException {
         if (Objects.equals(eventDTO.getStatus(), StatusEvent.CONFIRMED.getValue())) {
