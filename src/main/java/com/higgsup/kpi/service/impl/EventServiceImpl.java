@@ -271,10 +271,8 @@ public class EventServiceImpl extends BaseService implements EventService {
             ObjectMapper mapper = new ObjectMapper();
 
             String teamBuildingEventConfig = mapper.writeValueAsString(eventDTO.getAdditionalConfig());
-            BeanUtils.copyProperties(eventDTO, kpiEvent);
+            BeanUtils.copyProperties(eventDTO, kpiEvent, "createdDate", "updatedDate");
             kpiEvent.setAdditionalConfig(teamBuildingEventConfig);
-
-            kpiEvent.setCreatedDate(new Timestamp(System.currentTimeMillis()));
 
             Optional<KpiGroup> kpiGroup = kpiGroupRepo.findById(eventDTO.getGroup().getId());
             if (kpiGroup.isPresent()) {
@@ -289,77 +287,130 @@ public class EventServiceImpl extends BaseService implements EventService {
                     validateTeambuildingDTO.setGroup(convertConfigEventToDTO(kpiEvent.getGroup()));
                     validateTeambuildingDTO.setEventUserList(eventDTO.getEventUserList());
                 } else {
-//                    group type khong khop
                     validateTeambuildingDTO.setMessage(ErrorMessage.GROUP_TYPE_IS_INVALID);
                     validateTeambuildingDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
                 }
 
 
             } else {
-                // khong ton tai group
                 validateTeambuildingDTO.setMessage(ErrorMessage.NOT_FIND_GROUP_TYPE);
                 validateTeambuildingDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
             }
         } else {
-            validateTeambuildingDTO.setMessage(ErrorMessage.NOT_FIND_SEMINAR);
-            validateTeambuildingDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
 
+            validateTeambuildingDTO.setErrorCode(validates.get(0).getErrorCode());
+            validateTeambuildingDTO.setMessage(validates.get(0).getMessage());
+            validateTeambuildingDTO.setErrorDTOS(validates);
         }
-        validateTeambuildingDTO.setErrorCode(validates.get(0).getErrorCode());
-        validateTeambuildingDTO.setMessage(validates.get(0).getMessage());
-        validateTeambuildingDTO.setErrorDTOS(validates);
+
         return validateTeambuildingDTO;
     }
 
     private List<ErrorDTO> validateTeambuildingEvent(EventDTO<EventTeamBuildingDetail> eventDTO) {
         List<ErrorDTO> errors = new ArrayList<>();
-        ErrorDTO errorDTO = new ErrorDTO();
+
+        List<EventUserDTO> firstPlaces = new ArrayList<>();
+        List<EventUserDTO> secondPlaces = new ArrayList<>();
+        List<EventUserDTO> thirdPlaces = new ArrayList<>();
+        List<EventUserDTO> organizer = new ArrayList<>();
 
         if (Objects.isNull(eventDTO)) {
-            errorDTO.setMessage(ErrorMessage.EVENT_CAN_NOT_NULL);
-            errorDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
-            errors.add(errorDTO);
+            ErrorDTO nullEvent = new ErrorDTO();
+            nullEvent.setMessage(ErrorMessage.EVENT_CAN_NOT_NULL);
+            nullEvent.setErrorCode(ErrorCode.NOT_NULL.getValue());
+            errors.add(nullEvent);
         }
         if (Objects.isNull(eventDTO.getGroup())) {
-            errorDTO.setMessage(ErrorMessage.GROUP_CAN_NOT_NULL);
-            errorDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
-            errors.add(errorDTO);
+            ErrorDTO nullGroup = new ErrorDTO();
+            nullGroup.setMessage(ErrorMessage.GROUP_CAN_NOT_NULL);
+            nullGroup.setErrorCode(ErrorCode.NOT_NULL.getValue());
+            errors.add(nullGroup);
         }
         if (Objects.isNull(eventDTO.getEventUserList())) {
-            errorDTO.setMessage(ErrorMessage.EVENT_USER_LIST_CAN_NOT_NULL);
-            errorDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
-            errors.add(errorDTO);
+            ErrorDTO nullEventUserList = new ErrorDTO();
+            nullEventUserList.setMessage(ErrorMessage.EVENT_USER_LIST_CAN_NOT_NULL);
+            nullEventUserList.setErrorCode(ErrorCode.NOT_NULL.getValue());
+            errors.add(nullEventUserList);
+        } else {
+            for (EventUserDTO eventUserDTO : eventDTO.getEventUserList()) {
+                if (Objects.isNull(eventUserDTO)) {
+                    ErrorDTO nullUser = new ErrorDTO();
+                    nullUser.setMessage(ErrorMessage.EVENT_USER_CAN_NOT_NULL);
+                    nullUser.setErrorCode(ErrorCode.NOT_NULL.getValue());
+                    errors.add(nullUser);
+                }
+
+                if (eventUserDTO.getUser().getUsername() == null) {
+                    ErrorDTO userError = new ErrorDTO();
+                    userError.setMessage(ErrorMessage.USERNAME_CAN_NOT_NULL);
+                    userError.setErrorCode(ErrorCode.NOT_NULL.getValue());
+                    errors.add(userError);
+                } else if (!validateTeamBuildingUser(eventDTO)) {
+                    ErrorDTO userError = new ErrorDTO();
+                    userError.setErrorCode(ErrorCode.NOT_FIND.getValue());
+                    userError.setMessage(ErrorMessage.NOT_FIND_USER);
+                    errors.add(userError);
+                }
+
+                ErrorDTO eventUserTypeError = new ErrorDTO();
+                if (eventUserDTO.getType() == null) {
+                    eventUserTypeError.setMessage(ErrorMessage.MEMBER_TYPE_CAN_NOT_NULL);
+                    eventUserTypeError.setErrorCode(ErrorCode.NOT_NULL.getValue());
+                    errors.add(eventUserTypeError);
+                } else if ((eventUserDTO.getType() < EventUserType.ORGANIZER.getValue())
+                        || (eventUserDTO.getType() > EventUserType.THIRD_PLACE.getValue())) {
+                    eventUserTypeError.setMessage(ErrorMessage.INVALIDATED_MEMBER_TYPE);
+                    eventUserTypeError.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+                    errors.add(eventUserTypeError);
+                } else {
+                    if (eventUserDTO.getType() == EventUserType.FIRST_PLACE.getValue()) {
+                        firstPlaces.add(eventUserDTO);
+                    } else if (eventUserDTO.getType() == EventUserType.SECOND_PLACE.getValue()) {
+                        secondPlaces.add(eventUserDTO);
+                    } else if (eventUserDTO.getType() == EventUserType.THIRD_PLACE.getValue()) {
+                        thirdPlaces.add(eventUserDTO);
+                    } else {
+                        organizer.add(eventUserDTO);
+                    }
+                }
+            }
         }
-        for (EventUserDTO eventUserDTO : eventDTO.getEventUserList()) {
-            if (eventUserDTO.getUser().getUsername() == null) {
-                ErrorDTO eventUserError = new ErrorDTO();
-                eventUserError.setMessage(ErrorMessage.USERNAME_CAN_NOT_NULL);
-                eventUserError.setErrorCode(ErrorCode.NOT_NULL.getValue());
-                errors.add(eventUserError);
-            }
-            if (eventUserDTO.getType() == null) {
-                ErrorDTO eventUserError = new ErrorDTO();
-                eventUserError.setMessage(ErrorMessage.MEMBER_TYPE_CAN_NOT_NULL);
-                eventUserError.setErrorCode(ErrorCode.NOT_NULL.getValue());
-                errors.add(errorDTO);
-            } else if ((eventUserDTO.getType() < EventUserType.ORGANIZER.getValue())
-                    || (eventUserDTO.getType() > EventUserType.THIRD_PLACE.getValue())) {
-                ErrorDTO eventUserError = new ErrorDTO();
-                eventUserError.setMessage(ErrorMessage.INVALIDATED_MEMBER_TYPE);
-                eventUserError.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-                errors.add(eventUserError);
-            }
-            if (!validateTeamBuildingUser(eventDTO)) {
-                ErrorDTO eventUserError = new ErrorDTO();
-                eventUserError.setErrorCode(ErrorCode.NOT_FIND.getValue());
-                eventUserError.setMessage(ErrorMessage.NOT_FIND_USER);
-                errors.add(eventUserError);
-            }
+
+        if (firstPlaces.size() == 0) {
+            ErrorDTO nullFirstPlaceError = new ErrorDTO();
+            nullFirstPlaceError.setErrorCode(ErrorCode.NOT_NULL.getValue());
+            nullFirstPlaceError.setMessage(ErrorMessage.FIRST_PLACE_CAN_NOT_NULL);
+            errors.add(nullFirstPlaceError);
+        }
+        if (secondPlaces.size() == 0) {
+            ErrorDTO nullSecondPlaceError = new ErrorDTO();
+            nullSecondPlaceError.setErrorCode(ErrorCode.NOT_NULL.getValue());
+            nullSecondPlaceError.setMessage(ErrorMessage.SECOND_PLACE_CAN_NOT_NULL);
+            errors.add(nullSecondPlaceError);
+        }
+        if (thirdPlaces.size() == 0) {
+            ErrorDTO nullThirdPlaceError = new ErrorDTO();
+            nullThirdPlaceError.setErrorCode(ErrorCode.NOT_NULL.getValue());
+            nullThirdPlaceError.setMessage(ErrorMessage.THIRD_PLACE_CAN_NOT_NULL);
+            errors.add(nullThirdPlaceError);
+        }
+        if (organizer.size() == 0) {
+            ErrorDTO nullOrganizer = new ErrorDTO();
+            nullOrganizer.setErrorCode(ErrorCode.NOT_NULL.getValue());
+            nullOrganizer.setMessage(ErrorMessage.ORGANIZER_CAN_NOT_NULL);
+            errors.add(nullOrganizer);
         }
         if (eventDTO.getName() == null) {
-            errorDTO.setMessage(ErrorMessage.EVENT_NAME_CAN_NOT_NULL);
-            errorDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
-            errors.add(errorDTO);
+            ErrorDTO nullEventName = new ErrorDTO();
+            nullEventName.setMessage(ErrorMessage.EVENT_NAME_CAN_NOT_NULL);
+            nullEventName.setErrorCode(ErrorCode.NOT_NULL.getValue());
+            errors.add(nullEventName);
+        }
+        if (eventDTO.getBeginDate() == null) {
+            ErrorDTO nullBeginDate = new ErrorDTO();
+            nullBeginDate.setMessage(ErrorMessage.BEGIN_DATE_CAN_NOT_NULL);
+            nullBeginDate.setErrorCode(ErrorCode.NOT_NULL.getValue());
+            errors.add(nullBeginDate);
         }
         return errors;
     }
