@@ -2413,6 +2413,129 @@
             "description": "Not Found"
           }
         }
+      },
+      "get": {
+        "tags": [
+          "event-controller"
+        ],
+        "summary": "Get all seminar events",
+        "operationId": "getAllSeminarUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "status_code : 200. Meaning: Thành công \n status_code : 930. Message: Error IOException. Meaning: Lỗi IOException",
+            "schema": {
+              "type": "object",
+              "required": [
+                "status_code",
+                "data"
+              ],
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "name",
+                      "status",
+                      "createdDate",
+                      "updatedDate"
+                    ],
+                    "properties": {
+                      "id": {
+                        "type": "number"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "status": {
+                        "type": "number"
+                      },
+                      "createdDate": {
+                        "type": "string"
+                      },
+                      "updatedDate": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "message": {
+                  "type": "string"
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "errorCode": {
+                        "type": "number"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "status_code": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "example": {
+                "data": [
+                  {
+                    "id": 9,
+                    "name": "seminar test 2",
+                    "status": 1,
+                    "createdDate": "19-09-2018 08:54",
+                    "updatedDate": "21-09-2018 08:54",
+                  },
+                  {
+                    "id": 10,
+                    "name": "seminar test 3",
+                    "status": 1,
+                    "createdDate": "21-09-2018 08:54",
+                    "updatedDate": "21-09-2018 08:54",
+                  },
+                  {
+                    "id": 8,
+                    "name": "seminar test 1",
+                    "status": 2,
+                    "createdDate": "18-09-2018 08:54",
+                    "updatedDate": "21-09-2018 08:54",
+                  },
+                  {
+                    "id": 7,
+                    "name": "seminar test 6",
+                    "status": 2,
+                    "createdDate": "20-09-2018 17:44",
+                    "updatedDate": "20-09-2018 17:44",
+                  },
+                  {
+                    "id": 15,
+                    "name": "seminar test 8",
+                    "status": 1,
+                    "createdDate": "21-08-2018 08:54",
+                    "updatedDate": "21-08-2018 08:54",
+                  }
+                ],
+                "status_code": 200
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
       }
     },
     "/api/events/seminar/{id}": {
