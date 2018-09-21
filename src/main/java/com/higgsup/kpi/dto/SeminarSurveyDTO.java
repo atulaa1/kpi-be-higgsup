@@ -1,23 +1,28 @@
 package com.higgsup.kpi.dto;
 
-import java.util.Map;
 
 public class SeminarSurveyDTO extends BaseDTO {
 
-    private EventUserDTO evaluatingUsername;
+    private UserDTO evaluatingUsername;
+
+    private UserDTO evaluatedUsername;
 
     private Integer rating;
 
-    private EventDTO event;
-
-    private Map<EventUserDTO, Integer> hostEvaluation;
-
-    public EventUserDTO getEvaluatingUsername() {
+    public UserDTO getEvaluatingUsername() {
         return evaluatingUsername;
     }
 
-    public void setEvaluatingUsername(EventUserDTO evaluatingUsername) {
+    public void setEvaluatingUsername(UserDTO evaluatingUsername) {
         this.evaluatingUsername = evaluatingUsername;
+    }
+
+    public UserDTO getEvaluatedUsername() {
+        return evaluatedUsername;
+    }
+
+    public void setEvaluatedUsername(UserDTO evaluatedUsername) {
+        this.evaluatedUsername = evaluatedUsername;
     }
 
     public Integer getRating() {
@@ -26,21 +31,5 @@ public class SeminarSurveyDTO extends BaseDTO {
 
     public void setRating(Integer rating) {
         this.rating = rating;
-    }
-
-    public EventDTO getEvent() {
-        return event;
-    }
-
-    public void setEvent(EventDTO event) {
-        this.event = event;
-    }
-
-    public Map<EventUserDTO, Integer> getHostEvaluation() {
-        return hostEvaluation;
-    }
-
-    public void setHostEvaluation(Map<EventUserDTO, Integer> hostEvaluation) {
-        this.hostEvaluation = hostEvaluation;
     }
 }

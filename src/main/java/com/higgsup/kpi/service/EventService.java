@@ -25,5 +25,5 @@ public interface EventService {
 
     EventDTO confirmOrCancelEvent(EventDTO eventDTO) throws IOException, NoSuchFieldException, IllegalAccessException;
 
-    SeminarSurveyDTO createSeminarSurvey(SeminarSurveyDTO seminarSurveyDTO);
+    EventDTO createSeminarSurvey(EventDTO<List<SeminarSurveyDTO>> seminarSurveyDTO);
 }

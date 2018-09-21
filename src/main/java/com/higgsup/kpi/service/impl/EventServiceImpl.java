@@ -11,7 +11,6 @@ import com.higgsup.kpi.service.BaseService;
 import com.higgsup.kpi.service.EventService;
 import com.higgsup.kpi.service.LdapUserService;
 import com.higgsup.kpi.service.UserService;
-import io.swagger.models.auth.In;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -259,22 +258,44 @@ public class EventServiceImpl extends BaseService implements EventService {
     }
 
     @Override
-    public SeminarSurveyDTO createSeminarSurvey(SeminarSurveyDTO seminarSurveyDTO) {
-        SeminarSurveyDTO validatedSeminarSurveyDTO = new SeminarSurveyDTO();
-        Integer eventId = seminarSurveyDTO.getEvent().getId();
-        List<EventUserDTO> eventUserDTOList = convertListEventUserEntityToDTO(kpiseminarSurveyRepo
-                .findByUserType(EventUserType.HOST.getValue(), eventId));
+    public EventDTO createSeminarSurvey(EventDTO<List<SeminarSurveyDTO>> seminarSurveyDTO) {
+        UserDTO userDTO = new UserDTO();
+
+        EventDTO<List<SeminarSurveyDTO>> seminarSurveyDTOResponse = new EventDTO<>();
+
+        List<SeminarSurveyDTO> seminarSurveyDTOS = new ArrayList<>();
+
+        SeminarSurveyDTO seminarSurvey = new SeminarSurveyDTO();
+
+        List<KpiEventUser> kpiEventHostList = kpiseminarSurveyRepo.findByUserType(EventUserType.HOST.getValue(), seminarSurveyDTO.getId());
+
+        List<EventUserDTO> eventHostDTOList = convertListEventUserEntityToDTO(kpiEventHostList);
+
+        List<UserDTO> hostDTOList = eventHostDTOList.stream().map(EventUserDTO::getUser).collect(Collectors.toList());
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        for (UserDTO hostDTO : hostDTOList) {
+            KpiUser kpiUser = kpiUserRepo.findByUserName(authentication.getCredentials().toString());
+            BeanUtils.copyProperties(kpiUser, userDTO);
+            seminarSurvey.setEvaluatingUsername(userDTO);
+            seminarSurvey.setEvaluatedUsername(hostDTO);
+
+            seminarSurveyDTOS.add(seminarSurvey);
+        }
+
+        seminarSurveyDTOResponse.setAdditionalConfig(seminarSurveyDTOS);
+
+        // kpiseminarSurveyRepo.save();
+        return seminarSurveyDTOResponse;
+    }
 
 
+    private KpiEventUser convertEventUserEntityToDTO(EventUserDTO eventUserDTO) {
+        KpiEventUser kpiEventUser = new KpiEventUser();
+        BeanUtils.copyProperties(eventUserDTO, kpiEventUser);
 
-
-
-
-
-
-
-
-        return null;
+        return kpiEventUser;
     }
 
 

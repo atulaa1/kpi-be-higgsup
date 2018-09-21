@@ -225,10 +225,10 @@ public class EventController {
 
     @PostMapping("/seminar/survey")
     @PreAuthorize("hasRole('EMPLOYEE')")
-    public Response createSeminarSurvey(@RequestBody SeminarSurveyDTO seminarSurveyDTO) {
-        Response<SeminarSurveyDTO> response = new Response<>(HttpStatus.OK.value());
+    public Response createSeminarSurvey(@RequestBody(required = false) EventDTO<List<SeminarSurveyDTO>> seminarSurveyDTO) {
+        Response<EventDTO> response = new Response<>(HttpStatus.OK.value());
         try {
-            SeminarSurveyDTO seminarSurveyDTOResponse = eventService.createSeminarSurvey(seminarSurveyDTO);
+            EventDTO seminarSurveyDTOResponse = eventService.createSeminarSurvey(seminarSurveyDTO);
 
             if (Objects.nonNull(seminarSurveyDTOResponse.getErrorCode())) {
                 response.setStatus(seminarSurveyDTOResponse.getErrorCode());
@@ -243,4 +243,5 @@ public class EventController {
         }
         return response;
     }
+
 }
