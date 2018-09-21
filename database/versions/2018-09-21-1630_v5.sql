@@ -136,7 +136,7 @@ CREATE TABLE `kpi_latetime_check` (
 CREATE TABLE kpi_support
 (
   id INT PRIMARY KEY AUTO_INCREMENT,
-  task VARCHAR(500),
+  task_name VARCHAR(500),
   task_point FLOAT,
   created_date      DATETIME     DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
