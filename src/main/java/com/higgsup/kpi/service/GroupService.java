@@ -15,7 +15,7 @@ public interface GroupService {
 
     SupportDTO createTaskSupport(SupportDTO groupDTO) throws JsonProcessingException;
 
-    SupportDTO updateTaskSupport(SupportDTO groupDTO) throws JsonProcessingException;
+    SupportDTO updateTaskSupport(SupportDTO supportDTO) throws JsonProcessingException;
 
     GroupDTO updateSupport(GroupDTO<GroupSupportDetail> groupDTO) throws JsonProcessingException;
 

@@ -62,10 +62,10 @@ public class GroupController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/groups/support-new/task")
-    public Response createSupportNewTask(@RequestBody SupportDTO groupDTO) {
+    public Response createSupportNewTask(@RequestBody SupportDTO supportDTO) {
         Response<SupportDTO> response = new Response<>(HttpStatus.OK.value());
         try {
-            SupportDTO groupDTOResponse = groupService.createTaskSupport(groupDTO);
+            SupportDTO groupDTOResponse = groupService.createTaskSupport(supportDTO);
             if (Objects.nonNull(groupDTOResponse.getErrorCode())) {
                 response.setStatus(groupDTOResponse.getErrorCode());
                 response.setMessage(groupDTOResponse.getMessage());
@@ -82,11 +82,11 @@ public class GroupController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/groups/support-new/task/{id}")
-    public Response updateSupportNewTask(@PathVariable Integer id ,@RequestBody SupportDTO groupDTO) {
+    public Response updateSupportNewTask(@PathVariable Integer id ,@RequestBody SupportDTO supportDTO) {
         Response<SupportDTO> response = new Response<>(HttpStatus.OK.value());
         try {
-            groupDTO.setId(id);
-            SupportDTO groupDTOResponse = groupService.updateTaskSupport(groupDTO);
+            supportDTO.setId(id);
+            SupportDTO groupDTOResponse = groupService.updateTaskSupport(supportDTO);
             if (Objects.nonNull(groupDTOResponse.getErrorCode())) {
                 response.setStatus(groupDTOResponse.getErrorCode());
                 response.setMessage(groupDTOResponse.getMessage());
