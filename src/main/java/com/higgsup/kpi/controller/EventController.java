@@ -78,6 +78,27 @@ public class EventController {
         return response;
     }
 
+
+    @PostMapping("/support-new")
+    @PreAuthorize("hasRole('EMPLOYEE')")
+    public Response createSupportNew(@RequestBody EventDTO<List<EventSupportDTO>> supportDTO) {
+        Response response = new Response<>(HttpStatus.OK.value());
+        EventDTO eventDTO = null;
+        try {
+            eventDTO = eventService.createSupportEventNew(supportDTO);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (Objects.nonNull(eventDTO.getErrorCode())) {
+            response.setStatus(eventDTO.getErrorCode());
+            response.setMessage(eventDTO.getMessage());
+            response.setErrors(eventDTO.getErrorDTOS());
+        } else {
+            response.setData(eventDTO);
+        }
+        return response;
+    }
+
     @PutMapping("/support/{id}")
     @PreAuthorize("hasRole('EMPLOYEE')")
     public Response updateSupport(@PathVariable Integer id, @RequestBody EventDTO<List<EventSupportDetail>> supportDTO) {
@@ -85,6 +106,26 @@ public class EventController {
         try {
             supportDTO.setId(id);
             EventDTO eventDTO = eventService.updateSupportEvent(supportDTO);
+            if (Objects.nonNull(eventDTO.getErrorCode())) {
+                response.setStatus(eventDTO.getErrorCode());
+                response.setMessage(eventDTO.getMessage());
+                response.setErrors(eventDTO.getErrorDTOS());
+            } else {
+                response.setData(eventDTO);
+            }
+        } catch (NoSuchFieldException | IOException e) {
+            response.setStatus(ErrorCode.SYSTEM_ERROR.getValue());
+            response.setMessage(ErrorCode.SYSTEM_ERROR.getDescription());
+        }
+        return response;
+    }
+    @PutMapping("/support-new/{id}")
+    @PreAuthorize("hasRole('EMPLOYEE')")
+    public Response updateSupportNew(@PathVariable Integer id, @RequestBody EventDTO<List<EventSupportDTO>> supportDTO) {
+        Response response = new Response<>(HttpStatus.OK.value());
+        try {
+            supportDTO.setId(id);
+            EventDTO eventDTO = eventService.updateSupportEventNew(supportDTO);
             if (Objects.nonNull(eventDTO.getErrorCode())) {
                 response.setStatus(eventDTO.getErrorCode());
                 response.setMessage(eventDTO.getMessage());
@@ -206,6 +247,31 @@ public class EventController {
             if (Objects.nonNull(eventParam.getStatus())) {
                 eventParam.setId(id);
                 EventDTO eventDTO = eventService.confirmOrCancelEvent(eventParam);
+                if (Objects.nonNull(eventDTO.getErrorCode())) {
+                    response.setStatus(eventDTO.getErrorCode());
+                    response.setMessage(eventDTO.getMessage());
+                } else {
+                    response.setData(eventDTO);
+                }
+            } else {
+                response.setStatus(ErrorCode.NOT_NULL.getValue());
+                response.setMessage(ErrorMessage.EVENT_STATUS_CAN_NOT_NULL);
+            }
+        } catch (Exception e) {
+            response.setStatus(ErrorCode.SYSTEM_ERROR.getValue());
+            response.setMessage(ErrorCode.SYSTEM_ERROR.getDescription());
+        }
+        return response;
+    }
+
+    @PutMapping("/{id}/status/support-new")
+    @PreAuthorize("hasRole('ADMIN')")
+    public Response confirmOrCancelEventSupportNew(@PathVariable Integer id, @RequestBody EventDTO eventParam) {
+        Response response = new Response<>(HttpStatus.OK.value());
+        try {
+            if (Objects.nonNull(eventParam.getStatus())) {
+                eventParam.setId(id);
+                EventDTO eventDTO = eventService.confirmOrCancelEventSupportNew(eventParam);
                 if (Objects.nonNull(eventDTO.getErrorCode())) {
                     response.setStatus(eventDTO.getErrorCode());
                     response.setMessage(eventDTO.getMessage());

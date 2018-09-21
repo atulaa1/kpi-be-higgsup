@@ -5,6 +5,7 @@ import com.higgsup.kpi.configure.BaseConfiguration;
 import com.higgsup.kpi.dto.*;
 import com.higgsup.kpi.glossary.ErrorCode;
 import com.higgsup.kpi.glossary.ErrorMessage;
+import com.higgsup.kpi.repository.KpiMonthRepo;
 import com.higgsup.kpi.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -249,6 +250,20 @@ public class GroupController {
         Response<List<GroupDTO>> response = new Response<>(HttpStatus.OK.value());
         try {
             List<GroupDTO> groupDTOS = groupService.getAllGroup();
+            response.setData(groupDTOS);
+        } catch (IOException e) {
+            response.setStatus(ErrorCode.ERROR_IO_EXCEPTION.getValue());
+            response.setMessage(ErrorMessage.ERROR_IO_EXCEPTION);
+        }
+        return response;
+    }
+
+    @PreAuthorize("hasRole('EMPLOYEE')")
+    @RequestMapping(value = "/groups-new-support", method = RequestMethod.GET)
+    public Response getAllGroupNewSupport() {
+        Response<List<GroupDTO>> response = new Response<>(HttpStatus.OK.value());
+        try {
+            List<GroupDTO> groupDTOS = groupService.getAllGroupNewSupport();
             response.setData(groupDTOS);
         } catch (IOException e) {
             response.setStatus(ErrorCode.ERROR_IO_EXCEPTION.getValue());

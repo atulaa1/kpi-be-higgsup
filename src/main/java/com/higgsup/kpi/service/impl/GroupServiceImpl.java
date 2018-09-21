@@ -294,7 +294,7 @@ public class GroupServiceImpl implements GroupService {
     public GroupDTO createSupportNew(GroupDTO<List<SupportDTO>> groupDTO) throws JsonProcessingException {
         Optional<KpiGroup> groupOptional = Optional.ofNullable(kpiGroupRepo.findGroupTypeId(GroupType.SUPPORT.getId()));
         if (!groupOptional.isPresent()) {
-            List<ErrorDTO> errors = validateCreateSupport(groupDTO);
+            List<ErrorDTO> errors =  validateCreateSupport(groupDTO);
             if (CollectionUtils.isEmpty(errors)) {
                 KpiGroup kpiGroup = new KpiGroup();
                 BeanUtils.copyProperties(groupDTO, kpiGroup, "createdDate", "groupType", "additionalConfig");
@@ -649,6 +649,12 @@ public class GroupServiceImpl implements GroupService {
         return convertGroupsEntityToDTO(groupList);
     }
 
+    @Override
+    public List<GroupDTO> getAllGroupNewSupport() throws IOException {
+        List<KpiGroup> groupList = kpiGroupRepo.findAllGroup();
+        return convertGroupsEntityToDTONewSupport(groupList);
+    }
+
     private List<GroupDTO> convertGroupsEntityToDTO(List<KpiGroup> groupList) throws IOException {
         List<GroupDTO> groupDTOS = new ArrayList<>();
         if (!CollectionUtils.isEmpty(groupList)) {
@@ -672,6 +678,29 @@ public class GroupServiceImpl implements GroupService {
         return groupDTOS;
     }
 
+    private List<GroupDTO> convertGroupsEntityToDTONewSupport(List<KpiGroup> groupList) throws IOException {
+        List<GroupDTO> groupDTOS = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(groupList)) {
+            for (KpiGroup kpiGroup : groupList) {
+                switch (GroupType.getGroupType(kpiGroup.getGroupType().getId())) {
+                    case SEMINAR:
+                        groupDTOS.add(convertConfigSeminarToDTO(kpiGroup));
+                        break;
+                    case CLUB:
+                        groupDTOS.add(convertConfigClubToDTO(kpiGroup));
+                        break;
+                    case TEAM_BUILDING:
+                        groupDTOS.add(convertConfigTeamBuildingToDTO(kpiGroup));
+                        break;
+                    case SUPPORT:
+                        groupDTOS.add(convertConfigSupportToDTONewSupport(kpiGroup));
+                        break;
+                }
+            }
+        }
+        return groupDTOS;
+    }
+
     private GroupDTO convertConfigSupportToDTO(KpiGroup kpiGroup) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         GroupDTO<GroupSupportDetail> groupSupportDTO = new GroupDTO<>();
@@ -681,6 +710,18 @@ public class GroupServiceImpl implements GroupService {
                 GroupSupportDetail.class);
 
         groupSupportDTO.setAdditionalConfig(groupSeminarDetail);
+        groupSupportDTO.setGroupType(convertGroupTypeEntityToDTO(kpiGroup.getGroupType()));
+        return groupSupportDTO;
+    }
+
+    private GroupDTO convertConfigSupportToDTONewSupport(KpiGroup kpiGroup) throws IOException {
+        GroupDTO<List<SupportDTO>> groupSupportDTO = new GroupDTO<>();
+
+        BeanUtils.copyProperties(kpiGroup, groupSupportDTO);
+        List<KpiSupport> kpiSupports = (List<KpiSupport>) kpiSupportRepo.findAll();
+
+        groupSupportDTO.setAdditionalConfig(convertListSupportEntityToDTO(kpiSupports));
+
         groupSupportDTO.setGroupType(convertGroupTypeEntityToDTO(kpiGroup.getGroupType()));
         return groupSupportDTO;
     }
