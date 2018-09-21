@@ -25,6 +25,6 @@ public interface KpiEventRepo extends CrudRepository<KpiEvent, Integer> {
 
     @Query(value = "select * from kpi_event as e join kpi_group as g on g.id = e.group_id " +
             "where g.group_type_id = 1 " +
-            "order by e.created_date desc, e.status asc, e.updated_date desc", nativeQuery = true)
+            "order by e.created_date desc", nativeQuery = true)
     List<KpiEvent> findSeminarEvent();
 }
