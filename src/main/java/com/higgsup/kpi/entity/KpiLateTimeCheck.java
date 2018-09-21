@@ -1,7 +1,5 @@
 package com.higgsup.kpi.entity;
 
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 import javax.persistence.*;
 import java.io.Serializable;
 
