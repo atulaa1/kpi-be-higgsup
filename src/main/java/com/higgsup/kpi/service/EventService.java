@@ -1,9 +1,6 @@
 package com.higgsup.kpi.service;
 
-import com.higgsup.kpi.dto.EventClubDetail;
-import com.higgsup.kpi.dto.EventDTO;
-import com.higgsup.kpi.dto.EventSeminarDetail;
-import com.higgsup.kpi.dto.EventSupportDetail;
+import com.higgsup.kpi.dto.*;
 
 import java.io.IOException;
 import java.util.List;

@@ -1,5 +1,4 @@
 package com.higgsup.kpi.dto;
-import java.util.List;
 
 public class EventTeamBuildingDetail{
     private Float firstPrizePoint;
@@ -9,14 +8,6 @@ public class EventTeamBuildingDetail{
     private Float thirdPrizePoint;
 
     private Float organizerPoint;
-
-    public Float getOrganizerPoint() {
-        return organizerPoint;
-    }
-
-    public void setOrganizerPoint(Float organizersPoint) {
-        this.organizerPoint = organizersPoint;
-    }
 
     public Float getFirstPrizePoint() {
         return firstPrizePoint;
