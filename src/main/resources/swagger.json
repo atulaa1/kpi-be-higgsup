@@ -2437,6 +2437,14 @@
                   "type": "array",
                   "items": {
                     "type": "object",
+                    "required": [
+                      "id",
+                      "name",
+                      "createdDate",
+                      "updatedDate",
+                      "beginDate",
+                      "endDate"
+                    ],
                     "properties": {
                       "id": {
                         "type": "number"

@@ -10,7 +10,7 @@ public class EventUserDTO {
 
     private Integer type;
 
-    private Integer seminarSurveyStatus;
+    private Integer status;
 
     public UserDTO getUser() {
         return user;
@@ -36,11 +36,11 @@ public class EventUserDTO {
         this.type = type;
     }
 
-    public Integer getSeminarSurveyStatus() {
-        return seminarSurveyStatus;
+    public Integer getStatus() {
+        return status;
     }
 
-    public void setSeminarSurveyStatus(Integer seminarSurveyStatus) {
-        this.seminarSurveyStatus = seminarSurveyStatus;
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

@@ -483,7 +483,7 @@ public class EventServiceImpl extends BaseService implements EventService {
                     BeanUtils.copyProperties(userDB, userDTO);
                     userDTO.setUsername(userDB.getUserName());
                     eventUserDTO.setUser(userDTO);
-                    eventUserDTO.setSeminarSurveyStatus(kpiEventUser.getSeminarSurveyStatus());
+                    eventUserDTO.setStatus(kpiEventUser.getStatus());
 
                     eventUserDTOS.add(eventUserDTO);
                 }

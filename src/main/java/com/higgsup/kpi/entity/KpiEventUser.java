@@ -23,7 +23,7 @@ public class KpiEventUser implements Serializable {
     private Integer type;
 
     @Column(name = "status")
-    private Integer seminarSurveyStatus;
+    private Integer status;
 
     public KpiEventUserPK getKpiEventUserPK() {
         return kpiEventUserPK;
@@ -57,11 +57,11 @@ public class KpiEventUser implements Serializable {
         this.type = type;
     }
 
-    public Integer getSeminarSurveyStatus() {
-        return seminarSurveyStatus;
+    public Integer getStatus() {
+        return status;
     }
 
-    public void setSeminarSurveyStatus(Integer seminarSurveyStatus) {
-        this.seminarSurveyStatus = seminarSurveyStatus;
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }
