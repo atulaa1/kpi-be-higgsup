@@ -1424,6 +1424,409 @@
         }
       }
     },
+    "/api/events/support-new": {
+      "post": {
+        "tags": [
+          "event-controller"
+        ],
+        "summary": "createSupport",
+        "operationId": "createSupportUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "supportDTO",
+            "description": "supportDTO",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "beginDate",
+                "group",
+                "additionalConfig"
+              ],
+              "properties": {
+                "beginDate": {
+                  "type": "string"
+                },
+                "group": {
+                  "type": "object",
+                  "required": [
+                    "id"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "additionalConfig": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "quantity"
+                    ],
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "quantity": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "beginDate": "10-09-2018 11:00",
+                "group": {
+                  "id": 2
+                },
+                "additionalConfig": [
+                  {
+                    "id": 1,
+                    "quantity": 12
+                  },
+                  {
+                    "id": 2,
+                    "quantity": 12
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "status_code : 200. Meaning: Thành công \n status_code : 901 \n Message: start date cannot null. Meaning: ngày bắt đầu không được null. \n Message: group cannot null. Meaning: group không thể rỗng \n Message: group ID can not be null. Meaning: ID group không được rỗng \n Message: group ID not is support. Meaning: ID group không phải là support \n Message: list support can not empty. Meaning: danh sách support không được rỗng \n Message: name at index {index} can not null. Meaning: tên tại 1 không thể rỗng \n Message: name support at index {index} not incorrect. Meaning: tên support tại 1 không chính xác \n Message: quantity at index {index} can not null. Meaning: số lượng tại 1 không thể rỗng \n Message: quantity at index {index} can less one. Meaning: số lượng tại 1 không thể nhỏ hơn 1 \n status_code : 999 \n Message: system error. Meaning: Lỗi hệ thống , liên hệ admin.",
+            "schema": {
+              "type": "object",
+              "required": [
+                "status_code"
+              ],
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "name",
+                    "status",
+                    "createdDate",
+                    "beginDate",
+                    "group",
+                    "eventUserList",
+                    "additionalConfig"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "address": {
+                      "type": "string"
+                    },
+                    "createdDate": {
+                      "type": "string"
+                    },
+                    "updatedDate": {
+                      "type": "string"
+                    },
+                    "beginDate": {
+                      "type": "string"
+                    },
+                    "endDate": {
+                      "type": "string"
+                    },
+                    "group": {
+                      "type": "object",
+                      "required": [
+                        "id",
+                        "name",
+                        "status",
+                        "groupType",
+                        "createdDate",
+                        "additionalConfig"
+                      ],
+                      "properties": {
+                        "id": {
+                          "type": "number"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "groupType": {
+                          "type": "object",
+                          "required": [
+                            "id",
+                            "name"
+                          ],
+                          "properties": {
+                            "id": {
+                              "type": "number"
+                            },
+                            "name": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "createdDate": {
+                          "type": "string"
+                        },
+                        "additionalConfig": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "required": [
+                              "id",
+                              "taskName",
+                              "point",
+                              "createdDate"
+                            ],
+                            "properties": {
+                              "id": {
+                                "type": "number"
+                              },
+                              "taskName": {
+                                "type": "number"
+                              },
+                              "point": {
+                                "type": "number"
+                              },
+                              "createdDate": {
+                                "type": "number"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "eventUserList": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "user": {
+                            "type": "object",
+                            "properties": {
+                              "user": {
+                                "type": "object",
+                                "properties": {
+                                  "username": {
+                                    "type": "string"
+                                  },
+                                  "lastName": {
+                                    "type": "string"
+                                  },
+                                  "firstName": {
+                                    "type": "string"
+                                  },
+                                  "fullName": {
+                                    "type": "string"
+                                  },
+                                  "email": {
+                                    "type": "string"
+                                  },
+                                  "userRole": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "avatar": {
+                                    "type": "string"
+                                  },
+                                  "birthday": {
+                                    "type": "date"
+                                  },
+                                  "numberPhone": {
+                                    "type": "string"
+                                  },
+                                  "gmail": {
+                                    "type": "string"
+                                  },
+                                  "skype": {
+                                    "type": "string"
+                                  },
+                                  "dateStartWork": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "event": {
+                                "type": "object"
+                              },
+                              "type": {
+                                "type": "number"
+                              }
+                            }
+                          },
+                          "event": {
+                            "type": "object"
+                          },
+                          "type": {
+                            "type": "number"
+                          }
+                        }
+                      }
+                    },
+                    "additionalConfig": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "id",
+                          "taskName",
+                          "point",
+                          "createdDate"
+                        ],
+                        "properties": {
+                          "id": {
+                            "type": "number"
+                          },
+                          "taskName": {
+                            "type": "number"
+                          },
+                          "point": {
+                            "type": "number"
+                          },
+                          "createdDate": {
+                            "type": "number"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "message": {
+                  "type": "string"
+                },
+                "status_code": {
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "errorCode": {
+                        "type": "number"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "data": {
+                  "id": 2,
+                  "name": "support chung",
+                  "description": null,
+                  "status": 1,
+                  "address": null,
+                  "createdDate": "21-09-2018 17:48",
+                  "updatedDate": "21-09-2018 17:48",
+                  "beginDate": "18-09-2018 12:55",
+                  "endDate": null,
+                  "group": {
+                    "id": 1,
+                    "name": "support chung",
+                    "description": null,
+                    "groupType": {
+                      "id": 4,
+                      "name": "Support chung"
+                    },
+                    "createdDate": "21-09-2018 17:12",
+                    "additionalConfig": [
+                      {
+                        "id": 1,
+                        "taskName": "rọn rác",
+                        "point": 1,
+                        "createdDate": "21-09-2018 17:12"
+                      },
+                      {
+                        "id": 2,
+                        "taskName": "nấu cơm",
+                        "point": 1,
+                        "createdDate": "21-09-2018 17:12"
+                      }
+                    ]
+                  },
+                  "eventUserList": [
+                    {
+                      "user": {
+                        "username": "kpi.admin",
+                        "lastName": "kpi",
+                        "firstName": "admin",
+                        "fullName": "kpi test. admin",
+                        "email": "kpi.admin@higgsup.com",
+                        "userRole": null,
+                        "avatar": null,
+                        "birthday": "2018-09-20",
+                        "numberPhone": "0966211618",
+                        "address": "hà nội",
+                        "gmail": "lethanh9398@gmail.com",
+                        "skype": null,
+                        "dateStartWork": "2018-09-20"
+                      },
+                      "type": 2
+                    }
+                  ],
+                  "additionalConfig": [
+                    {
+                      "id": 1,
+                      "taskName": null,
+                      "point": null,
+                      "createdDate": null,
+                      "quantity": 12
+                    },
+                    {
+                      "id": 2,
+                      "taskName": null,
+                      "point": null,
+                      "createdDate": null,
+                      "quantity": 12
+                    }
+                  ]
+                },
+                "status_code": 200
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/events/support/{id}": {
       "put": {
         "tags": [
@@ -5298,7 +5701,6 @@
           }
         }
       }
-
     },
     "/api/groups/team-building": {
       "post": {

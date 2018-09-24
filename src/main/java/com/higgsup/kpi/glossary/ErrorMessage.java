@@ -48,6 +48,7 @@ public final class ErrorMessage {
     public final static String ID_AT_INDEX_CAN_NOT_NULL = "id at index %s can not null";
 
     public final static String NAME_SUPPORT_AT_INDEX_CAN_NOT_INCORRECT = "name support at index %s not incorrect";
+    public final static String ID_SUPPORT_AT_INDEX_CAN_NOT_INCORRECT = "id support at index %s not incorrect";
     public final static String QUANTITY_AT_INDEX_CAN_NOT_NULL = "quantity at index %s can not null";
     public final static String QUANTITY_AT_INDEX_CAN_NOT_LESS_ONE = "quantity at index %s can not less one";
     public final static String GROUP_ID_NOT_IS_SUPPORT = "group ID  not is support";

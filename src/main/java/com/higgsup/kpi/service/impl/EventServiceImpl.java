@@ -212,7 +212,7 @@ public class EventServiceImpl extends BaseService implements EventService {
                         ErrorDTO errorDTO = new ErrorDTO();
 
                         errorDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-                        errorDTO.setMessage(String.format(ErrorMessage.NAME_SUPPORT_AT_INDEX_CAN_NOT_INCORRECT, i));
+                        errorDTO.setMessage(String.format(ErrorMessage.ID_SUPPORT_AT_INDEX_CAN_NOT_INCORRECT, i));
 
                         errors.add(errorDTO);
                     }
