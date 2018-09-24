@@ -10,6 +10,8 @@ public class EventUserDTO {
 
     private Integer type;
 
+    private Integer status;
+
     public UserDTO getUser() {
         return user;
     }
@@ -32,5 +34,13 @@ public class EventUserDTO {
 
     public void setType(Integer type) {
         this.type = type;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }
