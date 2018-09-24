@@ -58,12 +58,13 @@ public class EventController {
         return response;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('EMPLOYEE')")
     @GetMapping("/seminar")
-    public Response getAllSeminarEvent() {
+    public Response getSeminarEventByUser() {
         Response<List<EventDTO>> response = new Response<>(HttpStatus.OK.value());
         try {
-            List<EventDTO> eventDTOS = eventService.getAllSeminarEvent();
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            List<EventDTO> eventDTOS = eventService.getSeminarEventByUser(authentication.getPrincipal().toString());
             response.setData(eventDTOS);
         } catch (IOException ex) {
             response.setStatus(ErrorCode.ERROR_IO_EXCEPTION.getValue());

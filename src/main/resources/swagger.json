@@ -2418,17 +2418,17 @@
         "tags": [
           "event-controller"
         ],
-        "summary": "Get all seminar events",
-        "operationId": "getAllSeminarUsingGET",
+        "summary": "Get all seminar survey by user ",
+        "operationId": "getAllSeminarSurveyByUserUsingGET",
         "produces": [
           "*/*"
         ],
-        "responses": {
+        "responses":{
           "200": {
             "description": "status_code : 200. Meaning: Thành công \n status_code : 930. Message: Error IOException. Meaning: Lỗi IOException",
             "schema": {
               "type": "object",
-              "required": [
+              "required":[
                 "status_code",
                 "data"
               ],
@@ -2437,13 +2437,6 @@
                   "type": "array",
                   "items": {
                     "type": "object",
-                    "required": [
-                      "id",
-                      "name",
-                      "status",
-                      "createdDate",
-                      "updatedDate"
-                    ],
                     "properties": {
                       "id": {
                         "type": "number"
@@ -2451,78 +2444,393 @@
                       "name": {
                         "type": "string"
                       },
+                      "description": {
+                        "type": "string"
+                      },
                       "status": {
                         "type": "number"
+                      },
+                      "address": {
+                        "type": "string"
                       },
                       "createdDate": {
                         "type": "string"
                       },
                       "updatedDate": {
                         "type": "string"
-                      }
-                    }
-                  }
-                },
-                "message": {
-                  "type": "string"
-                },
-                "errors": {
-                  "type": "array",
-                  "items": {
-                    "properties": {
-                      "errorCode": {
-                        "type": "number"
                       },
-                      "message": {
+                      "beginDate": {
                         "type": "string"
+                      },
+                      "endDate": {
+                        "type": "string"
+                      },
+                      "group": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "number"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "groupType": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "number"
+                              },
+                              "name": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "createdDate": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "eventUserList": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "user": {
+                              "type": "object",
+                              "properties": {
+                                "user": {
+                                  "type": "object",
+                                  "properties": {
+                                    "username": {
+                                      "type": "string"
+                                    },
+                                    "lastName": {
+                                      "type": "string"
+                                    },
+                                    "firstName": {
+                                      "type": "string"
+                                    },
+                                    "fullName": {
+                                      "type": "string"
+                                    },
+                                    "email": {
+                                      "type": "string"
+                                    },
+                                    "userRole": {
+                                      "type": "string"
+                                    },
+                                    "birthday": {
+                                      "type": "string"
+                                    },
+                                    "numberPhone": {
+                                      "type": "string"
+                                    },
+                                    "address": {
+                                      "type": "string"
+                                    },
+                                    "gmail": {
+                                      "type": "string"
+                                    },
+                                    "skype": {
+                                      "type": "string"
+                                    },
+                                    "dateStartWork": {
+                                      "type": "string"
+                                    }
+                                  }
+                                },
+                                "event": {
+                                  "type": "object"
+                                },
+                                "type": {
+                                  "type": "number"
+                                },
+                                "seminarSurveyStatus":{
+                                  "type": "number"
+                                }
+                              }
+                            },
+                            "event": {
+                              "type": "object"
+                            },
+                            "type": {
+                              "type": "number"
+                            },
+                            "seminarSurveyStatus":{
+                              "type": "number"
+                            }
+                          }
+                        }
                       }
+                    },
+                    "example":{
+                      "data": [
+                        {
+                          "id": 9,
+                          "name": "seminar test 2",
+                          "description": null,
+                          "status": 1,
+                          "address": "Ha Noi",
+                          "createdDate": "19-09-2018 08:54",
+                          "updatedDate": "21-09-2018 08:54",
+                          "beginDate": "10-07-024 16:24",
+                          "endDate": "21-09-2018 16:24",
+                          "group": {
+                            "id": 3,
+                            "name": "seminar thứ 7",
+                            "description": null,
+                            "groupType": {
+                              "id": 1,
+                              "name": "Seminar"
+                            },
+                            "createdDate": "20-09-2018 17:43",
+                            "additionalConfig": {
+                              "hostPoint": "7.0",
+                              "memberPoint": "5.0",
+                              "listenerPoint": "3.0"
+                            }
+                          },
+                          "eventUserList": [
+                            {
+                              "user": {
+                                "username": "kpi.employee",
+                                "lastName": "kpi",
+                                "firstName": "employee",
+                                "fullName": "kpi test. employee",
+                                "email": "kpi.employee@higgsup.com",
+                                "userRole": null,
+                                "avatar": null,
+                                "birthday": null,
+                                "numberPhone": null,
+                                "address": null,
+                                "gmail": null,
+                                "skype": null,
+                                "dateStartWork": null
+                              },
+                              "type": 3,
+                              "seminarSurveyStatus": 0
+                            },
+                            {
+                              "user": {
+                                "username": "kpi.test",
+                                "lastName": "kpi",
+                                "firstName": "test",
+                                "fullName": "kpi test. test",
+                                "email": "kpi.test@higgsup.com",
+                                "userRole": null,
+                                "avatar": null,
+                                "birthday": null,
+                                "numberPhone": null,
+                                "address": null,
+                                "gmail": null,
+                                "skype": null,
+                                "dateStartWork": null
+                              },
+                              "type": 2,
+                              "seminarSurveyStatus": 0
+                            },
+                            {
+                              "user": {
+                                "username": "kpi.test01",
+                                "lastName": "kpi",
+                                "firstName": "test01",
+                                "fullName": "kpi test. test01",
+                                "email": "kpi.test01@higgsup.com",
+                                "userRole": null,
+                                "avatar": null,
+                                "birthday": null,
+                                "numberPhone": null,
+                                "address": null,
+                                "gmail": null,
+                                "skype": null,
+                                "dateStartWork": null
+                              },
+                              "type": 1,
+                              "seminarSurveyStatus": 0
+                            }
+                          ],
+                          "additionalConfig": null
+                        },
+                        {
+                          "id": 10,
+                          "name": "seminar test 3",
+                          "description": null,
+                          "status": 1,
+                          "address": "Ha Noi",
+                          "createdDate": "21-09-2018 08:54",
+                          "updatedDate": "21-09-2018 08:54",
+                          "beginDate": "10-07-024 16:24",
+                          "endDate": "21-09-2018 16:24",
+                          "group": {
+                            "id": 3,
+                            "name": "seminar thứ 7",
+                            "description": null,
+                            "groupType": {
+                              "id": 1,
+                              "name": "Seminar"
+                            },
+                            "createdDate": "20-09-2018 17:43",
+                            "additionalConfig": {
+                              "hostPoint": "7.0",
+                              "memberPoint": "5.0",
+                              "listenerPoint": "3.0"
+                            }
+                          },
+                          "eventUserList": [
+                            {
+                              "user": {
+                                "username": "kpi.employee",
+                                "lastName": "kpi",
+                                "firstName": "employee",
+                                "fullName": "kpi test. employee",
+                                "email": "kpi.employee@higgsup.com",
+                                "userRole": null,
+                                "avatar": null,
+                                "birthday": null,
+                                "numberPhone": null,
+                                "address": null,
+                                "gmail": null,
+                                "skype": null,
+                                "dateStartWork": null
+                              },
+                              "type": 3,
+                              "seminarSurveyStatus": 0
+                            },
+                            {
+                              "user": {
+                                "username": "kpi.test",
+                                "lastName": "kpi",
+                                "firstName": "test",
+                                "fullName": "kpi test. test",
+                                "email": "kpi.test@higgsup.com",
+                                "userRole": null,
+                                "avatar": null,
+                                "birthday": null,
+                                "numberPhone": null,
+                                "address": null,
+                                "gmail": null,
+                                "skype": null,
+                                "dateStartWork": null
+                              },
+                              "type": 2,
+                              "seminarSurveyStatus": 0
+                            },
+                            {
+                              "user": {
+                                "username": "kpi.test01",
+                                "lastName": "kpi",
+                                "firstName": "test01",
+                                "fullName": "kpi test. test01",
+                                "email": "kpi.test01@higgsup.com",
+                                "userRole": null,
+                                "avatar": null,
+                                "birthday": null,
+                                "numberPhone": null,
+                                "address": null,
+                                "gmail": null,
+                                "skype": null,
+                                "dateStartWork": null
+                              },
+                              "type": 1,
+                              "seminarSurveyStatus": 0
+                            }
+                          ],
+                          "additionalConfig": null
+                        },
+                        {
+                          "id": 7,
+                          "name": "seminar test 6",
+                          "description": null,
+                          "status": 2,
+                          "address": "Ha Noi",
+                          "createdDate": "20-09-2018 17:44",
+                          "updatedDate": "20-09-2018 17:44",
+                          "beginDate": "20-09-2018 16:24",
+                          "endDate": "21-09-2018 16:24",
+                          "group": {
+                            "id": 3,
+                            "name": "seminar thứ 7",
+                            "description": null,
+                            "groupType": {
+                              "id": 1,
+                              "name": "Seminar"
+                            },
+                            "createdDate": "20-09-2018 17:43",
+                            "additionalConfig": {
+                              "hostPoint": "7.0",
+                              "memberPoint": "5.0",
+                              "listenerPoint": "3.0"
+                            }
+                          },
+                          "eventUserList": [
+                            {
+                              "user": {
+                                "username": "kpi.employee",
+                                "lastName": "kpi",
+                                "firstName": "employee",
+                                "fullName": "kpi test. employee",
+                                "email": "kpi.employee@higgsup.com",
+                                "userRole": null,
+                                "avatar": null,
+                                "birthday": null,
+                                "numberPhone": null,
+                                "address": null,
+                                "gmail": null,
+                                "skype": null,
+                                "dateStartWork": null
+                              },
+                              "type": 3,
+                              "seminarSurveyStatus": 1
+                            },
+                            {
+                              "user": {
+                                "username": "kpi.test",
+                                "lastName": "kpi",
+                                "firstName": "test",
+                                "fullName": "kpi test. test",
+                                "email": "kpi.test@higgsup.com",
+                                "userRole": null,
+                                "avatar": null,
+                                "birthday": null,
+                                "numberPhone": null,
+                                "address": null,
+                                "gmail": null,
+                                "skype": null,
+                                "dateStartWork": null
+                              },
+                              "type": 2,
+                              "seminarSurveyStatus": 0
+                            },
+                            {
+                              "user": {
+                                "username": "kpi.test01",
+                                "lastName": "kpi",
+                                "firstName": "test01",
+                                "fullName": "kpi test. test01",
+                                "email": "kpi.test01@higgsup.com",
+                                "userRole": null,
+                                "avatar": null,
+                                "birthday": null,
+                                "numberPhone": null,
+                                "address": null,
+                                "gmail": null,
+                                "skype": null,
+                                "dateStartWork": null
+                              },
+                              "type": 1,
+                              "seminarSurveyStatus": 0
+                            }
+                          ],
+                          "additionalConfig": null
+                        }
+                      ],
+                      "status_code": 200
                     }
                   }
-                },
-                "status_code": {
-                  "type": "integer",
-                  "format": "int32"
                 }
-              },
-              "example": {
-                "data": [
-                  {
-                    "id": 9,
-                    "name": "seminar test 2",
-                    "status": 1,
-                    "createdDate": "19-09-2018 08:54",
-                    "updatedDate": "21-09-2018 08:54",
-                  },
-                  {
-                    "id": 10,
-                    "name": "seminar test 3",
-                    "status": 1,
-                    "createdDate": "21-09-2018 08:54",
-                    "updatedDate": "21-09-2018 08:54",
-                  },
-                  {
-                    "id": 8,
-                    "name": "seminar test 1",
-                    "status": 2,
-                    "createdDate": "18-09-2018 08:54",
-                    "updatedDate": "21-09-2018 08:54",
-                  },
-                  {
-                    "id": 7,
-                    "name": "seminar test 6",
-                    "status": 2,
-                    "createdDate": "20-09-2018 17:44",
-                    "updatedDate": "20-09-2018 17:44",
-                  },
-                  {
-                    "id": 15,
-                    "name": "seminar test 8",
-                    "status": 1,
-                    "createdDate": "21-08-2018 08:54",
-                    "updatedDate": "21-08-2018 08:54",
-                  }
-                ],
-                "status_code": 200
               }
             }
           },

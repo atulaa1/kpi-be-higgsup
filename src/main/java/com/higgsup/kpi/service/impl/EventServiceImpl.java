@@ -69,30 +69,9 @@ public class EventServiceImpl extends BaseService implements EventService {
         return convertEventEntityToDTO(eventList);
     }
 
-    public List<EventDTO> getAllSeminarEvent() throws IOException{
-        List<KpiEvent> seminarEvents = kpiEventRepo.findSeminarEvent();
-        List<EventDTO> seminarEventDTOS = convertEventEntityToDTO(seminarEvents);
-        seminarEventDTOS = seminarEventDTOS.stream().sorted((s1,s2) -> {
-            if (s1.getCreatedDate().getMonth() == s2.getCreatedDate().getMonth()) {
-                if (s1.getStatus() < s2.getStatus()) {
-                    return -1;
-                } else if(s1.getStatus().equals(1) && s2.getStatus().equals(1)){
-                    if(s1.getCreatedDate().after(s2.getCreatedDate())){
-                        return 1;
-                    }else{
-                        return -1;
-                    }
-                } else if(s1.getStatus().equals(2) && s2.getStatus().equals(2)){
-                    if(s1.getUpdatedDate().after(s2.getUpdatedDate())){
-                        return -1;
-                    }else{
-                        return 1;
-                    }
-                }
-            }
-            return 0;
-        }) .collect(Collectors.toList());;
-        return seminarEventDTOS;
+    public List<EventDTO> getSeminarEventByUser(String username) throws IOException{
+        List<KpiEvent> seminarEvents = kpiEventRepo.findSeminarEventByUser(username);
+        return convertEventEntityToDTO(seminarEvents);
     }
 
     private List<EventDTO> convertEventEntityToDTO(List<KpiEvent> kpiEventEntities) throws IOException {
@@ -504,6 +483,7 @@ public class EventServiceImpl extends BaseService implements EventService {
                     BeanUtils.copyProperties(userDB, userDTO);
                     userDTO.setUsername(userDB.getUserName());
                     eventUserDTO.setUser(userDTO);
+                    eventUserDTO.setSeminarSurveyStatus(kpiEventUser.getSeminarSurveyStatus());
 
                     eventUserDTOS.add(eventUserDTO);
                 }

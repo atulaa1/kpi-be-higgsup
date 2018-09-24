@@ -13,7 +13,7 @@ public interface EventService {
 
     List<EventDTO> getEventCreatedByUser(String username) throws IOException;
 
-    List<EventDTO> getAllSeminarEvent() throws IOException;
+    List<EventDTO> getSeminarEventByUser(String username) throws IOException;
 
     EventDTO createSupportEvent(EventDTO<List<EventSupportDetail>> supportDTO) throws IOException, NoSuchFieldException;
 
