@@ -62,6 +62,12 @@ public class EventServiceImpl extends BaseService implements EventService {
     }
 
     @Override
+    public List<EventDTO> getAllClubAndSupportEventNewSupport() throws IOException {
+        List<KpiEvent> eventList = kpiEventRepo.findClubAndSupportEvent();
+        return convertEventEntityToDTONewSupport(eventList);
+    }
+
+    @Override
     public List<EventDTO> getEventCreatedByUser(String username) throws IOException {
         List<KpiEvent> eventList = kpiEventRepo.findEventCreatedByUser(username);
         return convertEventEntityToDTO(eventList);
@@ -77,6 +83,26 @@ public class EventServiceImpl extends BaseService implements EventService {
                         break;
                     case SUPPORT:
                         eventDTOS.add(convertSupportEntiyToDTO(kpiEvent));
+                        break;
+                    case SEMINAR:
+                        eventDTOS.add(convertSeminarEntityToDTO(kpiEvent));
+                }
+            }
+        }
+        return eventDTOS;
+    }
+
+
+    private List<EventDTO> convertEventEntityToDTONewSupport(List<KpiEvent> kpiEventEntities) throws IOException {
+        List<EventDTO> eventDTOS = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(kpiEventEntities)) {
+            for (KpiEvent kpiEvent : kpiEventEntities) {
+                switch (GroupType.getGroupType(kpiEvent.getGroup().getGroupType().getId())) {
+                    case CLUB:
+                        eventDTOS.add(convertEventClubEntityToDTO(kpiEvent));
+                        break;
+                    case SUPPORT:
+                        eventDTOS.add(convertNewSupportEntityToDTO(kpiEvent));
                         break;
                     case SEMINAR:
                         eventDTOS.add(convertSeminarEntityToDTO(kpiEvent));
