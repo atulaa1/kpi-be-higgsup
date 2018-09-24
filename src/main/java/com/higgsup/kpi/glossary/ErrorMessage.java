@@ -45,12 +45,14 @@ public final class ErrorMessage {
     public final static String LIST_SUPPORT_CAN_NOT_EMPTY = "list support can not empty";
     public final static String NAME_AT_INDEX_CAN_NOT_NULL = "name at index %s can not null";
 
-    public final static String ID_AT_INDEX_CAN_NOT_NULL = "id at index %s can not null";
+    public final static String ID_TASK_AT_INDEX_CAN_NOT_NULL = "id task can not null at index %s";
 
     public final static String NAME_SUPPORT_AT_INDEX_CAN_NOT_INCORRECT = "name support at index %s not incorrect";
-    public final static String ID_SUPPORT_AT_INDEX_CAN_NOT_INCORRECT = "id support at index %s not incorrect";
+    public final static String ID_SUPPORT_CAN_NOT_INCORRECT_AT_INDEX = "id support not incorrect at index %s";
     public final static String QUANTITY_AT_INDEX_CAN_NOT_NULL = "quantity at index %s can not null";
     public final static String QUANTITY_AT_INDEX_CAN_NOT_LESS_ONE = "quantity at index %s can not less one";
+    public final static String QUANTITY_AT_INDEX_CAN_NOT_NULL_NEW = "quantity can not null at index %s";
+    public final static String QUANTITY_AT_INDEX_CAN_NOT_LESS_ONE_NEW = "quantity can not less one at index %s";
     public final static String GROUP_ID_NOT_IS_SUPPORT = "group ID  not is support";
     public final static String ID_NOT_INCORRECT = "id not incorrect";
     public final static String ONLY_THE_CURRENT_MONTH_CAN_BE_EDITED = "only the current month can be edited";

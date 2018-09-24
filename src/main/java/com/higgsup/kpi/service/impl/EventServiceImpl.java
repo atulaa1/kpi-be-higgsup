@@ -204,7 +204,7 @@ public class EventServiceImpl extends BaseService implements EventService {
                     ErrorDTO errorDTO = new ErrorDTO();
 
                     errorDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-                    errorDTO.setMessage(String.format(ErrorMessage.ID_AT_INDEX_CAN_NOT_NULL, i));
+                    errorDTO.setMessage(String.format(ErrorMessage.ID_TASK_AT_INDEX_CAN_NOT_NULL, i));
 
                     errors.add(errorDTO);
                 } else {
@@ -212,7 +212,7 @@ public class EventServiceImpl extends BaseService implements EventService {
                         ErrorDTO errorDTO = new ErrorDTO();
 
                         errorDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-                        errorDTO.setMessage(String.format(ErrorMessage.ID_SUPPORT_AT_INDEX_CAN_NOT_INCORRECT, i));
+                        errorDTO.setMessage(String.format(ErrorMessage.ID_SUPPORT_CAN_NOT_INCORRECT_AT_INDEX, i));
 
                         errors.add(errorDTO);
                     }
@@ -221,7 +221,7 @@ public class EventServiceImpl extends BaseService implements EventService {
                     ErrorDTO errorDTO = new ErrorDTO();
 
                     errorDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-                    errorDTO.setMessage(String.format(ErrorMessage.QUANTITY_AT_INDEX_CAN_NOT_NULL, i));
+                    errorDTO.setMessage(String.format(ErrorMessage.QUANTITY_AT_INDEX_CAN_NOT_NULL_NEW, i));
 
                     errors.add(errorDTO);
                 } else {
@@ -229,7 +229,7 @@ public class EventServiceImpl extends BaseService implements EventService {
                         ErrorDTO errorDTO = new ErrorDTO();
 
                         errorDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-                        errorDTO.setMessage(String.format(ErrorMessage.QUANTITY_AT_INDEX_CAN_NOT_LESS_ONE, i));
+                        errorDTO.setMessage(String.format(ErrorMessage.QUANTITY_AT_INDEX_CAN_NOT_LESS_ONE_NEW, i));
 
                         errors.add(errorDTO);
                     }
