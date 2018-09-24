@@ -1,10 +1,9 @@
 package com.higgsup.kpi.service;
 
-import com.higgsup.kpi.dto.EventClubDetail;
-import com.higgsup.kpi.dto.EventDTO;
-import com.higgsup.kpi.dto.EventSeminarDetail;
-import com.higgsup.kpi.dto.EventSupportDetail;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.higgsup.kpi.dto.*;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.List;
 
@@ -28,4 +27,6 @@ public interface EventService {
     EventDTO updateSeminar(EventDTO<EventSeminarDetail> eventDTO) throws IOException;
 
     EventDTO confirmOrCancelEvent(EventDTO eventDTO) throws IOException, NoSuchFieldException, IllegalAccessException;
+
+    EventDTO createTeamBuildingEvent(EventDTO<EventTeamBuildingDetail> eventDTO) throws IOException;
 }

@@ -1758,6 +1758,284 @@
         }
       }
     },
+    "/api/events/team-building": {
+      "post": {
+        "tags": [
+          "event-controller"
+        ],
+        "summary": "createTeamBuilding",
+        "operationId": "createTeamBuildingUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "teamBuildingDetailEventDTO",
+            "description": "teamBuildingDetailEventDTO",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "name",
+                "group",
+                "beginDate",
+                "eventUserList"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "address": {
+                  "type": "string"
+                },
+                "group": {
+                  "type": "object",
+                  "required": [
+                    "id"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "eventUserList": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "user",
+                      "type"
+                    ],
+                    "properties": {
+                      "user": {
+                        "type": "object",
+                        "required": [
+                          "username"
+                        ],
+                        "properties": {
+                          "username": {
+                            "type": "String"
+                          }
+                        }
+                      },
+                      "type": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "name": "Team an hai san",
+                "address": "Sam Son",
+                "beginDate": "21-09-2018 14:27",
+                "group": {
+                  "id": 10
+                },
+                "eventUserList": [
+                  {
+                    "user": {
+                      "username": "kpi.test01"
+                    },
+                    "type": 4
+                  },
+                  {
+                    "user": {
+                      "username": "kpi.employee"
+                    },
+                    "type": 5
+                  },
+                  {
+                    "user": {
+                      "username": "kpi.man"
+                    },
+                    "type": 6
+                  },
+                  {
+                    "user": {
+                      "username": "kpi.test02"
+                    },
+                    "type": 7
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "status_code:200 \n Meessage:OK \n Meaning: Thành công \n status_code: 900 not find \n Meessage: group type does not exist \n Meaning: Không tìm thấy group type phù hợp \n Meessage: not find user \n Meaning: Không tìm thấy user \n status_code:901 not valid \n Meessage: group type is invalid \n Meaning:group type không phù hợp \n Meessage: member type of event is invalidated \n Meaning: Member type không hợp lệ \n status_code:903 not null \n Meessage: event can not be null \n Meaning: Không được để trống event \n Meessage: group cannot null \n Meaning: Không được để trống group \n Meessage: event user list can not be null \n Meaning: Không được để trống danh sách người tham gia \n Meessage: event user can not be null \n Meaning: không được để trống thông tin người tham gia \n Meessage: event user can not be null \n Meaning: không được để trống username \n Meessage: member type of event can not be null \n Meaning: không được để trống member type \n Meessage: first places can not be null \n Meaning: không được để trống các thành viên được giải nhất \n Meessage: second places can not be null \n Meaning: không được để trống thành viên được giải nhì \n Meessage: third places can not be null \n Meaning: không được để trống  thành viên được giải ba \n Meessage: organizer places can not be null \n Meaning: không được để trống thành viên ban tổ chức \n Meessage: name of event can not be null \n Meaning: không được để trống tên event",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "address": {
+                      "type": "string"
+                    },
+                    "beginDate": {
+                      "type": "string"
+                    },
+                    "group": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "groupType": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "number"
+                            },
+                            "name": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "createdDate": {
+                          "type": "string"
+                        },
+                        "additionalConfig": {
+                          "type": "object",
+                          "properties": {
+                            "firstPrizePoint": {
+                              "type": "number"
+                            },
+                            "secondPrizePoint": {
+                              "type": "number"
+                            },
+                            "thirdPrizePoint": {
+                              "type": "number"
+                            },
+                            "organizerPoint": {
+                              "type": "number"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "eventUserList": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "user",
+                        "type"
+                      ],
+                      "properties": {
+                        "user": {
+                          "type": "object",
+                          "required": [
+                            "username"
+                          ],
+                          "properties": {
+                            "username": {
+                              "type": "String"
+                            }
+                          }
+                        },
+                        "type": {
+                          "type": "number"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "example": {
+            "data": {
+              "id": 46,
+              "name": "Thi an hai san",
+              "address": "Sam Son",
+              "beginDate": "21-09-2018 14:27",
+              "group": {
+                "id": 10,
+                "name": "Team Building Higgsup 2018",
+                "groupType": {
+                  "id": 3,
+                  "name": "Team building"
+                },
+                "createdDate": "20-09-2018 16:57",
+                "additionalConfig": {
+                  "firstPrizePoint": 4.25,
+                  "secondPrizePoint": 3,
+                  "thirdPrizePoint": 2.5,
+                  "organizerPoint": 5
+                }
+              },
+              "eventUserList": [
+                {
+                  "user": {
+                    "username": "kpi.test01"
+                  },
+                  "type": 4
+                },
+                {
+                  "user": {
+                    "username": "kpi.employee"
+                  },
+                  "type": 7
+                },
+                {
+                  "user": {
+                    "username": "kpi.man"
+                  },
+                  "type": 5
+                },
+                {
+                  "user": {
+                    "username": "kpi.test02"
+                  },
+                  "type": 6
+                }
+              ]
+            },
+            "status_code": 200
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+
     "/api/events/{id}/status": {
       "put": {
         "tags": [
