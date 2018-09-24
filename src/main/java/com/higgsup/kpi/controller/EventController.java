@@ -227,8 +227,8 @@ public class EventController {
     @PreAuthorize("hasRole('EMPLOYEE')")
     public Response createSeminarSurvey(@RequestBody(required = false) EventDTO<List<SeminarSurveyDTO>> seminarSurveyDTO) {
         Response<EventDTO> response = new Response<>(HttpStatus.OK.value());
-        try {
-            EventDTO seminarSurveyDTOResponse = eventService.createSeminarSurvey(seminarSurveyDTO);
+
+        EventDTO seminarSurveyDTOResponse = eventService.createSeminarSurvey(seminarSurveyDTO);
 
             if (Objects.nonNull(seminarSurveyDTOResponse.getErrorCode())) {
                 response.setStatus(seminarSurveyDTOResponse.getErrorCode());
@@ -237,10 +237,7 @@ public class EventController {
             } else {
                 response.setData(seminarSurveyDTOResponse);
             }
-        } catch (Exception e) {
-            response.setStatus(ErrorCode.SYSTEM_ERROR.getValue());
-            response.setMessage(ErrorCode.SYSTEM_ERROR.getDescription());
-        }
+
         return response;
     }
 

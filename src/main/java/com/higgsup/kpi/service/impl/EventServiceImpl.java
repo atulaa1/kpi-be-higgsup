@@ -290,6 +290,13 @@ public class EventServiceImpl extends BaseService implements EventService {
         return seminarSurveyDTOResponse;
     }
 
+    private KpiUser convertUserDTOToEntity(UserDTO user) {
+        KpiUser kpiUser = new KpiUser();
+        BeanUtils.copyProperties(user, kpiUser);
+        kpiUser.setUserName(user.getUsername());
+        return kpiUser;
+    }
+
 
     private KpiEventUser convertEventUserEntityToDTO(EventUserDTO eventUserDTO) {
         KpiEventUser kpiEventUser = new KpiEventUser();

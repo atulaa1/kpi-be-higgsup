@@ -92,8 +92,8 @@ CREATE TABLE `kpi_seminar_survey` (
   `evaluated_username` varchar(50) CHARACTER SET utf8 NOT NULL,
   `rating` int(11),
 
-  FOREIGN KEY (evaluating_username) REFERENCES kpi_event_user(user_name),
-  FOREIGN KEY (evaluated_username) REFERENCES kpi_event_user(user_name),
+  FOREIGN KEY (evaluating_username) REFERENCES kpi_user (user_name),
+  FOREIGN KEY (evaluated_username) REFERENCES kpi_user (user_name),
   FOREIGN KEY (event_id) REFERENCES kpi_event(id)
 
 
