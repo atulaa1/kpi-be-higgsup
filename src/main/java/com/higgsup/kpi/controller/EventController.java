@@ -58,6 +58,21 @@ public class EventController {
         return response;
     }
 
+    @PreAuthorize("hasRole('EMPLOYEE')")
+    @GetMapping("/seminar")
+    public Response getSeminarEventByUser() {
+        Response<List<EventDTO>> response = new Response<>(HttpStatus.OK.value());
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            List<EventDTO> eventDTOS = eventService.getSeminarEventByUser(authentication.getPrincipal().toString());
+            response.setData(eventDTOS);
+        } catch (IOException ex) {
+            response.setStatus(ErrorCode.ERROR_IO_EXCEPTION.getValue());
+            response.setMessage(ErrorMessage.ERROR_IO_EXCEPTION);
+        }
+        return response;
+    }
+
     @PostMapping("/support")
     @PreAuthorize("hasRole('EMPLOYEE')")
     public Response createSupport(@RequestBody EventDTO<List<EventSupportDetail>> supportDTO) {
