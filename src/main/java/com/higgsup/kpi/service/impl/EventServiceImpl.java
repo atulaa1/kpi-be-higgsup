@@ -277,21 +277,71 @@ public class EventServiceImpl extends BaseService implements EventService {
             Optional<KpiEventUser> kpiEventUserOptional = kpiEventHostList.stream()
                     .filter(kpiEventUser -> kpiEventUser.getKpiUser().getUserName().equals(loginUsername)).findFirst();
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (kpiEventUserOptional.isPresent()) {
+                KpiEventUser kpiEventUser = kpiEventUserOptional.get();
+                if (!kpiEventUser.getType().equals(EventUserType.HOST.getValue())) {
+                    if (kpiEventUser.getStatus().equals(EvaluatingStatus.UNFINISHED.getValue())) {
+                        List<KpiSeminarSurvey> kpiSeminarSurveys = new ArrayList<>();
 
-        for (UserDTO hostDTO : hostDTOList) {
-            KpiUser kpiUser = kpiUserRepo.findByUserName(authentication.getCredentials().toString());
-            BeanUtils.copyProperties(kpiUser, userDTO);
-            seminarSurvey.setEvaluatingUsername(userDTO);
-            seminarSurvey.setEvaluatedUsername(hostDTO);
+                        List<KpiEventUser> eventUserEvaluated = kpiEventHostList.stream()
+                                .filter(value -> !value.getKpiUser().getUserName().equals(loginUsername))
+                                .collect(Collectors.toList());
 
-            seminarSurveyDTOS.add(seminarSurvey);
+                        for (SeminarSurveyDTO RequestSeminarSurveyDTO : seminarSurveyDTO.getAdditionalConfig()) {
+                            KpiSeminarSurvey kpiSeminarSurvey = new KpiSeminarSurvey();
+                            Optional<KpiEventUser> kpiEventUserEvaluated = eventUserEvaluated.stream()
+                                    .filter(kpiEventUser1 -> kpiEventUser1.getKpiUser().getUserName()
+                                            .equals(RequestSeminarSurveyDTO.getEvaluatedUsername().getUsername())
+                                            && kpiEventUser1.getType().equals(EventUserType.HOST.getValue())).findFirst();
+                            if (kpiEventUserEvaluated.isPresent()) {
+                                kpiSeminarSurvey.setEvaluatedUsername(kpiEventUserEvaluated.get().getKpiUser());
+                                kpiSeminarSurvey.setEvaluatingUsername(kpiEventUser.getKpiUser());
+                                kpiSeminarSurvey.setEvent(kpiEvent);
+                                kpiSeminarSurvey.setRating(RequestSeminarSurveyDTO.getRating());
+                                kpiSeminarSurveys.add(kpiSeminarSurvey);
+                            } else {
+                                ErrorDTO errorDTO = new ErrorDTO();
+                                errorDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
+                                errorDTO.setMessage(ErrorMessage.HOST_DOES_NOT_EXIST);
+                                errors.add(errorDTO);
+                            }
+                        }
+                        if (CollectionUtils.isEmpty(errors)) {
+                            List<SeminarSurveyDTO> seminarSurveyDTOs = convertListSeminarSurveyEntityToDTO
+                                    ((List<KpiSeminarSurvey>) kpiseminarSurveyRepo.saveAll(kpiSeminarSurveys));
+                            kpiEventUser.setStatus(EvaluatingStatus.FINISH.getValue());
+                            kpiEventUserRepo.save(kpiEventUser);
+                            EventUserDTO eventUserDTO = convertEventUsersEntityToDTONotHaveEvent(kpiEventUser);
+                            eventUserDTO.setSeminarSurveys(seminarSurveyDTOs);
+                            seminarDetailEventDTO.setEventUserList(Lists.newArrayList(eventUserDTO));
+
+                        }
+                    } else {
+                        ErrorDTO errorDTO = new ErrorDTO();
+                        errorDTO.setErrorCode(ErrorCode.ALREADY_EVALUATED.getValue());
+                        errorDTO.setMessage(ErrorCode.ALREADY_EVALUATED.getDescription());
+                        errors.add(errorDTO);
+                    }
+
+                } else {
+                    ErrorDTO errorDTO = new ErrorDTO();
+                    errorDTO.setErrorCode(ErrorCode.HOST_CANNOT_CREATE_SEMINAR_SURVEY.getValue());
+                    errorDTO.setMessage(ErrorMessage.HOST_CANNOT_CREATE_SEMINAR_SURVEY);
+                    errors.add(errorDTO);
+                }
+            } else {
+                ErrorDTO errorDTO = new ErrorDTO();
+                errorDTO.setErrorCode(ErrorCode.NOT_ATTEND_EVENT.getValue());
+                errorDTO.setMessage(ErrorCode.NOT_ATTEND_EVENT.getDescription());
+                errors.add(errorDTO);
+            }
+        } else {
+            ErrorDTO errorDTO = new ErrorDTO();
+            errorDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
+            errorDTO.setMessage(ErrorMessage.NOT_FIND_EVENT);
+            errors.add(errorDTO);
         }
-
-        seminarSurveyDTOResponse.setAdditionalConfig(seminarSurveyDTOS);
-
-        // kpiseminarSurveyRepo.save();
-        return seminarSurveyDTOResponse;
+        return seminarDetailEventDTO;
     }
 
     private EventUserDTO convertEventUsersEntityToDTONotHaveEvent(KpiEventUser kpiEventUser) {
@@ -319,15 +369,6 @@ public class EventServiceImpl extends BaseService implements EventService {
         userDTO.setUsername(user.getUserName());
         return userDTO;
     }
-
-
-    private KpiEventUser convertEventUserEntityToDTO(EventUserDTO eventUserDTO) {
-        KpiEventUser kpiEventUser = new KpiEventUser();
-        BeanUtils.copyProperties(eventUserDTO, kpiEventUser);
-
-        return kpiEventUser;
-    }
-
 
     private EventDTO confirmOrCancelEventClub(KpiEvent kpiEvent, EventDTO eventDTO) throws IOException {
         if (Objects.equals(eventDTO.getStatus(), StatusEvent.CONFIRMED.getValue())) {
