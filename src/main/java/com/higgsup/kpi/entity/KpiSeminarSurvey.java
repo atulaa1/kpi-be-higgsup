@@ -14,11 +14,11 @@ public class KpiSeminarSurvey {
 
     @JoinColumn(name = "evaluating_username", referencedColumnName = "user_name")
     @ManyToOne(fetch = FetchType.LAZY)
-    private KpiEventUser evaluatingUsername;
+    private KpiUser evaluatingUsername;
 
     @JoinColumn(name = "evaluated_username", referencedColumnName = "user_name")
     @ManyToOne(fetch = FetchType.LAZY)
-    private KpiEventUser evaluatedUsername;
+    private KpiUser evaluatedUsername;
 
     @JoinColumn(name = "event_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
@@ -40,19 +40,19 @@ public class KpiSeminarSurvey {
         this.id = id;
     }
 
-    public KpiEventUser getEvaluatingUsername() {
+    public KpiUser getEvaluatingUsername() {
         return evaluatingUsername;
     }
 
-    public void setEvaluatingUsername(KpiEventUser evaluatingUsername) {
+    public void setEvaluatingUsername(KpiUser evaluatingUsername) {
         this.evaluatingUsername = evaluatingUsername;
     }
 
-    public KpiEventUser getEvaluatedUsername() {
+    public KpiUser getEvaluatedUsername() {
         return evaluatedUsername;
     }
 
-    public void setEvaluatedUsername(KpiEventUser evaluatedUsername) {
+    public void setEvaluatedUsername(KpiUser evaluatedUsername) {
         this.evaluatedUsername = evaluatedUsername;
     }
 
