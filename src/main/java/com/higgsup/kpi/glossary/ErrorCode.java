@@ -7,6 +7,7 @@ public enum ErrorCode {
     NOT_NULL(903, "parameter cannot null"),
     JSON_PROCESSING_EXCEPTION(904, "json processing exception"),
     DATA_EXIST(902, "data exist"),
+    DATA_DOES_NOT_EXIST(908, "data does not exist"),
     NOT_FILLING_ALL_INFORMATION(905, "not filling all information"),
     ALREADY_CREATED(906, "already created"),
     NOT_FIND_ITEM(928, "item does not existed"),

@@ -58,6 +58,21 @@ public class EventController {
         return response;
     }
 
+    @PreAuthorize("hasRole('EMPLOYEE')")
+    @GetMapping("/seminar")
+    public Response getSeminarEventByUser() {
+        Response<List<EventDTO>> response = new Response<>(HttpStatus.OK.value());
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            List<EventDTO> eventDTOS = eventService.getSeminarEventByUser(authentication.getPrincipal().toString());
+            response.setData(eventDTOS);
+        } catch (IOException ex) {
+            response.setStatus(ErrorCode.ERROR_IO_EXCEPTION.getValue());
+            response.setMessage(ErrorMessage.ERROR_IO_EXCEPTION);
+        }
+        return response;
+    }
+
     @PostMapping("/support")
     @PreAuthorize("hasRole('EMPLOYEE')")
     public Response createSupport(@RequestBody EventDTO<List<EventSupportDetail>> supportDTO) {
@@ -217,6 +232,30 @@ public class EventController {
                 response.setMessage(ErrorMessage.EVENT_STATUS_CAN_NOT_NULL);
             }
         } catch (Exception e) {
+            response.setStatus(ErrorCode.SYSTEM_ERROR.getValue());
+            response.setMessage(ErrorCode.SYSTEM_ERROR.getDescription());
+        }
+        return response;
+    }
+
+    @RequestMapping(value = "/team-building", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ADMIN')")
+    public Response createTeamBuilding(@RequestBody EventDTO<EventTeamBuildingDetail> teamBuildingDetailEventDTO) {
+        Response<EventDTO> response = new Response<>(HttpStatus.OK.value());
+        try {
+            EventDTO eventDTOResponse = eventService.createTeamBuildingEvent(teamBuildingDetailEventDTO);
+
+            if (Objects.nonNull(eventDTOResponse.getErrorCode())) {
+                response.setStatus(eventDTOResponse.getErrorCode());
+                response.setMessage(eventDTOResponse.getMessage());
+                response.setErrors(eventDTOResponse.getErrorDTOS());
+            } else {
+                response.setData(eventDTOResponse);
+            }
+        } catch (JsonProcessingException e) {
+            response.setMessage(ErrorCode.JSON_PROCESSING_EXCEPTION.getDescription());
+            response.setStatus(ErrorCode.JSON_PROCESSING_EXCEPTION.getValue());
+        } catch (IOException e) {
             response.setStatus(ErrorCode.SYSTEM_ERROR.getValue());
             response.setMessage(ErrorCode.SYSTEM_ERROR.getDescription());
         }

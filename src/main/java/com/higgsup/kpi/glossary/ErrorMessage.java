@@ -62,6 +62,13 @@ public final class ErrorMessage {
     public final static String INVALIDATED_MEMBER_TYPE = "member type of event is invalidated";;
     public final static String EVENT_NAME_CAN_NOT_NULL = "name of event can not be null";
     public final static String END_DATE_AFTER_BEGIN_DATE = "end date has to be after begin date";
+    public final static String SUPPORT_ALREADY_EXISTS = "support already exists";
+    public final static String SUPPORT_NOT_EXISTS = "support not exists";
+    public final static String NAME_TASK_SUPPORT_DOES_NOT_ALLOW_NULL = "name task support does not allow null";
+    public final static String POINT_SUPPORT_DOES_NOT_ALLOW_NULL = "point support does not allow null";
+    public final static String POINT_SUPPORT_MUST_BIGGER_THAN_ZERO= "point support must be bigger than zero";
+    public final static String NAME_TASK_SUPPORT_ALREADY_EXISTS= "name task support already exists";
+    public final static String NAME_TASK_SUPPORT_CAN_NOT_DUPLICATE = "name Task support can not duplicate";
 
     public final static String BEGIN_DATE_CAN_NOT_NULL = "begin date cannot null";
     public final static String END_DATE_CAN_NOT_NULL = "end date cannot null";
@@ -81,6 +88,13 @@ public final class ErrorMessage {
     public final static String CAN_NOT_CHANGE_STATUS_EVENT_LAST_MONTH = "can not change status event last month";
     public final static String INCORRECT_LATE_TIMES_DATA = "incorrect late times data at line ";
     public final static String EMAIL_NOT_IN_DATABASE = "email not in database at line ";
+    public final static String GROUP_TYPE_IS_INVALID = "group type is invalid";
+
+    public final static String FIRST_PLACE_CAN_NOT_NULL = "first places can not be null";
+    public final static String SECOND_PLACE_CAN_NOT_NULL = "second places can not be null";
+    public final static String THIRD_PLACE_CAN_NOT_NULL = "third places can not be null";
+    public final static String ORGANIZER_CAN_NOT_NULL = "organizer places can not be null";
+    public final static String EVENT_USER_CAN_NOT_NULL = "event user can not be null";
     public final static String HOST_CANNOT_CREATE_SEMINAR_SURVEY = "host cannot create any seminar survey";
     public final static String HOST_DOES_NOT_EXIST = "host does not exist";
 }
