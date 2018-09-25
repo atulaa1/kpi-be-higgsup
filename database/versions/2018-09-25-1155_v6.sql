@@ -92,8 +92,8 @@ CREATE TABLE `kpi_seminar_survey` (
   `evaluated_username` varchar(50) CHARACTER SET utf8 NOT NULL,
   `rating` int(11),
 
-  FOREIGN KEY (evaluating_username) REFERENCES kpi_user (user_name),
-  FOREIGN KEY (evaluated_username) REFERENCES kpi_user (user_name),
+  FOREIGN KEY (evaluating_username) REFERENCES kpi_user(user_name),
+  FOREIGN KEY (evaluated_username) REFERENCES kpi_user(user_name),
   FOREIGN KEY (event_id) REFERENCES kpi_event(id)
 
 
@@ -131,4 +131,12 @@ CREATE TABLE `kpi_latetime_check` (
   `year_month_id` int(11) NOT NULL,
   FOREIGN KEY (user_name) REFERENCES kpi_user(user_name),
   FOREIGN KEY (year_month_id) REFERENCES kpi_year_month(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE kpi_support
+(
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  task_name VARCHAR(500),
+  task_point FLOAT,
+  created_date      DATETIME     DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
