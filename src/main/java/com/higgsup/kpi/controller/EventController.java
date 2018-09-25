@@ -225,7 +225,7 @@ public class EventController {
 
     @PostMapping("/seminar/survey")
     @PreAuthorize("hasRole('EMPLOYEE')")
-    public Response createSeminarSurvey(@RequestBody(required = false) EventDTO<List<SeminarSurveyDTO>> seminarSurveyDTO) {
+    public Response createSeminarSurvey(@RequestBody(required = false) EventDTO<List<SeminarSurveyDTO>> seminarSurveyDTO) throws IOException {
         Response<EventDTO> response = new Response<>(HttpStatus.OK.value());
 
         EventDTO seminarSurveyDTOResponse = eventService.createSeminarSurvey(seminarSurveyDTO);

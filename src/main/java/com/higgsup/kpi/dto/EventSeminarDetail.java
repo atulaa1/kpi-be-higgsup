@@ -2,7 +2,9 @@ package com.higgsup.kpi.dto;
 
 public class EventSeminarDetail {
     private String hostPoint;
+
     private String memberPoint;
+
     private String listenerPoint;
 
     public String getHostPoint() {

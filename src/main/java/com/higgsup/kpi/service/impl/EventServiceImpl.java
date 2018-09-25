@@ -3,6 +3,7 @@ package com.higgsup.kpi.service.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Lists;
 import com.higgsup.kpi.dto.*;
 import com.higgsup.kpi.entity.*;
 import com.higgsup.kpi.glossary.*;
@@ -258,20 +259,23 @@ public class EventServiceImpl extends BaseService implements EventService {
     }
 
     @Override
-    public EventDTO createSeminarSurvey(EventDTO<List<SeminarSurveyDTO>> seminarSurveyDTO) {
-        UserDTO userDTO = new UserDTO();
+    public EventDTO createSeminarSurvey(EventDTO<List<SeminarSurveyDTO>> seminarSurveyDTO) throws IOException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        EventDTO<EventSeminarDetail> seminarDetailEventDTO = new EventDTO<>();
 
-        EventDTO<List<SeminarSurveyDTO>> seminarSurveyDTOResponse = new EventDTO<>();
+        String loginUsername = authentication.getPrincipal().toString();
 
-        List<SeminarSurveyDTO> seminarSurveyDTOS = new ArrayList<>();
+        Optional<KpiEvent> kpiEventOptional = kpiEventRepo.findById(seminarSurveyDTO.getId());
+        List<KpiEventUser> kpiEventHostList = kpiEventUserRepo.findByUserType(seminarSurveyDTO.getId());
 
-        SeminarSurveyDTO seminarSurvey = new SeminarSurveyDTO();
+        List<ErrorDTO> errors = new ArrayList<>();
 
-        List<KpiEventUser> kpiEventHostList = kpiseminarSurveyRepo.findByUserType(EventUserType.HOST.getValue(), seminarSurveyDTO.getId());
+        if (kpiEventOptional.isPresent()) {
+            KpiEvent kpiEvent = kpiEventOptional.get();
+            seminarDetailEventDTO = convertEventSeminarEntityToDTO(kpiEvent);
 
-        List<EventUserDTO> eventHostDTOList = convertListEventUserEntityToDTO(kpiEventHostList);
-
-        List<UserDTO> hostDTOList = eventHostDTOList.stream().map(EventUserDTO::getUser).collect(Collectors.toList());
+            Optional<KpiEventUser> kpiEventUserOptional = kpiEventHostList.stream()
+                    .filter(kpiEventUser -> kpiEventUser.getKpiUser().getUserName().equals(loginUsername)).findFirst();
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -290,11 +294,30 @@ public class EventServiceImpl extends BaseService implements EventService {
         return seminarSurveyDTOResponse;
     }
 
-    private KpiUser convertUserDTOToEntity(UserDTO user) {
-        KpiUser kpiUser = new KpiUser();
-        BeanUtils.copyProperties(user, kpiUser);
-        kpiUser.setUserName(user.getUsername());
-        return kpiUser;
+    private EventUserDTO convertEventUsersEntityToDTONotHaveEvent(KpiEventUser kpiEventUser) {
+        EventUserDTO eventUserDTO = new EventUserDTO();
+        eventUserDTO.setUser(convertUserEntityToDTO(kpiEventUser.getKpiUser()));
+        eventUserDTO.setStatus(EvaluatingStatus.FINISH.getValue());
+        return eventUserDTO;
+    }
+
+    private List<SeminarSurveyDTO> convertListSeminarSurveyEntityToDTO(List<KpiSeminarSurvey> kpiSeminarSurveys) {
+        List<SeminarSurveyDTO> seminarSurveyDTOS = new ArrayList<>();
+
+        for (KpiSeminarSurvey kpiSeminarSurvey : kpiSeminarSurveys) {
+            SeminarSurveyDTO seminarSurveyDTO = new SeminarSurveyDTO();
+            seminarSurveyDTO.setRating(kpiSeminarSurvey.getRating());
+            seminarSurveyDTO.setEvaluatedUsername(convertUserEntityToDTO(kpiSeminarSurvey.getEvaluatedUsername()));
+            seminarSurveyDTOS.add(seminarSurveyDTO);
+        }
+        return seminarSurveyDTOS;
+    }
+
+    private UserDTO convertUserEntityToDTO(KpiUser user) {
+        UserDTO userDTO = new UserDTO();
+        BeanUtils.copyProperties(user, userDTO);
+        userDTO.setUsername(user.getUserName());
+        return userDTO;
     }
 
 
@@ -505,6 +528,7 @@ public class EventServiceImpl extends BaseService implements EventService {
 
     private List<EventUserDTO> convertListEventUserEntityToDTO(List<KpiEventUser> kpiEventUsers) {
         List<EventUserDTO> eventUserDTOS = new ArrayList<>();
+
         if (!CollectionUtils.isEmpty(kpiEventUsers)) {
             List<String> namesUser = kpiEventUsers.stream().map(kpiEventUser -> kpiEventUser.getKpiEventUserPK().getUserName())
                     .collect(Collectors.toList());
@@ -523,12 +547,29 @@ public class EventServiceImpl extends BaseService implements EventService {
                     BeanUtils.copyProperties(userDB, userDTO);
                     userDTO.setUsername(userDB.getUserName());
                     eventUserDTO.setUser(userDTO);
-
+                    eventUserDTO.setStatus(kpiEventUser.getStatus());
                     eventUserDTOS.add(eventUserDTO);
                 }
             }
         }
         return eventUserDTOS;
+    }
+
+    private EventDTO<EventSeminarDetail> convertEventSeminarEntityToDTO(KpiEvent kpiEvent) throws IOException {
+
+        EventDTO<EventSeminarDetail> eventSeminar = new EventDTO();
+        ObjectMapper mapper = new ObjectMapper();
+        BeanUtils.copyProperties(kpiEvent, eventSeminar);
+        eventSeminar.setStatus(kpiEvent.getStatus());
+        eventSeminar.setBeginDate(kpiEvent.getBeginDate());
+        Optional<KpiGroup> kpiGroup = kpiGroupRepo.findById(kpiEvent.getGroup().getId());
+        if (kpiGroup.isPresent()) {
+            KpiGroup kpiGroupDB = kpiGroup.get();
+            EventSeminarDetail additionalConfigSupport = mapper.readValue(kpiEvent.getGroup().getAdditionalConfig(), EventSeminarDetail.class);
+            eventSeminar.setAdditionalConfig(additionalConfigSupport);
+            eventSeminar.setName(kpiGroupDB.getName());
+        }
+        return eventSeminar;
     }
 
     private GroupTypeDTO convertGroupTypeEntityToDTO(KpiGroupType kpiGroupType) {

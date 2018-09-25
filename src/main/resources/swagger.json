@@ -2765,6 +2765,337 @@
         }
       }
     },
+    "/api/events/seminar/survey": {
+      "post": {
+        "tags": [
+          "event-controller"
+        ],
+        "summary": "createSeminarSurvey",
+        "operationId": "createSeminarSurveyUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "seminarSurveyDTO",
+            "description": "seminarSurveyDTO",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "evaluatedUsername",
+                "rating"
+              ],
+              "properties": {
+                "evaluatedUsername": {
+                  "type": "object",
+                  "required": [
+                    "username"
+                  ],
+                  "properties": {
+                    "username": {
+                      "type": "String"
+                    }
+                  }
+                },
+                "rating": {
+                  "type": "number"
+                }
+              },
+              "example": {
+                "id": 2,
+                "additionalConfig": [
+                  {
+                    "evaluatedUsername": {
+                      "username": "kpi.man"
+                    },
+                    "rating": 4
+                  },
+                  {
+                    "evaluatedUsername": {
+                      "username": "kpi.test"
+                    },
+                    "rating": 8
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Status_code: 200. Message: OK. Meaning: Thành công \n Status_code: 900. Message: host does not exist. Meaning: Host không tồn tại. \n Status_code: 917. Message: already evaluated. Meaning: Bạn đã đánh giá khảo sát rồi. \n Status_code: 918. Message: host cannot create any seminar survey. Meaning: Host không được phép làm khảo sát. \n Status_code: 919. Message: not attend this event. Meaning: Bạn không tham gia event này. \n Status_code: 900. Message: not find event by id. Meaning: Event không tồn tại. ",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "address": {
+                      "type": "string"
+                    },
+                    "createdDate": {
+                      "type": "string"
+                    },
+                    "updatedDate": {
+                      "type": "string"
+                    },
+                    "beginDate": {
+                      "type": "string"
+                    },
+                    "endDate": {
+                      "type": "string"
+                    },
+                    "group": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "groupType": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "number"
+                            },
+                            "name": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "createdDate": {
+                          "type": "string"
+                        },
+                        "additionalConfig": {
+                          "type": "object",
+                          "properties": {
+                            "hostPoint": {
+                              "type": "number"
+                            },
+                            "memberPoint": {
+                              "type": "number"
+                            },
+                            "listenerPoint": {
+                              "type": "number"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "eventUserList": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "user",
+                        "status",
+                        "seminarSurveys"
+                      ],
+                      "properties": {
+                        "user": {
+                          "type": "object",
+                          "required": [
+                            "username",
+                            "lastName",
+                            "firstName",
+                            "fullName",
+                            "email"
+                          ],
+                          "properties": {
+                            "username": {
+                              "type": "String"
+                            },
+                            "lastName": {
+                              "type": "String"
+                            },
+                            "firstName": {
+                              "type": "String"
+                            },
+                            "fullName": {
+                              "type": "String"
+                            },
+                            "email": {
+                              "type": "String"
+                            }
+                          }
+                        },
+                        "seminarSurveys": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "required": [
+                              "evaluatedUsername",
+                              "rating"
+                            ],
+                            "properties": {
+                              "evaluatedUsername": {
+                                "type": "object",
+                                "required": [
+                                  "username",
+                                  "lastName",
+                                  "firstName",
+                                  "fullName",
+                                  "email"
+                                ],
+                                "properties": {
+                                  "username": "String"
+                                }
+                              },
+                              "rating": {
+                                "type": "number"
+                              }
+                            }
+                          }
+                        },
+                        "status": {
+                          "type": "number"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "data": {
+                  "id": 2,
+                  "name": "Seminar java 1",
+                  "description": null,
+                  "status": 1,
+                  "address": "Ha noi",
+                  "createdDate": "24-09-2018 17:20",
+                  "updatedDate": "24-09-2018 17:20",
+                  "beginDate": "14-08-2018 16:24",
+                  "endDate": "05-09-2018 16:24",
+                  "group": null,
+                  "eventUserList": [
+                    {
+                      "user": {
+                        "username": "kpi.employee",
+                        "lastName": "kpi",
+                        "firstName": "employee",
+                        "fullName": "kpi test. employee",
+                        "email": "kpi.employee@higgsup.com",
+                        "userRole": null,
+                        "avatar": null,
+                        "birthday": null,
+                        "numberPhone": null,
+                        "address": null,
+                        "gmail": null,
+                        "skype": null,
+                        "dateStartWork": null
+                      },
+                      "type": null,
+                      "status": 1,
+                      "seminarSurveys": [
+                        {
+                          "evaluatingUsername": null,
+                          "evaluatedUsername": {
+                            "username": "kpi.man",
+                            "lastName": "kpi",
+                            "firstName": "man",
+                            "fullName": "kpi test. man",
+                            "email": "kpi.man@higgsup.com",
+                            "userRole": null,
+                            "avatar": null,
+                            "birthday": null,
+                            "numberPhone": null,
+                            "address": null,
+                            "gmail": null,
+                            "skype": null,
+                            "dateStartWork": null
+                          },
+                          "rating": 4
+                        },
+                        {
+                          "evaluatingUsername": null,
+                          "evaluatedUsername": {
+                            "username": "kpi.test",
+                            "lastName": "kpi",
+                            "firstName": "test",
+                            "fullName": "kpi test. test",
+                            "email": "kpi.test@higgsup.com",
+                            "userRole": null,
+                            "avatar": null,
+                            "birthday": null,
+                            "numberPhone": null,
+                            "address": null,
+                            "gmail": null,
+                            "skype": null,
+                            "dateStartWork": null
+                          },
+                          "rating": 8
+                        }
+                      ]
+                    }
+                  ],
+                  "additionalConfig": {
+                    "hostPoint": "13.6",
+                    "memberPoint": "13.4",
+                    "listenerPoint": "11"
+                  }
+                },
+                "status_code": 200
+              }
+            },
+            "message": {
+              "type": "string"
+            },
+            "status_code": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "errors": {
+              "type": "array",
+              "items": {
+                "properties": {
+                  "errorCode": {
+                    "type": "number"
+                  },
+                  "message": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/events/club": {
       "post": {
         "tags": [

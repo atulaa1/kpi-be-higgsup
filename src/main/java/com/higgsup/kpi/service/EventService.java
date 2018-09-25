@@ -4,7 +4,6 @@ import com.higgsup.kpi.dto.*;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 public interface EventService {
     List<EventDTO> getAllClubAndSupportEvent() throws IOException;
@@ -25,5 +24,5 @@ public interface EventService {
 
     EventDTO confirmOrCancelEvent(EventDTO eventDTO) throws IOException, NoSuchFieldException, IllegalAccessException;
 
-    EventDTO createSeminarSurvey(EventDTO<List<SeminarSurveyDTO>> seminarSurveyDTO);
+    EventDTO createSeminarSurvey(EventDTO<List<SeminarSurveyDTO>> seminarSurveyDTO) throws IOException;
 }
