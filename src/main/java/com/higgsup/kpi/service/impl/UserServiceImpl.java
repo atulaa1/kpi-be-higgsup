@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
             Optional<KpiUser> kpiUserOptional = kpiUsers.stream().filter(
                     kpiUser -> kpiUser.getUserName().equals(userDTO.getUsername())).findFirst();
             if (kpiUserOptional.isPresent()) {
-                BeanUtils.copyProperties(kpiUserOptional.get(),userDTO , ignoreProperties);
+                BeanUtils.copyProperties(kpiUserOptional.get(), userDTO, ignoreProperties);
             }
         });
         return userDTOS;

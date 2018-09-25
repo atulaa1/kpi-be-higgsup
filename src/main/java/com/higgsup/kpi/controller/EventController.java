@@ -269,13 +269,13 @@ public class EventController {
 
         EventDTO seminarSurveyDTOResponse = eventService.createSeminarSurvey(seminarSurveyDTO);
 
-            if (Objects.nonNull(seminarSurveyDTOResponse.getErrorCode())) {
-                response.setStatus(seminarSurveyDTOResponse.getErrorCode());
-                response.setMessage(seminarSurveyDTOResponse.getMessage());
-                response.setErrors(seminarSurveyDTOResponse.getErrorDTOS());
-            } else {
-                response.setData(seminarSurveyDTOResponse);
-            }
+        if (Objects.nonNull(seminarSurveyDTOResponse.getErrorCode())) {
+            response.setStatus(seminarSurveyDTOResponse.getErrorCode());
+            response.setMessage(seminarSurveyDTOResponse.getMessage());
+            response.setErrors(seminarSurveyDTOResponse.getErrorDTOS());
+        } else {
+            response.setData(seminarSurveyDTOResponse);
+        }
 
         return response;
     }

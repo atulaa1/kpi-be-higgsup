@@ -407,7 +407,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     private List<SupportDTO> convertListSupportEntityToDTO(List<KpiSupport> supportEntityCreates,
-            String... ignoreProperties) {
+                                                           String... ignoreProperties) {
         List<SupportDTO> supportDTOS = new ArrayList<>();
         for (KpiSupport kpiSupport : supportEntityCreates) {
             SupportDTO supportDTO = new SupportDTO();

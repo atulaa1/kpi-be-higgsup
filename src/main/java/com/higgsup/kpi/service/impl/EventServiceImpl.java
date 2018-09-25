@@ -67,7 +67,7 @@ public class EventServiceImpl extends BaseService implements EventService {
         return convertEventEntityToDTO(eventList);
     }
 
-    public List<EventDTO> getSeminarEventByUser(String username) throws IOException{
+    public List<EventDTO> getSeminarEventByUser(String username) throws IOException {
         List<KpiEvent> seminarEvents = kpiEventRepo.findSeminarEventByUser(username);
         return convertEventEntityToDTO(seminarEvents);
     }
