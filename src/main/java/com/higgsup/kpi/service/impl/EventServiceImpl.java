@@ -982,6 +982,13 @@ public class EventServiceImpl extends BaseService implements EventService {
 
                 groupDTO.setAdditionalConfig(eventSeminarDetail);
                 groupDTO.setGroupType(convertGroupTypeEntityToDTO(kpiGroup.getGroupType()));
+            case TEAM_BUILDING:
+                BeanUtils.copyProperties(kpiGroup, groupDTO);
+                EventTeamBuildingDetail eventTeamBuildingDetail = mapper.readValue(kpiGroup.getAdditionalConfig(), EventTeamBuildingDetail.class);
+
+                groupDTO.setAdditionalConfig(eventTeamBuildingDetail);
+                groupDTO.setGroupType(convertGroupTypeEntityToDTO(kpiGroup.getGroupType()));
+                break;
         }
 
         return groupDTO;
