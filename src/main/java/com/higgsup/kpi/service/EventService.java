@@ -1,6 +1,5 @@
 package com.higgsup.kpi.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.higgsup.kpi.dto.*;
 
 import java.io.IOException;
@@ -17,11 +16,11 @@ public interface EventService {
 
     EventDTO createSupportEvent(EventDTO<List<EventSupportDetail>> supportDTO) throws IOException, NoSuchFieldException;
 
-    EventDTO createSupportEventNew(EventDTO<List<EventSupportDTO>>supportDTO) throws IOException;
+    EventDTO createSupportEventNew(EventDTO<List<EventSupportDTO>> supportDTO) throws IOException;
 
     EventDTO updateSupportEvent(EventDTO<List<EventSupportDetail>> supportDTO) throws IOException, NoSuchFieldException;
 
-    EventDTO updateSupportEventNew(EventDTO<List<EventSupportDTO>>supportDTO) throws IOException, NoSuchFieldException;
+    EventDTO updateSupportEventNew(EventDTO<List<EventSupportDTO>> supportDTO) throws IOException, NoSuchFieldException;
 
     EventDTO createClub(EventDTO<EventClubDetail> eventDTO) throws IOException;
 
@@ -34,4 +33,6 @@ public interface EventService {
     EventDTO confirmOrCancelEvent(EventDTO eventDTO) throws IOException, NoSuchFieldException, IllegalAccessException;
 
     EventDTO confirmOrCancelEventSupportNew(EventDTO eventDTO) throws IOException, NoSuchFieldException, IllegalAccessException;
+
+    EventDTO createTeamBuildingEvent(EventDTO<EventTeamBuildingDetail> eventDTO) throws IOException;
 }
