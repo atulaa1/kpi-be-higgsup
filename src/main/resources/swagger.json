@@ -2113,70 +2113,59 @@
                         }
                       },
                       "eventUserList": {
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "properties": {
-                            "user": {
-                              "type": "object",
-                              "properties": {
-                                "user": {
-                                  "type": "object",
-                                  "properties": {
-                                    "username": {
-                                      "type": "string"
-                                    },
-                                    "lastName": {
-                                      "type": "string"
-                                    },
-                                    "firstName": {
-                                      "type": "string"
-                                    },
-                                    "fullName": {
-                                      "type": "string"
-                                    },
-                                    "email": {
-                                      "type": "string"
-                                    },
-                                    "userRole": {
-                                      "type": "string"
-                                    },
-                                    "birthday": {
-                                      "type": "string"
-                                    },
-                                    "numberPhone": {
-                                      "type": "string"
-                                    },
-                                    "address": {
-                                      "type": "string"
-                                    },
-                                    "gmail": {
-                                      "type": "string"
-                                    },
-                                    "skype": {
-                                      "type": "string"
-                                    },
-                                    "dateStartWork": {
-                                      "type": "string"
-                                    }
+                         "type": "array",
+                         "items": {
+                            "type": "object",
+                            "properties": {
+                              "user": {
+                                "type": "object",
+                                "properties": {
+                                  "username": {
+                                    "type": "string"
+                                  },
+                                  "lastName": {
+                                    "type": "string"
+                                  },
+                                  "firstName": {
+                                    "type": "string"
+                                  },
+                                  "fullName": {
+                                    "type": "string"
+                                  },
+                                  "email": {
+                                    "type": "string"
+                                  },
+                                  "userRole": {
+                                    "type": "string"
+                                  },
+                                  "birthday": {
+                                    "type": "string"
+                                  },
+                                  "numberPhone": {
+                                    "type": "string"
+                                  },
+                                  "address": {
+                                    "type": "string"
+                                  },
+                                  "gmail": {
+                                    "type": "string"
+                                  },
+                                  "skype": {
+                                    "type": "string"
+                                  },
+                                  "dateStartWork": {
+                                    "type": "string"
                                   }
-                                },
-                                "event": {
-                                  "type": "object"
-                                },
-                                "type": {
-                                  "type": "number"
                                 }
+                              },
+                              "event": {
+                                "type": "object"
+                              },
+                              "type": {
+                                "type": "number"
                               }
-                            },
-                            "event": {
-                              "type": "object"
-                            },
-                            "type": {
-                              "type": "number"
                             }
-                          }
-                        }
+                         }
                       }
                     },
                     "example": {
