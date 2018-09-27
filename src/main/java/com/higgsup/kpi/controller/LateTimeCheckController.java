@@ -53,7 +53,7 @@ public class LateTimeCheckController {
         Response<List<LateTimeCheckDTO>> response = new Response<>(HttpStatus.OK.value());
         try {
             List<LateTimeCheckDTO> lateTimeCheckDTOS = lateTimeCheckService.processExcelFile(file);
-            if (Objects.nonNull(lateTimeCheckDTOS.get(0).getErrorDTOS())) {
+            if (Objects.nonNull(lateTimeCheckDTOS.get(0).getErrorDTOS())){
                 response.setErrors(lateTimeCheckDTOS.get(0).getErrorDTOS());
                 response.setStatus(lateTimeCheckDTOS.get(0).getErrorDTOS().get(0).getErrorCode());
                 response.setMessage(lateTimeCheckDTOS.get(0).getErrorDTOS().get(0).getMessage());
@@ -64,9 +64,6 @@ public class LateTimeCheckController {
         } catch (IOException e) {
             response.setStatus(ErrorCode.ERROR_IO_EXCEPTION.getValue());
             response.setMessage(ErrorMessage.ERROR_IO_EXCEPTION);
-        } catch (Exception e) {
-            response.setStatus(ErrorCode.SYSTEM_ERROR.getValue());
-            response.setMessage(ErrorCode.SYSTEM_ERROR.getDescription());
         }
         return response;
     }
