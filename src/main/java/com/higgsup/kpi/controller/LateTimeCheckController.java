@@ -64,6 +64,9 @@ public class LateTimeCheckController {
         } catch (IOException e) {
             response.setStatus(ErrorCode.ERROR_IO_EXCEPTION.getValue());
             response.setMessage(ErrorMessage.ERROR_IO_EXCEPTION);
+        } catch (Exception e) {
+            response.setStatus(ErrorCode.SYSTEM_ERROR.getValue());
+            response.setMessage(ErrorCode.SYSTEM_ERROR.getDescription());
         }
         return response;
     }
