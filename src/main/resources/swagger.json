@@ -386,31 +386,31 @@
         }
       }
     },
-    "/api/late-times/import-file": {
-      "post": {
-        "tags": [
+    "/api/late-times/import-file":{
+      "post":{
+        "tags":[
           "event-controller"
         ],
-        "summary": "processLateTimeExcelFile",
-        "operationId": "processExcelFileUsingPOST",
+        "summary":"processLateTimeExcelFile",
+        "operationId":"processExcelFileUsingPOST",
         "consumes": [
           "multipart/form-data"
         ],
-        "produces": [
+        "produces":[
           "*/*"
         ],
         "parameters": [
           {
-            "name": "file",
-            "in": "formData",
-            "description": "file",
-            "required": true,
-            "type": "file"
+            "name":"file",
+            "in":"formData",
+            "description":"file",
+            "required":true,
+            "type":"file"
           }
         ],
         "responses": {
           "200": {
-            "description": "status_code : 200. Meaning: Thành công \n status_code : 910 \n Message: incorrect file format. Meaning: không phải file excel. \n status_code : 911. Message: invalid member name. Meaning: Sai định dạng tên cột thành viên. \n Message: invalid email. Meaning: Sai định dạng tên cột email. Message: invalid number of late times. Meaning: Sai định dạng tên cột số lần đi muộn. \n status_code : 915. Message: incorrect email data at line. Meaning: Sai định dạng email tại dòng. \n  Message: incorrect late times data at line. Meaning: Sai định dạng số lần đi muộn. \n Message: email not in database at line. Meaning: email không có trong database",
+            "description":"status_code : 200. Meaning: Thành công \n status_code : 910 \n Message: incorrect file format. Meaning: không phải file excel. \n status_code : 911. Message: invalid member name. Meaning: Sai định dạng tên cột thành viên. \n Message: invalid email. Meaning: Sai định dạng tên cột email. Message: invalid number of late times. Meaning: Sai định dạng tên cột số lần đi muộn. \n status_code : 916. Message: incorrect email data at line. Meaning: Sai định dạng email tại dòng. \n  Message: incorrect late times data at line. Meaning: Sai định dạng số lần đi muộn. \n Message: email not in database at line. Meaning: email không có trong database",
             "schema": {
               "type": "object",
               "required": [
@@ -473,7 +473,7 @@
                   "format": "int32"
                 }
               },
-              "example": {
+              "example":{
                 "data": [
                   {
                     "id": 37,
@@ -3557,6 +3557,494 @@
             "description": "Not Found"
           }
         }
+      },
+      "get": {
+        "tags": [
+          "event-controller"
+        ],
+        "summary": "getTeamBuildingEvents",
+        "operationId": "getTeamBuildingEventsUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "status_code : 200. Meaning: Thành công \n status_code : 930. Message: Error IOException. Meaning: Lỗi IOException",
+            "schema": {
+              "type": "object",
+              "required": [
+                "status_code"
+              ],
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "number"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "status": {
+                        "type": "number"
+                      },
+                      "address": {
+                        "type": "string"
+                      },
+                      "createdDate": {
+                        "type": "string"
+                      },
+                      "updatedDate": {
+                        "type": "string"
+                      },
+                      "beginDate": {
+                        "type": "string"
+                      },
+                      "endDate": {
+                        "type": "string"
+                      },
+                      "group": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "number"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "groupType": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "number"
+                              },
+                              "name": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "createdDate": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "eventUserList": {
+                         "type": "array",
+                         "items": {
+                            "type": "object",
+                            "properties": {
+                              "user": {
+                                "type": "object",
+                                "properties": {
+                                  "username": {
+                                    "type": "string"
+                                  },
+                                  "lastName": {
+                                    "type": "string"
+                                  },
+                                  "firstName": {
+                                    "type": "string"
+                                  },
+                                  "fullName": {
+                                    "type": "string"
+                                  },
+                                  "email": {
+                                    "type": "string"
+                                  },
+                                  "userRole": {
+                                    "type": "string"
+                                  },
+                                  "birthday": {
+                                    "type": "string"
+                                  },
+                                  "numberPhone": {
+                                    "type": "string"
+                                  },
+                                  "address": {
+                                    "type": "string"
+                                  },
+                                  "gmail": {
+                                    "type": "string"
+                                  },
+                                  "skype": {
+                                    "type": "string"
+                                  },
+                                  "dateStartWork": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "event": {
+                                "type": "object"
+                              },
+                              "type": {
+                                "type": "number"
+                              }
+                            }
+                         }
+                      }
+                    },
+                    "example": {
+                      "data": [
+                        {
+                          "id": 23,
+                          "name": "Team Blackjack",
+                          "description": null,
+                          "status": null,
+                          "address": "Sam Son",
+                          "createdDate": "24-09-2018 16:58",
+                          "updatedDate": "24-09-2018 16:58",
+                          "beginDate": "21-09-2018 14:27",
+                          "endDate": null,
+                          "group": {
+                            "id": 1,
+                            "name": "Team Building",
+                            "description": null,
+                            "groupType": {
+                              "id": 3,
+                              "name": "Team building"
+                            },
+                            "createdDate": "20-09-2018 15:19",
+                            "additionalConfig": {
+                              "firstPrizePoint": 7,
+                              "secondPrizePoint": 3,
+                              "thirdPrizePoint": 2,
+                              "organizerPoint": 5
+                            }
+                          },
+                          "eventUserList": [
+                            {
+                              "user": {
+                                "username": "kpi.employee",
+                                "lastName": "kpi",
+                                "firstName": "employee",
+                                "fullName": "kpi test. employee",
+                                "email": "kpi.employee@higgsup.com",
+                                "userRole": null,
+                                "avatar": null,
+                                "birthday": null,
+                                "numberPhone": null,
+                                "address": null,
+                                "gmail": null,
+                                "skype": null,
+                                "dateStartWork": null
+                              },
+                              "type": 5,
+                              "status": null
+                            },
+                            {
+                              "user": {
+                                "username": "kpi.man",
+                                "lastName": "kpi",
+                                "firstName": "man",
+                                "fullName": "kpi test. man",
+                                "email": "kpi.man@higgsup.com",
+                                "userRole": null,
+                                "avatar": null,
+                                "birthday": null,
+                                "numberPhone": null,
+                                "address": null,
+                                "gmail": null,
+                                "skype": null,
+                                "dateStartWork": null
+                              },
+                              "type": 6,
+                              "status": null
+                            },
+                            {
+                              "user": {
+                                "username": "kpi.test01",
+                                "lastName": "kpi",
+                                "firstName": "test01",
+                                "fullName": "kpi test. test01",
+                                "email": "kpi.test01@higgsup.com",
+                                "userRole": null,
+                                "avatar": null,
+                                "birthday": null,
+                                "numberPhone": null,
+                                "address": null,
+                                "gmail": null,
+                                "skype": null,
+                                "dateStartWork": null
+                              },
+                              "type": 4,
+                              "status": null
+                            },
+                            {
+                              "user": {
+                                "username": "kpi.test02",
+                                "lastName": "kpi",
+                                "firstName": "test02",
+                                "fullName": "kpi test. test02",
+                                "email": "kpi.test02@higgsup.com",
+                                "userRole": null,
+                                "avatar": null,
+                                "birthday": null,
+                                "numberPhone": null,
+                                "address": null,
+                                "gmail": null,
+                                "skype": null,
+                                "dateStartWork": null
+                              },
+                              "type": 7,
+                              "status": null
+                            }
+                          ],
+                          "additionalConfig": {
+                            "firstPrizePoint": 7,
+                            "secondPrizePoint": 3,
+                            "thirdPrizePoint": 2,
+                            "organizerPoint": 5
+                          }
+                        },
+                        {
+                          "id": 22,
+                          "name": "Team Poker",
+                          "description": null,
+                          "status": null,
+                          "address": "Sam Son",
+                          "createdDate": "24-09-2018 16:57",
+                          "updatedDate": "24-09-2018 16:57",
+                          "beginDate": "21-09-2018 14:27",
+                          "endDate": null,
+                          "group": {
+                            "id": 1,
+                            "name": "Team Building",
+                            "description": null,
+                            "groupType": {
+                              "id": 3,
+                              "name": "Team building"
+                            },
+                            "createdDate": "20-09-2018 15:19",
+                            "additionalConfig": {
+                              "firstPrizePoint": 7,
+                              "secondPrizePoint": 3,
+                              "thirdPrizePoint": 2,
+                              "organizerPoint": 5
+                            }
+                          },
+                          "eventUserList": [
+                            {
+                              "user": {
+                                "username": "kpi.employee",
+                                "lastName": "kpi",
+                                "firstName": "employee",
+                                "fullName": "kpi test. employee",
+                                "email": "kpi.employee@higgsup.com",
+                                "userRole": null,
+                                "avatar": null,
+                                "birthday": null,
+                                "numberPhone": null,
+                                "address": null,
+                                "gmail": null,
+                                "skype": null,
+                                "dateStartWork": null
+                              },
+                              "type": 5,
+                              "status": null
+                            },
+                            {
+                              "user": {
+                                "username": "kpi.man",
+                                "lastName": "kpi",
+                                "firstName": "man",
+                                "fullName": "kpi test. man",
+                                "email": "kpi.man@higgsup.com",
+                                "userRole": null,
+                                "avatar": null,
+                                "birthday": null,
+                                "numberPhone": null,
+                                "address": null,
+                                "gmail": null,
+                                "skype": null,
+                                "dateStartWork": null
+                              },
+                              "type": 6,
+                              "status": null
+                            },
+                            {
+                              "user": {
+                                "username": "kpi.test01",
+                                "lastName": "kpi",
+                                "firstName": "test01",
+                                "fullName": "kpi test. test01",
+                                "email": "kpi.test01@higgsup.com",
+                                "userRole": null,
+                                "avatar": null,
+                                "birthday": null,
+                                "numberPhone": null,
+                                "address": null,
+                                "gmail": null,
+                                "skype": null,
+                                "dateStartWork": null
+                              },
+                              "type": 4,
+                              "status": null
+                            },
+                            {
+                              "user": {
+                                "username": "kpi.test02",
+                                "lastName": "kpi",
+                                "firstName": "test02",
+                                "fullName": "kpi test. test02",
+                                "email": "kpi.test02@higgsup.com",
+                                "userRole": null,
+                                "avatar": null,
+                                "birthday": null,
+                                "numberPhone": null,
+                                "address": null,
+                                "gmail": null,
+                                "skype": null,
+                                "dateStartWork": null
+                              },
+                              "type": 7,
+                              "status": null
+                            }
+                          ],
+                          "additionalConfig": {
+                            "firstPrizePoint": 7,
+                            "secondPrizePoint": 3,
+                            "thirdPrizePoint": 2,
+                            "organizerPoint": 5
+                          }
+                        },
+                        {
+                          "id": 21,
+                          "name": "Team an hai san",
+                          "description": null,
+                          "status": null,
+                          "address": "Sam Son",
+                          "createdDate": "24-09-2018 16:57",
+                          "updatedDate": "24-09-2018 16:57",
+                          "beginDate": "21-09-2018 14:27",
+                          "endDate": null,
+                          "group": {
+                            "id": 1,
+                            "name": "Team Building",
+                            "description": null,
+                            "groupType": {
+                              "id": 3,
+                              "name": "Team building"
+                            },
+                            "createdDate": "20-09-2018 15:19",
+                            "additionalConfig": {
+                              "firstPrizePoint": 7,
+                              "secondPrizePoint": 3,
+                              "thirdPrizePoint": 2,
+                              "organizerPoint": 5
+                            }
+                          },
+                          "eventUserList": [
+                            {
+                              "user": {
+                                "username": "kpi.employee",
+                                "lastName": "kpi",
+                                "firstName": "employee",
+                                "fullName": "kpi test. employee",
+                                "email": "kpi.employee@higgsup.com",
+                                "userRole": null,
+                                "avatar": null,
+                                "birthday": null,
+                                "numberPhone": null,
+                                "address": null,
+                                "gmail": null,
+                                "skype": null,
+                                "dateStartWork": null
+                              },
+                              "type": 5,
+                              "status": null
+                            },
+                            {
+                              "user": {
+                                "username": "kpi.man",
+                                "lastName": "kpi",
+                                "firstName": "man",
+                                "fullName": "kpi test. man",
+                                "email": "kpi.man@higgsup.com",
+                                "userRole": null,
+                                "avatar": null,
+                                "birthday": null,
+                                "numberPhone": null,
+                                "address": null,
+                                "gmail": null,
+                                "skype": null,
+                                "dateStartWork": null
+                              },
+                              "type": 6,
+                              "status": null
+                            },
+                            {
+                              "user": {
+                                "username": "kpi.test01",
+                                "lastName": "kpi",
+                                "firstName": "test01",
+                                "fullName": "kpi test. test01",
+                                "email": "kpi.test01@higgsup.com",
+                                "userRole": null,
+                                "avatar": null,
+                                "birthday": null,
+                                "numberPhone": null,
+                                "address": null,
+                                "gmail": null,
+                                "skype": null,
+                                "dateStartWork": null
+                              },
+                              "type": 4,
+                              "status": null
+                            },
+                            {
+                              "user": {
+                                "username": "kpi.test02",
+                                "lastName": "kpi",
+                                "firstName": "test02",
+                                "fullName": "kpi test. test02",
+                                "email": "kpi.test02@higgsup.com",
+                                "userRole": null,
+                                "avatar": null,
+                                "birthday": null,
+                                "numberPhone": null,
+                                "address": null,
+                                "gmail": null,
+                                "skype": null,
+                                "dateStartWork": null
+                              },
+                              "type": 7,
+                              "status": null
+                            }
+                          ],
+                          "additionalConfig": {
+                            "firstPrizePoint": 7,
+                            "secondPrizePoint": 3,
+                            "thirdPrizePoint": 2,
+                            "organizerPoint": 5
+                          }
+                        }
+                      ],
+                      "status_code": 200
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
       }
     },
     "/api/events/{id}/status/support-new": {
@@ -3961,28 +4449,28 @@
               },
               "example": {
                 "name": "seminar test 4",
-                "address": "Ha Noi",
-                "beginDate": "20-09-2018 16:24",
-                "endDate": "21-09-2018 16:24",
+                "address":"Ha Noi",
+                "beginDate":"20-09-2018 16:24",
+                "endDate":"21-09-2018 16:24",
                 "group": {
-                  "id": 1
+                  "id":1
                 },
-                "eventUserList": [
+                "eventUserList":[
                   {
-                    "user": {
-                      "username": "kpi.test01"
+                    "user":{
+                      "username":"kpi.test01"
                     },
                     "type": 1
                   },
                   {
                     "user": {
-                      "username": "kpi.test"
+                      "username":"kpi.test"
                     },
                     "type": 2
                   },
                   {
                     "user": {
-                      "username": "kpi.employee"
+                      "username":"kpi.employee"
                     },
                     "type": 3
                   }
@@ -4771,7 +5259,7 @@
                   },
                   {
                     "user": {
-                      "username": "kpi.employee"
+                      "username":"kpi.employee"
                     },
                     "type": 3
                   }
@@ -4994,6 +5482,337 @@
               "additionalConfig": "null"
             },
             "status_code": 200
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/events/seminar/survey": {
+      "post": {
+        "tags": [
+          "event-controller"
+        ],
+        "summary": "createSeminarSurvey",
+        "operationId": "createSeminarSurveyUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "seminarSurveyDTO",
+            "description": "seminarSurveyDTO",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "evaluatedUsername",
+                "rating"
+              ],
+              "properties": {
+                "evaluatedUsername": {
+                  "type": "object",
+                  "required": [
+                    "username"
+                  ],
+                  "properties": {
+                    "username": {
+                      "type": "String"
+                    }
+                  }
+                },
+                "rating": {
+                  "type": "number"
+                }
+              },
+              "example": {
+                "id": 2,
+                "additionalConfig": [
+                  {
+                    "evaluatedUsername": {
+                      "username": "kpi.man"
+                    },
+                    "rating": 4
+                  },
+                  {
+                    "evaluatedUsername": {
+                      "username": "kpi.test"
+                    },
+                    "rating": 8
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Status_code: 200. Message: OK. Meaning: Thành công \n Status_code: 900. Message: host does not exist. Meaning: Host không tồn tại. \n Status_code: 917. Message: already evaluated. Meaning: Bạn đã đánh giá khảo sát rồi. \n Status_code: 918. Message: host cannot create any seminar survey. Meaning: Host không được phép làm khảo sát. \n Status_code: 919. Message: not attend this event. Meaning: Bạn không tham gia event này. \n Status_code: 900. Message: not find event by id. Meaning: Event không tồn tại. ",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "address": {
+                      "type": "string"
+                    },
+                    "createdDate": {
+                      "type": "string"
+                    },
+                    "updatedDate": {
+                      "type": "string"
+                    },
+                    "beginDate": {
+                      "type": "string"
+                    },
+                    "endDate": {
+                      "type": "string"
+                    },
+                    "group": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "groupType": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "number"
+                            },
+                            "name": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "createdDate": {
+                          "type": "string"
+                        },
+                        "additionalConfig": {
+                          "type": "object",
+                          "properties": {
+                            "hostPoint": {
+                              "type": "number"
+                            },
+                            "memberPoint": {
+                              "type": "number"
+                            },
+                            "listenerPoint": {
+                              "type": "number"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "eventUserList": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "user",
+                        "status",
+                        "seminarSurveys"
+                      ],
+                      "properties": {
+                        "user": {
+                          "type": "object",
+                          "required": [
+                            "username",
+                            "lastName",
+                            "firstName",
+                            "fullName",
+                            "email"
+                          ],
+                          "properties": {
+                            "username": {
+                              "type": "String"
+                            },
+                            "lastName": {
+                              "type": "String"
+                            },
+                            "firstName": {
+                              "type": "String"
+                            },
+                            "fullName": {
+                              "type": "String"
+                            },
+                            "email": {
+                              "type": "String"
+                            }
+                          }
+                        },
+                        "seminarSurveys": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "required": [
+                              "evaluatedUsername",
+                              "rating"
+                            ],
+                            "properties": {
+                              "evaluatedUsername": {
+                                "type": "object",
+                                "required": [
+                                  "username",
+                                  "lastName",
+                                  "firstName",
+                                  "fullName",
+                                  "email"
+                                ],
+                                "properties": {
+                                  "username": "String"
+                                }
+                              },
+                              "rating": {
+                                "type": "number"
+                              }
+                            }
+                          }
+                        },
+                        "status": {
+                          "type": "number"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "data": {
+                  "id": 2,
+                  "name": "Seminar java 1",
+                  "description": null,
+                  "status": 1,
+                  "address": "Ha noi",
+                  "createdDate": "24-09-2018 17:20",
+                  "updatedDate": "24-09-2018 17:20",
+                  "beginDate": "14-08-2018 16:24",
+                  "endDate": "05-09-2018 16:24",
+                  "group": null,
+                  "eventUserList": [
+                    {
+                      "user": {
+                        "username": "kpi.employee",
+                        "lastName": "kpi",
+                        "firstName": "employee",
+                        "fullName": "kpi test. employee",
+                        "email": "kpi.employee@higgsup.com",
+                        "userRole": null,
+                        "avatar": null,
+                        "birthday": null,
+                        "numberPhone": null,
+                        "address": null,
+                        "gmail": null,
+                        "skype": null,
+                        "dateStartWork": null
+                      },
+                      "type": null,
+                      "status": 1,
+                      "seminarSurveys": [
+                        {
+                          "evaluatingUsername": null,
+                          "evaluatedUsername": {
+                            "username": "kpi.man",
+                            "lastName": "kpi",
+                            "firstName": "man",
+                            "fullName": "kpi test. man",
+                            "email": "kpi.man@higgsup.com",
+                            "userRole": null,
+                            "avatar": null,
+                            "birthday": null,
+                            "numberPhone": null,
+                            "address": null,
+                            "gmail": null,
+                            "skype": null,
+                            "dateStartWork": null
+                          },
+                          "rating": 4
+                        },
+                        {
+                          "evaluatingUsername": null,
+                          "evaluatedUsername": {
+                            "username": "kpi.test",
+                            "lastName": "kpi",
+                            "firstName": "test",
+                            "fullName": "kpi test. test",
+                            "email": "kpi.test@higgsup.com",
+                            "userRole": null,
+                            "avatar": null,
+                            "birthday": null,
+                            "numberPhone": null,
+                            "address": null,
+                            "gmail": null,
+                            "skype": null,
+                            "dateStartWork": null
+                          },
+                          "rating": 8
+                        }
+                      ]
+                    }
+                  ],
+                  "additionalConfig": {
+                    "hostPoint": "13.6",
+                    "memberPoint": "13.4",
+                    "listenerPoint": "11"
+                  }
+                },
+                "status_code": 200
+              }
+            },
+            "message": {
+              "type": "string"
+            },
+            "status_code": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "errors": {
+              "type": "array",
+              "items": {
+                "properties": {
+                  "errorCode": {
+                    "type": "number"
+                  },
+                  "message": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
           },
           "201": {
             "description": "Created"
@@ -5857,7 +6676,7 @@
         ],
         "responses": {
           "200": {
-            "description": "status_code : 200. Meaning: Thành công \n status_code : 904. Message: json processing exception. Meaning: Lỗi convert json \n status_code : 903. Message: parameter name is not valid. Meaning: Tên câu lạc bộ không hợp lệ \n status_code : 901. Message: parameter min number of sessions is not valid. Meaning: Số lần tổi thiểu đăng ký không hợp lệ \n status_code : 901. Message: parameter point is not valid. Meaning: Điểm không hợp lệ \n status_code : 901. Message: group type does not exist. Meaning: Loại group không tồn tại \n  status_code : 932. Message: group name already exist. Meaning:  Tên group đã tồn tại \n status_code : 914. Message: minimum session must be bigger than zero. Meaning:  Số buổi tối thiểu phải lớn hơn 0 ",
+            "description": "status_code : 200. Meaning: Thành công \n status_code : 904. Message: json processing exception. Meaning: Lỗi convert json \n status_code : 903. Message: parameter name is not valid. Meaning: Tên câu lạc bộ không hợp lệ \n status_code : 901. Message: parameter min number of sessions is not valid. Meaning: Số lần tổi thiểu đăng ký không hợp lệ \n status_code : 901. Message: parameter point is not valid. Meaning: Điểm không hợp lệ \n status_code : 901. Message: group type does not exist. Meaning: Loại group không tồn tại \n  status_code : 932. Message: group name already exist. Meaning:  Tên group đã tồn tại \n status_code : 914. Message: minimum session must be bigger than zero. Meaning:  Số buổi tối thiểu phải lớn hơn 0. \n status_code: 900. Message: user does not exist. Meaning: Người dùng không tồn tại. ",
             "schema": {
               "type": "object",
               "required": [
@@ -6442,7 +7261,7 @@
         ],
         "responses": {
           "200": {
-            "description": "status_code : 200. Meaning: Thành công \n status_code : 904. Message: json processing exception. Meaning: Lỗi convert josn \n status_code : 903. Message: parameter name is not valid. Meaning: Tên câu lạc bộ không hợp lệ \n status_code : 901. Message: parameter min number of sessions is not valid. Meaning: Số lần tổi thiểu đăng ký không hợp lệ \n status_code : 901. Message: parameter point is not valid. Meaning: Điểm không hợp lệ \n status_code : 901. Message: group type does not exist. Meaning: Loại group không tồn tại \n  status_code : 932. Message: group name already exist. Meaning:  Tên group đã tồn tại \n status_code : 914. Message: minimum session must be bigger than zero. Meaning:  Số buổi tối thiểu phải lớn hơn 0",
+            "description": "status_code : 200. Meaning: Thành công \n status_code : 904. Message: json processing exception. Meaning: Lỗi convert josn \n status_code : 903. Message: parameter name is not valid. Meaning: Tên câu lạc bộ không hợp lệ \n status_code : 901. Message: parameter min number of sessions is not valid. Meaning: Số lần tổi thiểu đăng ký không hợp lệ \n status_code : 901. Message: parameter point is not valid. Meaning: Điểm không hợp lệ \n status_code : 901. Message: group type does not exist. Meaning: Loại group không tồn tại \n  status_code : 932. Message: group name already exist. Meaning:  Tên group đã tồn tại \n status_code : 914. Message: minimum session must be bigger than zero. Meaning:  Số buổi tối thiểu phải lớn hơn 0. \n status_code: 900. Message: user does not exist. Meaning: Người dùng không tồn tại.",
             "schema": {
               "type": "object",
               "required": [
@@ -8752,7 +9571,7 @@
             "description": "roles",
             "required": false,
             "type": "string",
-            "example": "man,employee"
+            "example":"man,employee"
           }
         ],
         "responses": {

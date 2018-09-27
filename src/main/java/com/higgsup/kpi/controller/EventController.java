@@ -87,10 +87,25 @@ public class EventController {
         return response;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/team-building")
+    public Response getTeamBuildingEvents(){
+        Response<List<EventDTO>> response = new Response<>(HttpStatus.OK.value());
+        try{
+            List<EventDTO> eventDTOS = eventService.getTeamBuildingEvents();
+            response.setData(eventDTOS);
+        }catch(IOException ex){
+            response.setStatus(ErrorCode.ERROR_IO_EXCEPTION.getValue());
+            response.setMessage(ErrorMessage.ERROR_IO_EXCEPTION);
+        }
+        return response;
+    }
+
+
     @PostMapping("/support")
     @PreAuthorize("hasRole('EMPLOYEE')")
     public Response createSupport(@RequestBody EventDTO<List<EventSupportDetail>> supportDTO) {
-        Response response = new Response<>(HttpStatus.OK.value());
+        Response<EventDTO> response = new Response<>(HttpStatus.OK.value());
         try {
             EventDTO eventDTO = eventService.createSupportEvent(supportDTO);
             if (Objects.nonNull(eventDTO.getErrorCode())) {
@@ -110,7 +125,7 @@ public class EventController {
     @PutMapping("/support/{id}")
     @PreAuthorize("hasRole('EMPLOYEE')")
     public Response updateSupport(@PathVariable Integer id, @RequestBody EventDTO<List<EventSupportDetail>> supportDTO) {
-        Response response = new Response<>(HttpStatus.OK.value());
+        Response<EventDTO> response = new Response<>(HttpStatus.OK.value());
         try {
             supportDTO.setId(id);
             EventDTO eventDTO = eventService.updateSupportEvent(supportDTO);
@@ -230,7 +245,7 @@ public class EventController {
     @PutMapping("/{id}/status")
     @PreAuthorize("hasRole('ADMIN')")
     public Response confirmOrCancelEvent(@PathVariable Integer id, @RequestBody EventDTO eventParam) {
-        Response response = new Response<>(HttpStatus.OK.value());
+        Response<EventDTO> response = new Response<>(HttpStatus.OK.value());
         try {
             if (Objects.nonNull(eventParam.getStatus())) {
                 eventParam.setId(id);
@@ -275,4 +290,23 @@ public class EventController {
         }
         return response;
     }
+
+    @PostMapping("/seminar/survey")
+    @PreAuthorize("hasRole('EMPLOYEE')")
+    public Response createSeminarSurvey(@RequestBody(required = false) EventDTO<List<SeminarSurveyDTO>> seminarSurveyDTO) throws IOException {
+        Response<EventDTO> response = new Response<>(HttpStatus.OK.value());
+
+        EventDTO seminarSurveyDTOResponse = eventService.createSeminarSurvey(seminarSurveyDTO);
+
+        if (Objects.nonNull(seminarSurveyDTOResponse.getErrorCode())) {
+            response.setStatus(seminarSurveyDTOResponse.getErrorCode());
+            response.setMessage(seminarSurveyDTOResponse.getMessage());
+            response.setErrors(seminarSurveyDTOResponse.getErrorDTOS());
+        } else {
+            response.setData(seminarSurveyDTOResponse);
+        }
+
+        return response;
+    }
+
 }

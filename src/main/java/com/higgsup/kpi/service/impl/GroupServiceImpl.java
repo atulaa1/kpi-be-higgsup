@@ -7,14 +7,18 @@ import com.google.common.collect.Lists;
 import com.higgsup.kpi.dto.*;
 import com.higgsup.kpi.entity.KpiGroup;
 import com.higgsup.kpi.entity.KpiGroupType;
+import com.higgsup.kpi.entity.KpiUser;
 import com.higgsup.kpi.entity.KpiSupport;
 import com.higgsup.kpi.glossary.ErrorCode;
 import com.higgsup.kpi.glossary.ErrorMessage;
 import com.higgsup.kpi.glossary.GroupType;
 import com.higgsup.kpi.repository.KpiGroupRepo;
 import com.higgsup.kpi.repository.KpiGroupTypeRepo;
+import com.higgsup.kpi.repository.KpiUserRepo;
 import com.higgsup.kpi.repository.KpiSupportRepo;
 import com.higgsup.kpi.service.GroupService;
+import com.higgsup.kpi.service.LdapUserService;
+import com.higgsup.kpi.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,10 +36,21 @@ public class GroupServiceImpl implements GroupService {
 
     @Autowired
     KpiSupportRepo kpiSupportRepo;
+
     @Autowired
     private KpiGroupRepo kpiGroupRepo;
+
     @Autowired
     private KpiGroupTypeRepo kpiGroupTypeRepo;
+
+    @Autowired
+    private KpiUserRepo kpiUserRepo;
+
+    @Autowired
+    private LdapUserService ldapUserService;
+
+    @Autowired
+    private UserService userService;
 
     @Override
     public GroupDTO updateTeamBuilding(GroupDTO<TeamBuildingDTO> groupDTO) throws JsonProcessingException {
@@ -407,7 +422,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     private List<SupportDTO> convertListSupportEntityToDTO(List<KpiSupport> supportEntityCreates,
-            String... ignoreProperties) {
+                                                           String... ignoreProperties) {
         List<SupportDTO> supportDTOS = new ArrayList<>();
         for (KpiSupport kpiSupport : supportEntityCreates) {
             SupportDTO supportDTO = new SupportDTO();
@@ -616,6 +631,9 @@ public class GroupServiceImpl implements GroupService {
         } else if (!isValidPoint(effectivePoint) || effectivePoint.length() == 0) {
             validatedGroupDTO.setMessage(ErrorMessage.PARAMETERS_POINT_IS_NOT_VALID);
             validatedGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+        } else if (!validateUserName(groupDTO.getAdditionalConfig().getHost())) {
+            validatedGroupDTO.setMessage(ErrorMessage.USER_DOES_NOT_EXIST);
+            validatedGroupDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
         } else {
             validate = true;
         }
@@ -641,6 +659,20 @@ public class GroupServiceImpl implements GroupService {
             validate = true;
         }
         return validate;
+    }
+
+    private Boolean validateUserName(String username) {
+        List<UserDTO> ldapUserList = ldapUserService.getAllUsers();
+        List<UserDTO> ldapUserListClone = new ArrayList<>(ldapUserList);
+        List<KpiUser> dbUserList = (List<KpiUser>) kpiUserRepo.findAll();
+
+        ldapUserList.removeIf(userDTO -> dbUserList.stream()
+                .anyMatch(kpiUser -> kpiUser.getUserName().equals(userDTO.getUsername())));
+
+        ldapUserList.forEach(userDTO -> userService.registerUser(userDTO.getUsername()));
+
+        return ldapUserListClone.stream().anyMatch(
+                userDTO -> userDTO.getUsername().equals(username));
     }
 
     @Override

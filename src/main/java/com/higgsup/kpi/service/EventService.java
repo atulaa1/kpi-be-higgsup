@@ -14,6 +14,8 @@ public interface EventService {
 
     List<EventDTO> getSeminarEventByUser(String username) throws IOException;
 
+    List<EventDTO> getTeamBuildingEvents() throws IOException;
+
     EventDTO createSupportEvent(EventDTO<List<EventSupportDetail>> supportDTO) throws IOException, NoSuchFieldException;
 
     EventDTO createSupportEventNew(EventDTO<List<EventSupportDTO>> supportDTO) throws IOException;
@@ -35,4 +37,6 @@ public interface EventService {
     EventDTO confirmOrCancelEventSupportNew(EventDTO eventDTO) throws IOException, NoSuchFieldException, IllegalAccessException;
 
     EventDTO createTeamBuildingEvent(EventDTO<EventTeamBuildingDetail> eventDTO) throws IOException;
+
+    EventDTO createSeminarSurvey(EventDTO<List<SeminarSurveyDTO>> seminarSurveyDTO) throws IOException;
 }

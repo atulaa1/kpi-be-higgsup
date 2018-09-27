@@ -29,7 +29,7 @@ public class UtilsValidate {
         return matcher.matches();
     }
 
-    public static Boolean isValidLateTimeNumber(String str){
+    public static Boolean isValidLateTimeNumber(String str) {
         Pattern pattern = Pattern.compile("\\d+[.][0]");
         Matcher matcher = pattern.matcher(str);
         return matcher.matches();

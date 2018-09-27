@@ -53,9 +53,9 @@ public class UserController {
     @PreAuthorize("hasRole('EMPLOYEE')")
     @GetMapping(BaseConfiguration.BASE_API_URL + "/users")
     public Response getListUsers(@RequestParam(value = "name", required = false) String name,
-            @RequestParam(value = "roles", required = false) String roles) {
+                                 @RequestParam(value = "roles", required = false) String roles) {
         Response<List<UserDTO>> response = new Response<>(HttpStatus.OK.value());
-        List<UserDTO> listUsers=new ArrayList<>();
+        List<UserDTO> listUsers = new ArrayList<>();
         // search by name
         if (Objects.nonNull(name)) {
             if (!UtilsValidate.containRegex(name)) {

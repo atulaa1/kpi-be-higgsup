@@ -34,7 +34,7 @@ public class LateTimeCheckController {
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public Response updateLateTimesOfCurrentMonth(@PathVariable Integer id,
-            @RequestBody(required = true) LateTimeCheckDTO lateTimeCheckDTO) {
+                                                  @RequestBody(required = true) LateTimeCheckDTO lateTimeCheckDTO) {
         Response response = new Response<>(HttpStatus.OK.value());
         lateTimeCheckDTO.setId(id);
         LateTimeCheckDTO lateTimeCheckDTOS = lateTimeCheckService.updateLateTimesOfCurrentMonth(lateTimeCheckDTO);
