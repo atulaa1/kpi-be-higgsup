@@ -73,6 +73,21 @@ public class EventController {
         return response;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/team-building")
+    public Response getTeamBuildingEvents(){
+        Response<List<EventDTO>> response = new Response<>(HttpStatus.OK.value());
+        try{
+            List<EventDTO> eventDTOS = eventService.getTeamBuildingEvents();
+            response.setData(eventDTOS);
+        }catch(IOException ex){
+            response.setStatus(ErrorCode.ERROR_IO_EXCEPTION.getValue());
+            response.setMessage(ErrorMessage.ERROR_IO_EXCEPTION);
+        }
+        return response;
+    }
+
+
     @PostMapping("/support")
     @PreAuthorize("hasRole('EMPLOYEE')")
     public Response createSupport(@RequestBody EventDTO<List<EventSupportDetail>> supportDTO) {

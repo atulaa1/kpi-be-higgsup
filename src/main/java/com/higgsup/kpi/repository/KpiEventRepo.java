@@ -28,4 +28,8 @@ public interface KpiEventRepo extends CrudRepository<KpiEvent, Integer> {
             "where g.group_type_id = 1 and eu.user_name = :username " +
             "order by MONTH(e.created_date) desc, eu.status asc", nativeQuery = true)
     List<KpiEvent> findSeminarEventByUser(@Param("username") String username);
+
+    @Query(value = "select * from kpi_event as e join kpi_group as g on g.id = e.group_id" +
+            " where g.group_type_id = 3 order by e.created_date desc", nativeQuery = true)
+    List<KpiEvent> findTeamBuildingEvent();
 }

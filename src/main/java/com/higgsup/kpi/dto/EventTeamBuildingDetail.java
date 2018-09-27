@@ -1,8 +1,6 @@
 package com.higgsup.kpi.dto;
 
-import java.util.List;
-
-public class EventTeamBuildingDetail {
+public class EventTeamBuildingDetail{
     private Float firstPrizePoint;
 
     private Float secondPrizePoint;
