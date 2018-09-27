@@ -44,9 +44,15 @@ public final class ErrorMessage {
     public final static String GROUP_ID_CAN_NOT_NULL = "group ID can not be null";
     public final static String LIST_SUPPORT_CAN_NOT_EMPTY = "list support can not empty";
     public final static String NAME_AT_INDEX_CAN_NOT_NULL = "name at index %s can not null";
+
+    public final static String ID_TASK_AT_INDEX_CAN_NOT_NULL = "id task can not null at index %s";
+
     public final static String NAME_SUPPORT_AT_INDEX_CAN_NOT_INCORRECT = "name support at index %s not incorrect";
+    public final static String ID_SUPPORT_CAN_NOT_INCORRECT_AT_INDEX = "id support not incorrect at index %s";
     public final static String QUANTITY_AT_INDEX_CAN_NOT_NULL = "quantity at index %s can not null";
     public final static String QUANTITY_AT_INDEX_CAN_NOT_LESS_ONE = "quantity at index %s can not less one";
+    public final static String QUANTITY_AT_INDEX_CAN_NOT_NULL_NEW = "quantity can not null at index %s";
+    public final static String QUANTITY_AT_INDEX_CAN_NOT_LESS_ONE_NEW = "quantity can not less one at index %s";
     public final static String GROUP_ID_NOT_IS_SUPPORT = "group ID  not is support";
     public final static String ID_NOT_INCORRECT = "id not incorrect";
     public final static String ONLY_THE_CURRENT_MONTH_CAN_BE_EDITED = "only the current month can be edited";
@@ -70,6 +76,8 @@ public final class ErrorMessage {
     public final static String POINT_SUPPORT_MUST_BIGGER_THAN_ZERO = "point support must be bigger than zero";
     public final static String NAME_TASK_SUPPORT_ALREADY_EXISTS = "name task support already exists";
     public final static String NAME_TASK_SUPPORT_CAN_NOT_DUPLICATE = "name Task support can not duplicate";
+
+    public final static String ID_TASK_SUPPORT_CAN_NOT_DUPLICATE = "id task support can not duplicate";
 
     public final static String BEGIN_DATE_CAN_NOT_NULL = "begin date cannot null";
     public final static String END_DATE_CAN_NOT_NULL = "end date cannot null";

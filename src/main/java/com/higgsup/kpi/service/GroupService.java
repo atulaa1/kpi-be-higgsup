@@ -30,4 +30,6 @@ public interface GroupService {
     GroupDTO createSeminar(GroupDTO<GroupSeminarDetail> groupDTO) throws JsonProcessingException;
 
     List<GroupDTO> getAllGroup() throws IOException;
+
+    List<GroupDTO> getAllGroupNewSupport() throws IOException;
 }

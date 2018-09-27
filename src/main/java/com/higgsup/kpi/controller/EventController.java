@@ -74,6 +74,20 @@ public class EventController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/club-support-new")
+    public Response getAllEventNewSupport() {
+        Response<List<EventDTO>> response = new Response<>(HttpStatus.OK.value());
+        try {
+            List<EventDTO> eventDTOS = eventService.getAllClubAndSupportEventNewSupport();
+            response.setData(eventDTOS);
+        } catch (IOException ex) {
+            response.setStatus(ErrorCode.ERROR_IO_EXCEPTION.getValue());
+            response.setMessage(ErrorMessage.ERROR_IO_EXCEPTION);
+        }
+        return response;
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/team-building")
     public Response getTeamBuildingEvents(){
         Response<List<EventDTO>> response = new Response<>(HttpStatus.OK.value());
