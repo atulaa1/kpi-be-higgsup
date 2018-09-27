@@ -389,7 +389,7 @@
     "/api/late-times/import-file":{
       "post":{
         "tags":[
-          "event-controller"
+          "late-time-check-controller"
         ],
         "summary":"processLateTimeExcelFile",
         "operationId":"processExcelFileUsingPOST",
