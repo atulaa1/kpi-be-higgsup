@@ -386,31 +386,31 @@
         }
       }
     },
-    "/api/late-times/import-file": {
-      "post": {
-        "tags": [
+    "/api/late-times/import-file":{
+      "post":{
+        "tags":[
           "event-controller"
         ],
-        "summary": "processLateTimeExcelFile",
-        "operationId": "processExcelFileUsingPOST",
+        "summary":"processLateTimeExcelFile",
+        "operationId":"processExcelFileUsingPOST",
         "consumes": [
           "multipart/form-data"
         ],
-        "produces": [
+        "produces":[
           "*/*"
         ],
         "parameters": [
           {
-            "name": "file",
-            "in": "formData",
-            "description": "file",
-            "required": true,
-            "type": "file"
+            "name":"file",
+            "in":"formData",
+            "description":"file",
+            "required":true,
+            "type":"file"
           }
         ],
         "responses": {
           "200": {
-            "description": "status_code : 200. Meaning: Thành công \n status_code : 910 \n Message: incorrect file format. Meaning: không phải file excel. \n status_code : 911. Message: invalid member name. Meaning: Sai định dạng tên cột thành viên. \n Message: invalid email. Meaning: Sai định dạng tên cột email. Message: invalid number of late times. Meaning: Sai định dạng tên cột số lần đi muộn. \n status_code : 915. Message: incorrect email data at line. Meaning: Sai định dạng email tại dòng. \n  Message: incorrect late times data at line. Meaning: Sai định dạng số lần đi muộn. \n Message: email not in database at line. Meaning: email không có trong database",
+            "description":"status_code : 200. Meaning: Thành công \n status_code : 910 \n Message: incorrect file format. Meaning: không phải file excel. \n status_code : 911. Message: invalid member name. Meaning: Sai định dạng tên cột thành viên. \n Message: invalid email. Meaning: Sai định dạng tên cột email. Message: invalid number of late times. Meaning: Sai định dạng tên cột số lần đi muộn. \n status_code : 916. Message: incorrect email data at line. Meaning: Sai định dạng email tại dòng. \n  Message: incorrect late times data at line. Meaning: Sai định dạng số lần đi muộn. \n Message: email not in database at line. Meaning: email không có trong database",
             "schema": {
               "type": "object",
               "required": [
@@ -473,7 +473,7 @@
                   "format": "int32"
                 }
               },
-              "example": {
+              "example":{
                 "data": [
                   {
                     "id": 37,
@@ -2033,6 +2033,494 @@
             "description": "Not Found"
           }
         }
+      },
+      "get": {
+        "tags": [
+          "event-controller"
+        ],
+        "summary": "getTeamBuildingEvents",
+        "operationId": "getTeamBuildingEventsUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "status_code : 200. Meaning: Thành công \n status_code : 930. Message: Error IOException. Meaning: Lỗi IOException",
+            "schema": {
+              "type": "object",
+              "required": [
+                "status_code"
+              ],
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "number"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "status": {
+                        "type": "number"
+                      },
+                      "address": {
+                        "type": "string"
+                      },
+                      "createdDate": {
+                        "type": "string"
+                      },
+                      "updatedDate": {
+                        "type": "string"
+                      },
+                      "beginDate": {
+                        "type": "string"
+                      },
+                      "endDate": {
+                        "type": "string"
+                      },
+                      "group": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "number"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "groupType": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "number"
+                              },
+                              "name": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "createdDate": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "eventUserList": {
+                         "type": "array",
+                         "items": {
+                            "type": "object",
+                            "properties": {
+                              "user": {
+                                "type": "object",
+                                "properties": {
+                                  "username": {
+                                    "type": "string"
+                                  },
+                                  "lastName": {
+                                    "type": "string"
+                                  },
+                                  "firstName": {
+                                    "type": "string"
+                                  },
+                                  "fullName": {
+                                    "type": "string"
+                                  },
+                                  "email": {
+                                    "type": "string"
+                                  },
+                                  "userRole": {
+                                    "type": "string"
+                                  },
+                                  "birthday": {
+                                    "type": "string"
+                                  },
+                                  "numberPhone": {
+                                    "type": "string"
+                                  },
+                                  "address": {
+                                    "type": "string"
+                                  },
+                                  "gmail": {
+                                    "type": "string"
+                                  },
+                                  "skype": {
+                                    "type": "string"
+                                  },
+                                  "dateStartWork": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "event": {
+                                "type": "object"
+                              },
+                              "type": {
+                                "type": "number"
+                              }
+                            }
+                         }
+                      }
+                    },
+                    "example": {
+                      "data": [
+                        {
+                          "id": 23,
+                          "name": "Team Blackjack",
+                          "description": null,
+                          "status": null,
+                          "address": "Sam Son",
+                          "createdDate": "24-09-2018 16:58",
+                          "updatedDate": "24-09-2018 16:58",
+                          "beginDate": "21-09-2018 14:27",
+                          "endDate": null,
+                          "group": {
+                            "id": 1,
+                            "name": "Team Building",
+                            "description": null,
+                            "groupType": {
+                              "id": 3,
+                              "name": "Team building"
+                            },
+                            "createdDate": "20-09-2018 15:19",
+                            "additionalConfig": {
+                              "firstPrizePoint": 7,
+                              "secondPrizePoint": 3,
+                              "thirdPrizePoint": 2,
+                              "organizerPoint": 5
+                            }
+                          },
+                          "eventUserList": [
+                            {
+                              "user": {
+                                "username": "kpi.employee",
+                                "lastName": "kpi",
+                                "firstName": "employee",
+                                "fullName": "kpi test. employee",
+                                "email": "kpi.employee@higgsup.com",
+                                "userRole": null,
+                                "avatar": null,
+                                "birthday": null,
+                                "numberPhone": null,
+                                "address": null,
+                                "gmail": null,
+                                "skype": null,
+                                "dateStartWork": null
+                              },
+                              "type": 5,
+                              "status": null
+                            },
+                            {
+                              "user": {
+                                "username": "kpi.man",
+                                "lastName": "kpi",
+                                "firstName": "man",
+                                "fullName": "kpi test. man",
+                                "email": "kpi.man@higgsup.com",
+                                "userRole": null,
+                                "avatar": null,
+                                "birthday": null,
+                                "numberPhone": null,
+                                "address": null,
+                                "gmail": null,
+                                "skype": null,
+                                "dateStartWork": null
+                              },
+                              "type": 6,
+                              "status": null
+                            },
+                            {
+                              "user": {
+                                "username": "kpi.test01",
+                                "lastName": "kpi",
+                                "firstName": "test01",
+                                "fullName": "kpi test. test01",
+                                "email": "kpi.test01@higgsup.com",
+                                "userRole": null,
+                                "avatar": null,
+                                "birthday": null,
+                                "numberPhone": null,
+                                "address": null,
+                                "gmail": null,
+                                "skype": null,
+                                "dateStartWork": null
+                              },
+                              "type": 4,
+                              "status": null
+                            },
+                            {
+                              "user": {
+                                "username": "kpi.test02",
+                                "lastName": "kpi",
+                                "firstName": "test02",
+                                "fullName": "kpi test. test02",
+                                "email": "kpi.test02@higgsup.com",
+                                "userRole": null,
+                                "avatar": null,
+                                "birthday": null,
+                                "numberPhone": null,
+                                "address": null,
+                                "gmail": null,
+                                "skype": null,
+                                "dateStartWork": null
+                              },
+                              "type": 7,
+                              "status": null
+                            }
+                          ],
+                          "additionalConfig": {
+                            "firstPrizePoint": 7,
+                            "secondPrizePoint": 3,
+                            "thirdPrizePoint": 2,
+                            "organizerPoint": 5
+                          }
+                        },
+                        {
+                          "id": 22,
+                          "name": "Team Poker",
+                          "description": null,
+                          "status": null,
+                          "address": "Sam Son",
+                          "createdDate": "24-09-2018 16:57",
+                          "updatedDate": "24-09-2018 16:57",
+                          "beginDate": "21-09-2018 14:27",
+                          "endDate": null,
+                          "group": {
+                            "id": 1,
+                            "name": "Team Building",
+                            "description": null,
+                            "groupType": {
+                              "id": 3,
+                              "name": "Team building"
+                            },
+                            "createdDate": "20-09-2018 15:19",
+                            "additionalConfig": {
+                              "firstPrizePoint": 7,
+                              "secondPrizePoint": 3,
+                              "thirdPrizePoint": 2,
+                              "organizerPoint": 5
+                            }
+                          },
+                          "eventUserList": [
+                            {
+                              "user": {
+                                "username": "kpi.employee",
+                                "lastName": "kpi",
+                                "firstName": "employee",
+                                "fullName": "kpi test. employee",
+                                "email": "kpi.employee@higgsup.com",
+                                "userRole": null,
+                                "avatar": null,
+                                "birthday": null,
+                                "numberPhone": null,
+                                "address": null,
+                                "gmail": null,
+                                "skype": null,
+                                "dateStartWork": null
+                              },
+                              "type": 5,
+                              "status": null
+                            },
+                            {
+                              "user": {
+                                "username": "kpi.man",
+                                "lastName": "kpi",
+                                "firstName": "man",
+                                "fullName": "kpi test. man",
+                                "email": "kpi.man@higgsup.com",
+                                "userRole": null,
+                                "avatar": null,
+                                "birthday": null,
+                                "numberPhone": null,
+                                "address": null,
+                                "gmail": null,
+                                "skype": null,
+                                "dateStartWork": null
+                              },
+                              "type": 6,
+                              "status": null
+                            },
+                            {
+                              "user": {
+                                "username": "kpi.test01",
+                                "lastName": "kpi",
+                                "firstName": "test01",
+                                "fullName": "kpi test. test01",
+                                "email": "kpi.test01@higgsup.com",
+                                "userRole": null,
+                                "avatar": null,
+                                "birthday": null,
+                                "numberPhone": null,
+                                "address": null,
+                                "gmail": null,
+                                "skype": null,
+                                "dateStartWork": null
+                              },
+                              "type": 4,
+                              "status": null
+                            },
+                            {
+                              "user": {
+                                "username": "kpi.test02",
+                                "lastName": "kpi",
+                                "firstName": "test02",
+                                "fullName": "kpi test. test02",
+                                "email": "kpi.test02@higgsup.com",
+                                "userRole": null,
+                                "avatar": null,
+                                "birthday": null,
+                                "numberPhone": null,
+                                "address": null,
+                                "gmail": null,
+                                "skype": null,
+                                "dateStartWork": null
+                              },
+                              "type": 7,
+                              "status": null
+                            }
+                          ],
+                          "additionalConfig": {
+                            "firstPrizePoint": 7,
+                            "secondPrizePoint": 3,
+                            "thirdPrizePoint": 2,
+                            "organizerPoint": 5
+                          }
+                        },
+                        {
+                          "id": 21,
+                          "name": "Team an hai san",
+                          "description": null,
+                          "status": null,
+                          "address": "Sam Son",
+                          "createdDate": "24-09-2018 16:57",
+                          "updatedDate": "24-09-2018 16:57",
+                          "beginDate": "21-09-2018 14:27",
+                          "endDate": null,
+                          "group": {
+                            "id": 1,
+                            "name": "Team Building",
+                            "description": null,
+                            "groupType": {
+                              "id": 3,
+                              "name": "Team building"
+                            },
+                            "createdDate": "20-09-2018 15:19",
+                            "additionalConfig": {
+                              "firstPrizePoint": 7,
+                              "secondPrizePoint": 3,
+                              "thirdPrizePoint": 2,
+                              "organizerPoint": 5
+                            }
+                          },
+                          "eventUserList": [
+                            {
+                              "user": {
+                                "username": "kpi.employee",
+                                "lastName": "kpi",
+                                "firstName": "employee",
+                                "fullName": "kpi test. employee",
+                                "email": "kpi.employee@higgsup.com",
+                                "userRole": null,
+                                "avatar": null,
+                                "birthday": null,
+                                "numberPhone": null,
+                                "address": null,
+                                "gmail": null,
+                                "skype": null,
+                                "dateStartWork": null
+                              },
+                              "type": 5,
+                              "status": null
+                            },
+                            {
+                              "user": {
+                                "username": "kpi.man",
+                                "lastName": "kpi",
+                                "firstName": "man",
+                                "fullName": "kpi test. man",
+                                "email": "kpi.man@higgsup.com",
+                                "userRole": null,
+                                "avatar": null,
+                                "birthday": null,
+                                "numberPhone": null,
+                                "address": null,
+                                "gmail": null,
+                                "skype": null,
+                                "dateStartWork": null
+                              },
+                              "type": 6,
+                              "status": null
+                            },
+                            {
+                              "user": {
+                                "username": "kpi.test01",
+                                "lastName": "kpi",
+                                "firstName": "test01",
+                                "fullName": "kpi test. test01",
+                                "email": "kpi.test01@higgsup.com",
+                                "userRole": null,
+                                "avatar": null,
+                                "birthday": null,
+                                "numberPhone": null,
+                                "address": null,
+                                "gmail": null,
+                                "skype": null,
+                                "dateStartWork": null
+                              },
+                              "type": 4,
+                              "status": null
+                            },
+                            {
+                              "user": {
+                                "username": "kpi.test02",
+                                "lastName": "kpi",
+                                "firstName": "test02",
+                                "fullName": "kpi test. test02",
+                                "email": "kpi.test02@higgsup.com",
+                                "userRole": null,
+                                "avatar": null,
+                                "birthday": null,
+                                "numberPhone": null,
+                                "address": null,
+                                "gmail": null,
+                                "skype": null,
+                                "dateStartWork": null
+                              },
+                              "type": 7,
+                              "status": null
+                            }
+                          ],
+                          "additionalConfig": {
+                            "firstPrizePoint": 7,
+                            "secondPrizePoint": 3,
+                            "thirdPrizePoint": 2,
+                            "organizerPoint": 5
+                          }
+                        }
+                      ],
+                      "status_code": 200
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
       }
     },
 
@@ -2433,28 +2921,28 @@
               },
               "example": {
                 "name": "seminar test 4",
-                "address": "Ha Noi",
-                "beginDate": "20-09-2018 16:24",
-                "endDate": "21-09-2018 16:24",
+                "address":"Ha Noi",
+                "beginDate":"20-09-2018 16:24",
+                "endDate":"21-09-2018 16:24",
                 "group": {
-                  "id": 1
+                  "id":1
                 },
-                "eventUserList": [
+                "eventUserList":[
                   {
-                    "user": {
-                      "username": "kpi.test01"
+                    "user":{
+                      "username":"kpi.test01"
                     },
                     "type": 1
                   },
                   {
                     "user": {
-                      "username": "kpi.test"
+                      "username":"kpi.test"
                     },
                     "type": 2
                   },
                   {
                     "user": {
-                      "username": "kpi.employee"
+                      "username":"kpi.employee"
                     },
                     "type": 3
                   }
@@ -3243,7 +3731,7 @@
                   },
                   {
                     "user": {
-                      "username": "kpi.employee"
+                      "username":"kpi.employee"
                     },
                     "type": 3
                   }
@@ -6346,7 +6834,6 @@
           }
         }
       }
-
     },
     "/api/groups/team-building": {
       "post": {
@@ -7398,7 +7885,7 @@
             "description": "roles",
             "required": false,
             "type": "string",
-            "example": "man,employee"
+            "example":"man,employee"
           }
         ],
         "responses": {

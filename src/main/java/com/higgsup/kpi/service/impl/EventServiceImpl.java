@@ -61,6 +61,11 @@ public class EventServiceImpl extends BaseService implements EventService {
         return convertEventEntityToDTO(eventList);
     }
 
+    public List<EventDTO> getTeamBuildingEvents() throws IOException{
+        List<KpiEvent> teamBuildingEvents = kpiEventRepo.findTeamBuildingEvent();
+        return convertEventEntityToDTO(teamBuildingEvents);
+    }
+
     @Override
     public List<EventDTO> getEventCreatedByUser(String username) throws IOException {
         List<KpiEvent> eventList = kpiEventRepo.findEventCreatedByUser(username);
@@ -85,6 +90,9 @@ public class EventServiceImpl extends BaseService implements EventService {
                         break;
                     case SEMINAR:
                         eventDTOS.add(convertSeminarEntityToDTO(kpiEvent));
+                        break;
+                    case TEAM_BUILDING:
+                        eventDTOS.add(convertEventTeamBuildingEntityToDTO(kpiEvent));
                         break;
                 }
             }
@@ -692,12 +700,29 @@ public class EventServiceImpl extends BaseService implements EventService {
         return seminarDetailEventDTO;
     }
 
+    private EventDTO convertEventTeamBuildingEntityToDTO(KpiEvent kpiEvent) throws IOException{
+        EventDTO<EventTeamBuildingDetail> teamBuildingEventDTO = new EventDTO<>();
+        EventTeamBuildingDetail eventTeamBuildingDetail;
+        ObjectMapper mapper = new ObjectMapper();
+
+        BeanUtils.copyProperties(kpiEvent, teamBuildingEventDTO);
+        eventTeamBuildingDetail = mapper.readValue(kpiEvent.getAdditionalConfig(), EventTeamBuildingDetail.class);
+        teamBuildingEventDTO.setAdditionalConfig(eventTeamBuildingDetail);
+
+        List<KpiEventUser> kpiEventUsers = kpiEventUserRepo.findByKpiEventId(kpiEvent.getId());
+
+        List<EventUserDTO> eventUserDTOS = convertListEventUserEntityToDTO(kpiEventUsers);
+        teamBuildingEventDTO.setEventUserList(eventUserDTOS);
+        teamBuildingEventDTO.setGroup(convertConfigEventToDTO(kpiEvent.getGroup()));
+
+        return teamBuildingEventDTO;
+    }
+
     private GroupDTO convertConfigEventToDTO(KpiGroup kpiGroup) throws IOException {
         GroupDTO groupDTO = new GroupDTO<>();
         ObjectMapper mapper = new ObjectMapper();
 
         switch (GroupType.getGroupType(kpiGroup.getGroupType().getId())) {
-
             case SUPPORT:
 
                 BeanUtils.copyProperties(kpiGroup, groupDTO);
@@ -730,6 +755,7 @@ public class EventServiceImpl extends BaseService implements EventService {
 
                 groupDTO.setAdditionalConfig(eventTeamBuildingDetail);
                 groupDTO.setGroupType(convertGroupTypeEntityToDTO(kpiGroup.getGroupType()));
+                break;
         }
 
         return groupDTO;

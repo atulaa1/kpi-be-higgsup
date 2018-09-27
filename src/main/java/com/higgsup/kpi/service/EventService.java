@@ -1,9 +1,7 @@
 package com.higgsup.kpi.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.higgsup.kpi.dto.*;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.List;
 
@@ -13,6 +11,8 @@ public interface EventService {
     List<EventDTO> getEventCreatedByUser(String username) throws IOException;
 
     List<EventDTO> getSeminarEventByUser(String username) throws IOException;
+
+    List<EventDTO> getTeamBuildingEvents() throws IOException;
 
     EventDTO createSupportEvent(EventDTO<List<EventSupportDetail>> supportDTO) throws IOException, NoSuchFieldException;
 
