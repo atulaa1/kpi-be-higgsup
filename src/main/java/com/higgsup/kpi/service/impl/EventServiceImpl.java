@@ -124,6 +124,10 @@ public class EventServiceImpl extends BaseService implements EventService {
                         break;
                     case SEMINAR:
                         eventDTOS.add(convertSeminarEntityToDTO(kpiEvent));
+                        break;
+                    case TEAM_BUILDING:
+                        eventDTOS.add(convertEventTeamBuildingEntityToDTO(kpiEvent));
+                        break;
                 }
             }
         }
