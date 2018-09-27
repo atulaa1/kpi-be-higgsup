@@ -1,24 +1,16 @@
 package com.higgsup.kpi.glossary;
 
-public enum SeminarSurveyStatus {
+public enum EvaluatingStatus {
     UNFINISHED(0, "unfinished"),
-    FINISHED(1, "finished");
+    FINISH(1, "finish");
 
     private Integer value;
+
     private String content;
 
-    SeminarSurveyStatus(Integer value, String content) {
+    EvaluatingStatus(Integer value, String content) {
         this.value = value;
         this.content = content;
-    }
-
-    public static StatusEvent getStatusEvent(Integer value) {
-        for (StatusEvent statusEvent : StatusEvent.values()) {
-            if (statusEvent.getValue().equals(value)) {
-                return statusEvent;
-            }
-        }
-        return null;
     }
 
     public Integer getValue() {

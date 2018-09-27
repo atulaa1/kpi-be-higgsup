@@ -23,6 +23,9 @@ public enum ErrorCode {
     INVALID_COLUMN_NAME(911, "invalid column name"),
     MIN_SESSION_MUST_BIGGER_THAN_ZERO(914, "minimum session must be bigger than zero"),
     INCORRECT_DATA(916, "incorrect data"),
+    ALREADY_EVALUATED(917, "already evaluated"),
+    HOST_CANNOT_CREATE_SEMINAR_SURVEY(918, "host cannot create any seminar survey"),
+    NOT_ATTEND_EVENT(919, "not attend this event"),
     CANNOT_UPDATE(915, "cannot update");
 
     private Integer value;

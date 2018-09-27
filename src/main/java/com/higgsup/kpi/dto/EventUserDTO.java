@@ -2,6 +2,8 @@ package com.higgsup.kpi.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import java.util.List;
+
 public class EventUserDTO {
     private UserDTO user;
 
@@ -12,8 +14,26 @@ public class EventUserDTO {
 
     private Integer status;
 
+    List<SeminarSurveyDTO> seminarSurveys;
+
     public UserDTO getUser() {
         return user;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public List<SeminarSurveyDTO> getSeminarSurveys() {
+        return seminarSurveys;
+    }
+
+    public void setSeminarSurveys(List<SeminarSurveyDTO> seminarSurveys) {
+        this.seminarSurveys = seminarSurveys;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public void setUser(UserDTO user) {
@@ -34,13 +54,5 @@ public class EventUserDTO {
 
     public void setType(Integer type) {
         this.type = type;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
     }
 }
