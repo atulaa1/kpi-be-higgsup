@@ -269,15 +269,13 @@ public class LateTimeCheckServiceImpl implements LateTimeCheckService {
                 errorDTO.setErrorCode(ErrorCode.INVALID_COLUMN_NAME.getValue());
                 errorDTO.setMessage(ErrorMessage.INVALID_MEMBER_NAME);
                 errorDTOS.add(errorDTO);
-            }
-            if (titleRow.getCell(1) == null ||
+            } else if (titleRow.getCell(1) == null ||
                     !titleRow.getCell(1).getStringCellValue().trim().toLowerCase().contains("email")) {
                 ErrorDTO errorDTO = new ErrorDTO();
                 errorDTO.setErrorCode(ErrorCode.INVALID_COLUMN_NAME.getValue());
                 errorDTO.setMessage(ErrorMessage.INVALID_EMAIL);
                 errorDTOS.add(errorDTO);
-            }
-            if (titleRow.getCell(2) == null ||
+            } else if (titleRow.getCell(2) == null ||
                     !titleRow.getCell(2).getStringCellValue().trim().toLowerCase().contains("score")) {
                 ErrorDTO errorDTO = new ErrorDTO();
                 errorDTO.setErrorCode(ErrorCode.INVALID_COLUMN_NAME.getValue());
