@@ -264,19 +264,19 @@ public class LateTimeCheckServiceImpl implements LateTimeCheckService {
             XSSFSheet worksheet = workbook.getSheetAt(0);
             XSSFRow titleRow = worksheet.getRow(0);
             if (titleRow.getCell(0) == null ||
-                    !titleRow.getCell(0).getStringCellValue().trim().toLowerCase().contains("team member")) {
+                    !titleRow.getCell(0).getStringCellValue().trim().toLowerCase().equals("team member")) {
                 ErrorDTO errorDTO = new ErrorDTO();
                 errorDTO.setErrorCode(ErrorCode.INVALID_COLUMN_NAME.getValue());
                 errorDTO.setMessage(ErrorMessage.INVALID_MEMBER_NAME);
                 errorDTOS.add(errorDTO);
             } else if (titleRow.getCell(1) == null ||
-                    !titleRow.getCell(1).getStringCellValue().trim().toLowerCase().contains("email")) {
+                    !titleRow.getCell(1).getStringCellValue().trim().toLowerCase().equals("email")) {
                 ErrorDTO errorDTO = new ErrorDTO();
                 errorDTO.setErrorCode(ErrorCode.INVALID_COLUMN_NAME.getValue());
                 errorDTO.setMessage(ErrorMessage.INVALID_EMAIL);
                 errorDTOS.add(errorDTO);
             } else if (titleRow.getCell(2) == null ||
-                    !titleRow.getCell(2).getStringCellValue().trim().toLowerCase().contains("score")) {
+                    !titleRow.getCell(2).getStringCellValue().trim().toLowerCase().equals("score")) {
                 ErrorDTO errorDTO = new ErrorDTO();
                 errorDTO.setErrorCode(ErrorCode.INVALID_COLUMN_NAME.getValue());
                 errorDTO.setMessage(ErrorMessage.INVALID_NUMBER_OF_LATE_TIMES);
