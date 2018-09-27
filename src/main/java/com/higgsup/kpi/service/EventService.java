@@ -1,15 +1,18 @@
 package com.higgsup.kpi.service;
 
-import com.higgsup.kpi.dto.EventClubDetail;
-import com.higgsup.kpi.dto.EventDTO;
-import com.higgsup.kpi.dto.EventSeminarDetail;
-import com.higgsup.kpi.dto.EventSupportDetail;
+import com.higgsup.kpi.dto.*;
 
 import java.io.IOException;
 import java.util.List;
 
 public interface EventService {
-    List<EventDTO> getAllEvent() throws IOException;
+    List<EventDTO> getAllClubAndSupportEvent() throws IOException;
+
+    List<EventDTO> getEventCreatedByUser(String username) throws IOException;
+
+    List<EventDTO> getSeminarEventByUser(String username) throws IOException;
+
+    List<EventDTO> getTeamBuildingEvents() throws IOException;
 
     EventDTO createSupportEvent(EventDTO<List<EventSupportDetail>> supportDTO) throws IOException, NoSuchFieldException;
 
@@ -24,4 +27,6 @@ public interface EventService {
     EventDTO updateSeminar(EventDTO<EventSeminarDetail> eventDTO) throws IOException;
 
     EventDTO confirmOrCancelEvent(EventDTO eventDTO) throws IOException, NoSuchFieldException, IllegalAccessException;
+
+    EventDTO createTeamBuildingEvent(EventDTO<EventTeamBuildingDetail> eventDTO) throws IOException;
 }

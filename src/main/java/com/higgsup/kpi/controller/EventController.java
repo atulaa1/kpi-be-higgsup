@@ -9,6 +9,8 @@ import com.higgsup.kpi.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,8 +21,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
-import java.io.IOException;
-import java.util.List;
 
 @RestController
 @RequestMapping(BaseConfiguration.BASE_API_URL + "/events")
@@ -29,12 +29,56 @@ public class EventController {
     @Autowired
     private EventService eventService;
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/admin")
-    public Response getAllEvent(){
+    @PreAuthorize("hasRole('EMPLOYEE')")
+    @GetMapping("/created-by-user")
+    public Response getEventCreatedByUser() {
         Response<List<EventDTO>> response = new Response<>(HttpStatus.OK.value());
         try {
-            List<EventDTO> eventDTOS = eventService.getAllEvent();
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            List<EventDTO> eventDTOS = eventService.getEventCreatedByUser(authentication.getPrincipal().toString());
+            response.setData(eventDTOS);
+        } catch (IOException e) {
+            response.setStatus(ErrorCode.ERROR_IO_EXCEPTION.getValue());
+            response.setMessage(ErrorMessage.ERROR_IO_EXCEPTION);
+        }
+        return response;
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/club-support")
+    public Response getAllEvent() {
+        Response<List<EventDTO>> response = new Response<>(HttpStatus.OK.value());
+        try {
+            List<EventDTO> eventDTOS = eventService.getAllClubAndSupportEvent();
+            response.setData(eventDTOS);
+        } catch (IOException ex) {
+            response.setStatus(ErrorCode.ERROR_IO_EXCEPTION.getValue());
+            response.setMessage(ErrorMessage.ERROR_IO_EXCEPTION);
+        }
+        return response;
+    }
+
+    @PreAuthorize("hasRole('EMPLOYEE')")
+    @GetMapping("/seminar")
+    public Response getSeminarEventByUser() {
+        Response<List<EventDTO>> response = new Response<>(HttpStatus.OK.value());
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            List<EventDTO> eventDTOS = eventService.getSeminarEventByUser(authentication.getPrincipal().toString());
+            response.setData(eventDTOS);
+        } catch (IOException ex) {
+            response.setStatus(ErrorCode.ERROR_IO_EXCEPTION.getValue());
+            response.setMessage(ErrorMessage.ERROR_IO_EXCEPTION);
+        }
+        return response;
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/team-building")
+    public Response getTeamBuildingEvents(){
+        Response<List<EventDTO>> response = new Response<>(HttpStatus.OK.value());
+        try{
+            List<EventDTO> eventDTOS = eventService.getTeamBuildingEvents();
             response.setData(eventDTOS);
         }catch(IOException ex){
             response.setStatus(ErrorCode.ERROR_IO_EXCEPTION.getValue());
@@ -42,6 +86,7 @@ public class EventController {
         }
         return response;
     }
+
 
     @PostMapping("/support")
     @PreAuthorize("hasRole('EMPLOYEE')")
@@ -132,7 +177,6 @@ public class EventController {
     }
 
 
-
     @RequestMapping(value = "/seminar", method = RequestMethod.POST)
     @PreAuthorize("hasRole('EMPLOYEE')")
     public Response createSeminar(@RequestBody EventDTO<EventSeminarDetail> seminarDetailEventDTO) {
@@ -183,6 +227,7 @@ public class EventController {
         }
         return response;
     }
+
     @PutMapping("/{id}/status")
     @PreAuthorize("hasRole('ADMIN')")
     public Response confirmOrCancelEvent(@PathVariable Integer id, @RequestBody EventDTO eventParam) {
@@ -202,6 +247,30 @@ public class EventController {
                 response.setMessage(ErrorMessage.EVENT_STATUS_CAN_NOT_NULL);
             }
         } catch (Exception e) {
+            response.setStatus(ErrorCode.SYSTEM_ERROR.getValue());
+            response.setMessage(ErrorCode.SYSTEM_ERROR.getDescription());
+        }
+        return response;
+    }
+
+    @RequestMapping(value = "/team-building", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ADMIN')")
+    public Response createTeamBuilding(@RequestBody EventDTO<EventTeamBuildingDetail> teamBuildingDetailEventDTO) {
+        Response<EventDTO> response = new Response<>(HttpStatus.OK.value());
+        try {
+            EventDTO eventDTOResponse = eventService.createTeamBuildingEvent(teamBuildingDetailEventDTO);
+
+            if (Objects.nonNull(eventDTOResponse.getErrorCode())) {
+                response.setStatus(eventDTOResponse.getErrorCode());
+                response.setMessage(eventDTOResponse.getMessage());
+                response.setErrors(eventDTOResponse.getErrorDTOS());
+            } else {
+                response.setData(eventDTOResponse);
+            }
+        } catch (JsonProcessingException e) {
+            response.setMessage(ErrorCode.JSON_PROCESSING_EXCEPTION.getDescription());
+            response.setStatus(ErrorCode.JSON_PROCESSING_EXCEPTION.getValue());
+        } catch (IOException e) {
             response.setStatus(ErrorCode.SYSTEM_ERROR.getValue());
             response.setMessage(ErrorCode.SYSTEM_ERROR.getDescription());
         }

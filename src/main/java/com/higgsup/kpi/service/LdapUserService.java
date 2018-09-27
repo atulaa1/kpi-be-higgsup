@@ -9,7 +9,7 @@ public interface LdapUserService {
 
     List<UserDTO> getAllUsers();
 
-    List<UserDTO> getAllEmployeeUsers();
+    List<UserDTO> getAllEmployeeAndManUsers();
 
     UserDTO updateUserRole(String username, List<String> role);
 

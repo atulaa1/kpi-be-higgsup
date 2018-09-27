@@ -2,16 +2,20 @@ package com.higgsup.kpi.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 import com.higgsup.kpi.dto.*;
 import com.higgsup.kpi.entity.KpiGroup;
 import com.higgsup.kpi.entity.KpiGroupType;
 import com.higgsup.kpi.entity.KpiUser;
+import com.higgsup.kpi.entity.KpiSupport;
 import com.higgsup.kpi.glossary.ErrorCode;
 import com.higgsup.kpi.glossary.ErrorMessage;
 import com.higgsup.kpi.glossary.GroupType;
 import com.higgsup.kpi.repository.KpiGroupRepo;
 import com.higgsup.kpi.repository.KpiGroupTypeRepo;
 import com.higgsup.kpi.repository.KpiUserRepo;
+import com.higgsup.kpi.repository.KpiSupportRepo;
 import com.higgsup.kpi.service.GroupService;
 import com.higgsup.kpi.service.LdapUserService;
 import com.higgsup.kpi.service.UserService;
@@ -21,16 +25,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static com.higgsup.kpi.util.UtilsValidate.isValidPoint;
 
 @Service
 public class GroupServiceImpl implements GroupService {
+
+    @Autowired
+    KpiSupportRepo kpiSupportRepo;
 
     @Autowired
     private KpiGroupRepo kpiGroupRepo;
@@ -301,6 +306,183 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    public GroupDTO createSupportNew(GroupDTO<List<SupportDTO>> groupDTO) throws JsonProcessingException {
+        Optional<KpiGroup> groupOptional = Optional.ofNullable(kpiGroupRepo.findGroupTypeId(GroupType.SUPPORT.getId()));
+        if (!groupOptional.isPresent()) {
+            List<ErrorDTO> errors = validateCreateSupport(groupDTO);
+            if (CollectionUtils.isEmpty(errors)) {
+                KpiGroup kpiGroup = new KpiGroup();
+                BeanUtils.copyProperties(groupDTO, kpiGroup, "createdDate", "groupType", "additionalConfig");
+                kpiGroup.setGroupType(kpiGroupTypeRepo.findById(GroupType.SUPPORT.getId()).get());
+
+                kpiGroup = kpiGroupRepo.save(kpiGroup);
+
+                List<KpiSupport> kpiSupports = convertListSupportDTOTOEntity(groupDTO.getAdditionalConfig(), "id");
+                Iterable<KpiSupport> supportEntityCreates = kpiSupportRepo.saveAll(kpiSupports);
+
+                List<SupportDTO> supportDTOS = convertListSupportEntityToDTO((List<KpiSupport>) supportEntityCreates);
+
+                BeanUtils.copyProperties(kpiGroup, groupDTO, "groupType", "additionalConfig");
+                groupDTO.setGroupType(convertGroupTypeEntityToDTO(kpiGroup.getGroupType()));
+                groupDTO.setAdditionalConfig(supportDTOS);
+            } else {
+                groupDTO.setErrorDTOS(errors);
+                groupDTO.setErrorCode(errors.get(0).getErrorCode());
+                groupDTO.setMessage(errors.get(0).getMessage());
+            }
+        } else {
+            groupDTO.setErrorCode(ErrorCode.DATA_EXIST.getValue());
+            groupDTO.setMessage(ErrorMessage.SUPPORT_ALREADY_EXISTS);
+        }
+        return groupDTO;
+    }
+
+    @Override
+    public SupportDTO createTaskSupport(SupportDTO groupDTO) throws JsonProcessingException {
+        Optional<KpiGroup> groupOptional = Optional.ofNullable(kpiGroupRepo.findGroupTypeId(GroupType.SUPPORT.getId()));
+        if (groupOptional.isPresent()) {
+            List<ErrorDTO> errorDTOS = validateTaskSupport(groupDTO);
+            if (CollectionUtils.isEmpty(errorDTOS)) {
+                if (kpiSupportRepo.findByTaskName(groupDTO.getTaskName()).isPresent()) {
+                    ErrorDTO errorDTO = new ErrorDTO();
+                    errorDTO.setErrorCode(ErrorCode.DATA_EXIST.getValue());
+                    errorDTO.setMessage(ErrorMessage.NAME_TASK_SUPPORT_ALREADY_EXISTS);
+                    errorDTOS.add(errorDTO);
+                } else {
+                    KpiSupport kpiSupport = convertListSupportDTOTOEntity(Lists.newArrayList(groupDTO)).get(0);
+                    kpiSupport = kpiSupportRepo.save(kpiSupport);
+                    groupDTO = convertListSupportEntityToDTO(Lists.newArrayList(kpiSupport)).get(0);
+                }
+
+            } else {
+                groupDTO.setErrorCode(errorDTOS.get(0).getErrorCode());
+                groupDTO.setMessage(errorDTOS.get(0).getMessage());
+                groupDTO.setErrorDTOS(errorDTOS);
+            }
+        } else {
+            groupDTO.setErrorCode(ErrorCode.DATA_DOES_NOT_EXIST.getValue());
+            groupDTO.setMessage(ErrorMessage.SUPPORT_NOT_EXISTS);
+        }
+        return groupDTO;
+    }
+
+    @Override
+    public SupportDTO updateTaskSupport(SupportDTO supportDTO) throws JsonProcessingException {
+        Optional<KpiGroup> groupOptional = Optional.ofNullable(kpiGroupRepo.findGroupTypeId(GroupType.SUPPORT.getId()));
+        if (groupOptional.isPresent()) {
+            List<ErrorDTO> errorDTOS = validateTaskSupport(supportDTO);
+            if (CollectionUtils.isEmpty(errorDTOS)) {
+                List<KpiSupport> kpiSupport = (List<KpiSupport>) kpiSupportRepo.findAll();
+                Optional<KpiSupport> kpiSupportOptional = kpiSupport.stream().filter(
+                        support -> support.getId().equals(supportDTO.getId()))
+                        .findFirst();
+                if (kpiSupportOptional.isPresent()) {
+                    if (kpiSupport.stream().anyMatch(support -> support.getTaskName().equals(supportDTO.getTaskName())
+                            && !support.getId().equals(supportDTO.getId()))) {
+                        supportDTO.setErrorCode(ErrorCode.DATA_EXIST.getValue());
+                        supportDTO.setMessage(ErrorMessage.NAME_TASK_SUPPORT_CAN_NOT_DUPLICATE);
+                    } else {
+                        KpiSupport kpiSupportSave = kpiSupportOptional.get();
+                        BeanUtils.copyProperties(supportDTO, kpiSupportSave, "id", "createdDate");
+                        kpiSupportSave = kpiSupportRepo.save(kpiSupportSave);
+                        supportDTO.setCreatedDate(kpiSupportSave.getCreatedDate());
+                    }
+                } else {
+                    supportDTO.setErrorCode(ErrorCode.DATA_DOES_NOT_EXIST.getValue());
+                    supportDTO.setMessage(ErrorMessage.SUPPORT_NOT_EXISTS);
+                }
+
+            } else {
+                supportDTO.setErrorCode(errorDTOS.get(0).getErrorCode());
+                supportDTO.setMessage(errorDTOS.get(0).getMessage());
+                supportDTO.setErrorDTOS(errorDTOS);
+            }
+        } else {
+            supportDTO.setErrorCode(ErrorCode.DATA_DOES_NOT_EXIST.getValue());
+            supportDTO.setMessage(ErrorMessage.SUPPORT_NOT_EXISTS);
+        }
+        return supportDTO;
+    }
+
+    private List<ErrorDTO> validateTaskSupport(SupportDTO supportDTO) {
+        List<ErrorDTO> errorDTOS = new ArrayList<>();
+        if (Strings.isNullOrEmpty(supportDTO.getTaskName())) {
+            ErrorDTO errorDTO = new ErrorDTO();
+            errorDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
+            errorDTO.setMessage(ErrorMessage.NAME_TASK_SUPPORT_DOES_NOT_ALLOW_NULL);
+            errorDTOS.add(errorDTO);
+        }
+        if (Objects.isNull(supportDTO.getPoint())) {
+            ErrorDTO errorDTO = new ErrorDTO();
+            errorDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
+            errorDTO.setMessage(ErrorMessage.POINT_SUPPORT_DOES_NOT_ALLOW_NULL);
+            errorDTOS.add(errorDTO);
+        }
+        return errorDTOS;
+    }
+
+    private List<SupportDTO> convertListSupportEntityToDTO(List<KpiSupport> supportEntityCreates,
+            String... ignoreProperties) {
+        List<SupportDTO> supportDTOS = new ArrayList<>();
+        for (KpiSupport kpiSupport : supportEntityCreates) {
+            SupportDTO supportDTO = new SupportDTO();
+            BeanUtils.copyProperties(kpiSupport, supportDTO, ignoreProperties);
+            supportDTOS.add(supportDTO);
+        }
+        return supportDTOS;
+    }
+
+    private List<KpiSupport> convertListSupportDTOTOEntity(List<SupportDTO> supportDTOList, String... ignoreProperties) {
+        List<KpiSupport> kpiSupports = new ArrayList<>();
+        for (SupportDTO supportDTO : supportDTOList) {
+            KpiSupport kpiSupport = new KpiSupport();
+            BeanUtils.copyProperties(supportDTO, kpiSupport, ignoreProperties);
+            kpiSupports.add(kpiSupport);
+        }
+        return kpiSupports;
+    }
+
+    private List<ErrorDTO> validateCreateSupport(GroupDTO<List<SupportDTO>> groupDTO) {
+        List<ErrorDTO> errors = new ArrayList<>();
+        if (Strings.isNullOrEmpty(groupDTO.getName())) {
+            ErrorDTO errorDTO = new ErrorDTO();
+            errorDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
+            errorDTO.setMessage(ErrorMessage.NAME_DOES_NOT_ALLOW_NULL);
+            errors.add(errorDTO);
+        }
+        for (int i = 0; i < groupDTO.getAdditionalConfig().size(); i++) {
+            SupportDTO supportDTO = groupDTO.getAdditionalConfig().get(i);
+            if (Strings.isNullOrEmpty(supportDTO.getTaskName())) {
+                ErrorDTO errorDTO = new ErrorDTO();
+                errorDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
+                errorDTO.setMessage(ErrorMessage.NAME_TASK_SUPPORT_DOES_NOT_ALLOW_NULL + " at index " + i);
+                errors.add(errorDTO);
+            }
+            if (Objects.isNull(supportDTO.getPoint())) {
+                ErrorDTO errorDTO = new ErrorDTO();
+                errorDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
+                errorDTO.setMessage(ErrorMessage.POINT_SUPPORT_DOES_NOT_ALLOW_NULL + " at index " + i);
+                errors.add(errorDTO);
+            } else if (supportDTO.getPoint() <= 0) {
+                ErrorDTO errorDTO = new ErrorDTO();
+                errorDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+                errorDTO.setMessage(ErrorMessage.POINT_SUPPORT_MUST_BIGGER_THAN_ZERO + " at index " + i);
+                errors.add(errorDTO);
+            }
+        }
+        Collection<SupportDTO> supportDTOS = groupDTO.getAdditionalConfig().stream()
+                .collect(Collectors.toConcurrentMap(o -> o.getTaskName().toLowerCase(), Function.identity(), (p, q) -> p))
+                .values();
+        if (supportDTOS.size() != groupDTO.getAdditionalConfig().size()) {
+            ErrorDTO errorDTO = new ErrorDTO();
+            errorDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+            errorDTO.setMessage(ErrorMessage.NAME_TASK_SUPPORT_CAN_NOT_DUPLICATE);
+            errors.add(errorDTO);
+        }
+        return errors;
+    }
+
+    @Override
     public GroupDTO updateSupport(GroupDTO<GroupSupportDetail> groupDTO) throws JsonProcessingException {
         GroupDTO<GroupSupportDetail> validatedGroupDTO = new GroupDTO<>();
 
@@ -440,7 +622,7 @@ public class GroupServiceImpl implements GroupService {
         } else if (minNumberOfSessions.length() == 0 || minNumberOfSessions.length() > 2) {
             validatedGroupDTO.setMessage(ErrorMessage.PARAMETERS_MIN_NUMBER_OF_SESSIONS_IS_NOT_VALID);
             validatedGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-        } else if(groupDTO.getAdditionalConfig().getMinNumberOfSessions() <= 0) {
+        } else if (groupDTO.getAdditionalConfig().getMinNumberOfSessions() <= 0) {
             validatedGroupDTO.setMessage(ErrorMessage.MIN_SESSION_MUST_BIGGER_THAN_ZERO);
             validatedGroupDTO.setErrorCode(ErrorCode.MIN_SESSION_MUST_BIGGER_THAN_ZERO.getValue());
         } else if (!isValidPoint(participationPoint) || participationPoint.length() == 0) {
@@ -473,7 +655,7 @@ public class GroupServiceImpl implements GroupService {
         } else if (!isValidPoint(String.valueOf(listenerPoint))) {
             validatedGroupDTO.setMessage(ErrorMessage.POINT_LISTENER_IS_NOT_VALIDATE);
             validatedGroupDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-        }else {
+        } else {
             validate = true;
         }
         return validate;
