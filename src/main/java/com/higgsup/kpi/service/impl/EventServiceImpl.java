@@ -65,7 +65,7 @@ public class EventServiceImpl extends BaseService implements EventService {
         return convertEventEntityToDTO(eventList);
     }
 
-    public List<EventDTO> getTeamBuildingEvents() throws IOException{
+    public List<EventDTO> getTeamBuildingEvents() throws IOException {
         List<KpiEvent> teamBuildingEvents = kpiEventRepo.findTeamBuildingEvent();
         return convertEventEntityToDTO(teamBuildingEvents);
     }
@@ -110,7 +110,6 @@ public class EventServiceImpl extends BaseService implements EventService {
         return eventDTOS;
     }
 
-
     private List<EventDTO> convertEventEntityToDTONewSupport(List<KpiEvent> kpiEventEntities) throws IOException {
         List<EventDTO> eventDTOS = new ArrayList<>();
         if (!CollectionUtils.isEmpty(kpiEventEntities)) {
@@ -136,7 +135,8 @@ public class EventServiceImpl extends BaseService implements EventService {
 
     @Override
     @Transactional
-    public EventDTO createSupportEvent(EventDTO<List<EventSupportDetail>> supportDTO) throws IOException, NoSuchFieldException {
+    public EventDTO createSupportEvent(EventDTO<List<EventSupportDetail>> supportDTO) throws IOException,
+            NoSuchFieldException {
         EventDTO<List<EventSupportDetail>> eventSupportDTO = new EventDTO<>();
         List<ErrorDTO> validates = validateSupportEvent(supportDTO);
         if (CollectionUtils.isEmpty(validates)) {
@@ -227,7 +227,8 @@ public class EventServiceImpl extends BaseService implements EventService {
                 errors.add(errorDTO);
             } else {
                 Optional<KpiGroup> kpiGroup = kpiGroupRepo.findById(eventSupportDTO.getGroup().getId());
-                if (!kpiGroup.isPresent() || !Objects.equals(kpiGroup.get().getGroupType().getId(), GroupType.SUPPORT.getId())) {
+                if (!kpiGroup.isPresent() || !Objects.equals(kpiGroup.get().getGroupType().getId(),
+                        GroupType.SUPPORT.getId())) {
                     ErrorDTO errorDTO = new ErrorDTO();
 
                     errorDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
@@ -311,7 +312,8 @@ public class EventServiceImpl extends BaseService implements EventService {
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
                 List<KpiEventUser> kpiEventUsers = kpiEventUserRepo.findByKpiEventId(eventSupportDTO.getId());
                 if (!(kpiEventUsers.size() > 1)
-                        && !(kpiEventUsers.get(0).getKpiEventUserPK().getUserName().equals(authentication.getPrincipal()))) {
+                        && !(kpiEventUsers.get(0).getKpiEventUserPK().getUserName().equals(
+                        authentication.getPrincipal()))) {
                     ErrorDTO errorDTO = new ErrorDTO();
 
                     errorDTO.setErrorCode(HttpStatus.FORBIDDEN.value());
@@ -334,7 +336,8 @@ public class EventServiceImpl extends BaseService implements EventService {
 
     @Override
     @Transactional
-    public EventDTO updateSupportEvent(EventDTO<List<EventSupportDetail>> supportDTO) throws IOException, NoSuchFieldException {
+    public EventDTO updateSupportEvent(EventDTO<List<EventSupportDetail>> supportDTO) throws IOException,
+            NoSuchFieldException {
         EventDTO<List<EventSupportDetail>> eventSupportDTO = new EventDTO<>();
         List<ErrorDTO> validates = validateSupportEvent(supportDTO);
         if (CollectionUtils.isEmpty(validates)) {
@@ -357,7 +360,7 @@ public class EventServiceImpl extends BaseService implements EventService {
         if (CollectionUtils.isEmpty(validates)) {
             KpiEvent eventSupport = convertNewEventSupportDTOToEntityForUpdate(supportDTO);
             eventSupport = kpiEventRepo.save(eventSupport);
-            eventSupportDTO=  convertNewSupportEntityToDTO(eventSupport);
+            eventSupportDTO = convertNewSupportEntityToDTO(eventSupport);
         } else {
             eventSupportDTO.setErrorCode(validates.get(0).getErrorCode());
             eventSupportDTO.setMessage(validates.get(0).getMessage());
@@ -445,7 +448,8 @@ public class EventServiceImpl extends BaseService implements EventService {
                         kpiEvent.setGroup(kpiGroupOptional.get());
                         kpiEvent = kpiEventRepo.save(kpiEvent);
 
-                        List<KpiEventUser> eventUsers = convertEventUsersToEntity(kpiEvent, eventDTO.getEventUserList());
+                        List<KpiEventUser> eventUsers = convertEventUsersToEntity(kpiEvent,
+                                eventDTO.getEventUserList());
                         kpiEventUserRepo.saveAll(eventUsers);
 
                         BeanUtils.copyProperties(kpiEvent, validateSeminarDTO);
@@ -475,7 +479,8 @@ public class EventServiceImpl extends BaseService implements EventService {
     }
 
     @Override
-    public EventDTO confirmOrCancelEvent(EventDTO eventDTO) throws IOException, NoSuchFieldException, IllegalAccessException {
+    public EventDTO confirmOrCancelEvent(EventDTO eventDTO) throws IOException, NoSuchFieldException,
+            IllegalAccessException {
         Optional<KpiEvent> event = kpiEventRepo.findById(eventDTO.getId());
         if (event.isPresent()) {
             KpiEvent kpiEvent = event.get();
@@ -534,7 +539,6 @@ public class EventServiceImpl extends BaseService implements EventService {
                     validateTeambuildingDTO.setMessage(ErrorMessage.GROUP_TYPE_IS_INVALID);
                     validateTeambuildingDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
                 }
-
 
             } else {
                 validateTeambuildingDTO.setMessage(ErrorMessage.NOT_FIND_GROUP_TYPE);
@@ -693,7 +697,8 @@ public class EventServiceImpl extends BaseService implements EventService {
                             Optional<KpiEventUser> kpiEventUserEvaluated = eventUserEvaluated.stream()
                                     .filter(kpiEventUser1 -> kpiEventUser1.getKpiUser().getUserName()
                                             .equals(RequestSeminarSurveyDTO.getEvaluatedUsername().getUsername())
-                                            && kpiEventUser1.getType().equals(EventUserType.HOST.getValue())).findFirst();
+                                            && kpiEventUser1.getType().equals(EventUserType.HOST.getValue()))
+                                    .findFirst();
                             if (kpiEventUserEvaluated.isPresent()) {
                                 kpiSeminarSurvey.setEvaluatedUsername(kpiEventUserEvaluated.get().getKpiUser());
                                 kpiSeminarSurvey.setEvaluatingUsername(kpiEventUser.getKpiUser());
@@ -824,7 +829,8 @@ public class EventServiceImpl extends BaseService implements EventService {
 
     private void addPointWhenConfirmClub(KpiEvent kpiEvent) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        GroupClubDetail groupClubDetail = mapper.readValue(kpiEvent.getGroup().getAdditionalConfig(), GroupClubDetail.class);
+        GroupClubDetail groupClubDetail = mapper.readValue(kpiEvent.getGroup().getAdditionalConfig(),
+                GroupClubDetail.class);
         for (KpiEventUser kpiEventUser : kpiEvent.getKpiEventUserList()) {
             addPoint(kpiEventUser.getKpiUser(), groupClubDetail.getParticipationPoint());
         }
@@ -833,10 +839,16 @@ public class EventServiceImpl extends BaseService implements EventService {
     private boolean validateYearMonth(java.util.Date yearMonth) {
         //is true if in month old , is false if la new
         Timestamp dateCun = new Timestamp(System.currentTimeMillis());
+
         if (dateCun.getYear() + 1900 == yearMonth.getYear() + 1900
                 && dateCun.getMonth() + 1 == yearMonth.getMonth() + 1
-                && dateCun.getDate() >= Integer.valueOf(
+                && (dateCun.getDate() < Integer.valueOf(
                 environment.getProperty("config.day.new.year.month"))
+                || (dateCun.getDate() == Integer.valueOf(
+                environment.getProperty("config.day.new.year.month"))
+                && dateCun.getHours() < Integer.valueOf(
+                environment.getProperty("config.hour.new.year.month")))
+        )
                 ) {
             return true;
         } else if (dateCun.getYear() + 1900 == yearMonth.getYear() + 1900
@@ -859,7 +871,8 @@ public class EventServiceImpl extends BaseService implements EventService {
         return false;
     }
 
-    private EventDTO confirmOrCancelEventSupport(KpiEvent kpiEvent, EventDTO eventDTO) throws IOException, NoSuchFieldException,
+    private EventDTO confirmOrCancelEventSupport(KpiEvent kpiEvent, EventDTO eventDTO) throws IOException,
+            NoSuchFieldException,
             IllegalAccessException {
         if (Objects.equals(eventDTO.getStatus(), StatusEvent.CONFIRMED.getValue())) {
             kpiEvent.setStatus(StatusEvent.CONFIRMED.getValue());
@@ -876,7 +889,8 @@ public class EventServiceImpl extends BaseService implements EventService {
         return eventDTO;
     }
 
-    private EventDTO confirmOrCancelEventSupportNew(KpiEvent kpiEvent, EventDTO eventDTO) throws IOException, NoSuchFieldException,
+    private EventDTO confirmOrCancelEventSupportNew(KpiEvent kpiEvent, EventDTO eventDTO) throws IOException,
+            NoSuchFieldException,
             IllegalAccessException {
         if (Objects.equals(eventDTO.getStatus(), StatusEvent.CONFIRMED.getValue())) {
             kpiEvent.setStatus(StatusEvent.CONFIRMED.getValue());
@@ -893,7 +907,8 @@ public class EventServiceImpl extends BaseService implements EventService {
         return eventDTO;
     }
 
-    private Float setHistorySupportAndGetAllPoint(KpiEvent kpiEvent) throws NoSuchFieldException, IllegalAccessException,
+    private Float setHistorySupportAndGetAllPoint(KpiEvent kpiEvent) throws NoSuchFieldException,
+            IllegalAccessException,
             IOException {
         ObjectMapper mapper = new ObjectMapper();
         Float point = 0F;
@@ -913,7 +928,8 @@ public class EventServiceImpl extends BaseService implements EventService {
         return point;
     }
 
-    private Float setHistorySupportAndGetAllPointNewSupport(KpiEvent kpiEvent) throws NoSuchFieldException, IllegalAccessException,
+    private Float setHistorySupportAndGetAllPointNewSupport(KpiEvent kpiEvent) throws NoSuchFieldException,
+            IllegalAccessException,
             IOException {
         ObjectMapper mapper = new ObjectMapper();
         Float point = 0F;
@@ -922,17 +938,19 @@ public class EventServiceImpl extends BaseService implements EventService {
         List<EventSupportDTO> configEventSupport = mapper.readValue(kpiEvent.getAdditionalConfig(), tRefBedType);
         kpiEvent.setAdditionalConfig(mapper.writeValueAsString(configEventSupport));
 
-        List<KpiSupport> kpiSupports= (List<KpiSupport>) kpiSupportRepo.findAll();
+        List<KpiSupport> kpiSupports = (List<KpiSupport>) kpiSupportRepo.findAll();
         for (EventSupportDTO eventSupportDetail : configEventSupport) {
-            Optional<KpiSupport> supportOptional=  kpiSupports.stream().filter(kpiSupportFilter -> kpiSupportFilter.getId().equals(eventSupportDetail.getId())).findFirst();
-            KpiSupport kpiSupport1=  supportOptional.get();
-            BeanUtils.copyProperties(kpiSupport1, eventSupportDetail,"quantity");
+            Optional<KpiSupport> supportOptional = kpiSupports.stream().filter(
+                    kpiSupportFilter -> kpiSupportFilter.getId().equals(eventSupportDetail.getId())).findFirst();
+            KpiSupport kpiSupport1 = supportOptional.get();
+            BeanUtils.copyProperties(kpiSupport1, eventSupportDetail, "quantity");
             point += eventSupportDetail.getPoint() * eventSupportDetail.getQuantity();
 
         }
         kpiEvent.setAdditionalConfig(mapper.writeValueAsString(configEventSupport));
         return point;
     }
+
     private KpiEvent convertEventSupportDTOToEntityForUpdate(EventDTO<List<EventSupportDetail>> supportDTO) throws
             JsonProcessingException {
         KpiEvent eventSupport;
@@ -1014,7 +1032,8 @@ public class EventServiceImpl extends BaseService implements EventService {
         ObjectMapper mapper = new ObjectMapper();
 
         BeanUtils.copyProperties(kpiEvent, seminarDetailEventDTO);
-        EventSeminarDetail eventSeminarDetail = mapper.readValue(kpiEvent.getAdditionalConfig(), EventSeminarDetail.class);
+        EventSeminarDetail eventSeminarDetail = mapper.readValue(kpiEvent.getAdditionalConfig(),
+                EventSeminarDetail.class);
         seminarDetailEventDTO.setAdditionalConfig(eventSeminarDetail);
 
         List<KpiEventUser> kpiEventUsers = kpiEventUserRepo.findByKpiEventId(kpiEvent.getId());
@@ -1026,7 +1045,7 @@ public class EventServiceImpl extends BaseService implements EventService {
         return seminarDetailEventDTO;
     }
 
-    private EventDTO convertEventTeamBuildingEntityToDTO(KpiEvent kpiEvent) throws IOException{
+    private EventDTO convertEventTeamBuildingEntityToDTO(KpiEvent kpiEvent) throws IOException {
         EventDTO<EventTeamBuildingDetail> teamBuildingEventDTO = new EventDTO<>();
         EventTeamBuildingDetail eventTeamBuildingDetail;
         ObjectMapper mapper = new ObjectMapper();
@@ -1070,14 +1089,16 @@ public class EventServiceImpl extends BaseService implements EventService {
             case SEMINAR:
 
                 BeanUtils.copyProperties(kpiGroup, groupDTO);
-                EventSeminarDetail eventSeminarDetail = mapper.readValue(kpiGroup.getAdditionalConfig(), EventSeminarDetail.class);
+                EventSeminarDetail eventSeminarDetail = mapper.readValue(kpiGroup.getAdditionalConfig(),
+                        EventSeminarDetail.class);
 
                 groupDTO.setAdditionalConfig(eventSeminarDetail);
                 groupDTO.setGroupType(convertGroupTypeEntityToDTO(kpiGroup.getGroupType()));
                 break;
             case TEAM_BUILDING:
                 BeanUtils.copyProperties(kpiGroup, groupDTO);
-                EventTeamBuildingDetail eventTeamBuildingDetail = mapper.readValue(kpiGroup.getAdditionalConfig(), EventTeamBuildingDetail.class);
+                EventTeamBuildingDetail eventTeamBuildingDetail = mapper.readValue(kpiGroup.getAdditionalConfig(),
+                        EventTeamBuildingDetail.class);
 
                 groupDTO.setAdditionalConfig(eventTeamBuildingDetail);
                 groupDTO.setGroupType(convertGroupTypeEntityToDTO(kpiGroup.getGroupType()));
@@ -1092,7 +1113,8 @@ public class EventServiceImpl extends BaseService implements EventService {
         ObjectMapper mapper = new ObjectMapper();
 
         BeanUtils.copyProperties(kpiGroup, groupDTO);
-        EventTeamBuildingDetail eventTeamBuildingDetail = mapper.readValue(kpiGroup.getAdditionalConfig(), EventTeamBuildingDetail.class);
+        EventTeamBuildingDetail eventTeamBuildingDetail = mapper.readValue(kpiGroup.getAdditionalConfig(),
+                EventTeamBuildingDetail.class);
 
         return eventTeamBuildingDetail;
     }
@@ -1133,7 +1155,8 @@ public class EventServiceImpl extends BaseService implements EventService {
                 groupDTO.setGroupType(convertGroupTypeEntityToDTO(kpiGroup.getGroupType()));
             case TEAM_BUILDING:
                 BeanUtils.copyProperties(kpiGroup, groupDTO);
-                EventTeamBuildingDetail eventTeamBuildingDetail = mapper.readValue(kpiGroup.getAdditionalConfig(), EventTeamBuildingDetail.class);
+                EventTeamBuildingDetail eventTeamBuildingDetail = mapper.readValue(kpiGroup.getAdditionalConfig(),
+                        EventTeamBuildingDetail.class);
 
                 groupDTO.setAdditionalConfig(eventTeamBuildingDetail);
                 groupDTO.setGroupType(convertGroupTypeEntityToDTO(kpiGroup.getGroupType()));
@@ -1142,11 +1165,13 @@ public class EventServiceImpl extends BaseService implements EventService {
 
         return groupDTO;
     }
+
     private List<EventUserDTO> convertListEventUserEntityToDTO(List<KpiEventUser> kpiEventUsers) {
         List<EventUserDTO> eventUserDTOS = new ArrayList<>();
 
         if (!CollectionUtils.isEmpty(kpiEventUsers)) {
-            List<String> namesUser = kpiEventUsers.stream().map(kpiEventUser -> kpiEventUser.getKpiEventUserPK().getUserName())
+            List<String> namesUser = kpiEventUsers.stream().map(
+                    kpiEventUser -> kpiEventUser.getKpiEventUserPK().getUserName())
                     .collect(Collectors.toList());
             List<KpiUser> usersEvent = (List<KpiUser>) kpiUserRepo.findAllById(namesUser);
 
@@ -1182,7 +1207,8 @@ public class EventServiceImpl extends BaseService implements EventService {
         Optional<KpiGroup> kpiGroup = kpiGroupRepo.findById(kpiEvent.getGroup().getId());
         if (kpiGroup.isPresent()) {
             KpiGroup kpiGroupDB = kpiGroup.get();
-            EventSeminarDetail additionalConfigSupport = mapper.readValue(kpiEvent.getGroup().getAdditionalConfig(), EventSeminarDetail.class);
+            EventSeminarDetail additionalConfigSupport = mapper.readValue(kpiEvent.getGroup().getAdditionalConfig(),
+                    EventSeminarDetail.class);
             eventSeminar.setAdditionalConfig(additionalConfigSupport);
             eventSeminar.setName(kpiGroupDB.getName());
         }
@@ -1265,7 +1291,8 @@ public class EventServiceImpl extends BaseService implements EventService {
                 errors.add(errorDTO);
             } else {
                 Optional<KpiGroup> kpiGroup = kpiGroupRepo.findById(supportDTO.getGroup().getId());
-                if (!kpiGroup.isPresent() || !Objects.equals(kpiGroup.get().getGroupType().getId(), GroupType.SUPPORT.getId())) {
+                if (!kpiGroup.isPresent() || !Objects.equals(kpiGroup.get().getGroupType().getId(),
+                        GroupType.SUPPORT.getId())) {
                     ErrorDTO errorDTO = new ErrorDTO();
 
                     errorDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
@@ -1342,7 +1369,8 @@ public class EventServiceImpl extends BaseService implements EventService {
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
                 List<KpiEventUser> kpiEventUsers = kpiEventUserRepo.findByKpiEventId(supportDTO.getId());
                 if (!(kpiEventUsers.size() > 1)
-                        && !(kpiEventUsers.get(0).getKpiEventUserPK().getUserName().equals(authentication.getPrincipal()))) {
+                        && !(kpiEventUsers.get(0).getKpiEventUserPK().getUserName().equals(
+                        authentication.getPrincipal()))) {
                     ErrorDTO errorDTO = new ErrorDTO();
 
                     errorDTO.setErrorCode(HttpStatus.FORBIDDEN.value());
@@ -1437,7 +1465,8 @@ public class EventServiceImpl extends BaseService implements EventService {
                         kpiEvent.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
                         kpiEvent = kpiEventRepo.save(kpiEvent);
 
-                        List<KpiEventUser> eventUsers = convertEventUsersToEntity(kpiEvent, eventDTO.getEventUserList());
+                        List<KpiEventUser> eventUsers = convertEventUsersToEntity(kpiEvent,
+                                eventDTO.getEventUserList());
                         kpiEventUserRepo.saveAll(eventUsers);
 
                         BeanUtils.copyProperties(kpiEvent, validatedEventDTO);
