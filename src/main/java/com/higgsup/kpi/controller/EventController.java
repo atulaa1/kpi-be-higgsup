@@ -130,16 +130,18 @@ public class EventController {
         EventDTO eventDTO = null;
         try {
             eventDTO = eventService.createSupportEventNew(supportDTO);
+            if (Objects.nonNull(eventDTO.getErrorCode())) {
+                response.setStatus(eventDTO.getErrorCode());
+                response.setMessage(eventDTO.getMessage());
+                response.setErrors(eventDTO.getErrorDTOS());
+            } else {
+                response.setData(eventDTO);
+            }
         } catch (IOException e) {
-            e.printStackTrace();
+            response.setStatus(ErrorCode.SYSTEM_ERROR.getValue());
+            response.setMessage(ErrorCode.SYSTEM_ERROR.getDescription());
         }
-        if (Objects.nonNull(eventDTO.getErrorCode())) {
-            response.setStatus(eventDTO.getErrorCode());
-            response.setMessage(eventDTO.getMessage());
-            response.setErrors(eventDTO.getErrorDTOS());
-        } else {
-            response.setData(eventDTO);
-        }
+
         return response;
     }
 
