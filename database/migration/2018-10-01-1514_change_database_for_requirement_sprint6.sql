@@ -14,7 +14,6 @@ CREATE TABLE `higgsup_kpi`.`kpi_point` (
   `weekend_seminar`      FLOAT                          NULL,
   `support_point`        FLOAT                          NULL,
   `teambuilding_point`   FLOAT                          NULL,
-  `project_point`        FLOAT                          NOT NULL,
   `evaluating_point`     FLOAT                          NOT NULL,
   `total_point`          FLOAT                          NOT NULL,
   `year_month_id`        int(11)                        NOT NULL,

@@ -42,12 +42,8 @@ public class KpiPoint implements Serializable {
     private Float teambuildingPoint;
 
     @Basic
-    @Column(name = "project_point")
-    private Float projectPoint;
-
-    @Basic
     @Column(name = "evaluating_point")
-    private Float evaluatingPoint;
+    private Float evaluatingPointByMan;
 
     @Basic
     @Column(name = "total_point")
@@ -121,20 +117,12 @@ public class KpiPoint implements Serializable {
         this.teambuildingPoint = teambuildingPoint;
     }
 
-    public Float getProjectPoint() {
-        return projectPoint;
+    public Float getEvaluatingPointByMan() {
+        return evaluatingPointByMan;
     }
 
-    public void setProjectPoint(Float projectPoint) {
-        this.projectPoint = projectPoint;
-    }
-
-    public Float getEvaluatingPoint() {
-        return evaluatingPoint;
-    }
-
-    public void setEvaluatingPoint(Float evaluatingPoint) {
-        this.evaluatingPoint = evaluatingPoint;
+    public void setEvaluatingPointByMan(Float evaluatingPointByMan) {
+        this.evaluatingPointByMan = evaluatingPointByMan;
     }
 
     public Float getTotalPoint() {
