@@ -147,7 +147,7 @@ CREATE TABLE `kpi_point` (
   `rule_point` FLOAT NOT NULL,
   `club_point` FLOAT NULL,
   `normal_seminar_point` FLOAT NULL,
-  `weekend_seminar` FLOAT NULL,
+  `weekend_seminar_point`FLOAT NULL,
   `support_point` FLOAT NULL,
   `teambuilding_point` FLOAT NULL,
   `evaluating_point` FLOAT NOT NULL,
