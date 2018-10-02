@@ -948,6 +948,17 @@
                             }
                           }
                         }
+                      },
+                      "creator": {
+                        "type": "object",
+                        "properties": {
+                          "username": {
+                            "type": "string"
+                          },
+                          "fullName": {
+                            "type": "string"
+                          }
+                        }
                       }
                     },
                     "example": {
@@ -1013,70 +1024,11 @@
                               },
                               "type": 3
                             }
-                          ]
-                        },
-                        {
-                          "id": 31,
-                          "name": "Tam cho dong vat",
-                          "description": "Tam cho thu nuoi",
-                          "status": 1,
-                          "address": "Sân vận động Mỹ Đình",
-                          "createdDate": "18-09-2018 10:00",
-                          "updatedDate": "18-09-2018 10:00",
-                          "beginDate": "15-09-2018 18:30",
-                          "endDate": "15-09-2018 20:30",
-                          "group": {
-                            "id": 8,
-                            "name": "Thich tam cho dong vat",
-                            "description": null,
-                            "groupType": {
-                              "id": 2,
-                              "name": "Câu lạc bộ"
-                            },
-                            "createdDate": "18-09-2018 09:55",
-                            "additionalConfig": {
-                              "host": "Hai Anh",
-                              "minNumberOfSessions": 10,
-                              "participationPoint": 5.2,
-                              "effectivePoint": 8.2
-                            }
-                          },
-                          "eventUserList": [
-                            {
-                              "user": {
-                                "username": "kpi.employee",
-                                "lastName": "kpi",
-                                "firstName": "employee",
-                                "fullName": null,
-                                "email": "kpi.employee@higgsup.com",
-                                "userRole": null,
-                                "birthday": null,
-                                "numberPhone": null,
-                                "address": null,
-                                "gmail": null,
-                                "skype": null,
-                                "dateStartWork": null
-                              },
-                              "type": 1
-                            },
-                            {
-                              "user": {
-                                "username": "kpi.test",
-                                "lastName": "kpi",
-                                "firstName": "test",
-                                "fullName": null,
-                                "email": "kpi.test@higgsup.com",
-                                "userRole": null,
-                                "birthday": null,
-                                "numberPhone": null,
-                                "address": null,
-                                "gmail": null,
-                                "skype": null,
-                                "dateStartWork": null
-                              },
-                              "type": 3
-                            }
-                          ]
+                          ],
+                          "creator": {
+                            "username": "kpi.man",
+                            "fullName": "kpi test. man"
+                          }
                         }
                       ],
                       "status_code": 200
@@ -1549,6 +1501,21 @@
                       }
                     }
                   }
+                },
+                "creator": {
+                  "type": "object",
+                  "required": [
+                    "username",
+                    "fullName"
+                  ],
+                  "properties": {
+                    "username": {
+                      "type": "string"
+                    },
+                    "fullName": {
+                      "type": "string"
+                    }
+                  }
                 }
               },
               "example": {
@@ -1561,7 +1528,11 @@
                     "name": "cleanUpPoint",
                     "quantity": 1
                   }
-                ]
+                ],
+                "creator": {
+                  "username": "kpi.man",
+                  "fullName": "kpi test. man"
+                }
               }
             }
           }
@@ -1718,6 +1689,17 @@
                           }
                         }
                       }
+                    },
+                    "creator": {
+                      "type": "object",
+                      "properties": {
+                        "username": {
+                          "type": "string"
+                        },
+                        "fullName": {
+                          "type": "string"
+                        }
+                      }
                     }
                   }
                 },
@@ -1796,7 +1778,11 @@
                       "point": null,
                       "quantity": 1
                     }
-                  ]
+                  ],
+                  "creator": {
+                    "username": "kpi.man",
+                    "fullName": "kpi test. man"
+                  }
                 },
                 "status_code": 200
               }
@@ -5367,6 +5353,7 @@
                 "beginDate",
                 "endDate",
                 "group",
+                "creator",
                 "eventUserList"
               ],
               "properties": {
@@ -5422,6 +5409,17 @@
                       }
                     }
                   }
+                },
+                "creator": {
+                  "type": "object",
+                  "required": [
+                    "username"
+                  ],
+                  "properties": {
+                    "username": {
+                      "type": "string"
+                    }
+                  }
                 }
               },
               "example": {
@@ -5446,7 +5444,10 @@
                     },
                     "type": 3
                   }
-                ]
+                ],
+                "creator": {
+                  "username": "kpi.man"
+                }
               }
             }
           }
@@ -5603,7 +5604,19 @@
                           }
                         }
                       }
+                    },
+                    "creator": {
+                      "type": "object",
+                      "properties": {
+                        "username": {
+                          "type": "string"
+                        },
+                        "fullName": {
+                          "type": "string"
+                        }
+                      }
                     }
+
                   }
                 },
                 "message": {
@@ -5698,6 +5711,10 @@
                       "effectivePoint": 8.2
                     }
                   ]
+                },
+                "creator": {
+                  "username": "kpi.man",
+                  "fullName": "kpi test. man"
                 },
                 "status_code": 200
               }

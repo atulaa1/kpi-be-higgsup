@@ -983,6 +983,7 @@ public class EventServiceImpl extends BaseService implements EventService {
         List<EventUserDTO> eventUserDTOS = convertListEventUserEntityToDTO(kpiEventUsers);
         eventSupportDTO.setEventUserList(eventUserDTOS);
         eventSupportDTO.setGroup(convertConfigEventToDTO(kpiEvent.getGroup()));
+        eventSupportDTO.setCreator(convertCreatorToDTO(kpiEvent.getCreator()));
 
         return eventSupportDTO;
     }
@@ -1023,6 +1024,7 @@ public class EventServiceImpl extends BaseService implements EventService {
         List<EventUserDTO> eventUserDTOS = convertListEventUserEntityToDTO(kpiEventUsers);
         clubDetailEventDTO.setEventUserList(eventUserDTOS);
         clubDetailEventDTO.setGroup(convertConfigEventToDTO(kpiEvent.getGroup()));
+        clubDetailEventDTO.setCreator(convertCreatorToDTO(kpiEvent.getCreator()));
 
         return clubDetailEventDTO;
     }
@@ -1061,6 +1063,13 @@ public class EventServiceImpl extends BaseService implements EventService {
         teamBuildingEventDTO.setGroup(convertConfigEventToDTO(kpiEvent.getGroup()));
 
         return teamBuildingEventDTO;
+    }
+
+    private UserDTO convertCreatorToDTO(KpiUser kpiUser) {
+        UserDTO userDTO = new UserDTO();
+        BeanUtils.copyProperties(kpiUser, userDTO);
+        userDTO.setUsername(kpiUser.getUserName());
+        return userDTO;
     }
 
     private GroupDTO convertConfigEventToDTO(KpiGroup kpiGroup) throws IOException {
@@ -1229,10 +1238,12 @@ public class EventServiceImpl extends BaseService implements EventService {
         eventSupport.setStatus(StatusEvent.WAITING.getValue());
         eventSupport.setBeginDate(supportDTO.getBeginDate());
         Optional<KpiGroup> kpiGroup = kpiGroupRepo.findById(supportDTO.getGroup().getId());
-        if (kpiGroup.isPresent()) {
+        Optional<KpiUser> userOptional = Optional.ofNullable(kpiUserRepo.findByUserName(supportDTO.getCreator().getUsername()));
+        if (kpiGroup.isPresent() && userOptional.isPresent()) {
             KpiGroup kpiGroupDB = kpiGroup.get();
             kpiGroup.ifPresent(eventSupport::setGroup);
             eventSupport.setGroup(kpiGroupDB);
+            eventSupport.setCreator(userOptional.get());
 
             String additionalConfigSupport = mapper.writeValueAsString(supportDTO.getAdditionalConfig());
             eventSupport.setAdditionalConfig(additionalConfigSupport);
@@ -1405,15 +1416,20 @@ public class EventServiceImpl extends BaseService implements EventService {
 
         List<ErrorDTO> validates = validateClub(eventDTO);
 
+        String loginUsername = eventDTO.getCreator().getUsername();
+
+
         if (CollectionUtils.isEmpty(validates)) {
             String clubJson = mapper.writeValueAsString(eventDTO.getAdditionalConfig());
             BeanUtils.copyProperties(eventDTO, kpiEvent);
 
             kpiEvent.setAdditionalConfig(clubJson);
             Optional<KpiGroup> groupOptional = kpiGroupRepo.findById(eventDTO.getGroup().getId());
+            Optional<KpiUser> userOptional = Optional.ofNullable(kpiUserRepo.findByUserName(loginUsername));
 
-            if (groupOptional.isPresent()) {
+            if (groupOptional.isPresent() && userOptional.isPresent()) {
                 kpiEvent.setGroup(groupOptional.get());
+                kpiEvent.setCreator(userOptional.get());    //save creator to event
                 kpiEvent = kpiEventRepo.save(kpiEvent);
 
                 List<KpiEventUser> eventUsers = convertEventUsersToEntity(kpiEvent, eventDTO.getEventUserList());
@@ -1422,6 +1438,7 @@ public class EventServiceImpl extends BaseService implements EventService {
                 BeanUtils.copyProperties(kpiEvent, validatedEventDTO);
                 validatedEventDTO.setGroup(convertConfigEventToDTO(kpiEvent.getGroup()));
                 validatedEventDTO.setEventUserList(eventDTO.getEventUserList());
+                validatedEventDTO.setCreator(convertCreatorToDTO(kpiEvent.getCreator()));
             } else {
                 validatedEventDTO.setMessage(ErrorMessage.NOT_FIND_GROUP);
                 validatedEventDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
