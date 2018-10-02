@@ -34,6 +34,8 @@ public class EventDTO<T> extends BaseDTO {
 
     private T additionalConfig;
 
+    private UserDTO creator;
+
     public Integer getId() {
         return id;
     }
@@ -128,5 +130,13 @@ public class EventDTO<T> extends BaseDTO {
 
     public void setAdditionalConfig(T additionalConfig) {
         this.additionalConfig = additionalConfig;
+    }
+
+    public UserDTO getCreator() {
+        return creator;
+    }
+
+    public void setCreator(UserDTO creator) {
+        this.creator = creator;
     }
 }
