@@ -1,7 +1,7 @@
 /**
 date: 2018-09-06 15:00
-author: TuTT
-purpose: 2018-09-25-1155_ change database for creating a seminar survey of employee
+author: anhpth
+purpose: 2018-10-02-1408 add creator column in kpi_event
 **/
 
 CREATE DATABASE higgsup_kpi;
