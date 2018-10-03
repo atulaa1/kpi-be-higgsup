@@ -1432,11 +1432,6 @@ public class EventServiceImpl extends BaseService implements EventService {
 
         String loginUsername = eventDTO.getCreator().getUsername();
 
-        for(EventUserDTO eventUserDTO : eventDTO.getEventUserList()){
-            KpiUser kpiUser = kpiUserRepo.findByUserName(eventUserDTO.getUser().getUsername());
-            UserDTO userDTO = convertUserEntityToDTO(kpiUser);
-            eventUserDTO.setUser(userDTO);
-        }
 
         if (CollectionUtils.isEmpty(validates)) {
             String clubJson = mapper.writeValueAsString(eventDTO.getAdditionalConfig());
@@ -1456,6 +1451,13 @@ public class EventServiceImpl extends BaseService implements EventService {
 
                 BeanUtils.copyProperties(kpiEvent, validatedEventDTO);
                 validatedEventDTO.setGroup(convertConfigEventToDTO(kpiEvent.getGroup()));
+
+                for(EventUserDTO eventUserDTO : eventDTO.getEventUserList()){
+                    KpiUser kpiUser = kpiUserRepo.findByUserName(eventUserDTO.getUser().getUsername());
+                    UserDTO userDTO = convertUserEntityToDTO(kpiUser);
+                    eventUserDTO.setUser(userDTO);
+                }
+
                 validatedEventDTO.setEventUserList(eventDTO.getEventUserList());
                 validatedEventDTO.setCreator(convertCreatorToDTO(kpiEvent.getCreator()));
             } else {
