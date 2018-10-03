@@ -411,6 +411,13 @@ public class EventServiceImpl extends BaseService implements EventService {
 
                 BeanUtils.copyProperties(kpiEvent, validateSeminarDTO);
                 validateSeminarDTO.setGroup(convertConfigEventToDTO(kpiEvent.getGroup()));
+
+                for(EventUserDTO eventUserDTO : eventDTO.getEventUserList()){
+                    KpiUser kpiUser = kpiUserRepo.findByUserName(eventUserDTO.getUser().getUsername());
+                    UserDTO userDTO = convertUserEntityToDTO(kpiUser);
+                    eventUserDTO.setUser(userDTO);
+                }
+
                 validateSeminarDTO.setEventUserList(eventDTO.getEventUserList());
             } else {
                 validateSeminarDTO.setMessage(ErrorMessage.NOT_FIND_GROUP_TYPE);
@@ -455,6 +462,13 @@ public class EventServiceImpl extends BaseService implements EventService {
                         BeanUtils.copyProperties(kpiEvent, validateSeminarDTO);
                         validateSeminarDTO.setGroup(convertConfigEventToDTO(kpiEvent.getGroup()));
                         validateSeminarDTO.setAdditionalConfig(eventDTO.getAdditionalConfig());
+
+                        for(EventUserDTO eventUserDTO : eventDTO.getEventUserList()){
+                            KpiUser kpiUser = kpiUserRepo.findByUserName(eventUserDTO.getUser().getUsername());
+                            UserDTO userDTO = convertUserEntityToDTO(kpiUser);
+                            eventUserDTO.setUser(userDTO);
+                        }
+
                         validateSeminarDTO.setEventUserList(eventDTO.getEventUserList());
 
                     } else {
@@ -1418,6 +1432,11 @@ public class EventServiceImpl extends BaseService implements EventService {
 
         String loginUsername = eventDTO.getCreator().getUsername();
 
+        for(EventUserDTO eventUserDTO : eventDTO.getEventUserList()){
+            KpiUser kpiUser = kpiUserRepo.findByUserName(eventUserDTO.getUser().getUsername());
+            UserDTO userDTO = convertUserEntityToDTO(kpiUser);
+            eventUserDTO.setUser(userDTO);
+        }
 
         if (CollectionUtils.isEmpty(validates)) {
             String clubJson = mapper.writeValueAsString(eventDTO.getAdditionalConfig());
@@ -1490,6 +1509,13 @@ public class EventServiceImpl extends BaseService implements EventService {
                         validatedEventDTO.setGroup(convertConfigEventToDTO(kpiEvent.getGroup()));
                         validatedEventDTO.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
                         validatedEventDTO.setAdditionalConfig(eventDTO.getAdditionalConfig());
+
+                        for(EventUserDTO eventUserDTO : eventDTO.getEventUserList()){
+                            KpiUser kpiUser = kpiUserRepo.findByUserName(eventUserDTO.getUser().getUsername());
+                            UserDTO userDTO = convertUserEntityToDTO(kpiUser);
+                            eventUserDTO.setUser(userDTO);
+                        }
+
                         validatedEventDTO.setEventUserList(eventDTO.getEventUserList());
 
                     } else {
