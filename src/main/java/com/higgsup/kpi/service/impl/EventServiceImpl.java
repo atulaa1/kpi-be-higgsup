@@ -411,6 +411,13 @@ public class EventServiceImpl extends BaseService implements EventService {
 
                 BeanUtils.copyProperties(kpiEvent, validateSeminarDTO);
                 validateSeminarDTO.setGroup(convertConfigEventToDTO(kpiEvent.getGroup()));
+
+                for(EventUserDTO eventUserDTO : eventDTO.getEventUserList()){
+                    KpiUser kpiUser = kpiUserRepo.findByUserName(eventUserDTO.getUser().getUsername());
+                    UserDTO userDTO = convertUserEntityToDTO(kpiUser);
+                    eventUserDTO.setUser(userDTO);
+                }
+
                 validateSeminarDTO.setEventUserList(eventDTO.getEventUserList());
             } else {
                 validateSeminarDTO.setMessage(ErrorMessage.NOT_FIND_GROUP_TYPE);
@@ -455,6 +462,13 @@ public class EventServiceImpl extends BaseService implements EventService {
                         BeanUtils.copyProperties(kpiEvent, validateSeminarDTO);
                         validateSeminarDTO.setGroup(convertConfigEventToDTO(kpiEvent.getGroup()));
                         validateSeminarDTO.setAdditionalConfig(eventDTO.getAdditionalConfig());
+
+                        for(EventUserDTO eventUserDTO : eventDTO.getEventUserList()){
+                            KpiUser kpiUser = kpiUserRepo.findByUserName(eventUserDTO.getUser().getUsername());
+                            UserDTO userDTO = convertUserEntityToDTO(kpiUser);
+                            eventUserDTO.setUser(userDTO);
+                        }
+
                         validateSeminarDTO.setEventUserList(eventDTO.getEventUserList());
 
                     } else {
@@ -1437,6 +1451,13 @@ public class EventServiceImpl extends BaseService implements EventService {
 
                 BeanUtils.copyProperties(kpiEvent, validatedEventDTO);
                 validatedEventDTO.setGroup(convertConfigEventToDTO(kpiEvent.getGroup()));
+
+                for(EventUserDTO eventUserDTO : eventDTO.getEventUserList()){
+                    KpiUser kpiUser = kpiUserRepo.findByUserName(eventUserDTO.getUser().getUsername());
+                    UserDTO userDTO = convertUserEntityToDTO(kpiUser);
+                    eventUserDTO.setUser(userDTO);
+                }
+
                 validatedEventDTO.setEventUserList(eventDTO.getEventUserList());
                 validatedEventDTO.setCreator(convertCreatorToDTO(kpiEvent.getCreator()));
             } else {
@@ -1490,6 +1511,13 @@ public class EventServiceImpl extends BaseService implements EventService {
                         validatedEventDTO.setGroup(convertConfigEventToDTO(kpiEvent.getGroup()));
                         validatedEventDTO.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
                         validatedEventDTO.setAdditionalConfig(eventDTO.getAdditionalConfig());
+
+                        for(EventUserDTO eventUserDTO : eventDTO.getEventUserList()){
+                            KpiUser kpiUser = kpiUserRepo.findByUserName(eventUserDTO.getUser().getUsername());
+                            UserDTO userDTO = convertUserEntityToDTO(kpiUser);
+                            eventUserDTO.setUser(userDTO);
+                        }
+
                         validatedEventDTO.setEventUserList(eventDTO.getEventUserList());
 
                     } else {
