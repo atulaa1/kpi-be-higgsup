@@ -7,13 +7,15 @@ purpose: add table for sprint 6
 
 -- show infomation of user join in project
 CREATE TABLE `kpi_project_user` (
+  `id`             INT(10) PRIMARY KEY AUTO_INCREMENT,
   `rated_username` varchar(50) NOT NULL,
-  `project_id` int(11) DEFAULT NULL,
-  `joined_date` int(11) DEFAULT NULL,
-  PRIMARY KEY (`rated_username`),
+  `project_id`     INT(11)             DEFAULT NULL,
+  `joined_date`    INT(11)             DEFAULT NULL,
   UNIQUE KEY `unique_project_user` (`rated_username`,`project_id`) USING BTREE,
   KEY `fk_project_id` (`project_id`),
-  CONSTRAINT `fk_project_id` FOREIGN KEY (`project_id`) REFERENCES `kpi_project` (`id`)
+  CONSTRAINT `fk_project_id` FOREIGN KEY (`project_id`) REFERENCES `kpi_project` (`id`),
+  KEY `fk_user` (`rated_username`),
+  CONSTRAINT `fk_user` FOREIGN KEY (`rated_username`) REFERENCES `kpi_user` (`user_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- infomation of project in month
@@ -28,7 +30,8 @@ CREATE TABLE `kpi_project_log` (
   UNIQUE KEY `unique1` (`rated_username`,`project_id`,`year_month`) USING BTREE,
   KEY `fk_project` (`project_id`),
   CONSTRAINT `fk_project` FOREIGN KEY (`project_id`) REFERENCES `kpi_project` (`id`),
-  CONSTRAINT `fk_username` FOREIGN KEY (`rated_username`) REFERENCES `kpi_project_user` (`rated_username`)
+  CONSTRAINT `fk_username` FOREIGN KEY (`rated_username`) REFERENCES `kpi_project_user` (`rated_username`),
+  CONSTRAINT `fk_man` FOREIGN KEY (`man_username`) REFERENCES `kpi_user` (`user_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `higgsup_kpi`.`kpi_point` (
