@@ -35,7 +35,7 @@ public class KpiProject implements Serializable {
     @CreationTimestamp
     private Timestamp updatedDate;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "kpiProject", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<KpiProjectUser> ratedUserList;
 
     public Integer getId() {
