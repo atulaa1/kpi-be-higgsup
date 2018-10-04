@@ -10234,7 +10234,8 @@
                 "evaluator": {
                   "username": "kpi.man",
                   "fullName": "kpi test. man"
-                }
+                },
+                "status_code": 200
               }
             }
           },
