@@ -5,6 +5,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @Table(name = "kpi_project")
@@ -33,6 +34,9 @@ public class KpiProject implements Serializable {
     @Column(name = "updated_date")
     @CreationTimestamp
     private Timestamp updatedDate;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "kpiProject", fetch = FetchType.LAZY)
+    private List<KpiProjectUser> ratedUserList;
 
     public Integer getId() {
         return id;
@@ -72,5 +76,13 @@ public class KpiProject implements Serializable {
 
     public void setUpdatedDate(Timestamp updateDate) {
         this.updatedDate = updateDate;
+    }
+
+    public List<KpiProjectUser> getRatedUserList() {
+        return ratedUserList;
+    }
+
+    public void setRatedUserList(List<KpiProjectUser> ratedUserList) {
+        this.ratedUserList = ratedUserList;
     }
 }
