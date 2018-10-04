@@ -8520,7 +8520,8 @@
                       "id",
                       "name",
                       "active",
-                      "createdDate"
+                      "createdDate",
+                      "projectUserList"
                     ],
                     "properties": {
                       "id": {
@@ -8537,6 +8538,28 @@
                       },
                       "updatedDate": {
                         "type": "string"
+                      },
+                      "projectUserList": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "required": [
+                            "ratedUsername"
+                          ],
+                          "properties": {
+                            "ratedUsername": {
+                              "type": "object",
+                              "required": [
+                                "username"
+                              ],
+                              "properties": {
+                                "username": {
+                                  "type": "String"
+                                }
+                              }
+                            }
+                          }
+                        }
                       }
                     }
                   }
@@ -8570,14 +8593,38 @@
                     "name": "VNTRIP",
                     "active": 1,
                     "createdDate": "29-08-2018 03:36",
-                    "updatedDate": "29-08-2018 03:36"
+                    "updatedDate": "29-08-2018 03:36",
+                    "projectUserList": [
+                      {
+                        "ratedUsername": {
+                          "username": "kpi.employee"
+                        }
+                      },
+                      {
+                        "ratedUsername": {
+                          "username": "kpi.test"
+                        }
+                      }
+                    ]
                   },
                   {
                     "id": 7,
                     "name": "KPI",
                     "active": 1,
                     "createdDate": "23-08-2018 09:45",
-                    "updatedDate": "29-08-2018 03:36"
+                    "updatedDate": "29-08-2018 03:36",
+                    "projectUserList": [
+                      {
+                        "ratedUsername": {
+                          "username": "kpi.employee"
+                        }
+                      },
+                      {
+                        "ratedUsername": {
+                          "username": "kpi.test"
+                        }
+                      }
+                    ]
                   }
                 ]
               },
@@ -8617,7 +8664,8 @@
               "type": "object",
               "required": [
                 "name",
-                "active"
+                "active",
+                "projectUserList"
               ],
               "properties": {
                 "name": {
@@ -8625,11 +8673,45 @@
                 },
                 "active": {
                   "type": "number"
+                },
+                "projectUserList": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "ratedUsername"
+                    ],
+                    "properties": {
+                      "ratedUsername": {
+                        "type": "object",
+                        "required": [
+                          "username"
+                        ],
+                        "properties": {
+                          "username": {
+                            "type": "String"
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
               },
               "example": {
                 "name": "VNTRIP",
-                "active": 1
+                "active": 1,
+                "projectUserList": [
+                  {
+                    "ratedUsername": {
+                      "username": "kpi.employee"
+                    }
+                  },
+                  {
+                    "ratedUsername": {
+                      "username": "kpi.test"
+                    }
+                  }
+                ]
               }
             }
           }
@@ -8650,7 +8732,8 @@
                     "id",
                     "name",
                     "active",
-                    "createdDate"
+                    "createdDate",
+                    "projectUserList"
                   ],
                   "properties": {
                     "id": {
@@ -8665,9 +8748,18 @@
                     "createdDate": {
                       "type": "string"
                     },
-                    "updatedDate": {
-                      "type": "string"
-                    }
+                    "projectUserList": [
+                      {
+                        "ratedUsername": {
+                          "username": "kpi.employee"
+                        }
+                      },
+                      {
+                        "ratedUsername": {
+                          "username": "kpi.test"
+                        }
+                      }
+                    ]
                   }
                 },
                 "message": {
@@ -8697,7 +8789,19 @@
                   "name": "VNTRIP",
                   "active": 1,
                   "createdDate": "29-08-2018 03:36",
-                  "updatedDate": "29-08-2018 03:36"
+                  "updatedDate": "29-08-2018 03:36",
+                  "projectUserList": [
+                    {
+                      "ratedUsername": {
+                        "username": "kpi.employee"
+                      }
+                    },
+                    {
+                      "ratedUsername": {
+                        "username": "kpi.test"
+                      }
+                    }
+                  ]
                 },
                 "status_code": 200
               },
@@ -8750,7 +8854,8 @@
               "type": "object",
               "required": [
                 "name",
-                "active"
+                "active",
+                "projectUserList"
               ],
               "properties": {
                 "name": {
@@ -8758,11 +8863,45 @@
                 },
                 "active": {
                   "type": "number"
+                },
+                "projectUserList": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "ratedUsername"
+                    ],
+                    "properties": {
+                      "ratedUsername": {
+                        "type": "object",
+                        "required": [
+                          "username"
+                        ],
+                        "properties": {
+                          "username": {
+                            "type": "String"
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
               },
               "example": {
                 "name": "VNTRIP",
-                "active": 1
+                "active": 1,
+                "projectUserList": [
+                  {
+                    "ratedUsername": {
+                      "username": "kpi.employee"
+                    }
+                  },
+                  {
+                    "ratedUsername": {
+                      "username": "kpi.test"
+                    }
+                  }
+                ]
               }
             }
           }
@@ -8783,7 +8922,8 @@
                     "id",
                     "name",
                     "active",
-                    "createdDate"
+                    "createdDate",
+                    "projectUserList"
                   ],
                   "properties": {
                     "id": {
@@ -8800,6 +8940,28 @@
                     },
                     "updatedDate": {
                       "type": "string"
+                    },
+                    "projectUserList": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "ratedUsername"
+                        ],
+                        "properties": {
+                          "ratedUsername": {
+                            "type": "object",
+                            "required": [
+                              "username"
+                            ],
+                            "properties": {
+                              "username": {
+                                "type": "String"
+                              }
+                            }
+                          }
+                        }
+                      }
                     }
                   }
                 },
@@ -8830,7 +8992,19 @@
                   "name": "VNTRIP",
                   "active": 1,
                   "createdDate": "29-08-2018 03:36",
-                  "updatedDate": "29-08-2018 03:36"
+                  "updatedDate": "29-08-2018 03:36",
+                  "projectUserList": [
+                    {
+                      "ratedUsername": {
+                        "username": "kpi.employee"
+                      }
+                    },
+                    {
+                      "ratedUsername-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             ": {
+                        "username": "kpi.test"
+                      }
+                    }
+                  ]
                 },
                 "status_code": 200
               },
