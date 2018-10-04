@@ -9918,8 +9918,8 @@
         "parameters": [
           {
             "in": "body",
-            "name": "evaluationDTO",
-            "description": "evaluationDTO",
+            "name": "evaluationEmployeeDTO",
+            "description": "evaluationEmployeeDTO",
             "required": true,
             "schema": {
               "type": "object",
@@ -10072,115 +10072,108 @@
             "description": "status_code : 200. Meaning: Thành công \n status_code : 940. Message: Evaluation is not complete for employee. Meaning: Chưa hoàn thành khảo sát cho nhân viên. \n status_code : 942. Message: You are the last evaluator. Please evaluate all the remaining. Meaning: Bạn là người dùng khảo sát cuối. Vui lòng đánh giá những phần còn lại \n",
             "schema": {
               "type": "object",
+              "required": [
+                "evaluator"
+              ],
               "properties": {
-                "type": "object",
-                "required": [
-                  "evaluator"
-                ],
-                "properties": {
-                  "employeeList": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "required": [
-                        "username",
-                        "lastName",
-                        "firstName",
-                        "fullName",
-                        "email",
-                        "userRole",
-                        "evaluateStatus"
-                      ],
-                      "properties": {
-                        "username": {
-                          "type": "string"
-                        },
-                        "lastName": {
-                          "type": "string"
-                        },
-                        "firstName": {
-                          "type": "string"
-                        },
-                        "fullName": {
-                          "type": "string"
-                        },
-                        "email": {
-                          "type": "string"
-                        },
-                        "userRole": {
-                          "type": "array",
-                          "items": {
-                            "type": "string"
-                          }
-                        },
-                        "avatar": {
-                          "type": "string"
-                        },
-                        "birthday": {
-                          "type": "date"
-                        },
-                        "numberPhone": {
-                          "type": "string"
-                        },
-                        "gmail": {
-                          "type": "string"
-                        },
-                        "skype": {
-                          "type": "string"
-                        },
-                        "dateStartWork": {
-                          "type": "string"
-                        },
-
-                        "evaluateStatus":{
-                          "type": "number"
-                        },
-                        "evaluateQuestion": {
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "required": [
-                              "question",
-                              "point"
-                            ],
-                            "properties": {
-                              "number": {
-                                "type": "number"
-                              },
-                              "question": {
-                                "type": "string"
-                              },
-                              "point": {
-                                "type": "number"
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "evaluator": {
+                "employeeList": {
+                  "type": "array",
+                  "items": {
                     "type": "object",
                     "required": [
                       "username",
-                      "fullName"
+                      "lastName",
+                      "firstName",
+                      "fullName",
+                      "email",
+                      "userRole",
+                      "evaluateStatus"
                     ],
                     "properties": {
                       "username": {
                         "type": "string"
                       },
+                      "lastName": {
+                        "type": "string"
+                      },
+                      "firstName": {
+                        "type": "string"
+                      },
                       "fullName": {
                         "type": "string"
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "userRole": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "avatar": {
+                        "type": "string"
+                      },
+                      "birthday": {
+                        "type": "date"
+                      },
+                      "numberPhone": {
+                        "type": "string"
+                      },
+                      "gmail": {
+                        "type": "string"
+                      },
+                      "skype": {
+                        "type": "string"
+                      },
+                      "dateStartWork": {
+                        "type": "string"
+                      },
+
+                      "evaluateStatus":{
+                        "type": "number"
+                      },
+                      "evaluateQuestion": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "required": [
+                            "question",
+                            "point"
+                          ],
+                          "properties": {
+                            "number": {
+                              "type": "number"
+                            },
+                            "question": {
+                              "type": "string"
+                            },
+                            "point": {
+                              "type": "number"
+                            }
+                          }
+                        }
                       }
+                    }
+                  }
+                },
+                "evaluator": {
+                  "type": "object",
+                  "required": [
+                    "username",
+                    "fullName"
+                  ],
+                  "properties": {
+                    "username": {
+                      "type": "string"
+                    },
+                    "fullName": {
+                      "type": "string"
                     }
                   }
                 },
                 "message": {
                   "type": "string"
-                },
-                "status_code": {
-                  "type": "integer",
-                  "format": "int32"
                 },
                 "errors": {
                   "type": "array",
@@ -10194,6 +10187,10 @@
                       }
                     }
                   }
+                },
+                "status_code": {
+                  "type": "integer",
+                  "format": "int32"
                 }
               },
               "example": {
