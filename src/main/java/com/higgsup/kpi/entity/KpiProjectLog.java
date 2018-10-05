@@ -13,13 +13,13 @@ public class KpiProjectLog implements Serializable {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
-    @Basic
-    @Column(name = "project_id")
+    @JoinColumn(name = "project_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private KpiProject project;
 
-    @Basic
-    @JoinColumn(name = "rated_username")
-    private KpiUser ratedUsername;
+    @JoinColumn(name = "rated_username", referencedColumnName = "rated_username", insertable = false, updatable = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private KpiProjectUser ratedUsername;
 
     @Basic
     @Column(name = "yearmonth")
@@ -29,7 +29,8 @@ public class KpiProjectLog implements Serializable {
     @Column(name = "project_point")
     private Float projectPoint;
 
-    @Column(name = "man_username")
+    @JoinColumn(name = "man_username", referencedColumnName = "user_name", insertable = false, updatable = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private KpiUser manUsername;
 
     public Integer getId() {
@@ -73,11 +74,11 @@ public class KpiProjectLog implements Serializable {
         this.manUsername = manUsername;
     }
 
-    public KpiUser getRatedUsername() {
+    public KpiProjectUser getRatedUsername() {
         return ratedUsername;
     }
 
-    public void setRatedUsername(KpiUser ratedUsername) {
+    public void setRatedUsername(KpiProjectUser ratedUsername) {
         this.ratedUsername = ratedUsername;
     }
 }
