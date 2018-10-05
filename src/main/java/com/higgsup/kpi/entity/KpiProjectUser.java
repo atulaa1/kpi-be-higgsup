@@ -21,9 +21,9 @@ public class KpiProjectUser implements Serializable {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private KpiProject project;
 
-    @Basic
-    @Column(name = "rated_username")
-    private String projectUser;
+    @JoinColumn(name = "rated_username", referencedColumnName = "user_name", insertable = false, updatable = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private KpiUser projectUser;
 
     @Basic
     @Column(name = "joined_date")
@@ -46,11 +46,11 @@ public class KpiProjectUser implements Serializable {
         this.project = project;
     }
 
-    public String getProjectUser() {
+    public KpiUser getProjectUser() {
         return projectUser;
     }
 
-    public void setProjectUser(String projectUser) {
+    public void setProjectUser(KpiUser projectUser) {
         this.projectUser = projectUser;
     }
 
