@@ -106,4 +106,6 @@ public final class ErrorMessage {
     public final static String EVENT_USER_CAN_NOT_NULL = "event user can not be null";
     public final static String HOST_CANNOT_CREATE_SEMINAR_SURVEY = "host cannot create any seminar survey";
     public final static String HOST_DOES_NOT_EXIST = "host does not exist";
+
+    public final static String PROJECT_USER_LIST_CAN_NOT_NULL = "project user list can not null";
 }
