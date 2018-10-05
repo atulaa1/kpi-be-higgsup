@@ -10112,7 +10112,7 @@
         ],
         "responses": {
           "200": {
-            "description": "status_code : 200. Meaning: Thành công \n status_code : 940. Message: Evaluation is not complete for employee. Meaning: Chưa hoàn thành khảo sát cho nhân viên. \n status_code : 942. Message: You are the last evaluator. Please evaluate all the remaining. Meaning: Bạn là người dùng khảo sát cuối. Vui lòng đánh giá những phần còn lại \n",
+            "description": "status_code : 200. Meaning: Thành công \n status_code : 940. Message: Evaluation is not complete for employee. Meaning: Chưa hoàn thành khảo sát cho nhân viên. \n status_code : 941. Message: Evaluation is not complete for project. Meaning: Chưa hoàn thành khảo sát cho dự án. \n status_code : 942. Message: You are the last evaluator. Please evaluate all the remaining. Meaning: Bạn là người dùng khảo sát cuối. Vui lòng đánh giá những phần còn lại \n",
             "schema": {
               "type": "object",
               "required": [
@@ -10130,7 +10130,7 @@
                       "fullName",
                       "email",
                       "userRole",
-                      "evaluateStatus",
+                      "isEvaluate",
                       "evaluateQuestion"
                     ],
                     "properties": {
@@ -10173,8 +10173,8 @@
                       "dateStartWork": {
                         "type": "string"
                       },
-                      "evaluateStatus":{
-                        "type": "number"
+                      "isEvaluate":{
+                        "type": "boolean"
                       },
                       "evaluateQuestion": {
                         "type": "array",
@@ -10291,19 +10291,19 @@
                         "point": 5
                       }
                     ],
-                    "evaluateStatus": 1
+                    "isEvaluate": true
                   }
                 ],
                 "projectList": [
                   {
                     "name": "VNTrip",
                     "rating": 10,
-                    "isRated": 1
+                    "isRated": true
                   },
                   {
                     "name": "GMS",
                     "rating": 5,
-                    "isRated": 1
+                    "isRated": true
                   }
                 ],
                 "evaluator": {
