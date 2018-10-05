@@ -35,8 +35,8 @@ public class KpiProject implements Serializable {
     @CreationTimestamp
     private Timestamp updatedDate;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<KpiProjectUser> ratedUserList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "project", fetch = FetchType.EAGER)
+    private List<KpiProjectUser> projectUserList;
 
     public Integer getId() {
         return id;
@@ -78,11 +78,12 @@ public class KpiProject implements Serializable {
         this.updatedDate = updateDate;
     }
 
-    public List<KpiProjectUser> getRatedUserList() {
-        return ratedUserList;
+    public List<KpiProjectUser> getProjectUserList() {
+
+        return projectUserList;
     }
 
-    public void setRatedUserList(List<KpiProjectUser> ratedUserList) {
-        this.ratedUserList = ratedUserList;
+    public void setProjectUserList(List<KpiProjectUser> projectUserList) {
+        this.projectUserList = projectUserList;
     }
 }

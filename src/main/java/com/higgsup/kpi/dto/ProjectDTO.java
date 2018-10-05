@@ -18,7 +18,7 @@ public class ProjectDTO extends BaseDTO {
     @JsonFormat(pattern = "dd-MM-yyy HH:mm")
     private Timestamp updatedDate;
 
-    private List<ProjectUserDTO> ratedUserList;
+    private List<ProjectUserDTO> projectUserList;
 
     public Integer getId() {
         return id;
@@ -60,11 +60,11 @@ public class ProjectDTO extends BaseDTO {
         this.updatedDate = updatedDate;
     }
 
-    public List<ProjectUserDTO> getRatedUserList() {
-        return ratedUserList;
+    public List<ProjectUserDTO> getProjectUserList() {
+        return projectUserList;
     }
 
-    public void setRatedUserList(List<ProjectUserDTO> ratedUserList) {
-        this.ratedUserList = ratedUserList;
+    public void setProjectUserList(List<ProjectUserDTO> projectUserList) {
+        this.projectUserList = projectUserList;
     }
 }

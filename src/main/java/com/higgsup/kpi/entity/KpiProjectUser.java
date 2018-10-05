@@ -1,8 +1,10 @@
 package com.higgsup.kpi.entity;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
 import java.io.Serializable;
-import java.security.Timestamp;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "kpi_project_user")
@@ -14,17 +16,19 @@ public class KpiProjectUser implements Serializable {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
-    @Basic
-    @Column(name = "project_id")
+
+    @JoinColumn(name = "project_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private KpiProject project;
 
     @Basic
     @Column(name = "rated_username")
-    private KpiUser ratedUsername;
+    private String projectUser;
 
     @Basic
     @Column(name = "joined_date")
-    private Timestamp joindDate;
+    @CreationTimestamp
+    private Timestamp joinedDate;
 
     public Integer getId() {
         return id;
@@ -42,19 +46,19 @@ public class KpiProjectUser implements Serializable {
         this.project = project;
     }
 
-    public KpiUser getRatedUsername() {
-        return ratedUsername;
+    public String getProjectUser() {
+        return projectUser;
     }
 
-    public void setRatedUsername(KpiUser ratedUsername) {
-        this.ratedUsername = ratedUsername;
+    public void setProjectUser(String projectUser) {
+        this.projectUser = projectUser;
     }
 
-    public Timestamp getJoindDate() {
-        return joindDate;
+    public Timestamp getJoinedDate() {
+        return joinedDate;
     }
 
-    public void setJoindDate(Timestamp joindDate) {
-        this.joindDate = joindDate;
+    public void setJoinedDate(Timestamp joinedDate) {
+        this.joinedDate = joinedDate;
     }
 }

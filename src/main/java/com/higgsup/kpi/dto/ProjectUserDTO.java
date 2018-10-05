@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 public class ProjectUserDTO {
     private Integer id;
     private ProjectDTO project;
-    private UserDTO ratedUsername;
+    private UserDTO projectUser;
     private Timestamp joinedDate;
 
     public Integer getId() {
@@ -24,12 +24,12 @@ public class ProjectUserDTO {
         this.project = project;
     }
 
-    public UserDTO getRatedUsername() {
-        return ratedUsername;
+    public UserDTO getProjectUser() {
+        return projectUser;
     }
 
-    public void setRatedUsername(UserDTO ratedUsername) {
-        this.ratedUsername = ratedUsername;
+    public void setProjectUser(UserDTO projectUser) {
+        this.projectUser = projectUser;
     }
 
     public Timestamp getJoinedDate() {

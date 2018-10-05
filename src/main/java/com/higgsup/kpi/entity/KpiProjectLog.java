@@ -73,5 +73,11 @@ public class KpiProjectLog implements Serializable {
         this.manUsername = manUsername;
     }
 
+    public KpiUser getRatedUsername() {
+        return ratedUsername;
+    }
 
+    public void setRatedUsername(KpiUser ratedUsername) {
+        this.ratedUsername = ratedUsername;
+    }
 }
