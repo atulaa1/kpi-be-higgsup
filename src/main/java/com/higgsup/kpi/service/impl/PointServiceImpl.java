@@ -3,7 +3,6 @@ package com.higgsup.kpi.service.impl;
 import com.higgsup.kpi.dto.EventDTO;
 import com.higgsup.kpi.dto.TeamBuildingDTO;
 import com.higgsup.kpi.entity.*;
-import com.higgsup.kpi.glossary.PointValue;
 import com.higgsup.kpi.repository.*;
 import com.higgsup.kpi.service.BaseService;
 import com.higgsup.kpi.service.PointService;
@@ -13,7 +12,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import static com.higgsup.kpi.glossary.EventUserType.ORGANIZER;
 import static com.higgsup.kpi.glossary.PointValue.FULL_RULE_POINT;
 import static com.higgsup.kpi.glossary.PointValue.LATE_TIME_POINT;
 
@@ -75,8 +76,61 @@ public class PointServiceImpl extends BaseService implements PointService {
 
         List<KpiEventUser> kpiEventUserList = kpiEventUserRepo.findByKpiEventId(teamBuildingDTO.getId());
 
-        /* List<KpiPoint> kpiPointList = kpiPointRepo.findByRatedUser();*/
+        List<KpiEventUser> organizers = kpiEventUserList.stream().filter(u -> u.getType()
+                .equals(ORGANIZER.getValue())).collect(Collectors.toList());
 
+        List<KpiEventUser> participants = kpiEventUserList.stream().filter(u -> !u.getType()
+                .equals(ORGANIZER.getValue())).collect(Collectors.toList());
 
+        for (KpiEventUser participant : participants) {
+            kpiPoint.setRatedUser(participant.getKpiUser());
+            switch (participant.getType()){
+                case 5: kpiPoint.setTeambuildingPoint(Float.valueOf(firstPrizePoint)); break;
+                case 6: kpiPoint.setTeambuildingPoint(Float.valueOf(secondPrizePoint)); break;
+                case 7: kpiPoint.setTeambuildingPoint(Float.valueOf(thirdPrizePoint)); break;
+            }
+            kpiPointRepo.save(kpiPoint);
+        }
+
+        for (KpiEventUser kpiEventUser : organizers) {
+            kpiPoint.setRatedUser(kpiEventUser.getKpiUser());
+
+            List<KpiEventUser> gamingOrganizers = kpiEventUserList.stream()
+                    .filter(u -> u.getKpiUser().equals(kpiEventUser.getKpiUser())).collect(Collectors.toList());
+
+            if (gamingOrganizers.isEmpty()){
+                    kpiPoint.setTeambuildingPoint(Float.valueOf(organizerPoint));
+            } else {
+                for (KpiEventUser gamingOrganizer : gamingOrganizers ){
+                    switch (gamingOrganizer.getType()){
+                        case 5: {
+                            if (Float.valueOf(organizerPoint) > Float.valueOf(firstPrizePoint)) {
+                                kpiPoint.setTeambuildingPoint(Float.valueOf(organizerPoint));
+                            } else {
+                                kpiPoint.setTeambuildingPoint(Float.valueOf(firstPrizePoint));
+                            }
+                            break;
+                        }
+                        case 6: {
+                            if (Float.valueOf(organizerPoint) > Float.valueOf(secondPrizePoint)) {
+                                kpiPoint.setTeambuildingPoint(Float.valueOf(organizerPoint));
+                            } else {
+                                kpiPoint.setTeambuildingPoint(Float.valueOf(secondPrizePoint));
+                            }
+                            break;
+                            }
+                        case 7: {
+                            if (Float.valueOf(organizerPoint) > Float.valueOf(thirdPrizePoint)) {
+                                kpiPoint.setTeambuildingPoint(Float.valueOf(organizerPoint));
+                            } else {
+                                kpiPoint.setTeambuildingPoint(Float.valueOf(thirdPrizePoint));
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+            kpiPointRepo.save(kpiPoint);
+        }
     }
 }
