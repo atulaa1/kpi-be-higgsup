@@ -765,9 +765,13 @@ public class EventServiceImpl extends BaseService implements EventService {
             errorDTO.setMessage(ErrorMessage.NOT_FIND_EVENT);
             errors.add(errorDTO);
         }
-        seminarDetailEventDTO.setErrorCode(errors.get(0).getErrorCode());
-        seminarDetailEventDTO.setMessage(errors.get(0).getMessage());
-        seminarDetailEventDTO.setErrorDTOS(errors);
+
+        if (!CollectionUtils.isEmpty(errors)) {
+            seminarDetailEventDTO.setErrorCode(errors.get(0).getErrorCode());
+            seminarDetailEventDTO.setMessage(errors.get(0).getMessage());
+            seminarDetailEventDTO.setErrorDTOS(errors);
+        }
+
         return seminarDetailEventDTO;
     }
 
@@ -1556,6 +1560,7 @@ public class EventServiceImpl extends BaseService implements EventService {
             kpiEventUser.setKpiEventUserPK(kpiEventUserPK);
 
             kpiEventUser.setType(eventUserDTO.getType());
+            kpiEventUser.setStatus(EvaluatingStatus.UNFINISHED.getValue());
             kpiEventUsers.add(kpiEventUser);
 
         }
