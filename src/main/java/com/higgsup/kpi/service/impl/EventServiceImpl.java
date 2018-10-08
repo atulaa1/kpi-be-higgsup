@@ -687,7 +687,7 @@ public class EventServiceImpl extends BaseService implements EventService {
         String loginUsername = authentication.getPrincipal().toString();
 
         Optional<KpiEvent> kpiEventOptional = kpiEventRepo.findById(seminarSurveyDTO.getId());
-        List<KpiEventUser> kpiEventHostList = kpiEventUserRepo.findByUserType(seminarSurveyDTO.getId());
+        List<KpiEventUser> kpiEventHostList = kpiEventUserRepo.findByKpiEventId(seminarSurveyDTO.getId());
 
         List<ErrorDTO> errors = new ArrayList<>();
 
@@ -710,6 +710,7 @@ public class EventServiceImpl extends BaseService implements EventService {
 
                         for (SeminarSurveyDTO RequestSeminarSurveyDTO : seminarSurveyDTO.getAdditionalConfig()) {
                             KpiSeminarSurvey kpiSeminarSurvey = new KpiSeminarSurvey();
+
                             Optional<KpiEventUser> kpiEventUserEvaluated = eventUserEvaluated.stream()
                                     .filter(kpiEventUser1 -> kpiEventUser1.getKpiUser().getUserName()
                                             .equals(RequestSeminarSurveyDTO.getEvaluatedUsername().getUsername())
@@ -720,6 +721,7 @@ public class EventServiceImpl extends BaseService implements EventService {
                                 kpiSeminarSurvey.setEvaluatingUsername(kpiEventUser.getKpiUser());
                                 kpiSeminarSurvey.setEvent(kpiEvent);
                                 kpiSeminarSurvey.setRating(RequestSeminarSurveyDTO.getRating());
+
                                 kpiSeminarSurveys.add(kpiSeminarSurvey);
                             } else {
                                 ErrorDTO errorDTO = new ErrorDTO();
@@ -731,12 +733,14 @@ public class EventServiceImpl extends BaseService implements EventService {
                         if (CollectionUtils.isEmpty(errors)) {
                             List<SeminarSurveyDTO> seminarSurveyDTOs = convertListSeminarSurveyEntityToDTO
                                     ((List<KpiSeminarSurvey>) kpiseminarSurveyRepo.saveAll(kpiSeminarSurveys));
+
                             kpiEventUser.setStatus(EvaluatingStatus.FINISH.getValue());
                             kpiEventUserRepo.save(kpiEventUser);
+
                             EventUserDTO eventUserDTO = convertEventUsersEntityToDTONotHaveEvent(kpiEventUser);
                             eventUserDTO.setSeminarSurveys(seminarSurveyDTOs);
-                            seminarDetailEventDTO.setEventUserList(Lists.newArrayList(eventUserDTO));
 
+                            seminarDetailEventDTO.setEventUserList(Lists.newArrayList(eventUserDTO));
                         }
                     } else {
                         ErrorDTO errorDTO = new ErrorDTO();
@@ -763,9 +767,13 @@ public class EventServiceImpl extends BaseService implements EventService {
             errorDTO.setMessage(ErrorMessage.NOT_FIND_EVENT);
             errors.add(errorDTO);
         }
-        seminarDetailEventDTO.setErrorCode(errors.get(0).getErrorCode());
-        seminarDetailEventDTO.setMessage(errors.get(0).getMessage());
-        seminarDetailEventDTO.setErrorDTOS(errors);
+
+        if (!CollectionUtils.isEmpty(errors)) {
+            seminarDetailEventDTO.setErrorCode(errors.get(0).getErrorCode());
+            seminarDetailEventDTO.setMessage(errors.get(0).getMessage());
+            seminarDetailEventDTO.setErrorDTOS(errors);
+        }
+
         return seminarDetailEventDTO;
     }
 
@@ -1554,6 +1562,7 @@ public class EventServiceImpl extends BaseService implements EventService {
             kpiEventUser.setKpiEventUserPK(kpiEventUserPK);
 
             kpiEventUser.setType(eventUserDTO.getType());
+            kpiEventUser.setStatus(EvaluatingStatus.UNFINISHED.getValue());
             kpiEventUsers.add(kpiEventUser);
 
         }

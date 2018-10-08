@@ -11,7 +11,4 @@ import java.util.List;
 public interface KpiEventUserRepo extends CrudRepository<KpiEventUser, KpiEventUserPK> {
     List<KpiEventUser> findByKpiEventId(int eventId);
 
-    @Query(value = "select * from kpi_event_user as eu where eu.event_id = :eventId  ", nativeQuery = true)
-    List<KpiEventUser> findByUserType(@Param("eventId") Integer eventId);
-
 }
