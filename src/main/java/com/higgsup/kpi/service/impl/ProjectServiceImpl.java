@@ -88,10 +88,15 @@ public class ProjectServiceImpl implements ProjectService {
         if (Objects.nonNull(projectDTO.getName())) {
             KpiProject kpiProject = kpiProjectRepo.findByName(projectDTO.getName());
             if (Objects.isNull(kpiProject)) {
-                kpiProject = new KpiProject();
-                BeanUtils.copyProperties(projectDTO, kpiProject, "id");
-                kpiProject = kpiProjectRepo.save(kpiProject);
-                BeanUtils.copyProperties(kpiProject, projectDTO);
+                if (projectDTO.getProjectUserList().isEmpty()) {
+                    projectDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
+                    projectDTO.setMessage(ErrorMessage.PROJECT_USER_LIST_CAN_NOT_NULL);
+                } else {
+                    kpiProject = new KpiProject();
+                    BeanUtils.copyProperties(projectDTO, kpiProject, "id");
+                    kpiProject = kpiProjectRepo.save(kpiProject);
+                    BeanUtils.copyProperties(kpiProject, projectDTO);
+                }
             } else {
                 projectDTO.setErrorCode(ErrorCode.PARAMETERS_ALREADY_EXIST.getValue());
                 projectDTO.setMessage(ErrorMessage.PARAMETERS_NAME_PROJECT_EXISTS);

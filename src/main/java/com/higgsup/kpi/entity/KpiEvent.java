@@ -55,6 +55,10 @@ public class KpiEvent implements Serializable {
     @Column(name = "address")
     private String address;
 
+    @JoinColumn(name = "creator", referencedColumnName = "user_name")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private KpiUser creator;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "kpiEvent", fetch = FetchType.LAZY)
     private List<KpiEventUser> kpiEventUserList;
 
@@ -156,5 +160,13 @@ public class KpiEvent implements Serializable {
 
     public void setAdditionalConfig(String additionalConfig) {
         this.additionalConfig = additionalConfig;
+    }
+
+    public KpiUser getCreator() {
+        return creator;
+    }
+
+    public void setCreator(KpiUser creator) {
+        this.creator = creator;
     }
 }

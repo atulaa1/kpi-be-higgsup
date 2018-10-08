@@ -263,52 +263,51 @@ public class LateTimeCheckServiceImpl implements LateTimeCheckService {
             XSSFWorkbook workbook = new XSSFWorkbook(excelDataFile.getInputStream());
             XSSFSheet worksheet = workbook.getSheetAt(0);
             XSSFRow titleRow = worksheet.getRow(0);
-            if (titleRow.getCell(0).getStringCellValue().isEmpty() ||
-                    !titleRow.getCell(0).getStringCellValue().toLowerCase().contains("team member")) {
+            if (titleRow.getCell(0) == null ||
+                    !titleRow.getCell(0).getStringCellValue().trim().toLowerCase().equals("team member")) {
                 ErrorDTO errorDTO = new ErrorDTO();
                 errorDTO.setErrorCode(ErrorCode.INVALID_COLUMN_NAME.getValue());
                 errorDTO.setMessage(ErrorMessage.INVALID_MEMBER_NAME);
                 errorDTOS.add(errorDTO);
-            }
-            if (titleRow.getCell(1).getStringCellValue().isEmpty() ||
-                    !titleRow.getCell(1).getStringCellValue().toLowerCase().contains("email")) {
+            } else if (titleRow.getCell(1) == null ||
+                    !titleRow.getCell(1).getStringCellValue().trim().toLowerCase().equals("email")) {
                 ErrorDTO errorDTO = new ErrorDTO();
                 errorDTO.setErrorCode(ErrorCode.INVALID_COLUMN_NAME.getValue());
                 errorDTO.setMessage(ErrorMessage.INVALID_EMAIL);
                 errorDTOS.add(errorDTO);
-            }
-            if (titleRow.getCell(2).getStringCellValue().isEmpty() ||
-                    !titleRow.getCell(2).getStringCellValue().toLowerCase().contains("score")) {
+            } else if (titleRow.getCell(2) == null ||
+                    !titleRow.getCell(2).getStringCellValue().trim().toLowerCase().equals("score")) {
                 ErrorDTO errorDTO = new ErrorDTO();
                 errorDTO.setErrorCode(ErrorCode.INVALID_COLUMN_NAME.getValue());
                 errorDTO.setMessage(ErrorMessage.INVALID_NUMBER_OF_LATE_TIMES);
                 errorDTOS.add(errorDTO);
             }
 
-            for (int i = 1; i < worksheet.getPhysicalNumberOfRows(); i++) {
-                XSSFRow row = worksheet.getRow(i);
-
-                if (row.getCell(1).getStringCellValue().isEmpty() ||
-                        !row.getCell(1).getStringCellValue().endsWith("@higgsup.com")) {
-                    ErrorDTO errorDTO = new ErrorDTO();
-                    errorDTO.setErrorCode(ErrorCode.INCORRECT_DATA.getValue());
-                    errorDTO.setMessage(ErrorMessage.INCORRECT_EMAIL_DATA + (i + 1));
-                    errorDTOS.add(errorDTO);
+            if(errorDTOS.isEmpty()){
+                for (int i = 1; i < worksheet.getPhysicalNumberOfRows(); i++) {
+                    XSSFRow row = worksheet.getRow(i);
+                    if (row.getCell(1) == null ||
+                            !row.getCell(1).getStringCellValue().endsWith("@higgsup.com")) {
+                        ErrorDTO errorDTO = new ErrorDTO();
+                        errorDTO.setErrorCode(ErrorCode.INCORRECT_DATA.getValue());
+                        errorDTO.setMessage(ErrorMessage.INCORRECT_EMAIL_DATA + (i + 1));
+                        errorDTOS.add(errorDTO);
+                    } else {
+                        if (kpiUserRepo.findByEmail(row.getCell(1).getStringCellValue()) == null) {
+                            ErrorDTO errorDTO = new ErrorDTO();
+                            errorDTO.setErrorCode(ErrorCode.INCORRECT_DATA.getValue());
+                            errorDTO.setMessage(ErrorMessage.EMAIL_NOT_IN_DATABASE + (i + 1));
+                            errorDTOS.add(errorDTO);
+                        }
+                    }
+                    if (row.getCell(2) == null ||
+                            !UtilsValidate.isValidLateTimeNumber((row.getCell(2).toString()))) {
+                        ErrorDTO errorDTO = new ErrorDTO();
+                        errorDTO.setErrorCode(ErrorCode.INCORRECT_DATA.getValue());
+                        errorDTO.setMessage(ErrorMessage.INCORRECT_LATE_TIMES_DATA + (i + 1));
+                        errorDTOS.add(errorDTO);
+                    }
                 }
-                if (kpiUserRepo.findByEmail(row.getCell(1).getStringCellValue()) == null) {
-                    ErrorDTO errorDTO = new ErrorDTO();
-                    errorDTO.setErrorCode(ErrorCode.INCORRECT_DATA.getValue());
-                    errorDTO.setMessage(ErrorMessage.EMAIL_NOT_IN_DATABASE + (i + 1));
-                    errorDTOS.add(errorDTO);
-                }
-                if (String.valueOf(row.getCell(2).toString()).isEmpty() ||
-                        !UtilsValidate.isValidLateTimeNumber((row.getCell(2).toString()))) {
-                    ErrorDTO errorDTO = new ErrorDTO();
-                    errorDTO.setErrorCode(ErrorCode.INCORRECT_DATA.getValue());
-                    errorDTO.setMessage(ErrorMessage.INCORRECT_LATE_TIMES_DATA + (i + 1));
-                    errorDTOS.add(errorDTO);
-                }
-
             }
         }
         return errorDTOS;
