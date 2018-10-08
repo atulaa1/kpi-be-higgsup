@@ -7,6 +7,8 @@ public class SurveyDTO extends BaseDTO {
 
     private String question;
 
+    private Float point;
+
     public Integer getId() {
         return id;
     }
@@ -29,5 +31,13 @@ public class SurveyDTO extends BaseDTO {
 
     public void setQuestion(String question) {
         this.question = question;
+    }
+
+    public Float getPoint() {
+        return point;
+    }
+
+    public void setPoint(Float point) {
+        this.point = point;
     }
 }

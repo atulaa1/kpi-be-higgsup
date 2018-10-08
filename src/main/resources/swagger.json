@@ -9752,7 +9752,7 @@
       }
     },
 
-    "api/evaluation/info":{
+    "/api/evaluation/info":{
       "get": {
         "tags": [
           "evaluation-controller"

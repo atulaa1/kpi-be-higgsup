@@ -17,6 +17,8 @@ public class ProjectDTO extends BaseDTO {
     @JsonFormat(pattern = "dd-MM-yyy HH:mm")
     private Timestamp updatedDate;
 
+    private Float rating;
+
     public Integer getId() {
         return id;
     }
@@ -55,5 +57,13 @@ public class ProjectDTO extends BaseDTO {
 
     public void setUpdatedDate(Timestamp updatedDate) {
         this.updatedDate = updatedDate;
+    }
+
+    public Float getRating() {
+        return rating;
+    }
+
+    public void setRating(Float rating) {
+        this.rating = rating;
     }
 }
