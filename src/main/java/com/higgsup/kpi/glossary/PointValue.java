@@ -6,6 +6,7 @@ public enum PointValue {
     MAX_WEEKEND_SEMINAR_POINT(30, "max weekend seminar point"),
     MAX_PROJECT_POINT(20, "max project point"),
     MAX_INDIVIDUAL_POINT(72, "max individual point"),
+    MAX_NORMAL_SEMINAR_POINT(24, "max normal seminar point"),
     FULL_RULE_POINT(24, "full rule point");
 
 

@@ -56,8 +56,6 @@ public class EventServiceImpl extends BaseService implements EventService {
     @Autowired
     private KpiSeminarSurveyRepo kpiseminarSurveyRepo;
 
-    @Autowired
-    private PointService pointService;
 
     @Override
     public List<EventDTO> getAllClubAndSupportEvent() throws IOException {
@@ -112,7 +110,7 @@ public class EventServiceImpl extends BaseService implements EventService {
 
     private List<EventDTO> convertEventEntityToDTONewSupport(List<KpiEvent> kpiEventEntities) throws IOException {
         List<EventDTO> eventDTOS = new ArrayList<>();
-        if (!CollectionUtils.isEmpty(kpiEventEntities)) {
+        if (!CollectionUtils.isEmpty(kpiEventEntities))
             for (KpiEvent kpiEvent : kpiEventEntities) {
                 switch (GroupType.getGroupType(kpiEvent.getGroup().getGroupType().getId())) {
                     case CLUB:
@@ -129,8 +127,16 @@ public class EventServiceImpl extends BaseService implements EventService {
                         break;
                 }
             }
-        }
         return eventDTOS;
+    }
+
+    public List<EventDTO<EventSeminarDetail>> convertSeminarEventEntityToDTO(List<KpiEvent> kpiEventEntities) throws IOException{
+        List<EventDTO<EventSeminarDetail>> eventDTOS = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(kpiEventEntities))
+            for(KpiEvent kpiEvent : kpiEventEntities){
+                eventDTOS.add(convertSeminarEntityToDTO(kpiEvent));
+            }
+            return eventDTOS;
     }
 
     @Override
@@ -693,6 +699,7 @@ public class EventServiceImpl extends BaseService implements EventService {
 
         if (kpiEventOptional.isPresent()) {
             KpiEvent kpiEvent = kpiEventOptional.get();
+            List<KpiEventUser> kpiEventUsers = kpiEventUserRepo.findByKpiEventId(kpiEvent.getId());
             seminarDetailEventDTO = convertEventSeminarEntityToDTO(kpiEvent);
 
             Optional<KpiEventUser> kpiEventUserOptional = kpiEventHostList.stream()
@@ -736,8 +743,11 @@ public class EventServiceImpl extends BaseService implements EventService {
                             EventUserDTO eventUserDTO = convertEventUsersEntityToDTONotHaveEvent(kpiEventUser);
                             eventUserDTO.setSeminarSurveys(seminarSurveyDTOs);
                             seminarDetailEventDTO.setEventUserList(Lists.newArrayList(eventUserDTO));
-
                         }
+                        if(kpiEventUsers.stream().noneMatch(e -> e.getStatus() == 0)){
+                            addSeminarPoint(kpiEventUsers, seminarDetailEventDTO);
+                        }
+
                     } else {
                         ErrorDTO errorDTO = new ErrorDTO();
                         errorDTO.setErrorCode(ErrorCode.ALREADY_EVALUATED.getValue());
@@ -1045,7 +1055,7 @@ public class EventServiceImpl extends BaseService implements EventService {
         return clubDetailEventDTO;
     }
 
-    private EventDTO convertSeminarEntityToDTO(KpiEvent kpiEvent) throws IOException {
+    public EventDTO convertSeminarEntityToDTO(KpiEvent kpiEvent) throws IOException {
         EventDTO<EventSeminarDetail> seminarDetailEventDTO = new EventDTO<>();
         ObjectMapper mapper = new ObjectMapper();
 

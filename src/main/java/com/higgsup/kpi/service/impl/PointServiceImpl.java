@@ -39,8 +39,6 @@ public class PointServiceImpl extends BaseService implements PointService {
     @Autowired
     private KpiProjectUserRepo kpiProjectUserRepo;
 
-    @Autowired
-    private KpiProjectLogRepo kpiProjectLogRepo;
 
     @Autowired
     private KpiEventUserRepo kpiEventUserRepo;
@@ -72,12 +70,6 @@ public class PointServiceImpl extends BaseService implements PointService {
                 kpiPointRepo.save(kpiPoint);
             }
         }
-    }
-
-    @Override
-    @Scheduled(cron = "0 0 16 10 * ?")
-    public void calculateNormalSeminarPoint() {
-
     }
 
     @Override
@@ -149,8 +141,9 @@ public class PointServiceImpl extends BaseService implements PointService {
         }
     }
 
-    @Scheduled(cron = "0 0 16 10 * ?")
+    @Scheduled(cron = "35 04 18 8 * ?")
     private void addEffectivePointForHost() throws IOException{
+        System.out.println("hello");
         List<KpiGroup> allClub = kpiGroupRepo.findAllClub();
 
         List<GroupDTO<GroupClubDetail>> allClubDTO = convertClubGroupEntityToDTO(allClub);
@@ -161,9 +154,9 @@ public class PointServiceImpl extends BaseService implements PointService {
             owner.setKpiUser(clubOwner);
             List<KpiEvent> eventsOfClub = kpiEventRepo.findEventCreatedByUser(clubDTO.getAdditionalConfig().getHost());
             Integer confirmEventsOfClub = (int) eventsOfClub.stream()
-                                                            .filter(e -> e.getStatus() == 2).count();
+                    .filter(e -> e.getStatus() == 2).count();
             Integer eventsClubOwnerParticipate = (int) eventsOfClub.stream()
-                                                                   .filter(e -> e.getKpiEventUserList().contains(owner) && e.getStatus() == 2).count();
+                    .filter(e -> e.getKpiEventUserList().contains(owner) && e.getStatus() == 2).count();
             if(confirmEventsOfClub >= clubDTO.getAdditionalConfig().getMinNumberOfSessions() / 2 &&
                     eventsClubOwnerParticipate >= confirmEventsOfClub * 3/4){
                 if(kpiPointRepo.findByRatedUser(clubOwner) != null){
@@ -174,9 +167,16 @@ public class PointServiceImpl extends BaseService implements PointService {
                     KpiPoint kpiPoint = new KpiPoint();
                     kpiPoint.setRatedUser(clubOwner);
                     kpiPoint.setClubPoint(clubDTO.getAdditionalConfig().getEffectivePoint());
+                    kpiPointRepo.save(kpiPoint);
                 }
             }
         }
+    }
+
+    @Override
+    @Scheduled(cron = "0 0 16 10 * ?")
+    public void calculateSeminarPoint() {
+
     }
 
     private List<GroupDTO<GroupClubDetail>> convertClubGroupEntityToDTO(List<KpiGroup> allClub) throws IOException {
@@ -199,7 +199,7 @@ public class PointServiceImpl extends BaseService implements PointService {
 
     private GroupTypeDTO convertGroupTypeEntityToDTO(KpiGroupType kpiGroupType) {
         GroupTypeDTO groupTypeDTO = new GroupTypeDTO();
-        BeanUtils.copyProperties(kpiGroupType, groupTypeDTO);
+        BeanUtils.copyProperties(kpiGroupType, groupTypeDTO, "name");
         return groupTypeDTO;
     }
 }
