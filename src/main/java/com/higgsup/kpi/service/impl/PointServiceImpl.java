@@ -1,15 +1,20 @@
 package com.higgsup.kpi.service.impl;
 
-import com.higgsup.kpi.dto.EventDTO;
-import com.higgsup.kpi.dto.TeamBuildingDTO;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.higgsup.kpi.dto.*;
 import com.higgsup.kpi.entity.*;
+import com.higgsup.kpi.glossary.GroupType;
 import com.higgsup.kpi.repository.*;
 import com.higgsup.kpi.service.BaseService;
 import com.higgsup.kpi.service.PointService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -17,6 +22,7 @@ import java.util.stream.Collectors;
 import static com.higgsup.kpi.glossary.EventUserType.ORGANIZER;
 import static com.higgsup.kpi.glossary.PointValue.FULL_RULE_POINT;
 import static com.higgsup.kpi.glossary.PointValue.LATE_TIME_POINT;
+import static com.higgsup.kpi.glossary.PointValue.MAX_CLUB_POINT;
 
 @Service
 public class PointServiceImpl extends BaseService implements PointService {
@@ -38,6 +44,15 @@ public class PointServiceImpl extends BaseService implements PointService {
 
     @Autowired
     private KpiEventUserRepo kpiEventUserRepo;
+
+    @Autowired
+    private KpiGroupRepo kpiGroupRepo;
+
+    @Autowired
+    private KpiUserRepo kpiUserRepo;
+
+    @Autowired
+    private KpiEventRepo kpiEventRepo;
 
     @Scheduled(cron = "0 0 16 10 * ?")
     public void calculateRulePoint() {
@@ -132,5 +147,59 @@ public class PointServiceImpl extends BaseService implements PointService {
             }
             kpiPointRepo.save(kpiPoint);
         }
+    }
+
+    @Scheduled(cron = "0 0 16 10 * ?")
+    private void addEffectivePointForHost() throws IOException{
+        List<KpiGroup> allClub = kpiGroupRepo.findAllClub();
+
+        List<GroupDTO<GroupClubDetail>> allClubDTO = convertClubGroupEntityToDTO(allClub);
+
+        for(GroupDTO<GroupClubDetail> clubDTO:allClubDTO) {
+            KpiUser clubOwner = kpiUserRepo.findByUserName(clubDTO.getAdditionalConfig().getHost());
+            KpiEventUser owner = new KpiEventUser();
+            owner.setKpiUser(clubOwner);
+            List<KpiEvent> eventsOfClub = kpiEventRepo.findEventCreatedByUser(clubDTO.getAdditionalConfig().getHost());
+            Integer confirmEventsOfClub = (int) eventsOfClub.stream()
+                                                            .filter(e -> e.getStatus() == 2).count();
+            Integer eventsClubOwnerParticipate = (int) eventsOfClub.stream()
+                                                                   .filter(e -> e.getKpiEventUserList().contains(owner) && e.getStatus() == 2).count();
+            if(confirmEventsOfClub >= clubDTO.getAdditionalConfig().getMinNumberOfSessions() / 2 &&
+                    eventsClubOwnerParticipate >= confirmEventsOfClub * 3/4){
+                if(kpiPointRepo.findByRatedUser(clubOwner) != null){
+                    KpiPoint kpiPoint = kpiPointRepo.findByRatedUser(clubOwner);
+                    kpiPoint.setClubPoint(kpiPoint.getClubPoint() + clubDTO.getAdditionalConfig().getEffectivePoint());
+                    kpiPointRepo.save(kpiPoint);
+                }else{
+                    KpiPoint kpiPoint = new KpiPoint();
+                    kpiPoint.setRatedUser(clubOwner);
+                    kpiPoint.setClubPoint(clubDTO.getAdditionalConfig().getEffectivePoint());
+                }
+            }
+        }
+    }
+
+    private List<GroupDTO<GroupClubDetail>> convertClubGroupEntityToDTO(List<KpiGroup> allClub) throws IOException {
+        List<GroupDTO<GroupClubDetail>> groupDTOS = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(allClub)) {
+            for (KpiGroup kpiGroup : allClub) {
+                    ObjectMapper mapper = new ObjectMapper();
+                    GroupDTO<GroupClubDetail> groupClubDTO = new GroupDTO<>();
+
+                    BeanUtils.copyProperties(kpiGroup, groupClubDTO);
+                    GroupClubDetail groupClubDetail = mapper.readValue(kpiGroup.getAdditionalConfig(), GroupClubDetail.class);
+
+                    groupClubDTO.setAdditionalConfig(groupClubDetail);
+                    groupClubDTO.setGroupType(convertGroupTypeEntityToDTO(kpiGroup.getGroupType()));
+                    groupDTOS.add(groupClubDTO);
+                }
+            }
+        return groupDTOS;
+    }
+
+    private GroupTypeDTO convertGroupTypeEntityToDTO(KpiGroupType kpiGroupType) {
+        GroupTypeDTO groupTypeDTO = new GroupTypeDTO();
+        BeanUtils.copyProperties(kpiGroupType, groupTypeDTO);
+        return groupTypeDTO;
     }
 }

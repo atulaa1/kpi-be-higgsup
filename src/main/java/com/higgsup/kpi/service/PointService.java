@@ -1,7 +1,6 @@
 package com.higgsup.kpi.service;
 
-import com.higgsup.kpi.dto.EventDTO;
-import com.higgsup.kpi.dto.TeamBuildingDTO;
+import com.higgsup.kpi.dto.*;
 
 public interface PointService {
     void calculateRulePoint();

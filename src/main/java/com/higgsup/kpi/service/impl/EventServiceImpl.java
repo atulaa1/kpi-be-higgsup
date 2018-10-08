@@ -8,10 +8,7 @@ import com.higgsup.kpi.dto.*;
 import com.higgsup.kpi.entity.*;
 import com.higgsup.kpi.glossary.*;
 import com.higgsup.kpi.repository.*;
-import com.higgsup.kpi.service.BaseService;
-import com.higgsup.kpi.service.EventService;
-import com.higgsup.kpi.service.LdapUserService;
-import com.higgsup.kpi.service.UserService;
+import com.higgsup.kpi.service.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -58,6 +55,9 @@ public class EventServiceImpl extends BaseService implements EventService {
 
     @Autowired
     private KpiSeminarSurveyRepo kpiseminarSurveyRepo;
+
+    @Autowired
+    private PointService pointService;
 
     @Override
     public List<EventDTO> getAllClubAndSupportEvent() throws IOException {
@@ -848,7 +848,7 @@ public class EventServiceImpl extends BaseService implements EventService {
         GroupClubDetail groupClubDetail = mapper.readValue(kpiEvent.getGroup().getAdditionalConfig(),
                 GroupClubDetail.class);
         for (KpiEventUser kpiEventUser : kpiEvent.getKpiEventUserList()) {
-            addPoint(kpiEventUser.getKpiUser(), groupClubDetail.getParticipationPoint());
+            addClubPoint(kpiEventUser.getKpiUser(), groupClubDetail.getParticipationPoint());
         }
     }
 
@@ -898,7 +898,7 @@ public class EventServiceImpl extends BaseService implements EventService {
         Float point = setHistorySupportAndGetAllPoint(kpiEvent);
         //ad point
         if (Objects.equals(kpiEvent.getStatus(), StatusEvent.CONFIRMED.getValue())) {
-            addPoint(kpiEvent.getKpiEventUserList().get(0).getKpiUser(), point);
+            addSupportPoint(kpiEvent.getKpiEventUserList().get(0).getKpiUser(), point);
         }
         kpiEvent = kpiEventRepo.save(kpiEvent);
         eventDTO = convertSupportEntiyToDTO(kpiEvent);
@@ -916,7 +916,7 @@ public class EventServiceImpl extends BaseService implements EventService {
         Float point = setHistorySupportAndGetAllPointNewSupport(kpiEvent);
         //ad point
         if (Objects.equals(kpiEvent.getStatus(), StatusEvent.CONFIRMED.getValue())) {
-            addPoint(kpiEvent.getKpiEventUserList().get(0).getKpiUser(), point);
+            addSupportPoint(kpiEvent.getKpiEventUserList().get(0).getKpiUser(), point);
         }
         kpiEvent = kpiEventRepo.save(kpiEvent);
         eventDTO = convertNewSupportEntityToDTO(kpiEvent);

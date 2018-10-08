@@ -19,4 +19,7 @@ public interface KpiGroupRepo extends CrudRepository<KpiGroup, Integer> {
 
     @Query("SELECT g from KpiGroup g order by g.createdDate desc")
     List<KpiGroup> findAllGroup();
+
+    @Query(value = "SELECT * from kpi_group as g where g.group_type_id = 2", nativeQuery = true)
+    List<KpiGroup> findAllClub();
 }
