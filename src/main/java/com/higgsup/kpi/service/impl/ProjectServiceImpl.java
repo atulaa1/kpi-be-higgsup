@@ -1,11 +1,15 @@
 package com.higgsup.kpi.service.impl;
 
+import com.higgsup.kpi.dto.EventUserDTO;
 import com.higgsup.kpi.dto.ProjectDTO;
-import com.higgsup.kpi.entity.KpiProject;
+import com.higgsup.kpi.dto.ProjectUserDTO;
+import com.higgsup.kpi.entity.*;
 import com.higgsup.kpi.glossary.ErrorCode;
 import com.higgsup.kpi.glossary.ErrorMessage;
+import com.higgsup.kpi.glossary.ProjectStatus;
 import com.higgsup.kpi.repository.KpiProjectRepo;
 import com.higgsup.kpi.service.ProjectService;
+import com.higgsup.kpi.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +26,9 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Autowired
     private KpiProjectRepo kpiProjectRepo;
+
+    @Autowired
+    private UserService userService;
 
     @Override
     public List<ProjectDTO> getAllProject() {
@@ -85,18 +92,25 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ProjectDTO createProject(ProjectDTO projectDTO) {
+        projectDTO.setActive(ProjectStatus.ACTIVE.getValue());
         if (Objects.nonNull(projectDTO.getName())) {
             KpiProject kpiProject = kpiProjectRepo.findByName(projectDTO.getName());
             if (Objects.isNull(kpiProject)) {
-                if (projectDTO.getProjectUserList().isEmpty()) {
-                    projectDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
-                    projectDTO.setMessage(ErrorMessage.PROJECT_USER_LIST_CAN_NOT_NULL);
-                } else {
-                    kpiProject = new KpiProject();
-                    BeanUtils.copyProperties(projectDTO, kpiProject, "id");
-                    kpiProject = kpiProjectRepo.save(kpiProject);
-                    BeanUtils.copyProperties(kpiProject, projectDTO);
-                }
+
+                kpiProject = new KpiProject();
+                BeanUtils.copyProperties(projectDTO, kpiProject, "id");
+                kpiProject = kpiProjectRepo.save(kpiProject);
+                BeanUtils.copyProperties(kpiProject, projectDTO);
+
+//                if (projectDTO.getProjectUserList().isEmpty()) {
+//                    projectDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
+//                    projectDTO.setMessage(ErrorMessage.PROJECT_USER_LIST_CAN_NOT_NULL);
+//                } else {
+//                    kpiProject = new KpiProject();
+//                    BeanUtils.copyProperties(projectDTO, kpiProject, "id");
+//                    kpiProject = kpiProjectRepo.save(kpiProject);
+//                    BeanUtils.copyProperties(kpiProject, projectDTO);
+//                }
             } else {
                 projectDTO.setErrorCode(ErrorCode.PARAMETERS_ALREADY_EXIST.getValue());
                 projectDTO.setMessage(ErrorMessage.PARAMETERS_NAME_PROJECT_EXISTS);
@@ -119,5 +133,22 @@ public class ProjectServiceImpl implements ProjectService {
             }
         }
         return projectDTOS;
+    }
+
+    private List<KpiProjectUser> convertProjectUsersToEntity(KpiProject kpiProject,
+            List<ProjectUserDTO> projectUserList) {
+        List<KpiProjectUser> kpiProjectUsers = new ArrayList<>();
+
+        for (ProjectUserDTO projectUserDTO : projectUserList) {
+            KpiProjectUser kpiProjectUser = new KpiProjectUser();
+            userService.registerUser(projectUserDTO.getProjectUser().getUsername());
+
+            kpiProjectUser.setId(kpiProject.getId());
+            //kpiEventUser.setKpiEventUserPK(kpiEventUserPK);
+
+            kpiProjectUsers.add(kpiProjectUser);
+
+        }
+        return kpiProjectUsers;
     }
 }
