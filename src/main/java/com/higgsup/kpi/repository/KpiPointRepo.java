@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface KpiPointRepo extends CrudRepository<KpiPoint, Integer> {
 
-    List<KpiPoint> findByRatedUser(KpiUser kpiUser);
+    KpiPoint findByRatedUser(KpiUser kpiUser);
 }

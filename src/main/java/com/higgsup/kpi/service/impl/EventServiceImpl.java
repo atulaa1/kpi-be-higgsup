@@ -545,12 +545,14 @@ public class EventServiceImpl extends BaseService implements EventService {
                     List<KpiEventUser> eventUsers = convertEventUsersToEntity(kpiEvent, eventDTO.getEventUserList());
                     kpiEventUserRepo.saveAll(eventUsers);
 
-                    //add method calculateNormalSeminarPoint() at here
-
                     BeanUtils.copyProperties(kpiEvent, validateTeambuildingDTO);
                     validateTeambuildingDTO.setGroup(convertConfigEventToDTO(kpiEvent.getGroup()));
                     validateTeambuildingDTO.setEventUserList(eventDTO.getEventUserList());
                     validateTeambuildingDTO.setAdditionalConfig(convertAdditionalConfigToDTO(kpiEvent.getGroup()));
+
+                    //pointService.calculateTeambuildingPoint(validateTeambuildingDTO);
+
+
                 } else {
                     validateTeambuildingDTO.setMessage(ErrorMessage.GROUP_TYPE_IS_INVALID);
                     validateTeambuildingDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
