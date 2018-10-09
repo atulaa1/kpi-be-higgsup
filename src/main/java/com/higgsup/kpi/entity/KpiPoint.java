@@ -13,7 +13,7 @@ public class KpiPoint {
     private Integer id;
 
 
-    @JoinColumn(name = "rated_username", referencedColumnName = "user_name", insertable = false, updatable = false)
+    @JoinColumn(name = "rated_username", referencedColumnName = "user_name")
     @OneToOne(optional = false, fetch = FetchType.LAZY)
     private KpiUser ratedUser;
 
@@ -53,9 +53,8 @@ public class KpiPoint {
     @Column(name = "total_point")
     private Float totalPoint;
 
-    @JoinColumn(name = "year_month_id", referencedColumnName = "id", insertable = false, updatable = false)
-    @OneToOne(optional = false, fetch = FetchType.LAZY)
-    private KpiYearMonth yearMonthId;
+    @JoinColumn(name = "year_month_id", referencedColumnName = "id")
+    private Integer yearMonthId;
 
     public Integer getId() {
         return id;
@@ -145,11 +144,11 @@ public class KpiPoint {
         this.totalPoint = totalPoint;
     }
 
-    public KpiYearMonth getYearMonthId() {
+    public Integer getYearMonthId() {
         return yearMonthId;
     }
 
-    public void setYearMonthId(KpiYearMonth yearMonthId) {
+    public void setYearMonthId(Integer yearMonthId) {
         this.yearMonthId = yearMonthId;
     }
 }
