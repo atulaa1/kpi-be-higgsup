@@ -53,9 +53,9 @@ public class KpiPoint {
     @Column(name = "total_point")
     private Float totalPoint;
 
-    @Basic
-    @Column(name = "year_month")
-    private Integer yearMonth;
+    @JoinColumn(name = "year_month_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @OneToOne(optional = false, fetch = FetchType.LAZY)
+    private KpiYearMonth yearMonthId;
 
     public Integer getId() {
         return id;
@@ -145,11 +145,11 @@ public class KpiPoint {
         this.totalPoint = totalPoint;
     }
 
-    public Integer getYearMonth() {
-        return yearMonth;
+    public KpiYearMonth getYearMonthId() {
+        return yearMonthId;
     }
 
-    public void setYearMonth(Integer yearMonth) {
-        this.yearMonth = yearMonth;
+    public void setYearMonthId(KpiYearMonth yearMonthId) {
+        this.yearMonthId = yearMonthId;
     }
 }
