@@ -2,7 +2,6 @@ package com.higgsup.kpi.service.impl;
 
 import com.higgsup.kpi.dto.EventDTO;
 import com.higgsup.kpi.dto.EventTeamBuildingDetail;
-import com.higgsup.kpi.dto.TeamBuildingDTO;
 import com.higgsup.kpi.entity.*;
 import com.higgsup.kpi.glossary.EventUserType;
 import com.higgsup.kpi.repository.*;
@@ -56,15 +55,15 @@ public class PointServiceImpl extends BaseService implements PointService {
                 if (Objects.nonNull(kpiPointRepo.findByRatedUser(kpiLateTimeCheck.getUser()))) {
                     KpiPoint kpiPoint = kpiPointRepo.findByRatedUser(kpiLateTimeCheck.getUser());
                     kpiPoint.setRulePoint(rulePoint);
-                    kpiPoint.setYearMonthId(kpiYearMonthOptional.get());
-                    System.out.println("1. start calculating...");
+                    kpiPoint.setYearMonthId(kpiYearMonthOptional.get().getId());
+
                     kpiPointRepo.save(kpiPoint);
                 } else {
                     KpiPoint kpiPoint = new KpiPoint();
                     kpiPoint.setRatedUser(kpiLateTimeCheck.getUser());
                     kpiPoint.setRulePoint(rulePoint);
-                    kpiPoint.setYearMonthId(kpiYearMonthOptional.get());
-                    System.out.println("2. start calculating...");
+                    kpiPoint.setYearMonthId(kpiYearMonthOptional.get().getId());
+
                     kpiPointRepo.save(kpiPoint);
                 }
             }
@@ -96,21 +95,29 @@ public class PointServiceImpl extends BaseService implements PointService {
                 .equals(ORGANIZER.getValue())).collect(Collectors.toList());
 
         for (KpiEventUser participant : participants) {
-            kpiPoint.setRatedUser(participant.getKpiUser());
 
-            EventUserType eventUserType = EventUserType.getEventUserType(participant.getType());
-            switch (Objects.requireNonNull(eventUserType)) {
-                case FIRST_PLACE:
-                    kpiPoint.setTeambuildingPoint(firstPrizePoint);
-                    break;
-                case SECOND_PLACE:
-                    kpiPoint.setTeambuildingPoint(secondPrizePoint);
-                    break;
-                case THIRD_PLACE:
-                    kpiPoint.setTeambuildingPoint(thirdPrizePoint);
-                    break;
+            if (Objects.nonNull(kpiPointRepo.findByRatedUser(participant.getKpiUser()))) {
+                KpiPoint kpiPoint = kpiPointRepo.findByRatedUser(participant.getKpiUser());
+
+                EventUserType eventUserType = EventUserType.getEventUserType(participant.getType());
+                switch (Objects.requireNonNull(eventUserType)) {
+                    case FIRST_PLACE:
+                        kpiPoint.setTeambuildingPoint(firstPrizePoint);
+                        break;
+                    case SECOND_PLACE:
+                        kpiPoint.setTeambuildingPoint(secondPrizePoint);
+                        break;
+                    case THIRD_PLACE:
+                        kpiPoint.setTeambuildingPoint(thirdPrizePoint);
+                        break;
+                }
+                kpiPointRepo.save(kpiPoint);
+            } else {
+                KpiPoint kpiPoint = new KpiPoint();
+                kpiPoint.setRatedUser(participant.getKpiUser());
             }
-            kpiPointRepo.save(kpiPoint);
+
+
         }
 
         for (KpiEventUser kpiEventUser : organizers) {
