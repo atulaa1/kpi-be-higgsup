@@ -1,6 +1,5 @@
 package com.higgsup.kpi.service.impl;
 
-import com.higgsup.kpi.dto.EventUserDTO;
 import com.higgsup.kpi.dto.ProjectDTO;
 import com.higgsup.kpi.dto.ProjectUserDTO;
 import com.higgsup.kpi.dto.UserDTO;
@@ -9,11 +8,9 @@ import com.higgsup.kpi.glossary.ErrorCode;
 import com.higgsup.kpi.glossary.ErrorMessage;
 import com.higgsup.kpi.glossary.ProjectStatus;
 import com.higgsup.kpi.repository.KpiProjectRepo;
-import com.higgsup.kpi.repository.KpiProjectUserRepo;
 import com.higgsup.kpi.repository.KpiUserRepo;
 import com.higgsup.kpi.service.ProjectService;
 import com.higgsup.kpi.service.UserService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
