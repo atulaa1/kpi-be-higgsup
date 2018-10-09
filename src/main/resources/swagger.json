@@ -8787,6 +8787,7 @@
                       "name",
                       "active",
                       "createdDate",
+                      "updatedDate",
                       "projectUserList"
                     ],
                     "properties": {
@@ -8810,13 +8811,15 @@
                         "items": {
                           "type": "object",
                           "required": [
-                            "ratedUsername"
+                            "projectUser"
                           ],
                           "properties": {
-                            "ratedUsername": {
+                            "projectUser": {
                               "type": "object",
                               "required": [
-                                "username"
+                                "username",
+                                "fullName",
+                                "avatar"
                               ],
                               "properties": {
                                 "username": {
@@ -8862,13 +8865,17 @@
                     "updatedDate": "29-08-2018 03:36",
                     "projectUserList": [
                       {
-                        "ratedUsername": {
-                          "username": "kpi.employee"
+                        "projectUser": {
+                          "username": "kpi.employee",
+                          "fullName": "employee full name",
+                          "avatar": "employee avatar"
                         }
                       },
                       {
-                        "ratedUsername": {
-                          "username": "kpi.test"
+                        "projectUser": {
+                          "username": "kpi.test",
+                          "fullName": "test full name",
+                          "avatar": "test avatar"
                         }
                       }
                     ]
@@ -8881,13 +8888,18 @@
                     "updatedDate": "29-08-2018 03:36",
                     "projectUserList": [
                       {
-                        "ratedUsername": {
-                          "username": "kpi.employee"
+                        "projectUser": {
+                          "username": "kpi.employee",
+                          "fullName": "employee full name",
+                          "avatar": "employee avatar"
+
                         }
                       },
                       {
-                        "ratedUsername": {
-                          "username": "kpi.test"
+                        "projectUser": {
+                          "username": "kpi.test",
+                          "fullName": "test full name",
+                          "avatar": "test avatar"
                         }
                       }
                     ]
@@ -8930,7 +8942,6 @@
               "type": "object",
               "required": [
                 "name",
-                "active",
                 "projectUserList"
               ],
               "properties": {
@@ -8945,10 +8956,10 @@
                   "items": {
                     "type": "object",
                     "required": [
-                      "ratedUsername"
+                      "projectUser"
                     ],
                     "properties": {
-                      "ratedUsername": {
+                      "projectUser": {
                         "type": "object",
                         "required": [
                           "username"
@@ -8965,15 +8976,14 @@
               },
               "example": {
                 "name": "VNTRIP",
-                "active": 1,
                 "projectUserList": [
                   {
-                    "ratedUsername": {
+                    "projectUser": {
                       "username": "kpi.employee"
                     }
                   },
                   {
-                    "ratedUsername": {
+                    "projectUser": {
                       "username": "kpi.test"
                     }
                   }
@@ -8984,7 +8994,7 @@
         ],
         "responses": {
           "200": {
-            "description": "status_code : 200. Meaning : Thành công \n status_code : 901. Message : name does not allow null.  Meaning: name project không thể để rỗng \n status_code : 932. Message :parameters name project exist. Meaning : project này đã tồn tại. ",
+            "description": "status_code : 200. Meaning : Thành công \n status_code : 901. Message : name does not allow null.  Meaning: name project không thể để rỗng \n status_code : 932. Message :parameters name project exist. Meaning : project này đã tồn tại. \n status_code : 903. Message: roject user list can not null. Meaning: Không được để trống danh sách người tham gia project ",
             "schema": {
               "type": "object",
               "required": [
@@ -9014,18 +9024,36 @@
                     "createdDate": {
                       "type": "string"
                     },
-                    "projectUserList": [
-                      {
-                        "ratedUsername": {
-                          "username": "kpi.employee"
-                        }
-                      },
-                      {
-                        "ratedUsername": {
-                          "username": "kpi.test"
+                    "projectUserList": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "projectUser"
+                        ],
+                        "properties": {
+                          "projectUser": {
+                            "type": "object",
+                            "required": [
+                              "username",
+                              "fullName",
+                              "avatar"
+                            ],
+                            "properties": {
+                              "username": {
+                                "type": "String"
+                              },
+                              "fullName": {
+                                "type": "String"
+                              },
+                              "avatar": {
+                                "type": "String"
+                              }
+                            }
+                          }
                         }
                       }
-                    ]
+                    }
                   }
                 },
                 "message": {
@@ -9055,16 +9083,19 @@
                   "name": "VNTRIP",
                   "active": 1,
                   "createdDate": "29-08-2018 03:36",
-                  "updatedDate": "29-08-2018 03:36",
                   "projectUserList": [
                     {
-                      "ratedUsername": {
-                        "username": "kpi.employee"
+                      "projectUser": {
+                        "username": "kpi.employee",
+                        "fullName": "employee full name",
+                        "avatar": "employee avatar"
                       }
                     },
                     {
-                      "ratedUsername": {
-                        "username": "kpi.test"
+                      "projectUser": {
+                        "username": "kpi.test",
+                        "fullName": "test full name",
+                        "avatar": "test avatar"
                       }
                     }
                   ]
@@ -9135,10 +9166,10 @@
                   "items": {
                     "type": "object",
                     "required": [
-                      "ratedUsername"
+                      "projectUser"
                     ],
                     "properties": {
-                      "ratedUsername": {
+                      "projectUser": {
                         "type": "object",
                         "required": [
                           "username"
@@ -9158,13 +9189,17 @@
                 "active": 1,
                 "projectUserList": [
                   {
-                    "ratedUsername": {
-                      "username": "kpi.employee"
+                    "projectUser": {
+                      "username": "kpi.employee",
+                      "fullName": "employee full name",
+                      "avatar": "employee avatar"
                     }
                   },
                   {
-                    "ratedUsername": {
-                      "username": "kpi.test"
+                    "projectUser": {
+                      "username": "kpi.test",
+                      "fullName": "test full name",
+                      "avatar": "test avatar"
                     }
                   }
                 ]
@@ -9174,7 +9209,7 @@
         ],
         "responses": {
           "200": {
-            "description": "status_code : 200. Meaning: Thành công \n status_code : 903. Message: name does not allow null. Meaning: name project không thể để rỗng \n  status_code : 900 . Message: not find project by id . Meaning: không tìm thấy project \n status_code : 901  . Message: parameters name project exist . Meaning: parameters name không chính xác \n ",
+            "description": "status_code : 200. Meaning: Thành công \n status_code : 903. Message: name does not allow null. Meaning: name project không thể để rỗng \n Message: roject user list can not null. Meaning: Không được để trống danh sách người tham gia project \n  status_code : 900 . Message: not find project by id . Meaning: không tìm thấy project \n status_code : 901  . Message: parameters name project exist . Meaning: parameters name không chính xác \n ",
             "schema": {
               "type": "object",
               "required": [
@@ -9188,7 +9223,7 @@
                     "id",
                     "name",
                     "active",
-                    "createdDate",
+                    "updatedDate",
                     "projectUserList"
                   ],
                   "properties": {
@@ -9201,9 +9236,6 @@
                     "active": {
                       "type": "number"
                     },
-                    "createdDate": {
-                      "type": "string"
-                    },
                     "updatedDate": {
                       "type": "string"
                     },
@@ -9212,16 +9244,24 @@
                       "items": {
                         "type": "object",
                         "required": [
-                          "ratedUsername"
+                          "projectUser"
                         ],
                         "properties": {
-                          "ratedUsername": {
+                          "projectUser": {
                             "type": "object",
                             "required": [
-                              "username"
+                              "username",
+                              "fullName",
+                              "avatar"
                             ],
                             "properties": {
                               "username": {
+                                "type": "String"
+                              },
+                              "fullName": {
+                                "type": "String"
+                              },
+                              "avatar": {
                                 "type": "String"
                               }
                             }
@@ -9257,7 +9297,6 @@
                   "id": 8,
                   "name": "VNTRIP",
                   "active": 1,
-                  "createdDate": "29-08-2018 03:36",
                   "updatedDate": "29-08-2018 03:36",
                   "projectUserList": [
                     {

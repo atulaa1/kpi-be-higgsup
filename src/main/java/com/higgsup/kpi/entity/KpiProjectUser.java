@@ -16,12 +16,11 @@ public class KpiProjectUser implements Serializable {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
-
-    @JoinColumn(name = "project_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "project_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private KpiProject project;
 
-    @JoinColumn(name = "rated_username", referencedColumnName = "user_name", insertable = false, updatable = false)
+    @JoinColumn(name = "rated_username", referencedColumnName = "user_name")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private KpiUser projectUser;
 
