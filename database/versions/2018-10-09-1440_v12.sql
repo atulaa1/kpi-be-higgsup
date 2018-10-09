@@ -1,7 +1,7 @@
 /**
-date: 2018-10-05 11:20
-author: anhpth
-purpose: update unique for project log
+date: 2018-10-09 14:58
+author: tutt
+purpose: change DB in kpi_point table
 **/
 
 CREATE DATABASE higgsup_kpi;
