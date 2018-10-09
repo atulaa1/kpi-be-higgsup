@@ -42,7 +42,7 @@ public class PointServiceImpl extends BaseService implements PointService {
     @Autowired
     private KpiEventUserRepo kpiEventUserRepo;
 
-    @Scheduled(cron = "0 34 18 8 * ?")
+    //@Scheduled(cron = "0 34 18 8 * ?")
     public void calculateRulePoint() {
         Optional<KpiYearMonth> kpiYearMonthOptional = kpiMonthRepo.findByMonthCurrent();
 
@@ -56,15 +56,15 @@ public class PointServiceImpl extends BaseService implements PointService {
                 if (Objects.nonNull(kpiPointRepo.findByRatedUser(kpiLateTimeCheck.getUser()))) {
                     KpiPoint kpiPoint = kpiPointRepo.findByRatedUser(kpiLateTimeCheck.getUser());
                     kpiPoint.setRulePoint(rulePoint);
-                    kpiPoint.setYearMonth(kpiYearMonthOptional.get().getYearMonth());
-                    System.out.println("start calculating...");
+                    kpiPoint.setYearMonthId(kpiYearMonthOptional.get());
+                    System.out.println("1. start calculating...");
                     kpiPointRepo.save(kpiPoint);
                 } else {
                     KpiPoint kpiPoint = new KpiPoint();
                     kpiPoint.setRatedUser(kpiLateTimeCheck.getUser());
                     kpiPoint.setRulePoint(rulePoint);
-                    kpiPoint.setYearMonth(kpiYearMonthOptional.get().getYearMonth());
-                    System.out.println("start calculating...");
+                    kpiPoint.setYearMonthId(kpiYearMonthOptional.get());
+                    System.out.println("2. start calculating...");
                     kpiPointRepo.save(kpiPoint);
                 }
             }
