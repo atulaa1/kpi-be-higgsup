@@ -33,9 +33,9 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Autowired
     private UserService userService;
-
     @Autowired
-    private KpiProjectUserRepo kpiProjectUserRepo;
+    private KpiUserRepo kpiUserRepo;
+
 
     @Override
     public List<ProjectDTO> getAllProject() {
@@ -78,6 +78,7 @@ public class ProjectServiceImpl implements ProjectService {
                         kpiProjectRepo.save(kpiProject);
                         validateProjectDTO.setName(kpiProject.getName());
                         validateProjectDTO.setActive(kpiProject.getActive());
+                        validateProjectDTO.setUpdatedDate(kpiProject.getUpdatedDate());
                         validateProjectDTO.setProjectUserList(convertListUserEntityToDTO(kpiProjectUsers));
                     }
 
@@ -129,7 +130,7 @@ public class ProjectServiceImpl implements ProjectService {
                 } else {
                     kpiProject = new KpiProject();
                     kpiProject.setName(projectDTO.getName());
-                    kpiProject.setActive(validateProjectDTO.getActive());
+                    kpiProject.setActive(projectDTO.getActive());
 
                     List<KpiProjectUser> kpiProjectUsers = new ArrayList<>();
                     for (ProjectUserDTO projectUserDTO : projectDTO.getProjectUserList()) {
@@ -141,9 +142,11 @@ public class ProjectServiceImpl implements ProjectService {
                     }
                     kpiProject.setProjectUserList(kpiProjectUsers);
                     kpiProjectRepo.save(kpiProject);
+                    validateProjectDTO.setId(kpiProject.getId());
                     validateProjectDTO.setName(projectDTO.getName());
                     validateProjectDTO.setActive(projectDTO.getActive());
-                    validateProjectDTO.setProjectUserList(convertListUserEntityToDTO(kpiProjectUsers));
+                    validateProjectDTO.setCreatedDate(kpiProject.getCreatedDate());
+                    validateProjectDTO.setProjectUserList(convertListUserEntityToDTO(kpiProject.getProjectUserList()));
                 }
             } else {
                 validateProjectDTO.setErrorCode(ErrorCode.PARAMETERS_ALREADY_EXIST.getValue());
@@ -162,7 +165,12 @@ public class ProjectServiceImpl implements ProjectService {
         if (!CollectionUtils.isEmpty(kpiProjects)) {
             for (KpiProject kpiProject : kpiProjects) {
                 ProjectDTO projectDTO = new ProjectDTO();
-                BeanUtils.copyProperties(kpiProject, projectDTO);
+                projectDTO.setId(kpiProject.getId());
+                projectDTO.setName(kpiProject.getName());
+                projectDTO.setCreatedDate(kpiProject.getCreatedDate());
+                projectDTO.setUpdatedDate(kpiProject.getUpdatedDate());
+                projectDTO.setActive(kpiProject.getActive());
+                projectDTO.setProjectUserList(convertListUserEntityToDTO(kpiProject.getProjectUserList()));
                 projectDTOS.add(projectDTO);
             }
         }
@@ -172,14 +180,17 @@ public class ProjectServiceImpl implements ProjectService {
     private UserDTO convertUserEntityToDTO(KpiUser user) {
         UserDTO userDTO = new UserDTO();
         userDTO.setUsername(user.getUserName());
+        userDTO.setFullName(user.getFullName());
+        userDTO.setAvatar(user.getAvatar());
         return userDTO;
     }
 
     private KpiUser convertUserDTOToEntity(UserDTO userDTO) {
         KpiUser kpiUser = new KpiUser();
         kpiUser.setUserName(userDTO.getUsername());
-        kpiUser.setFullName(userDTO.getFullName());
-        kpiUser.setAvatar(userDTO.getAvatar());
+        String username = kpiUser.getUserName();
+        kpiUser.setFullName(kpiUserRepo.findFullName(username));
+        kpiUser.setAvatar(kpiUserRepo.findAvatar(username));
         return kpiUser;
     }
 
@@ -188,6 +199,7 @@ public class ProjectServiceImpl implements ProjectService {
         for (KpiProjectUser kpiProjectUser : kpiProjectUsers) {
             ProjectUserDTO projectUserDTO = new ProjectUserDTO();
             projectUserDTO.setProjectUser(convertUserEntityToDTO(kpiProjectUser.getProjectUser()));
+            userService.registerUser(projectUserDTO.getProjectUser().getUsername());
             projectUserDTOList.add(projectUserDTO);
         }
         return projectUserDTOList;
