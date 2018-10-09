@@ -212,8 +212,7 @@ CREATE TABLE `higgsup_kpi`.`kpi_point` (
   `project_point`         FLOAT              NOT NULL,
   `total_point`           FLOAT              NOT NULL,
   `year_month_id`         INT(11)            NOT NULL,
-  FOREIGN KEY (rated_username) REFERENCES kpi_user (user_name),
-  FOREIGN KEY (year_month_id) REFERENCES kpi_year_month (id)
+  FOREIGN KEY (rated_username) REFERENCES kpi_user (user_name)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
