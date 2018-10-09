@@ -1,6 +1,6 @@
 package com.higgsup.kpi.dto;
 
-public class EmployeeEvaluationDTO {
+public class EmployeeEvaluationDTO extends BaseDTO {
     private UserDTO evaluator;
 
     private ProjectEvaluationDTO projectEvaluation;
