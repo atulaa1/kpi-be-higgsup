@@ -208,10 +208,10 @@ CREATE TABLE `higgsup_kpi`.`kpi_point` (
   `weekend_seminar_point` FLOAT              NULL,
   `support_point`         FLOAT              NULL,
   `teambuilding_point`    FLOAT              NULL,
-  `personal_point`        FLOAT              NOT NULL,
-  `project_point`         FLOAT              NOT NULL,
-  `total_point`           FLOAT              NOT NULL,
-  `year_month_id`         INT(11)            NOT NULL,
+  `personal_point`        FLOAT              NULL,
+  `project_point`         FLOAT              NULL,
+  `total_point`           FLOAT              NULL,
+  `year_month_id`         INT(11)            NULL,
   FOREIGN KEY (rated_username) REFERENCES kpi_user (user_name)
 )
   ENGINE = InnoDB
