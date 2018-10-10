@@ -1062,7 +1062,7 @@ public class EventServiceImpl extends BaseService implements EventService {
         return clubDetailEventDTO;
     }
 
-    private EventDTO convertSeminarEntityToDTO(KpiEvent kpiEvent) throws IOException {
+    public EventDTO<EventSeminarDetail> convertSeminarEntityToDTO(KpiEvent kpiEvent) throws IOException {
         EventDTO<EventSeminarDetail> seminarDetailEventDTO = new EventDTO<>();
         ObjectMapper mapper = new ObjectMapper();
 

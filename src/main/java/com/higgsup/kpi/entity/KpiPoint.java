@@ -19,41 +19,41 @@ public class KpiPoint {
 
     @Basic
     @Column(name = "rule_point")
-    private Float rulePoint;
+    private Float rulePoint = 0f;
 
     @Basic
     @Column(name = "club_point")
-    private Float clubPoint;
+    private Float clubPoint = 0f;
 
     @Basic
     @Column(name = "normal_seminar_point")
-    private Float normalSeminarPoint;
+    private Float normalSeminarPoint = 0f;
 
     @Basic
     @Column(name = "weekend_seminar_point")
-    private Float weekendSeminarPoint;
+    private Float weekendSeminarPoint = 0f;
 
     @Basic
     @Column(name = "support_point")
-    private Float supportPoint;
+    private Float supportPoint = 0f;
 
     @Basic
     @Column(name = "teambuilding_point")
-    private Float teambuildingPoint;
+    private Float teambuildingPoint = 0f;
 
     @Basic
     @Column(name = "personal_point")
-    private Float personalPoint;
+    private Float personalPoint = 0f;
 
     @Basic
     @Column(name = "project_point")
-    private Float projectPoint;
+    private Float projectPoint = 0f;
 
     @Basic
     @Column(name = "total_point")
-    private Float totalPoint;
+    private Float totalPoint = 0f;
 
-    @JoinColumn(name = "year_month_id", referencedColumnName = "id")
+    @JoinColumn(name = "year_month_id", referencedColumnName = "id", columnDefinition="int(10) default 0")
     private Integer yearMonthId;
 
     public Integer getId() {

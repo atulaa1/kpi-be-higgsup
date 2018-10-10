@@ -183,26 +183,29 @@ public class PointServiceImpl extends BaseService implements PointService {
         }
     }
 
-    @Scheduled(cron = "40 23 17 10 * ?")
+    @Scheduled(cron = "40 48 18 10 * ?")
     private void addEffectivePointForHost() throws IOException{
+        Optional<KpiYearMonth> kpiYearMonthOptional = kpiMonthRepo.findByMonthCurrent();
+
         List<KpiGroup> allClub = kpiGroupRepo.findAllClub();
 
         List<GroupDTO<GroupClubDetail>> allClubDTO = convertClubGroupEntityToDTO(allClub);
 
+        Integer hostParticipate = 0;
         for(GroupDTO<GroupClubDetail> clubDTO:allClubDTO) {
             KpiUser clubOwner = kpiUserRepo.findByUserName(clubDTO.getAdditionalConfig().getHost());
-            KpiEventUser owner = new KpiEventUser();
-            owner.setKpiUser(clubOwner);
             List<KpiEvent> eventsOfClub = kpiEventRepo.findClubEventCreatedByHost(clubDTO.getAdditionalConfig().getHost());
             List<KpiEvent> confirmEventsOfClub = eventsOfClub.stream()
                     .filter(e -> e.getStatus() == 2).collect(Collectors.toList());
             for(KpiEvent event:confirmEventsOfClub){
-                event.setKpiEventUserList(kpiEventUserRepo.findByKpiEventId(event.getId()));
+                List<KpiEventUser> kpiEventUsers = kpiEventUserRepo.findByKpiEventId(event.getId());
+                for(KpiEventUser kpiEventUser : kpiEventUsers){
+                    if(kpiEventUser.getKpiEventUserPK().getUserName().equals(clubDTO.getAdditionalConfig().getHost()))
+                        hostParticipate += 1;
+                }
             }
-            Integer eventsClubOwnerParticipate = (int) confirmEventsOfClub.stream()
-                    .filter(e -> e.getKpiEventUserList().contains(owner) && e.getStatus() == 2).count();
             if(confirmEventsOfClub.size() >= clubDTO.getAdditionalConfig().getMinNumberOfSessions() / 2 &&
-                    eventsClubOwnerParticipate >= confirmEventsOfClub.size() * 3/4){
+                    hostParticipate >= (float)confirmEventsOfClub.size() * 3/4){
                 if(kpiPointRepo.findByRatedUser(clubOwner) != null){
                     KpiPoint kpiPoint = kpiPointRepo.findByRatedUser(clubOwner);
                     kpiPoint.setClubPoint(kpiPoint.getClubPoint() + clubDTO.getAdditionalConfig().getEffectivePoint());
@@ -211,6 +214,7 @@ public class PointServiceImpl extends BaseService implements PointService {
                     KpiPoint kpiPoint = new KpiPoint();
                     kpiPoint.setRatedUser(clubOwner);
                     kpiPoint.setClubPoint(clubDTO.getAdditionalConfig().getEffectivePoint());
+                    kpiPoint.setYearMonthId(kpiYearMonthOptional.get().getId());
                     kpiPointRepo.save(kpiPoint);
                 }
             }
