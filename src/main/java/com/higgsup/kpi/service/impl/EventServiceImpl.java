@@ -87,7 +87,7 @@ public class EventServiceImpl extends BaseService implements EventService {
         return convertEventEntityToDTO(seminarEvents);
     }
 
-    public List<EventDTO> convertEventEntityToDTO(List<KpiEvent> kpiEventEntities) throws IOException {
+    private List<EventDTO> convertEventEntityToDTO(List<KpiEvent> kpiEventEntities) throws IOException {
         List<EventDTO> eventDTOS = new ArrayList<>();
         if (!CollectionUtils.isEmpty(kpiEventEntities)) {
             for (KpiEvent kpiEvent : kpiEventEntities) {
@@ -112,7 +112,7 @@ public class EventServiceImpl extends BaseService implements EventService {
 
     private List<EventDTO> convertEventEntityToDTONewSupport(List<KpiEvent> kpiEventEntities) throws IOException {
         List<EventDTO> eventDTOS = new ArrayList<>();
-        if (!CollectionUtils.isEmpty(kpiEventEntities))
+        if (!CollectionUtils.isEmpty(kpiEventEntities)) {
             for (KpiEvent kpiEvent : kpiEventEntities) {
                 switch (GroupType.getGroupType(kpiEvent.getGroup().getGroupType().getId())) {
                     case CLUB:
@@ -129,6 +129,7 @@ public class EventServiceImpl extends BaseService implements EventService {
                         break;
                 }
             }
+        }
         return eventDTOS;
     }
 
@@ -138,7 +139,7 @@ public class EventServiceImpl extends BaseService implements EventService {
             for(KpiEvent kpiEvent : kpiEventEntities){
                 eventDTOS.add(convertSeminarEntityToDTO(kpiEvent));
             }
-            return eventDTOS;
+        return eventDTOS;
     }
 
     @Override
@@ -695,7 +696,7 @@ public class EventServiceImpl extends BaseService implements EventService {
         String loginUsername = authentication.getPrincipal().toString();
 
         Optional<KpiEvent> kpiEventOptional = kpiEventRepo.findById(seminarSurveyDTO.getId());
-        List<KpiEventUser> kpiEventHostList = kpiEventUserRepo.findByUserType(seminarSurveyDTO.getId());
+        List<KpiEventUser> kpiEventHostList = kpiEventUserRepo.findByKpiEventId(seminarSurveyDTO.getId());
 
         List<ErrorDTO> errors = new ArrayList<>();
 
@@ -719,6 +720,7 @@ public class EventServiceImpl extends BaseService implements EventService {
 
                         for (SeminarSurveyDTO RequestSeminarSurveyDTO : seminarSurveyDTO.getAdditionalConfig()) {
                             KpiSeminarSurvey kpiSeminarSurvey = new KpiSeminarSurvey();
+
                             Optional<KpiEventUser> kpiEventUserEvaluated = eventUserEvaluated.stream()
                                     .filter(kpiEventUser1 -> kpiEventUser1.getKpiUser().getUserName()
                                             .equals(RequestSeminarSurveyDTO.getEvaluatedUsername().getUsername())
@@ -729,6 +731,7 @@ public class EventServiceImpl extends BaseService implements EventService {
                                 kpiSeminarSurvey.setEvaluatingUsername(kpiEventUser.getKpiUser());
                                 kpiSeminarSurvey.setEvent(kpiEvent);
                                 kpiSeminarSurvey.setRating(RequestSeminarSurveyDTO.getRating());
+
                                 kpiSeminarSurveys.add(kpiSeminarSurvey);
                             } else {
                                 ErrorDTO errorDTO = new ErrorDTO();
@@ -1059,7 +1062,7 @@ public class EventServiceImpl extends BaseService implements EventService {
         return clubDetailEventDTO;
     }
 
-    public EventDTO<EventSeminarDetail> convertSeminarEntityToDTO(KpiEvent kpiEvent) throws IOException {
+    private EventDTO convertSeminarEntityToDTO(KpiEvent kpiEvent) throws IOException {
         EventDTO<EventSeminarDetail> seminarDetailEventDTO = new EventDTO<>();
         ObjectMapper mapper = new ObjectMapper();
 
@@ -1076,8 +1079,6 @@ public class EventServiceImpl extends BaseService implements EventService {
 
         return seminarDetailEventDTO;
     }
-
-
 
     private EventDTO convertEventTeamBuildingEntityToDTO(KpiEvent kpiEvent) throws IOException {
         EventDTO<EventTeamBuildingDetail> teamBuildingEventDTO = new EventDTO<>();
@@ -1557,7 +1558,7 @@ public class EventServiceImpl extends BaseService implements EventService {
         return validatedEventDTO;
     }
 
-    public List<KpiEventUser> convertEventUsersToEntity(KpiEvent kpiEvent, List<EventUserDTO> eventUserList) {
+    private List<KpiEventUser> convertEventUsersToEntity(KpiEvent kpiEvent, List<EventUserDTO> eventUserList) {
         List<KpiEventUser> kpiEventUsers = new ArrayList<>();
 
         for (EventUserDTO eventUserDTO : eventUserList) {

@@ -6,13 +6,14 @@ import com.higgsup.kpi.entity.KpiUser;
 
 import java.io.IOException;
 import java.util.List;
+import com.higgsup.kpi.dto.EventDTO;
+import com.higgsup.kpi.dto.EventTeamBuildingDetail;
 
 public interface PointService {
     void calculateRulePoint();
 
     void addSeminarPoint(List<KpiEventUser> eventUsers, EventDTO<EventSeminarDetail> seminarEventDTO) throws IOException;
 
-    void calculateTeambuildingPoint(EventDTO<TeamBuildingDTO> teamBuildingDTO);
-
+    void calculateTeambuildingPoint(EventDTO<EventTeamBuildingDetail> teamBuildingDTO);
 }
 
