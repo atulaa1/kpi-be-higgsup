@@ -53,8 +53,7 @@ public class KpiPoint {
     @Column(name = "total_point")
     private Float totalPoint;
 
-    @Basic
-    @Column(name = "year_month")
+    @JoinColumn(name = "year_month_id", referencedColumnName = "id")
     private Integer yearMonth;
 
     public Integer getId() {
