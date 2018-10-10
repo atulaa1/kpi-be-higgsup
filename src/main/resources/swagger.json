@@ -8743,6 +8743,7 @@
                     "name",
                     "active",
                     "createdDate",
+                    "updatedDate",
                     "projectUserList"
                   ],
                   "properties": {
@@ -8756,6 +8757,9 @@
                       "type": "number"
                     },
                     "createdDate": {
+                      "type": "string"
+                    },
+                    "updatedDate": {
                       "type": "string"
                     },
                     "projectUserList": {
@@ -8817,6 +8821,7 @@
                   "name": "VNTRIP",
                   "active": 1,
                   "createdDate": "29-08-2018 03:36",
+                  "updatedDate": "29-08-2018 03:36",
                   "projectUserList": [
                     {
                       "projectUser": {
@@ -8957,6 +8962,7 @@
                     "id",
                     "name",
                     "active",
+                    "createdDate",
                     "updatedDate",
                     "projectUserList"
                   ],
@@ -8969,6 +8975,9 @@
                     },
                     "active": {
                       "type": "number"
+                    },
+                    "createdDate": {
+                      "type": "string"
                     },
                     "updatedDate": {
                       "type": "string"
@@ -9031,6 +9040,7 @@
                   "id": 8,
                   "name": "VNTRIP",
                   "active": 1,
+                  "createdDate": "29-08-2018 03:36",
                   "updatedDate": "29-08-2018 03:36",
                   "projectUserList": [
                     {
