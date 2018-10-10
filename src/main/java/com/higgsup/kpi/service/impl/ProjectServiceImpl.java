@@ -8,6 +8,7 @@ import com.higgsup.kpi.glossary.ErrorCode;
 import com.higgsup.kpi.glossary.ErrorMessage;
 import com.higgsup.kpi.glossary.ProjectStatus;
 import com.higgsup.kpi.repository.KpiProjectRepo;
+import com.higgsup.kpi.repository.KpiProjectUserRepo;
 import com.higgsup.kpi.repository.KpiUserRepo;
 import com.higgsup.kpi.service.ProjectService;
 import com.higgsup.kpi.service.UserService;
@@ -33,6 +34,9 @@ public class ProjectServiceImpl implements ProjectService {
     @Autowired
     private KpiUserRepo kpiUserRepo;
 
+    @Autowired
+    private KpiProjectUserRepo kpiProjectUserRepo;
+
 
     @Override
     public List<ProjectDTO> getAllProject() {
@@ -54,10 +58,6 @@ public class ProjectServiceImpl implements ProjectService {
                 //check if same
                 KpiProject kpiProjectInDB = kpiProjectRepo.findByName(projectDTO.getName());
                 if (!(Objects.nonNull(kpiProjectInDB) && !Objects.equals(projectDTO.getId(), kpiProjectInDB.getId()))) {
-                    if (projectDTO.getProjectUserList().isEmpty()) {
-                        validateProjectDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
-                        validateProjectDTO.setMessage(ErrorMessage.PROJECT_USER_LIST_CAN_NOT_NULL);
-                    } else {
                         kpiProject.setName(projectDTO.getName());
                         kpiProject.setActive(projectDTO.getActive());
                         kpiProject.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
@@ -73,12 +73,12 @@ public class ProjectServiceImpl implements ProjectService {
 
                         kpiProject.setProjectUserList(kpiProjectUsers);
                         kpiProjectRepo.save(kpiProject);
+                    validateProjectDTO.setId(kpiProject.getId());
                         validateProjectDTO.setName(kpiProject.getName());
                         validateProjectDTO.setActive(kpiProject.getActive());
                         validateProjectDTO.setUpdatedDate(kpiProject.getUpdatedDate());
+                    validateProjectDTO.setCreatedDate(kpiProject.getCreatedDate());
                         validateProjectDTO.setProjectUserList(convertListUserEntityToDTO(kpiProjectUsers));
-                    }
-
                 } else {
                     validateProjectDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
                     validateProjectDTO.setMessage(ErrorMessage.PARAMETERS_NAME_PROJECT_EXISTS);
@@ -143,6 +143,7 @@ public class ProjectServiceImpl implements ProjectService {
                     validateProjectDTO.setName(projectDTO.getName());
                     validateProjectDTO.setActive(projectDTO.getActive());
                     validateProjectDTO.setCreatedDate(kpiProject.getCreatedDate());
+                    validateProjectDTO.setUpdatedDate(kpiProject.getUpdatedDate());
                     validateProjectDTO.setProjectUserList(convertListUserEntityToDTO(kpiProject.getProjectUserList()));
                 }
             } else {
@@ -201,4 +202,6 @@ public class ProjectServiceImpl implements ProjectService {
         }
         return projectUserDTOList;
     }
+
+
 }

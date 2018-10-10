@@ -7,9 +7,11 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.core.support.LdapContextSource;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @Configuration
 @PropertySource("classpath:config.properties")
+@EnableScheduling
 public class BaseConfiguration {
 
     // Config API
