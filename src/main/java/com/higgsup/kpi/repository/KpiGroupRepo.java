@@ -22,4 +22,7 @@ public interface KpiGroupRepo extends CrudRepository<KpiGroup, Integer> {
 
     @Query(value = "SELECT * from kpi_group as g where g.group_type_id = 2", nativeQuery = true)
     List<KpiGroup> findAllClub();
+
+    @Query(value = "SELECT * from kpi_group as g join kpi_event e where e.group_id = g.id and e.id = :id", nativeQuery = true)
+    KpiGroup findGroupByEventId(@Param("id") Integer eventId);
 }

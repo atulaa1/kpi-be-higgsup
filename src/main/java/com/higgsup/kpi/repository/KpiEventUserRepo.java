@@ -10,5 +10,4 @@ import java.util.List;
 
 public interface KpiEventUserRepo extends CrudRepository<KpiEventUser, KpiEventUserPK> {
     List<KpiEventUser> findByKpiEventId(int eventId);
-
 }
