@@ -59,6 +59,9 @@ public class EventServiceImpl extends BaseService implements EventService {
     @Autowired
     private KpiSeminarSurveyRepo kpiseminarSurveyRepo;
 
+    @Autowired
+    private PointServiceImpl pointService;
+
     @Override
     public List<EventDTO> getAllClubAndSupportEvent() throws IOException {
         List<KpiEvent> eventList = kpiEventRepo.findClubAndSupportEvent();
@@ -550,7 +553,7 @@ public class EventServiceImpl extends BaseService implements EventService {
                     validateTeambuildingDTO.setEventUserList(eventDTO.getEventUserList());
                     validateTeambuildingDTO.setAdditionalConfig(convertAdditionalConfigToDTO(kpiEvent.getGroup()));
 
-                    //pointService.calculateTeambuildingPoint(validateTeambuildingDTO);
+                    pointService.calculateTeambuildingPoint(validateTeambuildingDTO);
 
 
                 } else {

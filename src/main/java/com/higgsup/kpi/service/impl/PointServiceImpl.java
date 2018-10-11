@@ -35,13 +35,13 @@ public class PointServiceImpl extends BaseService implements PointService {
     @Autowired
     private KpiProjectUserRepo kpiProjectUserRepo;
 
-    /*@Autowired
-    private KpiProjectLogRepo kpiProjectLogRepo;*/
-
     @Autowired
     private KpiEventUserRepo kpiEventUserRepo;
 
-    //@Scheduled(cron = "0 34 18 8 * ?")
+    @Autowired
+    private KpiUserRepo kpiUserRepo;
+
+    @Scheduled(cron = "0 0 16 10 * ?")
     public void calculateRulePoint() {
         Optional<KpiYearMonth> kpiYearMonthOptional = kpiMonthRepo.findByMonthCurrent();
 
@@ -77,69 +77,31 @@ public class PointServiceImpl extends BaseService implements PointService {
 
     }
 
-    @Override
-    public void calculateTeambuildingPoint(EventDTO<EventTeamBuildingDetail> teamBuildingDTO) {
+    private void calculateOrganizerPoint(EventDTO<EventTeamBuildingDetail> teamBuildingDTO, List<KpiEventUser> kpiEventUserList,
+                                         List<KpiEventUser> participants) {
         Float firstPrizePoint = teamBuildingDTO.getAdditionalConfig().getFirstPrizePoint();
         Float secondPrizePoint = teamBuildingDTO.getAdditionalConfig().getSecondPrizePoint();
         Float thirdPrizePoint = teamBuildingDTO.getAdditionalConfig().getThirdPrizePoint();
         Float organizerPoint = teamBuildingDTO.getAdditionalConfig().getOrganizerPoint();
 
-
-        List<KpiEventUser> kpiEventUserList = kpiEventUserRepo.findByKpiEventId(teamBuildingDTO.getId());
-
         List<KpiEventUser> organizers = kpiEventUserList.stream().filter(u -> u.getType()
                 .equals(ORGANIZER.getValue())).collect(Collectors.toList());
 
-        List<KpiEventUser> participants = kpiEventUserList.stream().filter(u -> !u.getType()
-                .equals(ORGANIZER.getValue())).collect(Collectors.toList());
-
-        for (KpiEventUser participant : participants) {
-
-            if (Objects.nonNull(kpiPointRepo.findByRatedUser(participant.getKpiUser()))) {
-                KpiPoint kpiPoint = kpiPointRepo.findByRatedUser(participant.getKpiUser());
-
-                EventUserType eventUserType = EventUserType.getEventUserType(participant.getType());
-                switch (Objects.requireNonNull(eventUserType)) {
-                    case FIRST_PLACE:
-                        kpiPoint.setTeambuildingPoint(kpiPoint.getTeambuildingPoint() + firstPrizePoint);
-                        break;
-                    case SECOND_PLACE:
-                        kpiPoint.setTeambuildingPoint(kpiPoint.getTeambuildingPoint() + secondPrizePoint);
-                        break;
-                    case THIRD_PLACE:
-                        kpiPoint.setTeambuildingPoint(kpiPoint.getTeambuildingPoint() + thirdPrizePoint);
-                        break;
-                }
-                kpiPointRepo.save(kpiPoint);
-            } else {
-                KpiPoint kpiPoint = new KpiPoint();
-                kpiPoint.setRatedUser(participant.getKpiUser());
-                EventUserType eventUserType = EventUserType.getEventUserType(participant.getType());
-                switch (Objects.requireNonNull(eventUserType)) {
-                    case FIRST_PLACE:
-                        kpiPoint.setTeambuildingPoint(firstPrizePoint);
-                        break;
-                    case SECOND_PLACE:
-                        kpiPoint.setTeambuildingPoint(secondPrizePoint);
-                        break;
-                    case THIRD_PLACE:
-                        kpiPoint.setTeambuildingPoint(thirdPrizePoint);
-                        break;
-                }
-                kpiPointRepo.save(kpiPoint);
-            }
-
-        }
-
         for (KpiEventUser kpiEventUser : organizers) {
-            if (Objects.nonNull(kpiPointRepo.findByRatedUser(kpiEventUser.getKpiUser()))) {
-                KpiPoint kpiPoint = kpiPointRepo.findByRatedUser(kpiEventUser.getKpiUser());
+            KpiUser kpiUserOrganizer = kpiUserRepo.findByUserName(kpiEventUser.getKpiEventUserPK().getUserName());
+
+            if (Objects.nonNull(kpiPointRepo.findByRatedUser(kpiUserOrganizer))) {
+                KpiPoint kpiPoint = kpiPointRepo.findByRatedUser(kpiUserOrganizer);
 
                 List<KpiEventUser> gamingOrganizers = participants.stream()
-                        .filter(u -> u.getKpiUser().equals(kpiEventUser.getKpiUser())).collect(Collectors.toList());
+                        .filter(u -> kpiUserOrganizer.equals(u.getKpiUser())).collect(Collectors.toList());
 
                 if (gamingOrganizers.isEmpty()) {
-                    kpiPoint.setTeambuildingPoint(kpiPoint.getTeambuildingPoint() + organizerPoint);
+                    if (Objects.nonNull(kpiPoint.getTeambuildingPoint())) {
+                        kpiPoint.setTeambuildingPoint(kpiPoint.getTeambuildingPoint() + organizerPoint);
+                    } else {
+                        kpiPoint.setTeambuildingPoint(organizerPoint);
+                    }
                 } else {
                     for (KpiEventUser gamingOrganizer : gamingOrganizers) {
 
@@ -147,25 +109,50 @@ public class PointServiceImpl extends BaseService implements PointService {
                         switch (Objects.requireNonNull(eventUserType)) {
                             case FIRST_PLACE: {
                                 if (organizerPoint > firstPrizePoint) {
-                                    kpiPoint.setTeambuildingPoint(kpiPoint.getTeambuildingPoint() + organizerPoint);
+                                    if (Objects.nonNull(kpiPoint.getTeambuildingPoint())) {
+                                        kpiPoint.setTeambuildingPoint(kpiPoint.getTeambuildingPoint() + organizerPoint);
+                                    } else {
+                                        kpiPoint.setTeambuildingPoint(organizerPoint);
+                                    }
+
                                 } else {
-                                    kpiPoint.setTeambuildingPoint(kpiPoint.getTeambuildingPoint() + firstPrizePoint);
+                                    if (Objects.nonNull(kpiPoint.getTeambuildingPoint())) {
+                                        kpiPoint.setTeambuildingPoint(kpiPoint.getTeambuildingPoint() + firstPrizePoint);
+                                    } else {
+                                        kpiPoint.setTeambuildingPoint(firstPrizePoint);
+                                    }
                                 }
                                 break;
                             }
                             case SECOND_PLACE: {
                                 if (organizerPoint > secondPrizePoint) {
-                                    kpiPoint.setTeambuildingPoint(kpiPoint.getTeambuildingPoint() + organizerPoint);
+                                    if (Objects.nonNull(kpiPoint.getTeambuildingPoint())) {
+                                        kpiPoint.setTeambuildingPoint(kpiPoint.getTeambuildingPoint() + organizerPoint);
+                                    } else {
+                                        kpiPoint.setTeambuildingPoint(organizerPoint);
+                                    }
                                 } else {
-                                    kpiPoint.setTeambuildingPoint(kpiPoint.getTeambuildingPoint() + secondPrizePoint);
+                                    if (Objects.nonNull(kpiPoint.getTeambuildingPoint())) {
+                                        kpiPoint.setTeambuildingPoint(kpiPoint.getTeambuildingPoint() + secondPrizePoint);
+                                    } else {
+                                        kpiPoint.setTeambuildingPoint(secondPrizePoint);
+                                    }
                                 }
                                 break;
                             }
                             case THIRD_PLACE: {
                                 if (organizerPoint > thirdPrizePoint) {
-                                    kpiPoint.setTeambuildingPoint(kpiPoint.getTeambuildingPoint() + organizerPoint);
+                                    if (Objects.nonNull(kpiPoint.getTeambuildingPoint())) {
+                                        kpiPoint.setTeambuildingPoint(kpiPoint.getTeambuildingPoint() + organizerPoint);
+                                    } else {
+                                        kpiPoint.setTeambuildingPoint(organizerPoint);
+                                    }
                                 } else {
-                                    kpiPoint.setTeambuildingPoint(kpiPoint.getTeambuildingPoint() + thirdPrizePoint);
+                                    if (Objects.nonNull(kpiPoint.getTeambuildingPoint())) {
+                                        kpiPoint.setTeambuildingPoint(kpiPoint.getTeambuildingPoint() + thirdPrizePoint);
+                                    } else {
+                                        kpiPoint.setTeambuildingPoint(thirdPrizePoint);
+                                    }
                                 }
                                 break;
                             }
@@ -177,10 +164,10 @@ public class PointServiceImpl extends BaseService implements PointService {
             } else {
                 KpiPoint kpiPoint = new KpiPoint();
 
-                kpiPoint.setRatedUser(kpiEventUser.getKpiUser());
+                kpiPoint.setRatedUser(kpiUserOrganizer);
 
                 List<KpiEventUser> gamingOrganizers = participants.stream()
-                        .filter(u -> u.getKpiUser().equals(kpiEventUser.getKpiUser())).collect(Collectors.toList());
+                        .filter(u -> kpiUserOrganizer.equals(u.getKpiUser())).collect(Collectors.toList());
 
                 if (gamingOrganizers.isEmpty()) {
                     kpiPoint.setTeambuildingPoint(organizerPoint);
@@ -219,6 +206,69 @@ public class PointServiceImpl extends BaseService implements PointService {
                 kpiPointRepo.save(kpiPoint);
             }
         }
+    }
 
+    @Override
+    public void calculateTeambuildingPoint(EventDTO<EventTeamBuildingDetail> teamBuildingDTO) {
+        Float firstPrizePoint = teamBuildingDTO.getAdditionalConfig().getFirstPrizePoint();
+        Float secondPrizePoint = teamBuildingDTO.getAdditionalConfig().getSecondPrizePoint();
+        Float thirdPrizePoint = teamBuildingDTO.getAdditionalConfig().getThirdPrizePoint();
+
+        List<KpiEventUser> kpiEventUserList = kpiEventUserRepo.findByKpiEventId(teamBuildingDTO.getId());
+
+        List<KpiEventUser> participants = kpiEventUserList.stream().filter(u -> !u.getType()
+                .equals(ORGANIZER.getValue())).collect(Collectors.toList());
+
+        for (KpiEventUser participant : participants) {
+            KpiUser UserParticipant = kpiUserRepo.findByUserName(participant.getKpiEventUserPK().getUserName());
+            if (Objects.nonNull(kpiPointRepo.findByRatedUser(UserParticipant))) {
+
+                KpiPoint kpiPoint = kpiPointRepo.findByRatedUser(UserParticipant);
+
+                EventUserType eventUserType = EventUserType.getEventUserType(participant.getType());
+                switch (Objects.requireNonNull(eventUserType)) {
+                    case FIRST_PLACE:
+                        if (Objects.nonNull(kpiPoint.getTeambuildingPoint())) {
+                            kpiPoint.setTeambuildingPoint(kpiPoint.getTeambuildingPoint() + firstPrizePoint);
+                        } else {
+                            kpiPoint.setTeambuildingPoint(firstPrizePoint);
+                        }
+                        break;
+                    case SECOND_PLACE:
+                        if (Objects.nonNull(kpiPoint.getTeambuildingPoint())) {
+                            kpiPoint.setTeambuildingPoint(kpiPoint.getTeambuildingPoint() + secondPrizePoint);
+                        } else {
+                            kpiPoint.setTeambuildingPoint(secondPrizePoint);
+                        }
+                        break;
+                    case THIRD_PLACE:
+                        if (Objects.nonNull(kpiPoint.getTeambuildingPoint())) {
+                            kpiPoint.setTeambuildingPoint(kpiPoint.getTeambuildingPoint() + thirdPrizePoint);
+                        } else {
+                            kpiPoint.setTeambuildingPoint(thirdPrizePoint);
+                        }
+                        break;
+                }
+                kpiPointRepo.save(kpiPoint);
+            } else {
+                KpiPoint kpiPoint = new KpiPoint();
+                kpiPoint.setRatedUser(UserParticipant);
+                EventUserType eventUserType = EventUserType.getEventUserType(participant.getType());
+                switch (Objects.requireNonNull(eventUserType)) {
+                    case FIRST_PLACE:
+                        kpiPoint.setTeambuildingPoint(firstPrizePoint);
+                        break;
+                    case SECOND_PLACE:
+                        kpiPoint.setTeambuildingPoint(secondPrizePoint);
+                        break;
+                    case THIRD_PLACE:
+                        kpiPoint.setTeambuildingPoint(thirdPrizePoint);
+                        break;
+                }
+                kpiPointRepo.save(kpiPoint);
+            }
+
+        }
+        calculateOrganizerPoint(teamBuildingDTO, kpiEventUserList, participants);
     }
 }
