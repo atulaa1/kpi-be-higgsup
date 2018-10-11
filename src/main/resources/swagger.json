@@ -10259,6 +10259,7 @@
               "required": [
                 "projectList",
                 "employeeList",
+                "questionList",
                 "status_code"
               ],
               "properties": {
@@ -10346,6 +10347,28 @@
                     }
                   }
                 },
+                "questionList":{
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "number",
+                      "question"
+                    ],
+                    "properties": {
+                      "id": {
+                        "type": "number"
+                      },
+                      "number": {
+                        "type": "number"
+                      },
+                      "question": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
                 "message": {
                   "type": "string"
                 },
@@ -10401,6 +10424,23 @@
                     "numberPhone": "null",
                     "skype": "null",
                     "dateStartWork": "2018-09-29"
+                  }
+                ],
+                "questionList": [
+                  {
+                    "id": 1,
+                    "number": 1,
+                    "question": "Lam viec khong?"
+                  },
+                  {
+                    "id": 2,
+                    "number": 2,
+                    "question": "Tot voi nhan vien khong?"
+                  },
+                  {
+                    "id": 3,
+                    "number": 3,
+                    "question": "Hieu qua khong"
                   }
                 ],
                 "status_code": 200

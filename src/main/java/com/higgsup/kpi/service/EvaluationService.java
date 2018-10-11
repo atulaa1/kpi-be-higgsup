@@ -1,7 +1,7 @@
 package com.higgsup.kpi.service;
 
-import com.higgsup.kpi.dto.EvaluationDTO;
+import com.higgsup.kpi.dto.EvaluationInfoDTO;
 
 public interface EvaluationService {
-    EvaluationDTO getAllEvaluationInfo();
+    EvaluationInfoDTO getAllEvaluationInfo();
 }

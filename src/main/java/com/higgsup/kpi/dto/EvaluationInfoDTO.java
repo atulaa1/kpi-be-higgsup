@@ -2,10 +2,10 @@ package com.higgsup.kpi.dto;
 
 import java.util.List;
 
-public class EvaluationDTO {
+public class EvaluationInfoDTO {
     private List<UserDTO> employeeList;
     private List<ProjectDTO> projectList;
-    private UserDTO evaluator;
+    private List<SurveyDTO> questionList;
 
     public List<UserDTO> getEmployeeList() {
         return employeeList;
@@ -23,11 +23,11 @@ public class EvaluationDTO {
         this.projectList = projectList;
     }
 
-    public UserDTO getEvaluator() {
-        return evaluator;
+    public List<SurveyDTO> getQuestionList() {
+        return questionList;
     }
 
-    public void setEvaluator(UserDTO evaluator) {
-        this.evaluator = evaluator;
+    public void setQuestionList(List<SurveyDTO> questionList) {
+        this.questionList = questionList;
     }
 }

@@ -20,8 +20,6 @@ public class ProjectDTO extends BaseDTO {
 
     private List<ProjectUserDTO> projectUserList;
 
-    private Float rating;
-
     public Integer getId() {
         return id;
     }
@@ -60,14 +58,6 @@ public class ProjectDTO extends BaseDTO {
 
     public void setUpdatedDate(Timestamp updatedDate) {
         this.updatedDate = updatedDate;
-    }
-
-    public Float getRating() {
-        return rating;
-    }
-
-    public void setRating(Float rating) {
-        this.rating = rating;
     }
 
     public List<ProjectUserDTO> getProjectUserList() {

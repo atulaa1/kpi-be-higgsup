@@ -1,6 +1,6 @@
 package com.higgsup.kpi.service.impl;
 
-import com.higgsup.kpi.dto.EvaluationDTO;
+import com.higgsup.kpi.dto.EvaluationInfoDTO;
 import com.higgsup.kpi.dto.ProjectDTO;
 import com.higgsup.kpi.dto.SurveyDTO;
 import com.higgsup.kpi.dto.UserDTO;
@@ -26,19 +26,16 @@ public class EvaluationServiceImpl implements EvaluationService {
     private SurveyService surveyService;
 
     @Override
-    public EvaluationDTO getAllEvaluationInfo() {
+    public EvaluationInfoDTO getAllEvaluationInfo() {
         List<UserDTO> employee = userService.getAllEmployee();
         List<ProjectDTO> projectsInMonth = projectService.getProjectsInMonth();
         List<SurveyDTO> questions = surveyService.getAllQuestion();
 
-        for(UserDTO e : employee){
-            e.setEvaluateQuestion(questions);
-        }
+        EvaluationInfoDTO evaluationInfoDTO = new EvaluationInfoDTO();
+        evaluationInfoDTO.setProjectList(projectsInMonth);
+        evaluationInfoDTO.setEmployeeList(employee);
+        evaluationInfoDTO.setQuestionList(questions);
 
-        EvaluationDTO evaluationDTO = new EvaluationDTO();
-        evaluationDTO.setProjectList(projectsInMonth);
-        evaluationDTO.setEmployeeList(employee);
-
-        return evaluationDTO;
+        return evaluationInfoDTO;
     }
 }
