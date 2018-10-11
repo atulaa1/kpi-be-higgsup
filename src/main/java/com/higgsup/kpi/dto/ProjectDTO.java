@@ -3,6 +3,7 @@ package com.higgsup.kpi.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 public class ProjectDTO extends BaseDTO {
     private Integer id;
@@ -16,6 +17,8 @@ public class ProjectDTO extends BaseDTO {
 
     @JsonFormat(pattern = "dd-MM-yyy HH:mm")
     private Timestamp updatedDate;
+
+    private List<ProjectUserDTO> projectUserList;
 
     private Float rating;
 
@@ -65,5 +68,13 @@ public class ProjectDTO extends BaseDTO {
 
     public void setRating(Float rating) {
         this.rating = rating;
+    }
+
+    public List<ProjectUserDTO> getProjectUserList() {
+        return projectUserList;
+    }
+
+    public void setProjectUserList(List<ProjectUserDTO> projectUserList) {
+        this.projectUserList = projectUserList;
     }
 }
