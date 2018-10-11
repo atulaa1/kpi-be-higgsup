@@ -202,7 +202,7 @@ CREATE TABLE `higgsup_kpi`.`kpi_point` (
   `id`                    INT(10) PRIMARY KEY AUTO_INCREMENT,
   `rated_username`        VARCHAR(50)
                           CHARACTER SET utf8 NOT NULL,
-  `rule_point`            FLOAT              NOT NULL,
+  `rule_point`            FLOAT              NULL,
   `club_point`            FLOAT              NULL,
   `normal_seminar_point`  FLOAT              NULL,
   `weekend_seminar_point` FLOAT              NULL,
