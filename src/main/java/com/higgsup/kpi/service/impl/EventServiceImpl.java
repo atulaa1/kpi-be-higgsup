@@ -1483,7 +1483,7 @@ public class EventServiceImpl extends BaseService implements EventService {
 
     @Override
     public EventDTO updateClub(EventDTO<EventClubDetail> eventDTO) throws IOException {
-
+        kpiEventUserRepo.deleteByEventId(eventDTO.getId());
         EventDTO<EventClubDetail> validatedEventDTO = new EventDTO<>();
 
         List<ErrorDTO> validates = validateClub(eventDTO);
