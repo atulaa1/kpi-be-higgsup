@@ -47,7 +47,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ProjectDTO updateProject(ProjectDTO projectDTO) {
-
+        kpiProjectUserRepo.deleteByProjectId(projectDTO.getId());
         ProjectDTO validateProjectDTO = new ProjectDTO();
         //check name is null then not update
         if (Objects.nonNull(projectDTO.getName())) {
