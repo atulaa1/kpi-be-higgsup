@@ -432,7 +432,9 @@ public class EventServiceImpl extends BaseService implements EventService {
     }
 
     @Override
+    @Transactional
     public EventDTO updateSeminar(EventDTO<EventSeminarDetail> eventDTO) throws IOException {
+        kpiEventUserRepo.deleteByEventId(eventDTO.getId());
         EventDTO validateSeminarDTO = new EventDTO();
         Optional<KpiEvent> kpiEventOptional = kpiEventRepo.findById(eventDTO.getId());
         List<ErrorDTO> validates = validateDataSeminarEvent(eventDTO);
@@ -441,26 +443,26 @@ public class EventServiceImpl extends BaseService implements EventService {
 
             if (Objects.equals(kpiEvent.getStatus(), StatusEvent.WAITING.getValue())) {
                 if (CollectionUtils.isEmpty(validates)) {
-
+                    eventDTO.setId(kpiEvent.getId());
+                    eventDTO.setStatus(kpiEvent.getStatus());
                     ObjectMapper mapper = new ObjectMapper();
 
                     String seminarEventConfig = mapper.writeValueAsString(eventDTO.getAdditionalConfig());
                     BeanUtils.copyProperties(eventDTO, kpiEvent, "id", "createdDate", "updatedDate", "group", "status");
 
                     kpiEvent.setAdditionalConfig(seminarEventConfig);
-
-                    kpiEvent.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
                     Optional<KpiGroup> kpiGroupOptional = kpiGroupRepo.findById(eventDTO.getGroup().getId());
                     if (kpiGroupOptional.isPresent()) {
                         kpiEvent.setGroup(kpiGroupOptional.get());
-                        kpiEvent = kpiEventRepo.save(kpiEvent);
+                        kpiEvent.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
+                        List<KpiEventUser> eventUsers = convertEventUsersToEntity(kpiEvent, eventDTO.getEventUserList());
+                        kpiEvent.setKpiEventUserList(eventUsers);
 
-                        List<KpiEventUser> eventUsers = convertEventUsersToEntity(kpiEvent,
-                                eventDTO.getEventUserList());
-                        kpiEventUserRepo.saveAll(eventUsers);
+                        kpiEvent = kpiEventRepo.save(kpiEvent);
 
                         BeanUtils.copyProperties(kpiEvent, validateSeminarDTO);
                         validateSeminarDTO.setGroup(convertConfigEventToDTO(kpiEvent.getGroup()));
+                        validateSeminarDTO.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
                         validateSeminarDTO.setAdditionalConfig(eventDTO.getAdditionalConfig());
 
                         for(EventUserDTO eventUserDTO : eventDTO.getEventUserList()){
@@ -468,7 +470,6 @@ public class EventServiceImpl extends BaseService implements EventService {
                             UserDTO userDTO = convertUserEntityToDTO(kpiUser);
                             eventUserDTO.setUser(userDTO);
                         }
-
                         validateSeminarDTO.setEventUserList(eventDTO.getEventUserList());
 
                     } else {
