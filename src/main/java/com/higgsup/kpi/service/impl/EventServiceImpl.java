@@ -882,30 +882,16 @@ public class EventServiceImpl extends BaseService implements EventService {
 
         if (dateCun.getYear() + 1900 == yearMonth.getYear() + 1900
                 && dateCun.getMonth() + 1 == yearMonth.getMonth() + 1
-                && (dateCun.getDate() < Integer.valueOf(
-                environment.getProperty("config.day.new.year.month"))
-                || (dateCun.getDate() == Integer.valueOf(
-                environment.getProperty("config.day.new.year.month"))
-                && dateCun.getHours() < Integer.valueOf(
-                environment.getProperty("config.hour.new.year.month")))
-        )
                 ) {
             return true;
-        } else if (dateCun.getYear() + 1900 == yearMonth.getYear() + 1900
-                && dateCun.getMonth() + 1 > yearMonth.getMonth() + 1
-                && (dateCun.getDate() < Integer.valueOf(
-                environment.getProperty("config.day.new.year.month"))
-                || (dateCun.getDate() == Integer.valueOf(
-                environment.getProperty("config.day.new.year.month"))
-                && dateCun.getHours() < Integer.valueOf(
-                environment.getProperty("config.hour.new.year.month"))))) {
-            return true;
-        } else if (dateCun.getYear() + 1900 > yearMonth.getYear() + 1900 && (dateCun.getDate() <= Integer.valueOf(
-                environment.getProperty("config.day.new.year.month"))
-                || (dateCun.getDate() == Integer.valueOf(
+        }
+        if (dateCun.getYear() + 1900 == yearMonth.getYear() + 1900
+                && (dateCun.getMonth() + 1 )- (yearMonth.getMonth() + 1) == 1
+                && dateCun.getDate() > Integer.valueOf(
                 environment.getProperty("config.day.new.year.month"))
                 && dateCun.getHours() < Integer.valueOf(
-                environment.getProperty("config.hour.new.year.month"))))) {
+                environment.getProperty("config.hour.new.year.month"))
+                ) {
             return true;
         }
         return false;
