@@ -448,8 +448,7 @@ public class EventServiceImpl extends BaseService implements EventService {
 
             if (Objects.equals(kpiEvent.getStatus(), StatusEvent.WAITING.getValue())) {
                 if (CollectionUtils.isEmpty(validates)) {
-                    eventDTO.setId(kpiEvent.getId());
-                    eventDTO.setStatus(kpiEvent.getStatus());
+
                     ObjectMapper mapper = new ObjectMapper();
 
                     String seminarEventConfig = mapper.writeValueAsString(eventDTO.getAdditionalConfig());
