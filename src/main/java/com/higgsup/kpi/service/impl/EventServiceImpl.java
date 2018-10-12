@@ -395,7 +395,7 @@ public class EventServiceImpl extends BaseService implements EventService {
 
     @Override
     public EventDTO createSeminar(EventDTO<EventSeminarDetail> eventDTO) throws IOException {
-        eventDTO.setStatus(StatusEvent.SURVEY_NOT_FINISHED.getValue());
+        eventDTO.setStatus(StatusEvent.WAITING.getValue());
         EventDTO validateSeminarDTO = new EventDTO();
 
         List<ErrorDTO> validates = validateDataSeminarEvent(eventDTO);
@@ -757,7 +757,7 @@ public class EventServiceImpl extends BaseService implements EventService {
                         if(kpiEventUsers.stream()
                                 .noneMatch(e -> (e.getType().equals(EventUserType.MEMBER.getValue()) || e.getType().equals(EventUserType.LISTEN.getValue()))
                                         && e.getStatus().equals(EvaluatingStatus.UNFINISHED.getValue()))){
-                            kpiEvent.setStatus(StatusEvent.ALL_SURVEY_DONE.getValue());
+                            kpiEvent.setStatus(StatusEvent.CONFIRMED.getValue());
                             kpiEventRepo.save(kpiEvent);
                             pointService.addSeminarPoint(kpiEventUsers, seminarDetailEventDTO);
                         }
@@ -1457,7 +1457,6 @@ public class EventServiceImpl extends BaseService implements EventService {
         List<ErrorDTO> validates = validateClub(eventDTO);
 
         String loginUsername = eventDTO.getCreator().getUsername();
-
 
         if (CollectionUtils.isEmpty(validates)) {
             String clubJson = mapper.writeValueAsString(eventDTO.getAdditionalConfig());

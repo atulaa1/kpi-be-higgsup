@@ -40,34 +40,34 @@ public interface KpiEventRepo extends CrudRepository<KpiEvent, Integer> {
     @Query(value = "select e.* from kpi_event as e join kpi_group as g on g.id = e.group_id " +
             "join kpi_event_user as eu on e.id = eu.event_id " +
             "where g.group_type_id = 1 and eu.user_name = :username and eu.type = 2 " +
-            "and e.status = 5", nativeQuery = true)
+            "and e.status = 2", nativeQuery = true)
     List<KpiEvent> findFinishedSurveySeminarEventByUserAsMember(@Param("username") String username);
 
     @Query(value = "select e.* from kpi_event as e join kpi_group as g on g.id = e.group_id " +
             "join kpi_event_user as eu on e.id = eu.event_id " +
             "where g.group_type_id = 1 and eu.user_name = :username and eu.type = 3 " +
-            "and e.status = 5", nativeQuery = true)
+            "and e.status = 2", nativeQuery = true)
     List<KpiEvent> findFinishedSurveySeminarEventByUserAsListener(@Param("username") String username);
 
     @Query(value = "select e.* from kpi_event as e join kpi_group as g on g.id = e.group_id " +
             "join kpi_event_user as eu on e.id = eu.event_id " +
             "where g.group_type_id = 1 and eu.user_name = :username and eu.type = 1 " +
-            "and e.status = 5", nativeQuery = true)
+            "and e.status = 2", nativeQuery = true)
     List<KpiEvent> findFinishedSurveySeminarEventByUserAsHost(@Param("username") String username);
 
     @Query(value = "select e.* from kpi_event as e join kpi_group as g on g.id = e.group_id " +
             "join kpi_event_user as eu on e.id = eu.event_id " +
             "where g.group_type_id = 1 and eu.user_name = :username and eu.type = 2 " +
-            " and WEEKDAY(e.begin_date) = 5 and e.status = 5", nativeQuery = true)
+            " and WEEKDAY(e.begin_date) = 5 and e.status = 2", nativeQuery = true)
     List<KpiEvent> findFinishedSurveySeminarEventByUserAsHostAtSaturday(@Param("username") String username);
 
     @Query(value = "select e.* from kpi_event as e join kpi_group as g on g.id = e.group_id " +
             "join kpi_event_user as eu on e.id = eu.event_id " +
             "where g.group_type_id = 1 and eu.user_name = :username and eu.type = 1 " +
-            " and WEEKDAY(e.begin_date) = 5 and e.status = 5", nativeQuery = true)
+            " and WEEKDAY(e.begin_date) = 5 and e.status = 2", nativeQuery = true)
     List<KpiEvent> findFinishedSurveySeminarEventByUserAsMemberAtSaturday(@Param("username") String username);
 
     @Query(value = "select e.* from kpi_event as e join kpi_group as g on g.id = e.group_id " +
-            "where g.group_type_id = 1 and e.status = 4", nativeQuery = true)
+            "where g.group_type_id = 1 and e.status = 1", nativeQuery = true)
     List<KpiEvent> findUnfinishedSurveySeminarEvent();
 }

@@ -10,10 +10,8 @@ import com.higgsup.kpi.dto.EventDTO;
 import com.higgsup.kpi.dto.EventTeamBuildingDetail;
 
 public interface PointService {
-    void calculateRulePoint();
-
     void addSeminarPoint(List<KpiEventUser> eventUsers, EventDTO<EventSeminarDetail> seminarEventDTO) throws IOException;
 
-    void calculateTeambuildingPoint(EventDTO<EventTeamBuildingDetail> teamBuildingDTO);
+
 }
 
