@@ -462,11 +462,8 @@ public class EventServiceImpl extends BaseService implements EventService {
                         kpiEvent.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
                         List<KpiEventUser> eventUsers = convertEventUsersToEntity(kpiEvent, eventDTO.getEventUserList());
                         kpiEvent.setKpiEventUserList(eventUsers);
-
                         kpiEvent = kpiEventRepo.save(kpiEvent);
 
-                        List<KpiEventUser> eventUsers = convertEventUsersToEntity(kpiEvent,
-                                eventDTO.getEventUserList());
                         for(KpiEventUser eventUser : eventUsers){
                             if(usernameFinishSurvey.stream()
                                                    .anyMatch(u -> u.equals(eventUser.getKpiEventUserPK().getUserName()))){
