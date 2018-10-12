@@ -182,7 +182,7 @@ public class PointServiceImpl extends BaseService implements PointService {
         }
     }
 
-    @Scheduled(cron = "40 48 18 10 * ?")
+    @Scheduled(cron = "05 01 10 12 * ?")
     private void addEffectivePointForHost() throws IOException{
         Optional<KpiYearMonth> kpiYearMonthOptional = kpiMonthRepo.findByMonthCurrent();
 
@@ -194,29 +194,32 @@ public class PointServiceImpl extends BaseService implements PointService {
         for(GroupDTO<GroupClubDetail> clubDTO:allClubDTO) {
             KpiUser clubOwner = kpiUserRepo.findByUserName(clubDTO.getAdditionalConfig().getHost());
             List<KpiEvent> confirmClubEvents = kpiEventRepo.findConfirmedClubEventCreatedByHost(clubDTO.getAdditionalConfig().getHost());
-            for(KpiEvent event:confirmClubEvents){
-                List<KpiEventUser> kpiEventUsers = kpiEventUserRepo.findByKpiEventId(event.getId());
-                hostParticipate = kpiEventUsers.stream().filter(e -> e.getKpiEventUserPK().getUserName()
-                        .equals(clubDTO.getAdditionalConfig().getHost())).count();
-            }
-            if(confirmClubEvents.size() >= clubDTO.getAdditionalConfig().getMinNumberOfSessions() / 2 &&
-                    hostParticipate >= (float)confirmClubEvents.size() * 3/4){
-                if(kpiPointRepo.findByRatedUser(clubOwner) != null){
-                    KpiPoint kpiPoint = kpiPointRepo.findByRatedUser(clubOwner);
-                    kpiPoint.setClubPoint(kpiPoint.getClubPoint() + clubDTO.getAdditionalConfig().getEffectivePoint());
-                    kpiPointRepo.save(kpiPoint);
-                }else{
-                    KpiPoint kpiPoint = new KpiPoint();
-                    kpiPoint.setRatedUser(clubOwner);
-                    kpiPoint.setClubPoint(clubDTO.getAdditionalConfig().getEffectivePoint());
-                    kpiPoint.setYearMonthId(kpiYearMonthOptional.get().getId());
-                    kpiPointRepo.save(kpiPoint);
+            if(confirmClubEvents != null){
+                for(KpiEvent event:confirmClubEvents){
+                    List<KpiEventUser> kpiEventUsers = kpiEventUserRepo.findByKpiEventId(event.getId());
+                    if(kpiEventUsers.stream().anyMatch(e -> e.getKpiEventUserPK().getUserName().equals(clubDTO.getAdditionalConfig().getHost()))){
+                        hostParticipate += 1;
+                    }
+                }
+                if(confirmClubEvents.size() >= clubDTO.getAdditionalConfig().getMinNumberOfSessions() / 2 &&
+                        hostParticipate >= (float)confirmClubEvents.size() * 3/4){
+                    if(kpiPointRepo.findByRatedUser(clubOwner) != null){
+                        KpiPoint kpiPoint = kpiPointRepo.findByRatedUser(clubOwner);
+                        kpiPoint.setClubPoint(kpiPoint.getClubPoint() + clubDTO.getAdditionalConfig().getEffectivePoint());
+                        kpiPointRepo.save(kpiPoint);
+                    }else{
+                        KpiPoint kpiPoint = new KpiPoint();
+                        kpiPoint.setRatedUser(clubOwner);
+                        kpiPoint.setClubPoint(clubDTO.getAdditionalConfig().getEffectivePoint());
+                        kpiPoint.setYearMonthId(kpiYearMonthOptional.get().getId());
+                        kpiPointRepo.save(kpiPoint);
+                    }
                 }
             }
         }
     }
 
-    @Scheduled(cron = "40 24 17 11 * ?")
+    @Scheduled(cron = "0 0 16 10 * ?")
     private void addUnfinishedSurveySeminarPoint() throws IOException{
         List<KpiEvent> unfinishedSurveySeminarEvent = kpiEventRepo.findUnfinishedSurveySeminarEvent();
         if(unfinishedSurveySeminarEvent.size() > 0){
