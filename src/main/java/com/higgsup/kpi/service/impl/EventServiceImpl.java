@@ -433,7 +433,9 @@ public class EventServiceImpl extends BaseService implements EventService {
     }
 
     @Override
+    @Transactional
     public EventDTO updateSeminar(EventDTO<EventSeminarDetail> eventDTO) throws IOException {
+        kpiEventUserRepo.deleteByEventId(eventDTO.getId());
         EventDTO validateSeminarDTO = new EventDTO();
         Optional<KpiEvent> kpiEventOptional = kpiEventRepo.findById(eventDTO.getId());
         List<ErrorDTO> validates = validateDataSeminarEvent(eventDTO);
@@ -453,15 +455,14 @@ public class EventServiceImpl extends BaseService implements EventService {
                     BeanUtils.copyProperties(eventDTO, kpiEvent, "id", "createdDate", "updatedDate", "group", "status");
 
                     kpiEvent.setAdditionalConfig(seminarEventConfig);
-
-                    kpiEvent.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
                     Optional<KpiGroup> kpiGroupOptional = kpiGroupRepo.findById(eventDTO.getGroup().getId());
                     if (kpiGroupOptional.isPresent()) {
                         kpiEvent.setGroup(kpiGroupOptional.get());
+                        kpiEvent.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
+                        List<KpiEventUser> eventUsers = convertEventUsersToEntity(kpiEvent, eventDTO.getEventUserList());
+                        kpiEvent.setKpiEventUserList(eventUsers);
                         kpiEvent = kpiEventRepo.save(kpiEvent);
 
-                        List<KpiEventUser> eventUsers = convertEventUsersToEntity(kpiEvent,
-                                eventDTO.getEventUserList());
                         for(KpiEventUser eventUser : eventUsers){
                             if(usernameFinishSurvey.stream()
                                                    .anyMatch(u -> u.equals(eventUser.getKpiEventUserPK().getUserName()))){
@@ -473,6 +474,7 @@ public class EventServiceImpl extends BaseService implements EventService {
 
                         BeanUtils.copyProperties(kpiEvent, validateSeminarDTO);
                         validateSeminarDTO.setGroup(convertConfigEventToDTO(kpiEvent.getGroup()));
+                        validateSeminarDTO.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
                         validateSeminarDTO.setAdditionalConfig(eventDTO.getAdditionalConfig());
 
                         for(EventUserDTO eventUserDTO : eventDTO.getEventUserList()){
@@ -1486,7 +1488,7 @@ public class EventServiceImpl extends BaseService implements EventService {
 
     @Override
     public EventDTO updateClub(EventDTO<EventClubDetail> eventDTO) throws IOException {
-
+        kpiEventUserRepo.deleteByEventId(eventDTO.getId());
         EventDTO<EventClubDetail> validatedEventDTO = new EventDTO<>();
 
         List<ErrorDTO> validates = validateClub(eventDTO);
