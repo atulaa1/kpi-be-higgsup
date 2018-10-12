@@ -386,7 +386,7 @@ public class EventServiceImpl extends BaseService implements EventService {
 
     @Override
     public EventDTO createSeminar(EventDTO<EventSeminarDetail> eventDTO) throws IOException {
-        eventDTO.setStatus(StatusEvent.WAITING.getValue());
+        eventDTO.setStatus(StatusEvent.SURVEY_NOT_FINISHED.getValue());
         EventDTO validateSeminarDTO = new EventDTO();
         List<ErrorDTO> validates = validateDataSeminarEvent(eventDTO);
 
@@ -416,6 +416,7 @@ public class EventServiceImpl extends BaseService implements EventService {
                     KpiUser kpiUser = kpiUserRepo.findByUserName(eventUserDTO.getUser().getUsername());
                     UserDTO userDTO = convertUserEntityToDTO(kpiUser);
                     eventUserDTO.setUser(userDTO);
+                    eventUserDTO.setType(EvaluatingStatus.UNFINISHED.getValue());
                 }
 
                 validateSeminarDTO.setEventUserList(eventDTO.getEventUserList());
@@ -438,8 +439,12 @@ public class EventServiceImpl extends BaseService implements EventService {
         List<ErrorDTO> validates = validateDataSeminarEvent(eventDTO);
         if (kpiEventOptional.isPresent()) {
             KpiEvent kpiEvent = kpiEventOptional.get();
+            List<String> usernameFinishSurvey = kpiEvent.getKpiEventUserList().stream()
+                    .filter(u -> u.getStatus() == 1)
+                    .map(u -> u.getKpiEventUserPK().getUserName())
+                    .collect(Collectors.toList());
 
-            if (Objects.equals(kpiEvent.getStatus(), StatusEvent.WAITING.getValue())) {
+            if (Objects.equals(kpiEvent.getStatus(), StatusEvent.SURVEY_NOT_FINISHED.getValue())) {
                 if (CollectionUtils.isEmpty(validates)) {
 
                     ObjectMapper mapper = new ObjectMapper();
@@ -457,6 +462,13 @@ public class EventServiceImpl extends BaseService implements EventService {
 
                         List<KpiEventUser> eventUsers = convertEventUsersToEntity(kpiEvent,
                                 eventDTO.getEventUserList());
+                        for(KpiEventUser eventUser : eventUsers){
+                            if(usernameFinishSurvey.stream()
+                                                   .anyMatch(u -> u.equals(eventUser.getKpiEventUserPK().getUserName()))){
+                                eventUser.setStatus(EvaluatingStatus.FINISH.getValue());
+                            }
+                        }
+
                         kpiEventUserRepo.saveAll(eventUsers);
 
                         BeanUtils.copyProperties(kpiEvent, validateSeminarDTO);
@@ -467,6 +479,12 @@ public class EventServiceImpl extends BaseService implements EventService {
                             KpiUser kpiUser = kpiUserRepo.findByUserName(eventUserDTO.getUser().getUsername());
                             UserDTO userDTO = convertUserEntityToDTO(kpiUser);
                             eventUserDTO.setUser(userDTO);
+                            if(usernameFinishSurvey.stream()
+                                    .anyMatch(u -> u.equals(eventUserDTO.getUser().getUsername()))){
+                                eventUserDTO.setStatus(EvaluatingStatus.FINISH.getValue());
+                            }else{
+                                eventUserDTO.setStatus(EvaluatingStatus.UNFINISHED.getValue());
+                            }
                         }
 
                         validateSeminarDTO.setEventUserList(eventDTO.getEventUserList());
