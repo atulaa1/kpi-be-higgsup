@@ -386,7 +386,7 @@ public class EventServiceImpl extends BaseService implements EventService {
 
     @Override
     public EventDTO createSeminar(EventDTO<EventSeminarDetail> eventDTO) throws IOException {
-        eventDTO.setStatus(StatusEvent.SURVEY_NOT_FINISHED.getValue());
+        eventDTO.setStatus(StatusEvent.WAITING.getValue());
         EventDTO validateSeminarDTO = new EventDTO();
         List<ErrorDTO> validates = validateDataSeminarEvent(eventDTO);
 
@@ -444,7 +444,7 @@ public class EventServiceImpl extends BaseService implements EventService {
                     .map(u -> u.getKpiEventUserPK().getUserName())
                     .collect(Collectors.toList());
 
-            if (Objects.equals(kpiEvent.getStatus(), StatusEvent.SURVEY_NOT_FINISHED.getValue())) {
+            if (Objects.equals(kpiEvent.getStatus(), StatusEvent.WAITING.getValue())) {
                 if (CollectionUtils.isEmpty(validates)) {
 
                     ObjectMapper mapper = new ObjectMapper();
