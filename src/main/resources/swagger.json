@@ -39,6 +39,10 @@
     {
       "name": "late-time-check-controller",
       "description": "late-time-check-controller"
+    },
+    {
+      "name": "evaluation-controller",
+      "description": "Evaluation of MANs at the end of month"
     }
   ],
   "security": [
@@ -237,7 +241,7 @@
           "late-time-check-controller"
         ],
         "summary": "updateLateTimeCheckMonthCurrent",
-        "operationId": "updateLateTimeCheckMonthCurrentUsingPOST",
+        "operationId": "updateLateTimeCheckMonthCurrentUsingPUT",
         "consumes": [
           "application/json"
         ],
@@ -10225,6 +10229,625 @@
                 }
               },
               "title": "Response"
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+
+    "/api/evaluation/info":{
+      "get": {
+        "tags": [
+          "evaluation-controller"
+        ],
+        "summary": "Get all information for evaluation",
+        "operationId": "getEvaluationInformationUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "200 : Thành công ",
+            "schema": {
+              "type": "object",
+              "required": [
+                "projectList",
+                "employeeList",
+                "questionList",
+                "status_code"
+              ],
+              "properties": {
+                "projectList": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "name",
+                      "active",
+                      "createdDate"
+                    ],
+                    "properties": {
+                      "id": {
+                        "type": "number"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "active": {
+                        "type": "number"
+                      },
+                      "createdDate": {
+                        "type": "string"
+                      },
+                      "updatedDate": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "employeeList": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "username",
+                      "lastName",
+                      "firstName",
+                      "fullName",
+                      "email",
+                      "userRole"
+                    ],
+                    "properties": {
+                      "username": {
+                        "type": "string"
+                      },
+                      "lastName": {
+                        "type": "string"
+                      },
+                      "firstName": {
+                        "type": "string"
+                      },
+                      "fullName": {
+                        "type": "string"
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "userRole": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "avatar": {
+                        "type": "string"
+                      },
+                      "birthday": {
+                        "type": "date"
+                      },
+                      "numberPhone": {
+                        "type": "string"
+                      },
+                      "gmail": {
+                        "type": "string"
+                      },
+                      "skype": {
+                        "type": "string"
+                      },
+                      "dateStartWork": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "questionList":{
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "number",
+                      "question"
+                    ],
+                    "properties": {
+                      "id": {
+                        "type": "number"
+                      },
+                      "number": {
+                        "type": "number"
+                      },
+                      "question": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "message": {
+                  "type": "string"
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "errorCode": {
+                        "type": "number"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "status_code": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "example": {
+                "projectList": [
+                  {
+                    "id": 8,
+                    "name": "VNTRIP",
+                    "active": 1,
+                    "createdDate": "29-08-2018 03:36",
+                    "updatedDate": "29-08-2018 03:36"
+                  },
+                  {
+                    "id": 7,
+                    "name": "KPI",
+                    "active": 1,
+                    "createdDate": "23-08-2018 09:45",
+                    "updatedDate": "29-08-2018 03:36"
+                  }
+                ],
+                "employeeList":[
+                  {
+                    "username": "kpi.employee",
+                    "lastName": "kpi",
+                    "firstName": "employee",
+                    "fullName": "kpi test. employee",
+                    "email": "kpi.employee@higgsup.com",
+                    "userRole": [
+                      "ROLE_EMPLOYEE"
+                    ],
+                    "address": "null",
+                    "avatar": "null",
+                    "birthday": "null",
+                    "gmail": "null",
+                    "numberPhone": "null",
+                    "skype": "null",
+                    "dateStartWork": "2018-09-29"
+                  }
+                ],
+                "questionList": [
+                  {
+                    "id": 1,
+                    "number": 1,
+                    "question": "Lam viec khong?"
+                  },
+                  {
+                    "id": 2,
+                    "number": 2,
+                    "question": "Tot voi nhan vien khong?"
+                  },
+                  {
+                    "id": 3,
+                    "number": 3,
+                    "question": "Hieu qua khong"
+                  }
+                ],
+                "status_code": 200
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+
+    "/api/evaluation":{
+      "post": {
+        "tags": [
+          "evaluation-controller"
+        ],
+        "summary": "createEvaluation",
+        "operationId": "createEvaluationUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "evaluationDTO",
+            "description": "evaluationDTO",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "evaluator"
+              ],
+              "properties": {
+                "employeeList": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                    ],
+                    "properties": {
+                      "username": {
+                        "type": "string"
+                      },
+                      "lastName": {
+                        "type": "string"
+                      },
+                      "firstName": {
+                        "type": "string"
+                      },
+                      "fullName": {
+                        "type": "string"
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "userRole": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "avatar": {
+                        "type": "string"
+                      },
+                      "birthday": {
+                        "type": "date"
+                      },
+                      "numberPhone": {
+                        "type": "string"
+                      },
+                      "gmail": {
+                        "type": "string"
+                      },
+                      "skype": {
+                        "type": "string"
+                      },
+                      "dateStartWork": {
+                        "type": "string"
+                      },
+                      "evaluateQuestion": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "required": [
+                            "question",
+                            "point"
+                          ],
+                          "properties": {
+                            "number": {
+                              "type": "number"
+                            },
+                            "question": {
+                              "type": "string"
+                            },
+                            "point": {
+                              "type": "number"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "projectList": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                    ],
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "rating": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                },
+                "evaluator": {
+                  "type": "object",
+                  "required": [
+                    "username",
+                    "fullName"
+                  ],
+                  "properties": {
+                    "username": {
+                      "type": "string"
+                    },
+                    "fullName": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "employeeList": [
+                  {
+                    "username": "kpi.employee",
+                    "lastName": "kpi",
+                    "firstName": "employee",
+                    "fullName": "kpi test. employee",
+                    "email": "kpi.employee@higgsup.com",
+                    "userRole": [
+                      "ROLE_EMPLOYEE"
+                    ],
+                    "address": "null",
+                    "avatar": "null",
+                    "birthday": "null",
+                    "gmail": "null",
+                    "numberPhone": "null",
+                    "skype": "null",
+                    "dateStartWork": "2018-09-29",
+                    "evaluateQuestion":[
+                      {
+                        "question": "Nhân viên này có hoàn thành tốt công việc hàng ngày?",
+                        "point": 10
+                      },
+                      {
+                        "question": "Thái độ chung trong công việc của nhân viên này?",
+                        "point": 10
+                      },
+                      {
+                        "question": "Nhân viên này có quan tâm hoặc giúp đỡ đồng nghiệp",
+                        "point": 5
+                      }
+                    ]
+                  }
+                ],
+                "projectList": [
+                  {
+                    "name": "VNTrip",
+                    "rating": 10
+                  },
+                  {
+                    "name": "GMS",
+                    "rating": 5
+                  }
+                ],
+                "evaluator": {
+                  "username": "kpi.man",
+                  "fullName": "kpi test. man"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "status_code : 200. Meaning: Thành công \n status_code : 940. Message: Evaluation is not complete for employee. Meaning: Chưa hoàn thành khảo sát cho nhân viên. \n status_code : 941. Message: Evaluation is not complete for project. Meaning: Chưa hoàn thành khảo sát cho dự án. \n status_code : 942. Message: You are the last evaluator. Please evaluate all the remaining. Meaning: Bạn là người dùng khảo sát cuối. Vui lòng đánh giá những phần còn lại \n",
+            "schema": {
+              "type": "object",
+              "required": [
+                "evaluator"
+              ],
+              "properties": {
+                "employeeList": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "username",
+                      "lastName",
+                      "firstName",
+                      "fullName",
+                      "email",
+                      "userRole",
+                      "isEvaluate",
+                      "evaluateQuestion"
+                    ],
+                    "properties": {
+                      "username": {
+                        "type": "string"
+                      },
+                      "lastName": {
+                        "type": "string"
+                      },
+                      "firstName": {
+                        "type": "string"
+                      },
+                      "fullName": {
+                        "type": "string"
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "userRole": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "avatar": {
+                        "type": "string"
+                      },
+                      "birthday": {
+                        "type": "date"
+                      },
+                      "numberPhone": {
+                        "type": "string"
+                      },
+                      "gmail": {
+                        "type": "string"
+                      },
+                      "skype": {
+                        "type": "string"
+                      },
+                      "dateStartWork": {
+                        "type": "string"
+                      },
+                      "isEvaluate":{
+                        "type": "boolean"
+                      },
+                      "evaluateQuestion": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "required": [
+                            "question",
+                            "point"
+                          ],
+                          "properties": {
+                            "number": {
+                              "type": "number"
+                            },
+                            "question": {
+                              "type": "string"
+                            },
+                            "point": {
+                              "type": "number"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "projectList": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                    ],
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "rating": {
+                        "type": "number"
+                      },
+                      "isRated": {
+                        "type": "boolean"
+                      }
+                    }
+                  }
+                },
+                "evaluator": {
+                  "type": "object",
+                  "required": [
+                    "username",
+                    "fullName",
+                    "isLast"
+                  ],
+                  "properties": {
+                    "username": {
+                      "type": "string"
+                    },
+                    "fullName": {
+                      "type": "string"
+                    },
+                    "isLast": {
+                      "type": "boolean"
+                    }
+                  }
+                },
+                "message": {
+                  "type": "string"
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "errorCode": {
+                        "type": "number"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "status_code": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "example": {
+                "employeeList": [
+                  {
+                    "username": "kpi.employee",
+                    "lastName": "kpi",
+                    "firstName": "employee",
+                    "fullName": "kpi test. employee",
+                    "email": "kpi.employee@higgsup.com",
+                    "userRole": [
+                      "ROLE_EMPLOYEE"
+                    ],
+                    "address": "null",
+                    "avatar": "null",
+                    "birthday": "null",
+                    "gmail": "null",
+                    "numberPhone": "null",
+                    "skype": "null",
+                    "dateStartWork": "2018-09-29",
+                    "evaluateQuestion":[
+                      {
+                        "question": "Nhân viên này có hoàn thành tốt công việc hàng ngày?",
+                        "point": 10
+                      },
+                      {
+                        "question": "Thái độ chung trong công việc của nhân viên này?",
+                        "point": 10
+                      },
+                      {
+                        "question": "Nhân viên này có quan tâm hoặc giúp đỡ đồng nghiệp",
+                        "point": 5
+                      }
+                    ],
+                    "isEvaluate": true
+                  }
+                ],
+                "projectList": [
+                  {
+                    "name": "VNTrip",
+                    "rating": 10,
+                    "isRated": true
+                  },
+                  {
+                    "name": "GMS",
+                    "rating": 5,
+                    "isRated": true
+                  }
+                ],
+                "evaluator": {
+                  "username": "kpi.man",
+                  "fullName": "kpi test. man",
+                  "isLast": false
+                },
+                "status_code": 200
+              }
             }
           },
           "201": {

@@ -12,4 +12,6 @@ public interface ProjectService {
     ProjectDTO deleteProject(ProjectDTO projectDTO);
 
     ProjectDTO createProject(ProjectDTO projectDTO);
+
+    List<ProjectDTO> getProjectsInMonth();
 }

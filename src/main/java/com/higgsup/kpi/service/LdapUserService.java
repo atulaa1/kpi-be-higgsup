@@ -15,4 +15,5 @@ public interface LdapUserService {
 
     List<UserDTO> findUsersByName(String name);
 
+    List<UserDTO> getAllEmployee();
 }

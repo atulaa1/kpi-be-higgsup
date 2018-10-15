@@ -45,6 +45,11 @@ public class ProjectServiceImpl implements ProjectService {
         return projectDTOS;
     }
 
+    public List<ProjectDTO> getProjectsInMonth(){
+        List<KpiProject> projectsInMonth = kpiProjectRepo.findAllProjectsInMonth();
+        return convertKpiProjectEntityToDTO(projectsInMonth);
+    }
+
     @Override
     public ProjectDTO updateProject(ProjectDTO projectDTO) {
         kpiProjectUserRepo.deleteByProjectId(projectDTO.getId());
