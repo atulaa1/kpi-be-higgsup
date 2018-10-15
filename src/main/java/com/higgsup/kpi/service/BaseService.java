@@ -1,30 +1,13 @@
 package com.higgsup.kpi.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.higgsup.kpi.dto.EventDTO;
-import com.higgsup.kpi.dto.EventSeminarDetail;
-import com.higgsup.kpi.dto.EventUserDTO;
 import com.higgsup.kpi.entity.*;
-import com.higgsup.kpi.glossary.EventUserType;
-import com.higgsup.kpi.glossary.GroupType;
-import com.higgsup.kpi.glossary.PointValue;
 import com.higgsup.kpi.repository.KpiEventRepo;
 import com.higgsup.kpi.repository.KpiPointRepo;
-import com.higgsup.kpi.repository.KpiSeminarSurveyRepo;
-import com.higgsup.kpi.repository.KpiUserRepo;
 import com.higgsup.kpi.service.impl.EventServiceImpl;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.util.CollectionUtils;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.higgsup.kpi.glossary.PointValue.MAX_CLUB_POINT;
+import static com.higgsup.kpi.glossary.PointValue.MAX_SUPPORT_POINT;
 
 public abstract class BaseService {
 
@@ -39,22 +22,22 @@ public abstract class BaseService {
 
 
     protected void addClubPoint(KpiUser kpiUser, Float point) {
-        KpiPoint kpiPoint = new KpiPoint();
-        kpiPoint.setRatedUser(kpiUser);
-
         if (kpiPointRepo.findByRatedUser(kpiUser) == null) {
+            KpiPoint kpiPoint = new KpiPoint();
+            kpiPoint.setRatedUser(kpiUser);
             kpiPoint.setClubPoint(point);
             kpiPointRepo.save(kpiPoint);
         } else {
-            Float currentPoint = kpiPointRepo.findByRatedUser(kpiUser).getClubPoint();
+            KpiPoint kpiPoint = kpiPointRepo.findByRatedUser(kpiUser);
+            Float currentPoint = kpiPoint.getClubPoint();
             if (currentPoint < MAX_CLUB_POINT.getValue()) {
                 if (MAX_CLUB_POINT.getValue() - currentPoint < point) {
                     kpiPoint.setClubPoint((float) MAX_CLUB_POINT.getValue());
                 } else {
                     kpiPoint.setClubPoint(currentPoint + point);
-                    kpiPointRepo.save(kpiPoint);
                 }
             }
+            kpiPointRepo.save(kpiPoint);
         }
     }
 
@@ -66,7 +49,13 @@ public abstract class BaseService {
             kpiPointRepo.save(kpiPoint);
         } else {
             kpiPoint = kpiPointRepo.findByRatedUser(kpiUser);
-            kpiPoint.setSupportPoint(point + kpiPoint.getSupportPoint());
+            if(kpiPoint.getSupportPoint() < MAX_SUPPORT_POINT.getValue()){
+                if(MAX_SUPPORT_POINT.getValue() - kpiPoint.getSupportPoint() < point){
+                    kpiPoint.setSupportPoint((float)MAX_SUPPORT_POINT.getValue());
+                }else{
+                    kpiPoint.setSupportPoint(kpiPoint.getSupportPoint() + point);
+                }
+            }
             kpiPointRepo.save(kpiPoint);
         }
     }

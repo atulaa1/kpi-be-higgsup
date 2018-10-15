@@ -7,6 +7,7 @@ public enum PointValue {
     MAX_PROJECT_POINT(20, "max project point"),
     MAX_INDIVIDUAL_POINT(72, "max individual point"),
     MAX_NORMAL_SEMINAR_POINT(24, "max normal seminar point"),
+    MAX_SUPPORT_POINT(24, "max support point"),
     DEFAULT_EFFECTIVE_POINT(3, "default effective point"),
     FULL_RULE_POINT(24, "full rule point");
 
