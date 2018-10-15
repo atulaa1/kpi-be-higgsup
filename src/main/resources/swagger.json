@@ -5137,6 +5137,9 @@
                         },
                         "type": {
                           "type": "number"
+                        },
+                        "status":{
+                          "type": "number"
                         }
                       }
                     }
@@ -5208,7 +5211,8 @@
                     "skype": null,
                     "dateStartWork": null
                   },
-                  "type": 1
+                  "type": 1,
+                  "status": 0
                 },
                 {
                   "user": {
@@ -5226,7 +5230,8 @@
                     "skype": null,
                     "dateStartWork": null
                   },
-                  "type": 2
+                  "type": 2,
+                  "status": 1
                 },
                 {
                   "user": {
@@ -5244,7 +5249,8 @@
                     "skype": null,
                     "dateStartWork": null
                   },
-                  "type": 3
+                  "type": 3,
+                  "status": 0
                 }
               ],
               "additionalConfig": "null"
