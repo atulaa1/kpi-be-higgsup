@@ -35,6 +35,8 @@ public class UserDTO extends BaseDTO {
 
     private Date dateStartWork;
 
+    private List<SurveyDTO> evaluateQuestion;
+
     public UserDTO() {
     }
 
@@ -159,5 +161,13 @@ public class UserDTO extends BaseDTO {
 
     public void setDateStartWork(Date dateStartWork) {
         this.dateStartWork = dateStartWork;
+    }
+
+    public List<SurveyDTO> getEvaluateQuestion() {
+        return evaluateQuestion;
+    }
+
+    public void setEvaluateQuestion(List<SurveyDTO> evaluateQuestion) {
+        this.evaluateQuestion = evaluateQuestion;
     }
 }

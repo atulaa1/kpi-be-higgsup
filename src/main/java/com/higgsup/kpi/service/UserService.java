@@ -13,4 +13,6 @@ public interface UserService {
     UserDTO registerUser(String username);
 
     UserDTO updateInfoUser(String username, UserDTO user);
+
+    List<UserDTO> getAllEmployee();
 }

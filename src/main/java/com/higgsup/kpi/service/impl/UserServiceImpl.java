@@ -59,6 +59,10 @@ public class UserServiceImpl implements UserService {
         return userDTOS;
     }
 
+    public List<UserDTO> getAllEmployee(){
+        return ldapUserService.getAllEmployee();
+    }
+
     @Transactional
     @Override
     public UserDTO registerUser(String username) {
