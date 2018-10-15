@@ -4,8 +4,11 @@ import java.sql.Timestamp;
 
 public class ProjectUserDTO {
     private Integer id;
+
     private ProjectDTO project;
+
     private UserDTO projectUser;
+
     private Timestamp joinedDate;
 
     public Integer getId() {
