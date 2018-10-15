@@ -5,6 +5,7 @@ import com.higgsup.kpi.dto.*;
 import com.higgsup.kpi.dto.EventDTO;
 import com.higgsup.kpi.dto.EventTeamBuildingDetail;
 import com.higgsup.kpi.entity.*;
+import com.higgsup.kpi.glossary.EvaluatingStatus;
 import com.higgsup.kpi.glossary.EventUserType;
 import com.higgsup.kpi.glossary.PointValue;
 import com.higgsup.kpi.repository.*;
@@ -143,7 +144,8 @@ public class PointServiceImpl extends BaseService implements PointService {
 
     @Override
     public void addSeminarPoint(List<KpiEventUser> eventUsers, EventDTO<EventSeminarDetail> seminarEventDTO) throws IOException {
-        List<KpiEventUser> addPointUsers = eventUsers.stream().filter(e -> (e.getType() == 1) || ((e.getType() == 2 || e.getType() == 3) && e.getStatus() == 1)).collect(Collectors.toList());
+        List<KpiEventUser> addPointUsers = eventUsers.stream()
+                .filter(e -> (e.getType().equals(EventUserType.HOST.getValue())) || ((e.getType().equals(EventUserType.MEMBER.getValue()) || e.getType().equals(EventUserType.LISTEN.getValue())) && e.getStatus().equals(EvaluatingStatus.FINISH.getValue()))).collect(Collectors.toList());
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(seminarEventDTO.getBeginDate().getTime());
             KpiEvent kpiEvent = convertEventDTOToEntity(seminarEventDTO);

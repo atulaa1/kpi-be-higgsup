@@ -2,9 +2,12 @@ package com.higgsup.kpi.service;
 
 import com.higgsup.kpi.entity.*;
 import com.higgsup.kpi.repository.KpiEventRepo;
+import com.higgsup.kpi.repository.KpiMonthRepo;
 import com.higgsup.kpi.repository.KpiPointRepo;
 import com.higgsup.kpi.service.impl.EventServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Optional;
 
 import static com.higgsup.kpi.glossary.PointValue.MAX_CLUB_POINT;
 import static com.higgsup.kpi.glossary.PointValue.MAX_SUPPORT_POINT;
@@ -18,14 +21,19 @@ public abstract class BaseService {
     KpiEventRepo kpiEventRepo;
 
     @Autowired
+    KpiMonthRepo kpiMonthRepo;
+
+    @Autowired
     EventServiceImpl kpiEventService;
 
 
     protected void addClubPoint(KpiUser kpiUser, Float point) {
+        Optional<KpiYearMonth> kpiYearMonthOptional = kpiMonthRepo.findByMonthCurrent();
         if (kpiPointRepo.findByRatedUser(kpiUser) == null) {
             KpiPoint kpiPoint = new KpiPoint();
             kpiPoint.setRatedUser(kpiUser);
             kpiPoint.setClubPoint(point);
+            kpiPoint.setYearMonthId(kpiYearMonthOptional.get().getId());
             kpiPointRepo.save(kpiPoint);
         } else {
             KpiPoint kpiPoint = kpiPointRepo.findByRatedUser(kpiUser);
@@ -42,10 +50,12 @@ public abstract class BaseService {
     }
 
     protected void addSupportPoint(KpiUser kpiUser, Float point) {
+        Optional<KpiYearMonth> kpiYearMonthOptional = kpiMonthRepo.findByMonthCurrent();
         KpiPoint kpiPoint = new KpiPoint();
         if (kpiPointRepo.findByRatedUser(kpiUser) == null) {
             kpiPoint.setSupportPoint(point);
             kpiPoint.setRatedUser(kpiUser);
+            kpiPoint.setYearMonthId(kpiYearMonthOptional.get().getId());
             kpiPointRepo.save(kpiPoint);
         } else {
             kpiPoint = kpiPointRepo.findByRatedUser(kpiUser);
