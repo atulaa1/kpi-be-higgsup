@@ -584,6 +584,10 @@ public class EventServiceImpl extends BaseService implements EventService {
                     validateTeambuildingDTO.setGroup(convertConfigEventToDTO(kpiEvent.getGroup()));
                     validateTeambuildingDTO.setEventUserList(eventDTO.getEventUserList());
                     validateTeambuildingDTO.setAdditionalConfig(convertAdditionalConfigToDTO(kpiEvent.getGroup()));
+
+                    pointService.calculateTeambuildingPoint(validateTeambuildingDTO);
+
+
                 } else {
                     validateTeambuildingDTO.setMessage(ErrorMessage.GROUP_TYPE_IS_INVALID);
                     validateTeambuildingDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
@@ -806,9 +810,13 @@ public class EventServiceImpl extends BaseService implements EventService {
             errorDTO.setMessage(ErrorMessage.NOT_FIND_EVENT);
             errors.add(errorDTO);
         }
-        seminarDetailEventDTO.setErrorCode(errors.get(0).getErrorCode());
-        seminarDetailEventDTO.setMessage(errors.get(0).getMessage());
-        seminarDetailEventDTO.setErrorDTOS(errors);
+
+        if (!CollectionUtils.isEmpty(errors)) {
+            seminarDetailEventDTO.setErrorCode(errors.get(0).getErrorCode());
+            seminarDetailEventDTO.setMessage(errors.get(0).getMessage());
+            seminarDetailEventDTO.setErrorDTOS(errors);
+        }
+
         return seminarDetailEventDTO;
     }
 

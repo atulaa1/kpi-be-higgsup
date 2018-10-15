@@ -170,7 +170,6 @@ CREATE TABLE `kpi_project_user` (
   `rated_username` VARCHAR(50) NOT NULL,
   `project_id`     INT(11)             DEFAULT NULL,
   `joined_date`    DATE                DEFAULT NULL,
-  UNIQUE KEY `unique_project_user` (`rated_username`, `project_id`) USING BTREE,
   KEY `fk_project_id` (`project_id`),
   CONSTRAINT `fk_project_id` FOREIGN KEY (`project_id`) REFERENCES `kpi_project` (`id`),
   KEY `fk_user` (`rated_username`),
@@ -197,12 +196,11 @@ CREATE TABLE `kpi_project_log` (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-
 CREATE TABLE `higgsup_kpi`.`kpi_point` (
   `id`                    INT(10) PRIMARY KEY AUTO_INCREMENT,
   `rated_username`        VARCHAR(50)
                           CHARACTER SET utf8 NOT NULL,
-  `rule_point`            FLOAT              NOT NULL,
+  `rule_point`            FLOAT              NULL,
   `club_point`            FLOAT              NULL,
   `normal_seminar_point`  FLOAT              NULL,
   `weekend_seminar_point` FLOAT              NULL,
