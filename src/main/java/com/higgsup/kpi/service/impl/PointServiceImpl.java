@@ -1,19 +1,22 @@
 package com.higgsup.kpi.service.impl;
 
-import com.higgsup.kpi.dto.EventDTO;
-import com.higgsup.kpi.dto.EventTeamBuildingDetail;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.higgsup.kpi.dto.*;
 import com.higgsup.kpi.entity.*;
+import com.higgsup.kpi.glossary.EvaluatingStatus;
 import com.higgsup.kpi.glossary.EventUserType;
+import com.higgsup.kpi.glossary.PointValue;
 import com.higgsup.kpi.repository.*;
 import com.higgsup.kpi.service.BaseService;
 import com.higgsup.kpi.service.PointService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.io.IOException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.higgsup.kpi.glossary.EventUserType.ORGANIZER;
@@ -56,9 +59,6 @@ public class PointServiceImpl extends BaseService implements PointService {
     @Autowired
     KpiGroupTypeRepo kpiGroupTypeRepo;
 
-    @Autowired
-    private KpiUserRepo kpiUserRepo;
-
     @Scheduled(cron = "0 0 16 10 * ?")
     public void calculateRulePoint() {
         Optional<KpiYearMonth> kpiYearMonthOptional = kpiMonthRepo.findByMonthCurrent();
@@ -86,13 +86,6 @@ public class PointServiceImpl extends BaseService implements PointService {
                 }
             }
         }
-
-    }
-
-    @Override
-    @Scheduled(cron = "0 0 16 10 * ?")
-    public void calculateNormalSeminarPoint() {
-
     }
 
     private void calculateOrganizerPoint(EventDTO<EventTeamBuildingDetail> teamBuildingDTO, List<KpiEventUser> kpiEventUserList,
@@ -291,7 +284,7 @@ public class PointServiceImpl extends BaseService implements PointService {
     }
 
     @Scheduled(cron = "00 00 16 10 * ?")
-    private void addEffectivePointForHost() throws IOException{
+    private void addEffectivePointForHost() throws IOException {
         Optional<KpiYearMonth> kpiYearMonthOptional = kpiMonthRepo.findByMonthCurrent();
 
         List<KpiGroup> allClub = kpiGroupRepo.findAllClub();

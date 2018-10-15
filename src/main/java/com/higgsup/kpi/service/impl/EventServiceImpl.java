@@ -57,9 +57,6 @@ public class EventServiceImpl extends BaseService implements EventService {
     private KpiSeminarSurveyRepo kpiseminarSurveyRepo;
 
     @Autowired
-    private PointServiceImpl pointService;
-
-    @Autowired
     private PointService pointService;
 
     @Override
