@@ -14,4 +14,7 @@ public interface KpiPointRepo extends CrudRepository<KpiPoint, Integer> {
 
     @Query(value = "select * from kpi_point p where p.rated_username = :username", nativeQuery = true)
     KpiPoint findByRatedUsername(@Param("username")String username);
+
+    @Query(value = "SELECT * FROM kpi_point ORDER BY total_point DESC, rated_username ASC", nativeQuery = true)
+    List<KpiPoint> getRanking();
 }
