@@ -6,7 +6,7 @@ import com.higgsup.kpi.dto.RankingDTO;
 import java.util.List;
 
 public interface RankingService {
-    List<RankingDTO> showNormalPointRanking();
+    List<RankingDTO> showNormalPointRanking(Integer curentPage);
 
     List<PointDTO> showFamedPointRanking();
 

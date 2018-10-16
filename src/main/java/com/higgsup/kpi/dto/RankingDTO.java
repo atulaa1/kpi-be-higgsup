@@ -3,7 +3,6 @@ package com.higgsup.kpi.dto;
 public class RankingDTO {
     private Float totalPoint;
     private UserDTO employee;
-    Integer rank;
 
     public Float getTotalPoint() {
         return totalPoint;
@@ -19,13 +18,5 @@ public class RankingDTO {
 
     public void setEmployee(UserDTO employee) {
         this.employee = employee;
-    }
-
-    public Integer getRank() {
-        return rank;
-    }
-
-    public void setRank(Integer rank) {
-        this.rank = rank;
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,10 +21,10 @@ public class RankingController {
     private RankingService rankingService;
 
     @PreAuthorize("hasRole('EMPLOYEE')")
-    @GetMapping("/normal-point-ranking")
-    public Response getProjectList() {
+    @GetMapping("/normal-point-ranking/page={curentPage}")
+    public Response showNormalPointRanking(@PathVariable("curentPage") Integer curentPage) {
         Response<List<RankingDTO>> response = new Response<>(HttpStatus.OK.value());
-        List<RankingDTO> normalPointRanking = rankingService.showNormalPointRanking();
+        List<RankingDTO> normalPointRanking = rankingService.showNormalPointRanking(curentPage);
         response.setData(normalPointRanking);
         return response;
     }

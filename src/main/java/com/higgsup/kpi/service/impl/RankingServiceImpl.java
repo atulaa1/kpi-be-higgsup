@@ -23,19 +23,56 @@ public class RankingServiceImpl implements RankingService {
     private KpiUserRepo kpiUserRepo;
 
     @Override
-    public List<RankingDTO> showNormalPointRanking() {
-        List<KpiPoint> kpiNomalPointRanking = kpiPointRepo.getRanking();
+    public List<RankingDTO> showNormalPointRanking(Integer curentPage) {
+        List<KpiPoint> kpiNomalPointRanking = getListPointForRanking(curentPage);
         List<RankingDTO> nomalPointRankingDTO = convertPointEntityToDTO(kpiNomalPointRanking);
 
         return nomalPointRankingDTO;
     }
 
+    private List<KpiPoint> getListPointForRanking(Integer curentPage) {
+        List<KpiPoint> kpiPoints;
+        Integer offset = 0;
+        Integer rows = 0;
+        switch (curentPage) {
+            case 1: {
+                rows = 10;
+                break;
+            }
+            case 2: {
+                offset = 10;
+                rows = 10;
+                break;
+            }
+            case 3: {
+                offset = 20;
+                rows = 30;
+                break;
+            }
+            case 4: {
+                offset = 50;
+                rows = 50;
+                break;
+            }
+        }
+        kpiPoints = kpiPointRepo.getRanking(offset, rows);
+        return kpiPoints;
+    }
+
+    @Override
+    public List<PointDTO> showFamedPointRanking() {
+        return null;
+    }
+
     private List<RankingDTO> convertPointEntityToDTO(List<KpiPoint> kpiNomalPointRanking) {
         List<RankingDTO> nomalPointRankingDTO = new ArrayList<>();
-        for (KpiPoint kpiPoint : kpiNomalPointRanking) {
+        for (int curentRank = 0; curentRank < kpiNomalPointRanking.size(); curentRank++) {
             RankingDTO rankingDTO = new RankingDTO();
-            rankingDTO.setEmployee(convertUserEntityToDTO(kpiPoint.getRatedUser()));
-            rankingDTO.setTotalPoint(kpiPoint.getTotalPoint());
+            KpiUser employee = kpiNomalPointRanking.get(curentRank).getRatedUser();
+            Float totalNormalPoint = kpiNomalPointRanking.get(curentRank).getTotalPoint();
+            rankingDTO.setEmployee(convertUserEntityToDTO(employee));
+            rankingDTO.setTotalPoint(totalNormalPoint);
+
             nomalPointRankingDTO.add(rankingDTO);
         }
         return nomalPointRankingDTO;
@@ -45,11 +82,7 @@ public class RankingServiceImpl implements RankingService {
         UserDTO userDTO = new UserDTO();
         userDTO.setUsername(kpiUser.getUserName());
         userDTO.setFullName(kpiUserRepo.findFullName(kpiUser.getUserName()));
+        userDTO.setAvatar(kpiUserRepo.findAvatar(kpiUser.getUserName()));
         return userDTO;
-    }
-
-    @Override
-    public List<PointDTO> showFamedPointRanking() {
-        return null;
     }
 }

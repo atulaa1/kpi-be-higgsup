@@ -8768,6 +8768,127 @@
         }
       }
     },
+    "/api/normal-point-ranking/page={curentPage}": {
+      "get": {
+        "tags": [
+          "ranking-controller"
+        ],
+        "summary": "showNormalPointRanking",
+        "operationId": "showNormalPointRankingUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "curentPage",
+            "in": "path",
+            "description": "curentPage",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "required": [
+                "status_code",
+                "data"
+              ],
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "totalPoint",
+                      "employee"
+                    ],
+                    "properties": {
+                      "totalPoint": {
+                        "type": "number"
+                      },
+                      "employee": {
+                        "type": "object",
+                        "required": [
+                          "username",
+                          "fullName",
+                          "avatar"
+                        ],
+                        "properties": {
+                          "username": {
+                            "type": "String"
+                          },
+                          "fullName": {
+                            "type": "String"
+                          },
+                          "avatar": {
+                            "type": "String"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "message": {
+                  "type": "string"
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "errorCode": {
+                        "type": "number"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "status_code": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "example": {
+                "status_code": 200,
+                "data": [
+                  {
+                    "totalPoint": 120,
+                    "employee": {
+                      "username": "kpi.test06",
+                      "fullName": "kpi. test06",
+                      "avatar": "test6 avatar"
+                    }
+                  },
+                  {
+                    "totalPoint": 110,
+                    "employee": {
+                      "username": "kpi.test05",
+                      "fullName": "kpi. test05",
+                      "avatar": "test5 avatar"
+                    }
+                  }
+                ]
+              },
+              "title": "Response"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/api/projects": {
       "get": {
         "tags": [
