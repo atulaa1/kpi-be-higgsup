@@ -8,6 +8,7 @@ import com.higgsup.kpi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -39,7 +40,17 @@ public class EvaluationServiceImpl implements EvaluationService {
     @Override
     public EmployeeEvaluationDTO createEmployeeEvaluation(EmployeeEvaluationDTO employeeEvaluationDTO) {
 
+        return employeeEvaluationDTO;
+    }
 
-        return null;
+    private List<ErrorDTO> validateEvaluation(EmployeeEvaluationDTO employeeEvaluationDTO) {
+        List<ErrorDTO> errors = new ArrayList<>();
+
+        EvaluationInfoDTO evaluationInfoDTO = getAllEvaluationInfo();
+
+        Integer projectQuantity = evaluationInfoDTO.getProjectList().size();
+
+
+        return errors;
     }
 }
