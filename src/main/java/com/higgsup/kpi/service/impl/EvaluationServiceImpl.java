@@ -1,9 +1,6 @@
 package com.higgsup.kpi.service.impl;
 
-import com.higgsup.kpi.dto.EvaluationInfoDTO;
-import com.higgsup.kpi.dto.ProjectDTO;
-import com.higgsup.kpi.dto.SurveyDTO;
-import com.higgsup.kpi.dto.UserDTO;
+import com.higgsup.kpi.dto.*;
 import com.higgsup.kpi.service.EvaluationService;
 import com.higgsup.kpi.service.ProjectService;
 import com.higgsup.kpi.service.SurveyService;
