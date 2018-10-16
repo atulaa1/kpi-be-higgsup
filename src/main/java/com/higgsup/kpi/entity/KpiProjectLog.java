@@ -22,7 +22,7 @@ public class KpiProjectLog implements Serializable {
     private KpiProjectUser ratedUsername;
 
     @Basic
-    @Column(name = "yearmonth")
+    @Column(name = "year_month")
     private Integer yearMonth;
 
     @Basic

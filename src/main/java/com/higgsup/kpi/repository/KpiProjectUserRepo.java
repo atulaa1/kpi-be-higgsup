@@ -1,7 +1,6 @@
 package com.higgsup.kpi.repository;
 
-import com.higgsup.kpi.entity.KpiEventUser;
-import com.higgsup.kpi.entity.KpiEventUserPK;
+import com.higgsup.kpi.entity.KpiProjectUser;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -10,11 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-public interface KpiEventUserRepo extends CrudRepository<KpiEventUser, KpiEventUserPK> {
-    List<KpiEventUser> findByKpiEventId(int eventId);
-
+public interface KpiProjectUserRepo extends CrudRepository<KpiProjectUser, Integer> {
     @Modifying
     @Transactional
-    @Query(value = "DELETE FROM kpi_event_user WHERE event_id=:eventID", nativeQuery = true)
-    void deleteByEventId(@Param("eventID") Integer eventID);
+    @Query(value = "DELETE FROM kpi_project_user WHERE project_id=:projectId", nativeQuery = true)
+    void deleteByProjectId(@Param("projectId") Integer projectId);
 }

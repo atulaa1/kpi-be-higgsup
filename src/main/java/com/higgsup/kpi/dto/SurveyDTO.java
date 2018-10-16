@@ -30,4 +30,5 @@ public class SurveyDTO extends BaseDTO {
     public void setQuestion(String question) {
         this.question = question;
     }
+
 }

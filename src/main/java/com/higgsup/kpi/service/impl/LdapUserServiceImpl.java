@@ -68,6 +68,11 @@ public class LdapUserServiceImpl implements LdapUserService {
         return ldapTemplate.search(query, new UserAttributesMapper());
     }
 
+    public List<UserDTO> getAllEmployee(){
+        LdapQuery query = query().where("objectclass").is("user").and("roleForKpi").is("employee");
+        return ldapTemplate.search(query, new UserAttributesMapper());
+    }
+
     @Override
     public UserDTO updateUserRole(String username, List<String> roles) {
         String rolesJoin = UtilsLdap.convertRole(roles);
