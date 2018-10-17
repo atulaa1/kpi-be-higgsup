@@ -23,18 +23,18 @@ public class RankingServiceImpl implements RankingService {
     private KpiUserRepo kpiUserRepo;
 
     @Override
-    public List<RankingDTO> showNormalPointRanking(Integer curentPage) {
-        List<KpiPoint> kpiNomalPointRanking = getListPointForRanking(curentPage);
-        List<RankingDTO> nomalPointRankingDTO = convertPointEntityToDTO(kpiNomalPointRanking);
+    public List<RankingDTO> showNormalPointRanking(Integer currentPage) {
+        List<KpiPoint> kpiNormalPointRanking = getListPointForRanking(currentPage);
+        List<RankingDTO> normalPointRankingDTO = convertPointEntityToDTO(kpiNormalPointRanking);
 
-        return nomalPointRankingDTO;
+        return normalPointRankingDTO;
     }
 
-    private List<KpiPoint> getListPointForRanking(Integer curentPage) {
+    private List<KpiPoint> getListPointForRanking(Integer currentPage) {
         List<KpiPoint> kpiPoints;
         Integer offset = 0;
         Integer rows = 0;
-        switch (curentPage) {
+        switch (currentPage) {
             case 1: {
                 rows = 10;
                 break;
@@ -64,18 +64,18 @@ public class RankingServiceImpl implements RankingService {
         return null;
     }
 
-    private List<RankingDTO> convertPointEntityToDTO(List<KpiPoint> kpiNomalPointRanking) {
-        List<RankingDTO> nomalPointRankingDTO = new ArrayList<>();
-        for (int curentRank = 0; curentRank < kpiNomalPointRanking.size(); curentRank++) {
+    private List<RankingDTO> convertPointEntityToDTO(List<KpiPoint> kpiNormalPointRanking) {
+        List<RankingDTO> normalPointRankingDTO = new ArrayList<>();
+        for (int currentRank = 0; currentRank < kpiNormalPointRanking.size(); currentRank++) {
             RankingDTO rankingDTO = new RankingDTO();
-            KpiUser employee = kpiNomalPointRanking.get(curentRank).getRatedUser();
-            Float totalNormalPoint = kpiNomalPointRanking.get(curentRank).getTotalPoint();
+            KpiUser employee = kpiNormalPointRanking.get(currentRank).getRatedUser();
+            Float totalNormalPoint = kpiNormalPointRanking.get(currentRank).getTotalPoint();
             rankingDTO.setEmployee(convertUserEntityToDTO(employee));
             rankingDTO.setTotalPoint(totalNormalPoint);
 
-            nomalPointRankingDTO.add(rankingDTO);
+            normalPointRankingDTO.add(rankingDTO);
         }
-        return nomalPointRankingDTO;
+        return normalPointRankingDTO;
     }
 
     private UserDTO convertUserEntityToDTO(KpiUser kpiUser) {

@@ -8768,7 +8768,7 @@
         }
       }
     },
-    "/api/normal-point-ranking/page={curentPage}": {
+    "/api/normal-point-ranking/page={currentPage}": {
       "get": {
         "tags": [
           "ranking-controller"
@@ -8780,9 +8780,9 @@
         ],
         "parameters": [
           {
-            "name": "curentPage",
+            "name": "currentPage",
             "in": "path",
-            "description": "curentPage",
+            "description": "currentPage",
             "required": true,
             "type": "integer",
             "format": "int32"

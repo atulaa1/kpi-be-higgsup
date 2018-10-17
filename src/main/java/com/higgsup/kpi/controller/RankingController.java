@@ -21,10 +21,10 @@ public class RankingController {
     private RankingService rankingService;
 
     @PreAuthorize("hasRole('EMPLOYEE')")
-    @GetMapping("/normal-point-ranking/page={curentPage}")
-    public Response showNormalPointRanking(@PathVariable("curentPage") Integer curentPage) {
+    @GetMapping("/normal-point-ranking/page={currentPage}")
+    public Response showNormalPointRanking(@PathVariable("currentPage") Integer currentPage) {
         Response<List<RankingDTO>> response = new Response<>(HttpStatus.OK.value());
-        List<RankingDTO> normalPointRanking = rankingService.showNormalPointRanking(curentPage);
+        List<RankingDTO> normalPointRanking = rankingService.showNormalPointRanking(currentPage);
         response.setData(normalPointRanking);
         return response;
     }
