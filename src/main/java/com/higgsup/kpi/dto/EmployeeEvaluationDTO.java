@@ -1,11 +1,19 @@
 package com.higgsup.kpi.dto;
 
+import java.sql.Timestamp;
+import java.util.List;
+
 public class EmployeeEvaluationDTO extends BaseDTO {
+
+    private String surveyName;
+
+    private Timestamp evaluatingTime;
+
     private UserDTO evaluator;
 
-    private ProjectEvaluationDTO projectEvaluation;
+    private List<ProjectEvaluationDTO> projectEvaluations;
 
-    private PersonalEvaluationDTO personalEvaluation;
+    private List<PersonalEvaluationDTO> personalEvaluationDTOList;
 
     public UserDTO getEvaluator() {
         return evaluator;
@@ -15,19 +23,35 @@ public class EmployeeEvaluationDTO extends BaseDTO {
         this.evaluator = evaluator;
     }
 
-    public ProjectEvaluationDTO getProjectEvaluation() {
-        return projectEvaluation;
+    public List<ProjectEvaluationDTO> getProjectEvaluations() {
+        return projectEvaluations;
     }
 
-    public void setProjectEvaluation(ProjectEvaluationDTO projectEvaluation) {
-        this.projectEvaluation = projectEvaluation;
+    public void setProjectEvaluations(List<ProjectEvaluationDTO> projectEvaluations) {
+        this.projectEvaluations = projectEvaluations;
     }
 
-    public PersonalEvaluationDTO getPersonalEvaluation() {
-        return personalEvaluation;
+    public List<PersonalEvaluationDTO> getPersonalEvaluationDTOList() {
+        return personalEvaluationDTOList;
     }
 
-    public void setPersonalEvaluation(PersonalEvaluationDTO personalEvaluation) {
-        this.personalEvaluation = personalEvaluation;
+    public void setPersonalEvaluationDTOList(List<PersonalEvaluationDTO> personalEvaluationDTOList) {
+        this.personalEvaluationDTOList = personalEvaluationDTOList;
+    }
+
+    public Timestamp getEvaluatingTime() {
+        return evaluatingTime;
+    }
+
+    public void setEvaluatingTime(Timestamp evaluatingTime) {
+        this.evaluatingTime = evaluatingTime;
+    }
+
+    public String getSurveyName() {
+        return surveyName;
+    }
+
+    public void setSurveyName(String surveyName) {
+        this.surveyName = surveyName;
     }
 }

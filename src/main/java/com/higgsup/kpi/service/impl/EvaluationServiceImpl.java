@@ -1,6 +1,8 @@
 package com.higgsup.kpi.service.impl;
 
 import com.higgsup.kpi.dto.*;
+import com.higgsup.kpi.glossary.ManInfo;
+import com.higgsup.kpi.repository.KpiPersonalEvaluationRepo;
 import com.higgsup.kpi.service.EvaluationService;
 import com.higgsup.kpi.service.ProjectService;
 import com.higgsup.kpi.service.SurveyService;
@@ -10,6 +12,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.higgsup.kpi.glossary.ErrorCode.MUST_ANSWER_ALL_REQUIRED_QUESTIONS;
+import static com.higgsup.kpi.glossary.SurveyQuestion.QUESTION4;
+import static com.higgsup.kpi.glossary.SurveyQuestion.REQUIRED_QUESTIONS;
 
 @Service
 public class EvaluationServiceImpl implements EvaluationService {
@@ -22,6 +28,9 @@ public class EvaluationServiceImpl implements EvaluationService {
 
     @Autowired
     private SurveyService surveyService;
+
+    @Autowired
+    private KpiPersonalEvaluationRepo kpiPersonalEvaluationRepo;
 
     @Override
     public EvaluationInfoDTO getAllEvaluationInfo() {
@@ -49,6 +58,33 @@ public class EvaluationServiceImpl implements EvaluationService {
         EvaluationInfoDTO evaluationInfoDTO = getAllEvaluationInfo();
 
         Integer projectQuantity = evaluationInfoDTO.getProjectList().size();
+
+        List<PersonalEvaluationDTO> personalEvaluationDTOList = employeeEvaluationDTO.getPersonalEvaluationDTOList();
+
+        if (personalEvaluationDTOList.isEmpty() || personalEvaluationDTOList.size() < REQUIRED_QUESTIONS.getNumber()) {
+            ErrorDTO errorDTO = new ErrorDTO();
+            errorDTO.setMessage(MUST_ANSWER_ALL_REQUIRED_QUESTIONS.getDescription());
+            errorDTO.setErrorCode(MUST_ANSWER_ALL_REQUIRED_QUESTIONS.getValue());
+            errors.add(errorDTO);
+        } else if (personalEvaluationDTOList.size() == REQUIRED_QUESTIONS.getNumber()) {
+            for (PersonalEvaluationDTO personalEvaluationDTO : personalEvaluationDTOList) {
+                Integer SurveyQuestionNo = personalEvaluationDTO.getSurveyDTO().getNumber();
+                if (SurveyQuestionNo.equals(QUESTION4.getNumber())) {
+                    ErrorDTO errorDTO = new ErrorDTO();
+                    errorDTO.setMessage(MUST_ANSWER_ALL_REQUIRED_QUESTIONS.getDescription());
+                    errorDTO.setErrorCode(MUST_ANSWER_ALL_REQUIRED_QUESTIONS.getValue());
+                    errors.add(errorDTO);
+                }
+            }
+        }
+        //validate the evaluation of a last man:
+        UserDTO Evaluator = employeeEvaluationDTO.getEvaluator();
+
+        Integer evaluatorCount = kpiPersonalEvaluationRepo.countEvaluator(employeeEvaluationDTO.getSurveyName());
+
+        if (evaluatorCount.equals(ManInfo.NUMBER_OF_MAN.getValue() - 1)) {
+
+        }
 
 
         return errors;

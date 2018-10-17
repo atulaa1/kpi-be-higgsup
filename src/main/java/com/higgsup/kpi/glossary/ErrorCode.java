@@ -26,6 +26,7 @@ public enum ErrorCode {
     ALREADY_EVALUATED(917, "already evaluated"),
     HOST_CANNOT_CREATE_SEMINAR_SURVEY(918, "host cannot create any seminar survey"),
     NOT_ATTEND_EVENT(919, "not attend this event"),
+    MUST_ANSWER_ALL_REQUIRED_QUESTIONS(920, "You must answer all required questions"),
     CANNOT_UPDATE(915, "cannot update");
 
     private Integer value;
