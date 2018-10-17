@@ -53,6 +53,10 @@ public class KpiPoint {
     @Column(name = "total_point")
     private Float totalPoint = 0f;
 
+    @Basic
+    @Column(name = "famed_point")
+    private Float famedPoint = 0f;
+
     @JoinColumn(name = "year_month_id", referencedColumnName = "id", columnDefinition="int(10) default 0")
     private Integer yearMonthId;
 
@@ -150,5 +154,13 @@ public class KpiPoint {
 
     public void setYearMonthId(Integer yearMonthId) {
         this.yearMonthId = yearMonthId;
+    }
+
+    public Float getFamedPoint() {
+        return famedPoint;
+    }
+
+    public void setFamedPoint(Float famedPoint) {
+        this.famedPoint = famedPoint;
     }
 }

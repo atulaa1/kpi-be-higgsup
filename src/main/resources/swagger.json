@@ -8768,7 +8768,7 @@
         }
       }
     },
-    "/api/normal-point-ranking/page={currentPage}": {
+    "/api/ranking/normal-point/page={currentPage}": {
       "get": {
         "tags": [
           "ranking-controller"
@@ -8857,19 +8857,140 @@
                 "status_code": 200,
                 "data": [
                   {
-                    "totalPoint": 120,
+                    "totalPoint": 141,
                     "employee": {
-                      "username": "kpi.test06",
-                      "fullName": "kpi. test06",
-                      "avatar": "test6 avatar"
+                      "username": "kpi.test15",
+                      "fullName": "kpi test. test15",
+                      "avatar": "avatar test15"
                     }
                   },
                   {
                     "totalPoint": 110,
                     "employee": {
-                      "username": "kpi.test05",
-                      "fullName": "kpi. test05",
-                      "avatar": "test5 avatar"
+                      "username": "kpi.test14",
+                      "fullName": "kpi test. test14",
+                      "avatar": "avatar test14"
+                    }
+                  }
+                ]
+              },
+              "title": "Response"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/ranking/famed-point/page={currentPage}": {
+      "get": {
+        "tags": [
+          "ranking-controller"
+        ],
+        "summary": "showFamedPointRanking",
+        "operationId": "showFamedPointRankingUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "currentPage",
+            "in": "path",
+            "description": "currentPage",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "required": [
+                "status_code",
+                "data"
+              ],
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "famedPoint",
+                      "employee"
+                    ],
+                    "properties": {
+                      "famedPoint": {
+                        "type": "number"
+                      },
+                      "employee": {
+                        "type": "object",
+                        "required": [
+                          "username",
+                          "fullName",
+                          "avatar"
+                        ],
+                        "properties": {
+                          "username": {
+                            "type": "String"
+                          },
+                          "fullName": {
+                            "type": "String"
+                          },
+                          "avatar": {
+                            "type": "String"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "message": {
+                  "type": "string"
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "errorCode": {
+                        "type": "number"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "status_code": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "example": {
+                "status_code": 200,
+                "data": [
+                  {
+                    "famedPoint": 141,
+                    "employee": {
+                      "username": "kpi.test15",
+                      "fullName": "kpi test. test15",
+                      "avatar": "avatar test15"
+                    }
+                  },
+                  {
+                    "famedPoint": 110,
+                    "employee": {
+                      "username": "kpi.test14",
+                      "fullName": "kpi test. test14",
+                      "avatar": "avatar test14"
                     }
                   }
                 ]
