@@ -5,6 +5,7 @@ import com.higgsup.kpi.dto.RankingDTO;
 import com.higgsup.kpi.dto.UserDTO;
 import com.higgsup.kpi.entity.KpiPoint;
 import com.higgsup.kpi.entity.KpiUser;
+import com.higgsup.kpi.glossary.RankingType;
 import com.higgsup.kpi.repository.KpiPointRepo;
 import com.higgsup.kpi.repository.KpiUserRepo;
 import com.higgsup.kpi.service.RankingService;
@@ -24,13 +25,21 @@ public class RankingServiceImpl implements RankingService {
 
     @Override
     public List<RankingDTO> showNormalPointRanking(Integer currentPage) {
-        List<KpiPoint> kpiNormalPointRanking = getListPointForRanking(currentPage);
-        List<RankingDTO> normalPointRankingDTO = convertPointEntityToDTO(kpiNormalPointRanking);
+        List<KpiPoint> kpiPointRanking = getListPointForRanking(RankingType.NORMAL_POINT_RANKING, currentPage);
+        List<RankingDTO> pointRankingDTO = convertPointEntityToDTO(kpiPointRanking);
 
-        return normalPointRankingDTO;
+        return pointRankingDTO;
     }
 
-    private List<KpiPoint> getListPointForRanking(Integer currentPage) {
+    @Override
+    public List<RankingDTO> showFamedPointRanking(Integer currentPage) {
+        List<KpiPoint> kpiPointRanking = getListPointForRanking(RankingType.FAMED_POINT_RANKING, currentPage);
+        List<RankingDTO> pointRankingDTO = convertPointEntityToDTO(kpiPointRanking);
+
+        return pointRankingDTO;
+    }
+
+    private List<KpiPoint> getListPointForRanking(RankingType rankingType, Integer currentPage) {
         List<KpiPoint> kpiPoints;
         Integer offset = 0;
         Integer rows = 0;
@@ -55,27 +64,25 @@ public class RankingServiceImpl implements RankingService {
                 break;
             }
         }
-        kpiPoints = kpiPointRepo.getRanking(offset, rows);
+
+        if (rankingType == RankingType.NORMAL_POINT_RANKING) {
+            kpiPoints = kpiPointRepo.getNomalPointRanking(offset, rows);
+        } else {
+            kpiPoints = kpiPointRepo.getFamedPointRanking(offset, rows);
+        }
         return kpiPoints;
     }
 
-    @Override
-    public List<PointDTO> showFamedPointRanking() {
-        return null;
-    }
-
-    private List<RankingDTO> convertPointEntityToDTO(List<KpiPoint> kpiNormalPointRanking) {
-        List<RankingDTO> normalPointRankingDTO = new ArrayList<>();
-        for (int currentRank = 0; currentRank < kpiNormalPointRanking.size(); currentRank++) {
+    private List<RankingDTO> convertPointEntityToDTO(List<KpiPoint> kpiPointRanking) {
+        List<RankingDTO> pointRankingDTO = new ArrayList<>();
+        for (KpiPoint kpiPoint : kpiPointRanking) {
             RankingDTO rankingDTO = new RankingDTO();
-            KpiUser employee = kpiNormalPointRanking.get(currentRank).getRatedUser();
-            Float totalNormalPoint = kpiNormalPointRanking.get(currentRank).getTotalPoint();
-            rankingDTO.setEmployee(convertUserEntityToDTO(employee));
-            rankingDTO.setTotalPoint(totalNormalPoint);
-
-            normalPointRankingDTO.add(rankingDTO);
+            rankingDTO.setEmployee(convertUserEntityToDTO(kpiPoint.getRatedUser()));
+            rankingDTO.setTotalPoint(kpiPoint.getTotalPoint());
+            rankingDTO.setFamedPoint(kpiPoint.getFamedPoint());
+            pointRankingDTO.add(rankingDTO);
         }
-        return normalPointRankingDTO;
+        return pointRankingDTO;
     }
 
     private UserDTO convertUserEntityToDTO(KpiUser kpiUser) {
