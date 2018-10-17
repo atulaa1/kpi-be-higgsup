@@ -1,5 +1,6 @@
 package com.higgsup.kpi.service.impl;
 
+import com.higgsup.kpi.dto.BestPerformancesDTO;
 import com.higgsup.kpi.dto.PointDTO;
 import com.higgsup.kpi.dto.RankingDTO;
 import com.higgsup.kpi.dto.UserDTO;
@@ -37,6 +38,11 @@ public class RankingServiceImpl implements RankingService {
         List<RankingDTO> pointRankingDTO = convertPointEntityToDTO(kpiPointRanking);
 
         return pointRankingDTO;
+    }
+
+    @Override
+    public List<BestPerformancesDTO> showBestPerformancesOfEachMonth() {
+        return null;
     }
 
     private List<KpiPoint> getListPointForRanking(RankingType rankingType, Integer currentPage) {
