@@ -10277,7 +10277,8 @@
                       "id",
                       "name",
                       "active",
-                      "createdDate"
+                      "createdDate",
+                      "evaluateStatus"
                     ],
                     "properties": {
                       "id": {
@@ -10292,8 +10293,8 @@
                       "createdDate": {
                         "type": "string"
                       },
-                      "updatedDate": {
-                        "type": "string"
+                      "evaluateStatus": {
+                        "type": "number"
                       }
                     }
                   }
@@ -10308,7 +10309,8 @@
                       "firstName",
                       "fullName",
                       "email",
-                      "userRole"
+                      "userRole",
+                      "evaluateStatus"
                     ],
                     "properties": {
                       "username": {
@@ -10349,6 +10351,9 @@
                       },
                       "dateStartWork": {
                         "type": "string"
+                      },
+                      "evaluateStatus":{
+                        "type": "number"
                       }
                     }
                   }
@@ -10403,14 +10408,16 @@
                     "name": "VNTRIP",
                     "active": 1,
                     "createdDate": "29-08-2018 03:36",
-                    "updatedDate": "29-08-2018 03:36"
+                    "updatedDate": "29-08-2018 03:36",
+                    "evaluateStatus": 0
                   },
                   {
                     "id": 7,
                     "name": "KPI",
                     "active": 1,
                     "createdDate": "23-08-2018 09:45",
-                    "updatedDate": "29-08-2018 03:36"
+                    "updatedDate": "29-08-2018 03:36",
+                    "evaluateStatus": 1
                   }
                 ],
                 "employeeList":[
@@ -10429,7 +10436,8 @@
                     "gmail": "null",
                     "numberPhone": "null",
                     "skype": "null",
-                    "dateStartWork": "2018-09-29"
+                    "dateStartWork": "2018-09-29",
+                    "evaluateStatus": 0
                   }
                 ],
                 "questionList": [
