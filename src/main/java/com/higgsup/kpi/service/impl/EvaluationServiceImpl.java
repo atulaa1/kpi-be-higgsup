@@ -7,12 +7,14 @@ import com.higgsup.kpi.service.EvaluationService;
 import com.higgsup.kpi.service.ProjectService;
 import com.higgsup.kpi.service.SurveyService;
 import com.higgsup.kpi.service.UserService;
+import io.jsonwebtoken.lang.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.higgsup.kpi.glossary.ErrorCode.DO_NOT_COMPLETE_PROJECT_SURVEY_QUESTIONS;
 import static com.higgsup.kpi.glossary.ErrorCode.MUST_ANSWER_ALL_REQUIRED_QUESTIONS;
 import static com.higgsup.kpi.glossary.SurveyQuestion.QUESTION4;
 import static com.higgsup.kpi.glossary.SurveyQuestion.REQUIRED_QUESTIONS;
@@ -78,14 +80,31 @@ public class EvaluationServiceImpl implements EvaluationService {
             }
         }
         //validate the evaluation of a last man:
-        UserDTO Evaluator = employeeEvaluationDTO.getEvaluator();
-
         Integer evaluatorCount = kpiPersonalEvaluationRepo.countEvaluator(employeeEvaluationDTO.getSurveyName());
 
         if (evaluatorCount.equals(ManInfo.NUMBER_OF_MAN.getValue() - 1)) {
 
-        }
 
+
+
+
+
+
+
+
+
+
+
+
+            /*for (ProjectEvaluationDTO projectEvaluationDTO : employeeEvaluationDTO.getProjectEvaluations()) {
+                if (projectEvaluationDTO.getRating() == null) {
+                    ErrorDTO errorDTO = new ErrorDTO();
+                    errorDTO.setMessage(DO_NOT_COMPLETE_PROJECT_SURVEY_QUESTIONS.getDescription());
+                    errorDTO.setErrorCode(DO_NOT_COMPLETE_PROJECT_SURVEY_QUESTIONS.getValue());
+                    errors.add(errorDTO);
+                }
+            }*/
+        }
 
         return errors;
     }

@@ -27,6 +27,7 @@ public enum ErrorCode {
     HOST_CANNOT_CREATE_SEMINAR_SURVEY(918, "host cannot create any seminar survey"),
     NOT_ATTEND_EVENT(919, "not attend this event"),
     MUST_ANSWER_ALL_REQUIRED_QUESTIONS(920, "You must answer all required questions"),
+    DO_NOT_COMPLETE_PROJECT_SURVEY_QUESTIONS(921, "You do not complete the project survey questions"),
     CANNOT_UPDATE(915, "cannot update");
 
     private Integer value;

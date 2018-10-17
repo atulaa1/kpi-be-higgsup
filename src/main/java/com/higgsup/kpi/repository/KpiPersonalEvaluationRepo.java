@@ -1,6 +1,5 @@
 package com.higgsup.kpi.repository;
 
-import com.higgsup.kpi.entity.KpiPersonalEvaluation;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
