@@ -1,7 +1,8 @@
 /**
-date: 2018-10-09 14:58
-author: tutt
-purpose: change DB in kpi_point table
+date: 2018-10-17 09:40
+author: anhpth
+purpose: add column famed point
+
 **/
 
 CREATE DATABASE higgsup_kpi;
