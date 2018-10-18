@@ -688,37 +688,41 @@ public class PointServiceImpl extends BaseService implements PointService {
 
     @Override
     public EmployeePointDetailDTO getPointDetailByUser(String username){
+        EmployeePointDetailDTO employeePointDetailDTO = new EmployeePointDetailDTO();
         KpiPoint kpiPoint = kpiPointRepo.findByRatedUsername(username);
         PointDTO pointDTO = new PointDTO();
-        TitleDTO titleDTO = new TitleDTO();
-        titleDTO.setId(kpiPoint.getTitle().getId());
-        titleDTO.setName(kpiPoint.getTitle().getName());
-        BeanUtils.copyProperties(kpiPoint, pointDTO, "id");
-        pointDTO.setTitle(titleDTO);
+        if(kpiPoint != null) {
+            TitleDTO titleDTO = new TitleDTO();
+            if(kpiPoint.getTitle() != null) {
+                titleDTO.setId(kpiPoint.getTitle().getId());
+                titleDTO.setName(kpiPoint.getTitle().getName());
+            }
+            BeanUtils.copyProperties(kpiPoint, pointDTO, "id");
+            pointDTO.setTitle(titleDTO);
 
-        List<KpiPointDetail> kpiPointDetails = kpiPointDetailRepo.findByUsername(username);
-        List<PointDetailDTO> pointDetailDTOs = new ArrayList<>();
+            List<KpiPointDetail> kpiPointDetails = kpiPointDetailRepo.findByUsername(username);
+            List<PointDetailDTO> pointDetailDTOs = new ArrayList<>();
+            if (kpiPointDetails != null) {
+                for (KpiPointDetail kpiPointDetail : kpiPointDetails) {
+                    EventDTO eventDTO = convertEventEntityToDTO(kpiPointDetail.getEvent());
 
-        for(KpiPointDetail kpiPointDetail : kpiPointDetails){
-            EventDTO eventDTO = convertEventEntityToDTO(kpiPointDetail.getEvent());
+                    PointTypeDTO pointTypeDTO = new PointTypeDTO();
+                    pointTypeDTO.setId(kpiPointDetail.getPointType().getId());
+                    pointTypeDTO.setName(kpiPointDetail.getPointType().getName());
 
-            PointTypeDTO pointTypeDTO = new PointTypeDTO();
-            pointTypeDTO.setId(kpiPointDetail.getPointType().getId());
-            pointTypeDTO.setName(kpiPointDetail.getPointType().getName());
+                    PointDetailDTO pointDetailDTO = new PointDetailDTO();
+                    pointDetailDTO.setEvent(eventDTO);
+                    pointDetailDTO.setPointType(pointTypeDTO);
+                    pointDetailDTO.setYearMonth(pointDetailDTO.getYearMonth());
+                    pointDetailDTO.setPoint(kpiPointDetail.getPoint());
+                    pointDetailDTO.setYearMonth(kpiPointDetail.getYearMonthId());
 
-            PointDetailDTO pointDetailDTO = new PointDetailDTO();
-            pointDetailDTO.setEvent(eventDTO);
-            pointDetailDTO.setPointType(pointTypeDTO);
-            pointDetailDTO.setYearMonth(pointDetailDTO.getYearMonth());
-            pointDetailDTO.setPoint(kpiPointDetail.getPoint());
-            pointDetailDTO.setYearMonth(kpiPointDetail.getYearMonthId());
-
-            pointDetailDTOs.add(pointDetailDTO);
+                    pointDetailDTOs.add(pointDetailDTO);
+                }
+            }
+            employeePointDetailDTO.setPointDTO(pointDTO);
+            employeePointDetailDTO.setPointDetailDTOs(pointDetailDTOs);
         }
-
-        EmployeePointDetailDTO employeePointDetailDTO = new EmployeePointDetailDTO();
-        employeePointDetailDTO.setPointDTO(pointDTO);
-        employeePointDetailDTO.setPointDetailDTOs(pointDetailDTOs);
         return employeePointDetailDTO;
     }
 
