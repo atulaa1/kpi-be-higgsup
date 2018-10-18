@@ -43,6 +43,10 @@
     {
       "name": "evaluation-controller",
       "description": "Evaluation of MANs at the end of month"
+    },
+    {
+      "name": "point-controller",
+      "description": "point-controller"
     }
   ],
   "security": [
@@ -10973,6 +10977,150 @@
           },
           "201": {
             "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/point-detail":{
+      "get":{
+        "tags":[
+          "point-controller"
+        ],
+        "summary": "getPointDetailByUser",
+        "operationId": "getPointDetailByUserUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "responses":{
+          "200": {
+            "description": "status_code : 200. Meaning: Thành công",
+            "schema":{
+              "type": "object",
+              "required": [
+               "pointDetail",
+               "status_code"
+              ],
+              "properties" : {
+                "pointDetail":{
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "event": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "number"
+                          },
+                          "name":{
+                            "type": "string"
+                          },
+                          "beginDate": {
+                            "type": "string"
+                          },
+                          "endDate": {
+                            "type": "string"
+                          },
+                          "group": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "number"
+                              },
+                              "name": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "pointType":{
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "number"
+                          },
+                          "name": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "point": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                },
+                "message": {
+                  "type": "string"
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "errorCode": {
+                        "type": "number"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "status_code": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "example": {
+                "pointDetail":[
+                  {
+                    "event":{
+                      "id": 62,
+                      "name": "Da Bong Hang Tuan",
+                      "beginDate": "2018-06-15 09:30",
+                      "endDate": "2018-06-15 11:30",
+                      "group": {
+                        "id": 8,
+                        "name": "Cau lac bo da bong"
+                      }
+                    },
+                    "pointType": {
+                      "id": 2,
+                      "name": "Diem cau lac bo"
+                    },
+                    "point": 5
+                  },
+                  {
+                    "event":{
+                      "id": 63,
+                      "name": "Seminar",
+                      "beginDate": "2018-06-20 07:30",
+                      "endDate": "2018-06-20 11:30",
+                      "group": {
+                        "id": 7,
+                        "name": "Seminar thuong"
+                      }
+                    },
+                    "pointType": {
+                      "id": 3,
+                      "name": "Diem seminar thuong"
+                    },
+                    "point": 5
+                  }
+                ],
+                "status_code": 200
+              }
+            }
           },
           "401": {
             "description": "Unauthorized"

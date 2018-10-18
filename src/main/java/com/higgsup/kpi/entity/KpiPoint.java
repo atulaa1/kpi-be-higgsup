@@ -56,6 +56,10 @@ public class KpiPoint {
     @JoinColumn(name = "year_month_id", referencedColumnName = "id", columnDefinition="int(10) default 0")
     private Integer yearMonthId;
 
+    @JoinColumn(name = "title_id", referencedColumnName = "id")
+    @OneToOne(fetch = FetchType.LAZY)
+    private KpiTitle title;
+
     public Integer getId() {
         return id;
     }
@@ -150,5 +154,13 @@ public class KpiPoint {
 
     public void setYearMonthId(Integer yearMonthId) {
         this.yearMonthId = yearMonthId;
+    }
+
+    public KpiTitle getTitle() {
+        return title;
+    }
+
+    public void setTitle(KpiTitle title) {
+        this.title = title;
     }
 }
