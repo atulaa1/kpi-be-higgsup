@@ -388,7 +388,7 @@ public class PointServiceImpl extends BaseService implements PointService {
         }
     }
 
-    @Scheduled(cron = "00 55 09 19 * ?")
+    @Scheduled(cron = "00 00 16 10 * ?")
     private void addUnfinishedSurveySeminarPoint() throws IOException{
         List<KpiEvent> unfinishedSurveySeminarEvent = kpiEventRepo.findUnfinishedSurveySeminarEvent();
         if(unfinishedSurveySeminarEvent.size() > 0){
