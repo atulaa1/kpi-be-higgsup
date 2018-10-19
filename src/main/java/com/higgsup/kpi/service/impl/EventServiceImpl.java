@@ -906,23 +906,22 @@ public class EventServiceImpl extends BaseService implements EventService {
 
     private boolean validateYearMonth(java.util.Date yearMonth) {
         //is true if in month old , is false if la new
-//        Timestamp dateCun = new Timestamp(System.currentTimeMillis());
-//
-//        if (dateCun.getYear() + 1900 == yearMonth.getYear() + 1900
-//                && dateCun.getMonth() + 1 == yearMonth.getMonth() + 1
-//                ) {
-//            return true;
-//        }
-//        if (dateCun.getYear() + 1900 == yearMonth.getYear() + 1900
-//                && (dateCun.getMonth() + 1 )- (yearMonth.getMonth() + 1) == 1
-//                && dateCun.getDate() > Integer.valueOf(
-//                environment.getProperty("config.day.new.year.month"))
-//                && dateCun.getHours() < Integer.valueOf(
-//                environment.getProperty("config.hour.new.year.month"))
-//                ) {
-//            return true;
-//        }
-        return true;
+        Timestamp dateCun = new Timestamp(System.currentTimeMillis());
+        if (dateCun.getYear() + 1900 == yearMonth.getYear() + 1900
+                && dateCun.getMonth() + 1 == yearMonth.getMonth() + 1
+                ) {
+            return true;
+        }
+        if (dateCun.getYear() + 1900 == yearMonth.getYear() + 1900
+                && (dateCun.getMonth() + 1 )- (yearMonth.getMonth() + 1) == 1
+                && dateCun.getDate() > Integer.valueOf(
+                environment.getProperty("config.day.new.year.month"))
+                && dateCun.getHours() < Integer.valueOf(
+                environment.getProperty("config.hour.new.year.month"))
+                ) {
+            return true;
+        }
+        return false;
     }
 
     private EventDTO confirmOrCancelEventSupport(KpiEvent kpiEvent, EventDTO eventDTO) throws IOException,
