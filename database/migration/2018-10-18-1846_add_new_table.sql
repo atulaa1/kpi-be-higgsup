@@ -1,4 +1,4 @@
-CREATE TABLE `higgsup_kpi`.`kpi_point_detail` (
+CREATE TABLE `kpi_point_detail` (
   `id`                    INT(11) PRIMARY KEY AUTO_INCREMENT,
   `event_id`              INT(11)            NULL,
   `user_name`             VARCHAR(50)
@@ -14,16 +14,19 @@ CREATE TABLE `higgsup_kpi`.`kpi_point_detail` (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-CREATE TABLE `higgsup_kpi`.`kpi_point_type` (
+CREATE TABLE `kpi_point_type` (
   `id`                    INT(10) PRIMARY KEY AUTO_INCREMENT,
   `name`                  VARCHAR(255) NOT NULL,
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-CREATE TABLE `higgsup_kpi`.`kpi_title` (
+CREATE TABLE `kpi_title` (
   `id`                    INT(10) PRIMARY KEY AUTO_INCREMENT,
   `name`                  VARCHAR(255) NOT NULL,
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
+
+ALTER TABLE `kpi_point`
+  ADD `title_id`  INT(11)

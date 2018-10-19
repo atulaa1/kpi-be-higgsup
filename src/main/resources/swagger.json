@@ -11007,7 +11007,8 @@
               "type": "object",
               "required": [
                "pointDetail",
-               "status_code"
+               "status_code",
+               "point"
               ],
               "properties" : {
                 "pointDetail":{
@@ -11029,17 +11030,6 @@
                           },
                           "endDate": {
                             "type": "string"
-                          },
-                          "group": {
-                            "type": "object",
-                            "properties": {
-                              "id": {
-                                "type": "number"
-                              },
-                              "name": {
-                                "type": "string"
-                              }
-                            }
                           }
                         }
                       },
@@ -11056,6 +11046,52 @@
                       },
                       "point": {
                         "type": "number"
+                      }
+                    }
+                  }
+                },
+                "point": {
+                  "type": "object",
+                  "properties": {
+                    "rulePoint": {
+                      "type": "number"
+                    },
+                    "clubPoint": {
+                      "type": "number"
+                    },
+                    "normalSeminarPoint": {
+                      "type": "number"
+                    },
+                    "weekendSeminarPoint": {
+                      "type": "number"
+                    },
+                    "supportPoint": {
+                      "type": "number"
+                    },
+                    "teambuildingPoint": {
+                      "type": "number"
+                    },
+                    "personalPoint": {
+                      "type": "number"
+                    },
+                    "projectPoint": {
+                      "type": "number"
+                    },
+                    "totalPoint": {
+                      "type": "number"
+                    },
+                    "yearMonthId": {
+                      "type": "number"
+                    },
+                    "title": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number"
+                        },
+                        "name": {
+                          "type": "string"
+                        }
                       }
                     }
                   }
@@ -11082,42 +11118,73 @@
                 }
               },
               "example": {
-                "pointDetail":[
-                  {
-                    "event":{
-                      "id": 62,
-                      "name": "Da Bong Hang Tuan",
-                      "beginDate": "2018-06-15 09:30",
-                      "endDate": "2018-06-15 11:30",
-                      "group": {
-                        "id": 8,
-                        "name": "Cau lac bo da bong"
-                      }
+                "data": {
+                  "pointDetailDTOs": [
+                    {
+                      "event": {
+                        "name": "support chung",
+                        "beginDate": "10-09-2018 11:00"
+                      },
+                      "point": 11,
+                      "pointType": {
+                        "id": 5,
+                        "name": "Điểm support chung"
+                      },
+                      "yearMonth": 2
                     },
-                    "pointType": {
+                    {
+                      "event": {
+                        "name": "Blackjack thu 6",
+                        "beginDate": "15-10-2018 18:30",
+                        "endDate": "15-10-2018 20:30"
+                      },
+                      "point": 3,
+                      "pointType": {
+                        "id": 2,
+                        "name": "Điểm Câu lạc bộ"
+                      },
+                      "yearMonth": 2
+                    },
+                    {
+                      "event": {
+                        "name": "Poker thu 4",
+                        "beginDate": "15-09-2018 18:30",
+                        "endDate": "15-09-2018 20:30"
+                      },
+                      "point": 3,
+                      "pointType": {
+                        "id": 2,
+                        "name": "Điểm Câu lạc bộ"
+                      },
+                      "yearMonth": 2
+                    },
+                    {
+                      "event": null,
+                      "point": 24,
+                      "pointType": {
+                        "id": 1,
+                        "name": "Điểm nội quy"
+                      },
+                      "yearMonth": 2
+                    }
+                  ],
+                  "pointDTO": {
+                    "rulePoint": 0,
+                    "clubPoint": 9,
+                    "normalSeminarPoint": 12,
+                    "weekendSeminarPoint": 0,
+                    "supportPoint": 24,
+                    "teambuildingPoint": 0,
+                    "personalPoint": 0,
+                    "projectPoint": 0,
+                    "totalPoint": 0,
+                    "yearMonthId": 2,
+                    "title": {
                       "id": 2,
-                      "name": "Diem cau lac bo"
-                    },
-                    "point": 5
-                  },
-                  {
-                    "event":{
-                      "id": 63,
-                      "name": "Seminar",
-                      "beginDate": "2018-06-20 07:30",
-                      "endDate": "2018-06-20 11:30",
-                      "group": {
-                        "id": 7,
-                        "name": "Seminar thuong"
-                      }
-                    },
-                    "pointType": {
-                      "id": 3,
-                      "name": "Diem seminar thuong"
-                    },
-                    "point": 5
+                      "name": "Nhan vien cua thang I"
+                    }
                   }
-                ],
+                },
                 "status_code": 200
               }
             }

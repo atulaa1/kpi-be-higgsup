@@ -196,7 +196,7 @@ CREATE TABLE `kpi_project_log` (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-CREATE TABLE `higgsup_kpi`.`kpi_point` (
+CREATE TABLE `kpi_point` (
   `id`                    INT(10) PRIMARY KEY AUTO_INCREMENT,
   `rated_username`        VARCHAR(50)
                           CHARACTER SET utf8 NOT NULL,
@@ -210,12 +210,14 @@ CREATE TABLE `higgsup_kpi`.`kpi_point` (
   `project_point`         FLOAT              NULL,
   `total_point`           FLOAT              NULL,
   `year_month_id`         INT(11)            NULL,
-  FOREIGN KEY (rated_username) REFERENCES kpi_user (user_name)
+  `title_id`              INT(11)            NULL,
+  FOREIGN KEY (rated_username) REFERENCES kpi_user (user_name),
+  FOREIGN KEY (title_id) REFERENCES kpi_title (`id`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-CREATE TABLE `higgsup_kpi`.`kpi_point_detail` (
+CREATE TABLE `kpi_point_detail` (
   `id`                    INT(11) PRIMARY KEY AUTO_INCREMENT,
   `event_id`              INT(11)            NULL,
   `user_name`             VARCHAR(50)
@@ -231,14 +233,14 @@ CREATE TABLE `higgsup_kpi`.`kpi_point_detail` (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-CREATE TABLE `higgsup_kpi`.`kpi_point_type` (
+CREATE TABLE `kpi_point_type` (
   `id`                    INT(10) PRIMARY KEY AUTO_INCREMENT,
   `name`                  VARCHAR(255) NOT NULL,
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-CREATE TABLE `higgsup_kpi`.`kpi_title` (
+CREATE TABLE `kpi_title` (
   `id`                    INT(10) PRIMARY KEY AUTO_INCREMENT,
   `name`                  VARCHAR(255) NOT NULL,
 )
