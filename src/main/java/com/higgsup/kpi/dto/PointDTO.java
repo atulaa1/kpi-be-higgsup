@@ -31,6 +31,10 @@ public class PointDTO extends BaseDTO {
 
     private TitleDTO title;
 
+    private Float famedPoint;
+
+
+
     public Integer getId() {
         return id;
     }
@@ -133,5 +137,13 @@ public class PointDTO extends BaseDTO {
 
     public void setTitle(TitleDTO title) {
         this.title = title;
+    }
+
+    public Float getFamedPoint() {
+        return famedPoint;
+    }
+
+    public void setFamedPoint(Float famedPoint) {
+        this.famedPoint = famedPoint;
     }
 }

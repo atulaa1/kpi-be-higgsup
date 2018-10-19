@@ -8,6 +8,6 @@ import java.util.List;
 public interface RankingService {
     List<RankingDTO> showNormalPointRanking(Integer currentPage);
 
-    List<PointDTO> showFamedPointRanking();
+    List<RankingDTO> showFamedPointRanking(Integer currentPage);
 
 }

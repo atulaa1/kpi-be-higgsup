@@ -21,11 +21,20 @@ public class RankingController {
     private RankingService rankingService;
 
     @PreAuthorize("hasRole('EMPLOYEE')")
-    @GetMapping("/normal-point-ranking/page={currentPage}")
+    @GetMapping("/ranking/normal-point/page={currentPage}")
     public Response showNormalPointRanking(@PathVariable("currentPage") Integer currentPage) {
         Response<List<RankingDTO>> response = new Response<>(HttpStatus.OK.value());
         List<RankingDTO> normalPointRanking = rankingService.showNormalPointRanking(currentPage);
         response.setData(normalPointRanking);
+        return response;
+    }
+
+    @PreAuthorize("hasRole('EMPLOYEE')")
+    @GetMapping("/ranking/famed-point/page={currentPage}")
+    public Response showFamedPointRanking(@PathVariable("currentPage") Integer currentPage) {
+        Response<List<RankingDTO>> response = new Response<>(HttpStatus.OK.value());
+        List<RankingDTO> famedPointRanking = rankingService.showFamedPointRanking(currentPage);
+        response.setData(famedPointRanking);
         return response;
     }
 }
