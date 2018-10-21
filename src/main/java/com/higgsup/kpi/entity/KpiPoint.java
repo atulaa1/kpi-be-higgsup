@@ -60,9 +60,7 @@ public class KpiPoint {
     @JoinColumn(name = "year_month_id", referencedColumnName = "id", columnDefinition="int(10) default 0")
     private Integer yearMonthId;
 
-    @JoinColumn(name = "title_id", referencedColumnName = "id")
-    @OneToOne(fetch = FetchType.LAZY)
-    private KpiTitle title;
+    private Integer title;
 
     public Integer getId() {
         return id;
@@ -160,11 +158,11 @@ public class KpiPoint {
         this.yearMonthId = yearMonthId;
     }
 
-    public KpiTitle getTitle() {
+    public Integer getTitle() {
         return title;
     }
 
-    public void setTitle(KpiTitle title) {
+    public void setTitle(Integer title) {
         this.title = title;
     }
 
