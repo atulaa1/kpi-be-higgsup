@@ -60,6 +60,7 @@ public class KpiPoint {
     @JoinColumn(name = "year_month_id", referencedColumnName = "id", columnDefinition="int(10) default 0")
     private Integer yearMonthId;
 
+    @Column(name = "title")
     private Integer title;
 
     public Integer getId() {

@@ -28,8 +28,6 @@ public abstract class BaseService {
     @Autowired
     KpiPointDetailRepo kpiPointDetailRepo;
 
-    @Autowired
-    KpiPointTypeRepo kpiPointTypeRepo;
 
     protected void addClubPoint(KpiUser kpiUser, Float point, KpiEvent event) {
         Optional<KpiYearMonth> kpiYearMonthOptional = kpiMonthRepo.findByMonthCurrent();
@@ -43,7 +41,7 @@ public abstract class BaseService {
             KpiPointDetail kpiPointDetail = new KpiPointDetail();
             kpiPointDetail.setEvent(event);
             kpiPointDetail.setPoint(point);
-            kpiPointDetail.setPointType(kpiPointTypeRepo.findById(PointType.CLUB_POINT.getValue()).get());
+            kpiPointDetail.setPointType(PointType.CLUB_POINT.getValue());
             kpiPointDetail.setUser(kpiUser);
             kpiPointDetail.setYearMonthId(kpiYearMonthOptional.get().getId());
             kpiPointDetailRepo.save(kpiPointDetail);
@@ -65,7 +63,7 @@ public abstract class BaseService {
                 KpiPointDetail kpiPointDetail = new KpiPointDetail();
                 kpiPointDetail.setEvent(event);
                 kpiPointDetail.setPoint(addedPoint);
-                kpiPointDetail.setPointType(kpiPointTypeRepo.findById(PointType.CLUB_POINT.getValue()).get());
+                kpiPointDetail.setPointType(PointType.CLUB_POINT.getValue());
                 kpiPointDetail.setUser(kpiUser);
                 kpiPointDetail.setYearMonthId(kpiYearMonthOptional.get().getId());
                 kpiPointDetailRepo.save(kpiPointDetail);
@@ -88,7 +86,7 @@ public abstract class BaseService {
             KpiPointDetail kpiPointDetail = new KpiPointDetail();
             kpiPointDetail.setEvent(event);
             kpiPointDetail.setPoint(point);
-            kpiPointDetail.setPointType(kpiPointTypeRepo.findById(PointType.SUPPORT_POINT.getValue()).get());
+            kpiPointDetail.setPointType(PointType.SUPPORT_POINT.getValue());
             kpiPointDetail.setUser(kpiUser);
             kpiPointDetail.setYearMonthId(kpiYearMonthOptional.get().getId());
             kpiPointDetailRepo.save(kpiPointDetail);
@@ -108,7 +106,7 @@ public abstract class BaseService {
                 KpiPointDetail kpiPointDetail = new KpiPointDetail();
                 kpiPointDetail.setEvent(event);
                 kpiPointDetail.setPoint(addedPoint);
-                kpiPointDetail.setPointType(kpiPointTypeRepo.findById(PointType.SUPPORT_POINT.getValue()).get());
+                kpiPointDetail.setPointType(PointType.SUPPORT_POINT.getValue());
                 kpiPointDetail.setUser(kpiUser);
                 kpiPointDetail.setYearMonthId(kpiYearMonthOptional.get().getId());
                 kpiPointDetailRepo.save(kpiPointDetail);

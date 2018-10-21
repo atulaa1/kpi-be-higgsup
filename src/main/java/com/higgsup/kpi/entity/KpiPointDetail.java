@@ -24,9 +24,8 @@ public class KpiPointDetail {
     @Column(name = "point")
     private Float point;
 
-    @JoinColumn(name = "point_type_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private KpiPointType pointType;
+    @Column(name = "point_type")
+    private Integer pointType;
 
     @JoinColumn(name = "year_month_id", referencedColumnName = "id")
     private Integer yearMonthId;
@@ -56,11 +55,11 @@ public class KpiPointDetail {
         this.event = event;
     }
 
-    public KpiPointType getPointType() {
+    public Integer getPointType() {
         return pointType;
     }
 
-    public void setPointType(KpiPointType pointType) {
+    public void setPointType(Integer pointType) {
         this.pointType = pointType;
     }
 

@@ -13,7 +13,6 @@ CREATE TABLE `kpi_point_detail` (
   `year_month_id`         INT(11)            NULL,
   FOREIGN KEY (event_id) REFERENCES kpi_event (id),
   FOREIGN KEY (user_name) REFERENCES kpi_user (user_name),
-  FOREIGN KEY (point_type_id) REFERENCES kpi_point_type(id),
   FOREIGN KEY (year_month_id) REFERENCES kpi_year_month(id),
 )
   ENGINE = InnoDB
