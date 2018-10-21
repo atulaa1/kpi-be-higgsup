@@ -99,13 +99,14 @@ public class PointServiceImpl extends BaseService implements PointService {
         Float thirdPrizePoint = teamBuildingDTO.getAdditionalConfig().getThirdPrizePoint();
         Float organizerPoint = teamBuildingDTO.getAdditionalConfig().getOrganizerPoint();
         Optional<KpiYearMonth> kpiYearMonthOptional = kpiMonthRepo.findByMonthCurrent();
+        List<UserDTO> employee = userService.getAllEmployee();
 
         List<KpiEventUser> organizers = kpiEventUserList.stream().filter(u -> u.getType()
                 .equals(ORGANIZER.getValue())).collect(Collectors.toList());
 
         for (KpiEventUser kpiEventUser : organizers) {
             KpiUser kpiUser = kpiUserRepo.findByUserName(kpiEventUser.getKpiEventUserPK().getUserName());
-            if(isEmployee(kpiUser)){
+            if(isEmployee(kpiUser, employee)){
                 if (Objects.nonNull(kpiPointRepo.findByRatedUser(kpiUser))) {
                     KpiPoint kpiPoint = kpiPointRepo.findByRatedUser(kpiUser);
 
@@ -232,6 +233,7 @@ public class PointServiceImpl extends BaseService implements PointService {
         Float secondPrizePoint = teamBuildingDTO.getAdditionalConfig().getSecondPrizePoint();
         Float thirdPrizePoint = teamBuildingDTO.getAdditionalConfig().getThirdPrizePoint();
         Optional<KpiYearMonth> kpiYearMonthOptional = kpiMonthRepo.findByMonthCurrent();
+        List<UserDTO> employee = userService.getAllEmployee();
 
         List<KpiEventUser> kpiEventUserList = kpiEventUserRepo.findByKpiEventId(teamBuildingDTO.getId());
 
@@ -240,7 +242,7 @@ public class PointServiceImpl extends BaseService implements PointService {
 
         for (KpiEventUser participant : participants) {
             KpiUser kpiUser = kpiUserRepo.findByUserName(participant.getKpiEventUserPK().getUserName());
-            if(isEmployee(kpiUser)){
+            if(isEmployee(kpiUser, employee)){
                 if (Objects.nonNull(kpiPointRepo.findByRatedUser(kpiUser))) {
 
                     KpiPoint kpiPoint = kpiPointRepo.findByRatedUser(kpiUser);
@@ -302,9 +304,11 @@ public class PointServiceImpl extends BaseService implements PointService {
         List<GroupDTO<GroupClubDetail>> allClubDTO = convertClubGroupEntityToDTO(allClub);
 
         Long hostParticipate = 0L;
+
+        List<UserDTO> employee = userService.getAllEmployee();
         for(GroupDTO<GroupClubDetail> clubDTO:allClubDTO) {
             KpiUser clubOwner = kpiUserRepo.findByUserName(clubDTO.getAdditionalConfig().getHost());
-            if(isEmployee(clubOwner)){
+            if(isEmployee(clubOwner, employee)){
                 List<KpiEvent> confirmClubEvents = kpiEventRepo.findConfirmedClubEventCreatedByHost(clubDTO.getAdditionalConfig().getHost());
                 if(confirmClubEvents != null){
                     for(KpiEvent event:confirmClubEvents){
@@ -380,11 +384,12 @@ public class PointServiceImpl extends BaseService implements PointService {
         calendar.setTimeInMillis(seminarEventDTO.getBeginDate().getTime());
         KpiEvent kpiEvent = convertEventDTOToEntity(seminarEventDTO);
         Optional<KpiYearMonth> kpiYearMonthOptional = kpiMonthRepo.findByMonthCurrent();
+        List<UserDTO> employee = userService.getAllEmployee();
 
         if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
             for (KpiEventUser eventUser : addPointUsers) {
                 KpiUser kpiUser = kpiUserRepo.findByUserName(eventUser.getKpiEventUserPK().getUserName());
-                if(isEmployee(kpiUser)) {
+                if(isEmployee(kpiUser, employee)) {
                     if (eventUser.getType().equals(EventUserType.HOST.getValue())) {
                         List<KpiSeminarSurvey> surveysEvaluateHost = kpiSeminarSurveyRepo.findByEvaluatedUsernameAndEvent
                                 (kpiUserRepo.findByUserName(eventUser.getKpiEventUserPK().getUserName()), kpiEvent);
@@ -441,7 +446,7 @@ public class PointServiceImpl extends BaseService implements PointService {
         } else {
             for (KpiEventUser eventUser : addPointUsers) {
                 KpiUser kpiUser = kpiUserRepo.findByUserName(eventUser.getKpiEventUserPK().getUserName());
-                if(isEmployee(kpiUser)){
+                if(isEmployee(kpiUser, employee)){
                     if (eventUser.getType().equals(EventUserType.HOST.getValue())) {
                         Float evaluatePoint = 0F;
                         List<KpiSeminarSurvey> surveysEvaluateHost = kpiSeminarSurveyRepo.findByEvaluatedUsernameAndEvent
@@ -585,10 +590,10 @@ public class PointServiceImpl extends BaseService implements PointService {
         return kpiEventService.convertSeminarEventEntityToDTO(kpiEvents);
     }
 
-    private boolean isEmployee(KpiUser kpiUser){
+    private boolean isEmployee(KpiUser kpiUser, List<UserDTO> userDTOS){
         Boolean isEmployee = false;
 
-        for(UserDTO employee : userService.getAllEmployee()){
+        for(UserDTO employee : userDTOS){
            if(employee.getUsername().equals(kpiUser.getUserName())){
                isEmployee = true;
                break;

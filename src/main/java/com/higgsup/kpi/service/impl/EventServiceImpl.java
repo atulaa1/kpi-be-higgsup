@@ -898,8 +898,11 @@ public class EventServiceImpl extends BaseService implements EventService {
         ObjectMapper mapper = new ObjectMapper();
         GroupClubDetail groupClubDetail = mapper.readValue(kpiEvent.getGroup().getAdditionalConfig(),
                 GroupClubDetail.class);
+        List<UserDTO> employee = userService.getAllEmployee();
         for (KpiEventUser kpiEventUser : kpiEvent.getKpiEventUserList()) {
-            addClubPoint(kpiEventUser.getKpiUser(), groupClubDetail.getParticipationPoint());
+            if(isEmployee(kpiEventUser.getKpiUser(), employee)){
+                addClubPoint(kpiEventUser.getKpiUser(), groupClubDetail.getParticipationPoint());
+            }
         }
     }
 
@@ -935,7 +938,10 @@ public class EventServiceImpl extends BaseService implements EventService {
         Float point = setHistorySupportAndGetAllPoint(kpiEvent);
         //ad point
         if (Objects.equals(kpiEvent.getStatus(), StatusEvent.CONFIRMED.getValue())) {
-            addSupportPoint(kpiEvent.getKpiEventUserList().get(0).getKpiUser(), point);
+            List<UserDTO> employee = userService.getAllEmployee();
+            if(isEmployee(kpiEvent.getKpiEventUserList().get(0).getKpiUser(), employee)){
+                addSupportPoint(kpiEvent.getKpiEventUserList().get(0).getKpiUser(), point);
+            }
         }
         kpiEvent = kpiEventRepo.save(kpiEvent);
         eventDTO = convertSupportEntiyToDTO(kpiEvent);
@@ -1819,4 +1825,15 @@ public class EventServiceImpl extends BaseService implements EventService {
         return true;
     }
 
+    private boolean isEmployee(KpiUser kpiUser, List<UserDTO> userDTOs){
+        Boolean isEmployee = false;
+
+        for(UserDTO employee : userDTOs){
+            if(employee.getUsername().equals(kpiUser.getUserName())){
+                isEmployee = true;
+                break;
+            }
+        }
+        return isEmployee;
+    }
 }
