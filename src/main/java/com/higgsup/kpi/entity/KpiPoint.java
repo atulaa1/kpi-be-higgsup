@@ -14,7 +14,7 @@ public class KpiPoint {
 
 
     @JoinColumn(name = "rated_username", referencedColumnName = "user_name")
-    @OneToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private KpiUser ratedUser;
 
     @Basic

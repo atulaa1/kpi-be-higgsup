@@ -575,16 +575,19 @@ public class PointServiceImpl extends BaseService implements PointService {
     @Scheduled(cron = "00 00 16 10 * ?")
     private void calculateFamePoint(){
         int year = Calendar.getInstance().get(Calendar.YEAR);
-        List<KpiPoint> kpiPointList = kpiPointRepo.getAllPoint();
+        Optional<KpiYearMonth> kpiYearMonth = kpiMonthRepo.findByMonthCurrent();
+        List<KpiPoint> kpiPointList = kpiPointRepo.getAllPointInMonth(kpiYearMonth.get().getId());
         for(KpiPoint kpiPoint: kpiPointList){
-            kpiPoint.setFamedPoint((kpiPoint.getTotalPoint() - 50) / 100);
+            kpiPoint.setFamedPoint((kpiPoint.getTotalPoint() - 50) / 10);
+            kpiPointRepo.save(kpiPoint);
             KpiFamePoint kpiFamePoint = kpiFamePointRepo.findByUsernameAndYear(year, kpiPoint.getRatedUser().getUserName());
             if(kpiFamePoint == null){
-                kpiFamePoint.setUser(kpiUserRepo.findByUserName(kpiPoint.getRatedUser().getUserName()));
-                kpiFamePoint.setFamePoint((kpiPoint.getTotalPoint() - 50) / 100);
+                kpiFamePoint = new KpiFamePoint();
+                kpiFamePoint.setFamePoint((kpiPoint.getTotalPoint() - 50) / 10);
                 kpiFamePoint.setYear(year);
+                kpiFamePoint.setUser(kpiPoint.getRatedUser());
             }else{
-                kpiFamePoint.setFamePoint(kpiFamePoint.getFamePoint() + (kpiPoint.getTotalPoint() - 50) / 100);
+                kpiFamePoint.setFamePoint(kpiFamePoint.getFamePoint() + (kpiPoint.getTotalPoint() - 50) / 10);
             }
             kpiFamePointRepo.save(kpiFamePoint);
         }
@@ -603,5 +606,19 @@ public class PointServiceImpl extends BaseService implements PointService {
         }
 
         return pointDTOs;
+    }
+
+    @Scheduled(cron = "00 00 00 01 * ?")
+    public void addNewYearMonth(){
+        Optional<KpiYearMonth> kpiYearMonth = kpiMonthRepo.findByMonthCurrent();
+        Integer currentYearMonth = kpiYearMonth.get().getYearMonth();
+        Integer currentMonth = Calendar.getInstance().get(Calendar.MONTH) + 1;
+        KpiYearMonth newYearMonth = new KpiYearMonth();
+        if(currentMonth == 1){
+            newYearMonth.setYearMonth(currentYearMonth + 89);
+        }else{
+            newYearMonth.setYearMonth(currentYearMonth + 1);
+        }
+        kpiMonthRepo.save(newYearMonth);
     }
 }

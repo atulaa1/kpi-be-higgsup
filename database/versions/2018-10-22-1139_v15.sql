@@ -1,7 +1,7 @@
 /**
 date: 2018-10-22 11:39
 author: hiepnnt
-purpose: add table kpi_fame_point
+purpose: add table kpi_fame_point and change year_month_id column in kpi_point into not null
 
 **/
 
@@ -210,7 +210,7 @@ CREATE TABLE `kpi_point` (
   `personal_point`        FLOAT              NULL,
   `project_point`         FLOAT              NULL,
   `total_point`           FLOAT              NULL,
-  `year_month_id`         INT(11)            NULL,
+  `year_month_id`         INT(11)            NOT NULL,
   `famed_point`           FLOAT              DEFAULT NULL,
   FOREIGN KEY (rated_username) REFERENCES kpi_user (user_name)
 )
@@ -222,7 +222,7 @@ CREATE TABLE `kpi_fame_point` (
   `username`              VARCHAR(50)
                           CHARACTER SET utf8 NOT NULL,
   `fame_point`            FLOAT              NOT NULL,
-  `year`                  INT(11)              NULL,
+  `year`                  INT(11)            NOT NULL,
   FOREIGN KEY (username) REFERENCES kpi_user (user_name)
 )
   ENGINE = InnoDB

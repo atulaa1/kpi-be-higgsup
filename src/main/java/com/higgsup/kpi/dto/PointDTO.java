@@ -1,5 +1,8 @@
 package com.higgsup.kpi.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class PointDTO extends BaseDTO {
 
     private Integer id;
@@ -26,7 +29,7 @@ public class PointDTO extends BaseDTO {
 
     private Float famedPoint;
 
-    private Integer yearMonth;
+    private Integer yearMonthId;
 
     public Integer getId() {
         return id;
@@ -117,11 +120,11 @@ public class PointDTO extends BaseDTO {
     }
 
     public Integer getYearMonth() {
-        return yearMonth;
+        return yearMonthId;
     }
 
     public void setYearMonth(Integer yearMonth) {
-        this.yearMonth = yearMonth;
+        this.yearMonthId = yearMonth;
     }
 
     public Float getFamedPoint() {
