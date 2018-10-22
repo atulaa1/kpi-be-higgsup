@@ -8,7 +8,7 @@ CREATE TABLE `kpi_point_detail` (
   `event_id`              INT(11)            NULL,
   `user_name`             VARCHAR(50)
                           CHARACTER SET utf8 NOT NULL,
-  `point_type_id`         INT(11)            NOT NULL,
+  `point_type`            INT(11)            NOT NULL,
   `point`                 INT(11)            NOT NULL,
   `year_month_id`         INT(11)            NULL,
   FOREIGN KEY (event_id) REFERENCES kpi_event (id),

@@ -728,6 +728,7 @@ public class PointServiceImpl extends BaseService implements PointService {
                     PointDetailDTO pointDetailDTO = new PointDetailDTO();
                     pointDetailDTO.setPoint(kpiPointDetail.getPoint());
                     pointDetailDTO.setYearMonth(kpiPointDetail.getYearMonthId());
+                    pointDetailDTO.setPointType(kpiPointDetail.getPointType());
 
                     if (kpiPointDetail.getEvent() != null) {
                         EventDTO eventDTO = convertEventEntityToDTO(kpiPointDetail.getEvent());
