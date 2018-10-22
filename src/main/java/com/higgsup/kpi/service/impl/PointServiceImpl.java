@@ -197,9 +197,7 @@ public class PointServiceImpl extends BaseService implements PointService {
 
             } else {
                 KpiPoint kpiPoint = new KpiPoint();
-
                 kpiPoint.setRatedUser(kpiUserOrganizer);
-
                 List<KpiEventUser> gamingOrganizers = participants.stream()
                         .filter(u -> kpiUserOrganizer.equals(u.getKpiUser())).collect(Collectors.toList());
 
@@ -426,220 +424,251 @@ public class PointServiceImpl extends BaseService implements PointService {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(seminarEventDTO.getBeginDate().getTime());
         KpiEvent kpiEvent = convertEventDTOToEntity(seminarEventDTO);
-        Optional<KpiYearMonth> kpiYearMonthOptional = kpiMonthRepo.findByMonthCurrent();
-        Float actualPointAdd;
+
 
         if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
-            for (KpiEventUser eventUser : addPointUsers) {
-                if (eventUser.getType().equals(EventUserType.HOST.getValue())) {
-                    List<KpiSeminarSurvey> surveysEvaluateHost = kpiSeminarSurveyRepo.findByEvaluatedUsernameAndEvent
-                            (kpiUserRepo.findByUserName(eventUser.getKpiEventUserPK().getUserName()), kpiEvent);
-                    Float evaluatePoint = 0F;
-
-                    if (surveysEvaluateHost.size() == 0) {
-                        evaluatePoint += PointValue.DEFAULT_EFFECTIVE_POINT.getValue();
-                    } else {
-                        Integer totalEvaluatePoint = surveysEvaluateHost.stream().mapToInt(KpiSeminarSurvey::getRating).sum();
-                        evaluatePoint = (float) totalEvaluatePoint / surveysEvaluateHost.size();
-                    }
-
-                    if (kpiPointRepo.findByRatedUsername(eventUser.getKpiEventUserPK().getUserName()) == null) {
-                        KpiPoint kpiPoint = new KpiPoint();
-                        kpiPoint.setRatedUser(kpiUserRepo.findByUserName(eventUser.getKpiEventUserPK().getUserName()));
-                        actualPointAdd = Float.parseFloat(seminarEventDTO.getAdditionalConfig().getHostPoint()) + evaluatePoint;
-                        kpiPoint.setWeekendSeminarPoint(actualPointAdd);
-                        kpiPoint.setYearMonthId(kpiYearMonthOptional.get().getId());
-                        kpiPointRepo.save(kpiPoint);
-                    } else {
-                        KpiPoint kpiPoint = kpiPointRepo.findByRatedUsername(eventUser.getKpiEventUserPK().getUserName());
-                        if (memberPointOfSaturdaySeminar(eventUser) < PointValue.MAX_WEEKEND_SEMINAR_POINT.getValue()) {
-                            if (PointValue.MAX_WEEKEND_SEMINAR_POINT.getValue() - memberPointOfSaturdaySeminar(eventUser) <
-                                    Float.parseFloat(seminarEventDTO.getAdditionalConfig().getHostPoint())) {
-                                actualPointAdd = PointValue.MAX_WEEKEND_SEMINAR_POINT.getValue() - memberPointOfSaturdaySeminar(eventUser)
-                                        + evaluatePoint;
-                                kpiPoint.setWeekendSeminarPoint(kpiPoint.getWeekendSeminarPoint() + actualPointAdd);
-                            } else {
-                                actualPointAdd = Float.parseFloat(seminarEventDTO.getAdditionalConfig().getHostPoint()) + evaluatePoint;
-                                kpiPoint.setWeekendSeminarPoint(kpiPoint.getWeekendSeminarPoint() + actualPointAdd);
-                            }
-                            kpiPointRepo.save(kpiPoint);
-
-                        }else{
-                            actualPointAdd = evaluatePoint;
-                            kpiPoint.setWeekendSeminarPoint(kpiPoint.getWeekendSeminarPoint() + actualPointAdd);
-                        }
-                    }
-
-                    KpiPointDetail kpiPointDetail = new KpiPointDetail();
-                    kpiPointDetail.setEvent(convertEventDTOToEntity(seminarEventDTO));
-                    kpiPointDetail.setUser(kpiUserRepo.findByUserName(eventUser.getKpiEventUserPK().getUserName()));
-                    kpiPointDetail.setPointType(PointType.SATURDAY_SEMINAR_POINT.getValue());
-                    kpiPointDetail.setPoint(actualPointAdd);
-                    kpiPointDetail.setYearMonthId(kpiYearMonthOptional.get().getId());
-                    kpiPointDetailRepo.save(kpiPointDetail);
-
-                } else {
-                    if (kpiPointRepo.findByRatedUsername(eventUser.getKpiEventUserPK().getUserName()) == null) {
-                        KpiPoint kpiPoint = new KpiPoint();
-                        kpiPoint.setRatedUser(kpiUserRepo.findByUserName(eventUser.getKpiEventUserPK().getUserName()));
-                        actualPointAdd = Float.parseFloat(seminarEventDTO.getAdditionalConfig().getMemberPoint());
-                        kpiPoint.setWeekendSeminarPoint(actualPointAdd);
-                        kpiPoint.setYearMonthId(kpiYearMonthOptional.get().getId());
-                        kpiPointRepo.save(kpiPoint);
-
-                        KpiPointDetail kpiPointDetail = new KpiPointDetail();
-                        kpiPointDetail.setEvent(convertEventDTOToEntity(seminarEventDTO));
-                        kpiPointDetail.setUser(kpiUserRepo.findByUserName(eventUser.getKpiEventUserPK().getUserName()));
-                        kpiPointDetail.setPointType(PointType.SATURDAY_SEMINAR_POINT.getValue());
-                        kpiPointDetail.setPoint(actualPointAdd);
-                        kpiPointDetail.setYearMonthId(kpiYearMonthOptional.get().getId());
-                        kpiPointDetailRepo.save(kpiPointDetail);
-                    } else {
-                        KpiPoint kpiPoint = kpiPointRepo.findByRatedUsername(eventUser.getKpiEventUserPK().getUserName());
-                        if (memberPointOfSaturdaySeminar(eventUser) < PointValue.MAX_WEEKEND_SEMINAR_POINT.getValue()) {
-                            if (PointValue.MAX_WEEKEND_SEMINAR_POINT.getValue() - memberPointOfSaturdaySeminar(eventUser) <
-                                    Float.parseFloat(seminarEventDTO.getAdditionalConfig().getMemberPoint())) {
-                                actualPointAdd = PointValue.MAX_WEEKEND_SEMINAR_POINT.getValue() - memberPointOfSaturdaySeminar(eventUser);
-                                kpiPoint.setWeekendSeminarPoint(kpiPoint.getWeekendSeminarPoint() + actualPointAdd);
-                            } else {
-                                actualPointAdd = Float.parseFloat(seminarEventDTO.getAdditionalConfig().getMemberPoint());
-                                kpiPoint.setWeekendSeminarPoint(kpiPoint.getWeekendSeminarPoint() + actualPointAdd);
-                            }
-                            kpiPointRepo.save(kpiPoint);
-
-                            KpiPointDetail kpiPointDetail = new KpiPointDetail();
-                            kpiPointDetail.setEvent(convertEventDTOToEntity(seminarEventDTO));
-                            kpiPointDetail.setUser(kpiUserRepo.findByUserName(eventUser.getKpiEventUserPK().getUserName()));
-                            kpiPointDetail.setPointType(PointType.SATURDAY_SEMINAR_POINT.getValue());
-                            kpiPointDetail.setPoint(actualPointAdd);
-                            kpiPointDetail.setYearMonthId(kpiYearMonthOptional.get().getId());
-                            kpiPointDetailRepo.save(kpiPointDetail);
-                        }
-                    }
-                }
-            }
+            addWeekendSeminarPoint(addPointUsers, kpiEvent, seminarEventDTO);
         } else {
-            for (KpiEventUser eventUser : addPointUsers) {
-                if (eventUser.getType().equals(EventUserType.HOST.getValue())) {
-                    Float evaluatePoint = 0F;
-                    List<KpiSeminarSurvey> surveysEvaluateHost = kpiSeminarSurveyRepo.findByEvaluatedUsernameAndEvent
-                            (kpiUserRepo.findByUserName(eventUser.getKpiEventUserPK().getUserName()), kpiEvent);
-                    if (surveysEvaluateHost.size() == 0) {
-                        evaluatePoint += PointValue.DEFAULT_EFFECTIVE_POINT.getValue();
-                    } else {
-                        Integer totalEvaluatePoint = surveysEvaluateHost.stream().mapToInt(KpiSeminarSurvey::getRating).sum();
-                        evaluatePoint = (float) totalEvaluatePoint / surveysEvaluateHost.size();
-                    }
+            addNormalSeminarPoint(addPointUsers, kpiEvent, seminarEventDTO);
+        }
+    }
 
-                    if (kpiPointRepo.findByRatedUsername(eventUser.getKpiEventUserPK().getUserName()) == null) {
-                        KpiPoint kpiPoint = new KpiPoint();
-                        kpiPoint.setRatedUser(kpiUserRepo.findByUserName(eventUser.getKpiEventUserPK().getUserName()));
-                        actualPointAdd = Float.parseFloat(seminarEventDTO.getAdditionalConfig().getHostPoint()) + evaluatePoint;
-                        kpiPoint.setNormalSeminarPoint(actualPointAdd);
-                        kpiPoint.setYearMonthId(kpiYearMonthOptional.get().getId());
-                        kpiPointRepo.save(kpiPoint);
-                    } else {
-                        KpiPoint kpiPoint = kpiPointRepo.findByRatedUsername(eventUser.getKpiEventUserPK().getUserName());
-                        if (memberPointOfNormalSeminar(eventUser) < PointValue.MAX_NORMAL_SEMINAR_POINT.getValue()) {
-                            if (PointValue.MAX_NORMAL_SEMINAR_POINT.getValue() - memberPointOfNormalSeminar(eventUser) <
-                                    Float.parseFloat(seminarEventDTO.getAdditionalConfig().getHostPoint())) {
-                                actualPointAdd = PointValue.MAX_NORMAL_SEMINAR_POINT.getValue() - memberPointOfNormalSeminar(eventUser)
-                                        + evaluatePoint;
-                            } else {
-                                actualPointAdd = Float.parseFloat(seminarEventDTO.getAdditionalConfig().getHostPoint()) + evaluatePoint;
-                            }
-                            kpiPoint.setNormalSeminarPoint(kpiPoint.getNormalSeminarPoint() + actualPointAdd);
-                            kpiPointRepo.save(kpiPoint);
-                        }else {
-                            actualPointAdd = evaluatePoint;
-                            kpiPoint.setNormalSeminarPoint(kpiPoint.getNormalSeminarPoint() + actualPointAdd);
-                        }
-                    }
-                    KpiPointDetail kpiPointDetail = new KpiPointDetail();
-                    kpiPointDetail.setEvent(convertEventDTOToEntity(seminarEventDTO));
-                    kpiPointDetail.setUser(kpiUserRepo.findByUserName(eventUser.getKpiEventUserPK().getUserName()));
-                    kpiPointDetail.setPointType(PointType.NORMAL_SEMINAR_POINT.getValue());
-                    kpiPointDetail.setPoint(actualPointAdd);
-                    kpiPointDetail.setYearMonthId(kpiYearMonthOptional.get().getId());
-                    kpiPointDetailRepo.save(kpiPointDetail);
+    private void addWeekendSeminarPoint(List<KpiEventUser> eventUsers, KpiEvent event, EventDTO<EventSeminarDetail> seminarEventDTO) throws IOException{
+        for (KpiEventUser eventUser : eventUsers) {
+            if (eventUser.getType().equals(EventUserType.HOST.getValue())) {
+                addHostWeekendSeminarPoint(eventUser, event, seminarEventDTO);
+            } else {
+                addMemberWeekendSeminarPoint(eventUser, seminarEventDTO);
+            }
+        }
+    }
 
-                } else if (eventUser.getType().equals(EventUserType.MEMBER.getValue())) {
-                    if (kpiPointRepo.findByRatedUsername(eventUser.getKpiEventUserPK().getUserName()) == null) {
-                        KpiPoint kpiPoint = new KpiPoint();
-                        kpiPoint.setRatedUser(kpiUserRepo.findByUserName(eventUser.getKpiEventUserPK().getUserName()));
-                        actualPointAdd = Float.parseFloat(seminarEventDTO.getAdditionalConfig().getMemberPoint());
-                        kpiPoint.setNormalSeminarPoint(actualPointAdd);
-                        kpiPoint.setYearMonthId(kpiYearMonthOptional.get().getId());
-                        kpiPointRepo.save(kpiPoint);
+    private void addNormalSeminarPoint(List<KpiEventUser> eventUsers, KpiEvent event, EventDTO<EventSeminarDetail> seminarEventDTO) throws IOException{
+        for (KpiEventUser eventUser : eventUsers) {
+            if (eventUser.getType().equals(EventUserType.HOST.getValue())) {
+                addHostNormalSeminarPoint(eventUser, event, seminarEventDTO);
+            } else if (eventUser.getType().equals(EventUserType.MEMBER.getValue())) {
+                addMemberNormalSeminarPoint(eventUser, seminarEventDTO);
+            } else if (eventUser.getType().equals(EventUserType.LISTEN.getValue())) {
+                addListenerNormalSeminarPoint(eventUser, seminarEventDTO);
+            }
+        }
+    }
 
-                        KpiPointDetail kpiPointDetail = new KpiPointDetail();
-                        kpiPointDetail.setEvent(convertEventDTOToEntity(seminarEventDTO));
-                        kpiPointDetail.setUser(kpiUserRepo.findByUserName(eventUser.getKpiEventUserPK().getUserName()));
-                        kpiPointDetail.setPointType(PointType.NORMAL_SEMINAR_POINT.getValue());
-                        kpiPointDetail.setPoint(actualPointAdd);
-                        kpiPointDetail.setYearMonthId(kpiYearMonthOptional.get().getId());
-                        kpiPointDetailRepo.save(kpiPointDetail);
+    private void addHostNormalSeminarPoint(KpiEventUser eventUser, KpiEvent event, EventDTO<EventSeminarDetail> seminarEventDTO) throws IOException{
+        Float evaluatePoint = 0F;
+        Float actualPointAdd;
+        Optional<KpiYearMonth> kpiYearMonthOptional = kpiMonthRepo.findByMonthCurrent();
+        List<KpiSeminarSurvey> surveysEvaluateHost = kpiSeminarSurveyRepo.findByEvaluatedUsernameAndEvent
+                (kpiUserRepo.findByUserName(eventUser.getKpiEventUserPK().getUserName()), event);
 
-                    } else {
-                        KpiPoint kpiPoint = kpiPointRepo.findByRatedUsername(eventUser.getKpiEventUserPK().getUserName());
-                        if (memberPointOfNormalSeminar(eventUser) < PointValue.MAX_NORMAL_SEMINAR_POINT.getValue()) {
-                            if (PointValue.MAX_NORMAL_SEMINAR_POINT.getValue() - memberPointOfNormalSeminar(eventUser) <
-                                    Float.parseFloat(seminarEventDTO.getAdditionalConfig().getMemberPoint())) {
-                                actualPointAdd = PointValue.MAX_NORMAL_SEMINAR_POINT.getValue() - memberPointOfNormalSeminar(eventUser);
-                            } else {
-                                actualPointAdd = Float.parseFloat(seminarEventDTO.getAdditionalConfig().getMemberPoint());
-                            }
-                            kpiPoint.setNormalSeminarPoint(kpiPoint.getNormalSeminarPoint() + actualPointAdd);
-                            kpiPointRepo.save(kpiPoint);
+        if (surveysEvaluateHost.size() == 0) {
+            evaluatePoint += PointValue.DEFAULT_EFFECTIVE_POINT.getValue();
+        } else {
+            Integer totalEvaluatePoint = surveysEvaluateHost.stream().mapToInt(KpiSeminarSurvey::getRating).sum();
+            evaluatePoint = (float) totalEvaluatePoint / surveysEvaluateHost.size();
+        }
 
-                            KpiPointDetail kpiPointDetail = new KpiPointDetail();
-                            kpiPointDetail.setEvent(convertEventDTOToEntity(seminarEventDTO));
-                            kpiPointDetail.setUser(kpiUserRepo.findByUserName(eventUser.getKpiEventUserPK().getUserName()));
-                            kpiPointDetail.setPointType(PointType.NORMAL_SEMINAR_POINT.getValue());
-                            kpiPointDetail.setPoint(actualPointAdd);
-                            kpiPointDetail.setYearMonthId(kpiYearMonthOptional.get().getId());
-                            kpiPointDetailRepo.save(kpiPointDetail);
-                        }
-                    }
-                } else if (eventUser.getType().equals(EventUserType.LISTEN.getValue())) {
-                    if (kpiPointRepo.findByRatedUsername(eventUser.getKpiEventUserPK().getUserName()) == null) {
-                        KpiPoint kpiPoint = new KpiPoint();
-                        kpiPoint.setRatedUser(kpiUserRepo.findByUserName(eventUser.getKpiEventUserPK().getUserName()));
-                        actualPointAdd = Float.parseFloat(seminarEventDTO.getAdditionalConfig().getListenerPoint());
-                        kpiPoint.setNormalSeminarPoint(actualPointAdd);
-                        kpiPoint.setYearMonthId(kpiYearMonthOptional.get().getId());
-                        kpiPointRepo.save(kpiPoint);
-
-                        KpiPointDetail kpiPointDetail = new KpiPointDetail();
-                        kpiPointDetail.setEvent(convertEventDTOToEntity(seminarEventDTO));
-                        kpiPointDetail.setUser(kpiUserRepo.findByUserName(eventUser.getKpiEventUserPK().getUserName()));
-                        kpiPointDetail.setPointType(PointType.NORMAL_SEMINAR_POINT.getValue());
-                        kpiPointDetail.setPoint(actualPointAdd);
-                        kpiPointDetail.setYearMonthId(kpiYearMonthOptional.get().getId());
-                        kpiPointDetailRepo.save(kpiPointDetail);
-
-                    } else {
-                        KpiPoint kpiPoint = kpiPointRepo.findByRatedUsername(eventUser.getKpiEventUserPK().getUserName());
-                        if (memberPointOfNormalSeminar(eventUser) < PointValue.MAX_NORMAL_SEMINAR_POINT.getValue()) {
-                            if (PointValue.MAX_NORMAL_SEMINAR_POINT.getValue() - memberPointOfNormalSeminar(eventUser) <
-                                    Float.parseFloat(seminarEventDTO.getAdditionalConfig().getListenerPoint())) {
-                                actualPointAdd = PointValue.MAX_NORMAL_SEMINAR_POINT.getValue() - memberPointOfNormalSeminar(eventUser);
-                            } else {
-                                actualPointAdd = Float.parseFloat(seminarEventDTO.getAdditionalConfig().getListenerPoint());
-                            }
-                            kpiPoint.setNormalSeminarPoint(kpiPoint.getNormalSeminarPoint() + actualPointAdd);
-                            kpiPointRepo.save(kpiPoint);
-
-                            KpiPointDetail kpiPointDetail = new KpiPointDetail();
-                            kpiPointDetail.setEvent(convertEventDTOToEntity(seminarEventDTO));
-                            kpiPointDetail.setUser(kpiUserRepo.findByUserName(eventUser.getKpiEventUserPK().getUserName()));
-                            kpiPointDetail.setPointType(PointType.NORMAL_SEMINAR_POINT.getValue());
-                            kpiPointDetail.setPoint(actualPointAdd);
-                            kpiPointDetail.setYearMonthId(kpiYearMonthOptional.get().getId());
-                            kpiPointDetailRepo.save(kpiPointDetail);
-                        }
-                    }
+        KpiPoint kpiPoint = kpiPointRepo.findByRatedUsername(eventUser.getKpiEventUserPK().getUserName());
+        if (kpiPoint == null) {
+            kpiPoint.setRatedUser(kpiUserRepo.findByUserName(eventUser.getKpiEventUserPK().getUserName()));
+            actualPointAdd = Float.parseFloat(seminarEventDTO.getAdditionalConfig().getHostPoint()) + evaluatePoint;
+            kpiPoint.setNormalSeminarPoint(actualPointAdd);
+            kpiPoint.setYearMonthId(kpiYearMonthOptional.get().getId());
+            kpiPointRepo.save(kpiPoint);
+        } else {
+            if (memberPointOfNormalSeminar(eventUser) < PointValue.MAX_NORMAL_SEMINAR_POINT.getValue()) {
+                if (PointValue.MAX_NORMAL_SEMINAR_POINT.getValue() - memberPointOfNormalSeminar(eventUser) <
+                        Float.parseFloat(seminarEventDTO.getAdditionalConfig().getHostPoint())) {
+                    actualPointAdd = PointValue.MAX_NORMAL_SEMINAR_POINT.getValue() - memberPointOfNormalSeminar(eventUser)
+                            + evaluatePoint;
+                } else {
+                    actualPointAdd = Float.parseFloat(seminarEventDTO.getAdditionalConfig().getHostPoint()) + evaluatePoint;
                 }
+                kpiPoint.setNormalSeminarPoint(kpiPoint.getNormalSeminarPoint() + actualPointAdd);
+                kpiPointRepo.save(kpiPoint);
+            }else {
+                actualPointAdd = evaluatePoint;
+                kpiPoint.setNormalSeminarPoint(kpiPoint.getNormalSeminarPoint() + actualPointAdd);
+            }
+        }
+        KpiPointDetail kpiPointDetail = new KpiPointDetail();
+        kpiPointDetail.setEvent(convertEventDTOToEntity(seminarEventDTO));
+        kpiPointDetail.setUser(kpiUserRepo.findByUserName(eventUser.getKpiEventUserPK().getUserName()));
+        kpiPointDetail.setPointType(PointType.NORMAL_SEMINAR_POINT.getValue());
+        kpiPointDetail.setPoint(actualPointAdd);
+        kpiPointDetail.setYearMonthId(kpiYearMonthOptional.get().getId());
+        kpiPointDetailRepo.save(kpiPointDetail);
+    }
+
+    private void addMemberNormalSeminarPoint(KpiEventUser eventUser, EventDTO<EventSeminarDetail> seminarEventDTO) throws IOException{
+        Float actualPointAdd;
+        Optional<KpiYearMonth> kpiYearMonthOptional = kpiMonthRepo.findByMonthCurrent();
+        KpiPoint kpiPoint = kpiPointRepo.findByRatedUsername(eventUser.getKpiEventUserPK().getUserName());
+        if (kpiPoint == null) {
+            kpiPoint.setRatedUser(kpiUserRepo.findByUserName(eventUser.getKpiEventUserPK().getUserName()));
+            actualPointAdd = Float.parseFloat(seminarEventDTO.getAdditionalConfig().getMemberPoint());
+            kpiPoint.setNormalSeminarPoint(actualPointAdd);
+            kpiPoint.setYearMonthId(kpiYearMonthOptional.get().getId());
+            kpiPointRepo.save(kpiPoint);
+
+            KpiPointDetail kpiPointDetail = new KpiPointDetail();
+            kpiPointDetail.setEvent(convertEventDTOToEntity(seminarEventDTO));
+            kpiPointDetail.setUser(kpiUserRepo.findByUserName(eventUser.getKpiEventUserPK().getUserName()));
+            kpiPointDetail.setPointType(PointType.NORMAL_SEMINAR_POINT.getValue());
+            kpiPointDetail.setPoint(actualPointAdd);
+            kpiPointDetail.setYearMonthId(kpiYearMonthOptional.get().getId());
+            kpiPointDetailRepo.save(kpiPointDetail);
+
+        } else {
+            if (memberPointOfNormalSeminar(eventUser) < PointValue.MAX_NORMAL_SEMINAR_POINT.getValue()) {
+                if (PointValue.MAX_NORMAL_SEMINAR_POINT.getValue() - memberPointOfNormalSeminar(eventUser) <
+                        Float.parseFloat(seminarEventDTO.getAdditionalConfig().getMemberPoint())) {
+                    actualPointAdd = PointValue.MAX_NORMAL_SEMINAR_POINT.getValue() - memberPointOfNormalSeminar(eventUser);
+                } else {
+                    actualPointAdd = Float.parseFloat(seminarEventDTO.getAdditionalConfig().getMemberPoint());
+                }
+                kpiPoint.setNormalSeminarPoint(kpiPoint.getNormalSeminarPoint() + actualPointAdd);
+                kpiPointRepo.save(kpiPoint);
+
+                KpiPointDetail kpiPointDetail = new KpiPointDetail();
+                kpiPointDetail.setEvent(convertEventDTOToEntity(seminarEventDTO));
+                kpiPointDetail.setUser(kpiUserRepo.findByUserName(eventUser.getKpiEventUserPK().getUserName()));
+                kpiPointDetail.setPointType(PointType.NORMAL_SEMINAR_POINT.getValue());
+                kpiPointDetail.setPoint(actualPointAdd);
+                kpiPointDetail.setYearMonthId(kpiYearMonthOptional.get().getId());
+                kpiPointDetailRepo.save(kpiPointDetail);
+            }
+        }
+    }
+
+    private void addListenerNormalSeminarPoint(KpiEventUser eventUser, EventDTO<EventSeminarDetail> seminarEventDTO) throws IOException{
+        Float actualPointAdd;
+        Optional<KpiYearMonth> kpiYearMonthOptional = kpiMonthRepo.findByMonthCurrent();
+        KpiPoint kpiPoint = kpiPointRepo.findByRatedUsername(eventUser.getKpiEventUserPK().getUserName());
+        if (kpiPoint == null) {
+            kpiPoint.setRatedUser(kpiUserRepo.findByUserName(eventUser.getKpiEventUserPK().getUserName()));
+            actualPointAdd = Float.parseFloat(seminarEventDTO.getAdditionalConfig().getListenerPoint());
+            kpiPoint.setNormalSeminarPoint(actualPointAdd);
+            kpiPoint.setYearMonthId(kpiYearMonthOptional.get().getId());
+            kpiPointRepo.save(kpiPoint);
+
+            KpiPointDetail kpiPointDetail = new KpiPointDetail();
+            kpiPointDetail.setEvent(convertEventDTOToEntity(seminarEventDTO));
+            kpiPointDetail.setUser(kpiUserRepo.findByUserName(eventUser.getKpiEventUserPK().getUserName()));
+            kpiPointDetail.setPointType(PointType.NORMAL_SEMINAR_POINT.getValue());
+            kpiPointDetail.setPoint(actualPointAdd);
+            kpiPointDetail.setYearMonthId(kpiYearMonthOptional.get().getId());
+            kpiPointDetailRepo.save(kpiPointDetail);
+
+        } else {
+            if (memberPointOfNormalSeminar(eventUser) < PointValue.MAX_NORMAL_SEMINAR_POINT.getValue()) {
+                if (PointValue.MAX_NORMAL_SEMINAR_POINT.getValue() - memberPointOfNormalSeminar(eventUser) <
+                        Float.parseFloat(seminarEventDTO.getAdditionalConfig().getListenerPoint())) {
+                    actualPointAdd = PointValue.MAX_NORMAL_SEMINAR_POINT.getValue() - memberPointOfNormalSeminar(eventUser);
+                } else {
+                    actualPointAdd = Float.parseFloat(seminarEventDTO.getAdditionalConfig().getListenerPoint());
+                }
+                kpiPoint.setNormalSeminarPoint(kpiPoint.getNormalSeminarPoint() + actualPointAdd);
+                kpiPointRepo.save(kpiPoint);
+
+                KpiPointDetail kpiPointDetail = new KpiPointDetail();
+                kpiPointDetail.setEvent(convertEventDTOToEntity(seminarEventDTO));
+                kpiPointDetail.setUser(kpiUserRepo.findByUserName(eventUser.getKpiEventUserPK().getUserName()));
+                kpiPointDetail.setPointType(PointType.NORMAL_SEMINAR_POINT.getValue());
+                kpiPointDetail.setPoint(actualPointAdd);
+                kpiPointDetail.setYearMonthId(kpiYearMonthOptional.get().getId());
+                kpiPointDetailRepo.save(kpiPointDetail);
+            }
+        }
+    }
+
+    private void addHostWeekendSeminarPoint(KpiEventUser eventUser, KpiEvent kpiEvent, EventDTO<EventSeminarDetail> seminarEventDTO) throws IOException{
+        List<KpiSeminarSurvey> surveysEvaluateHost = kpiSeminarSurveyRepo.findByEvaluatedUsernameAndEvent
+                (kpiUserRepo.findByUserName(eventUser.getKpiEventUserPK().getUserName()), kpiEvent);
+        Float evaluatePoint = 0F;
+        Float actualPointAdd;
+        Optional<KpiYearMonth> kpiYearMonthOptional = kpiMonthRepo.findByMonthCurrent();
+        KpiPoint kpiPoint = kpiPointRepo.findByRatedUsername(eventUser.getKpiEventUserPK().getUserName());
+
+        if (surveysEvaluateHost.size() == 0) {
+            evaluatePoint += PointValue.DEFAULT_EFFECTIVE_POINT.getValue();
+        } else {
+            Integer totalEvaluatePoint = surveysEvaluateHost.stream().mapToInt(KpiSeminarSurvey::getRating).sum();
+            evaluatePoint = (float) totalEvaluatePoint / surveysEvaluateHost.size();
+        }
+
+        if (kpiPoint == null) {
+            kpiPoint.setRatedUser(kpiUserRepo.findByUserName(eventUser.getKpiEventUserPK().getUserName()));
+            actualPointAdd = Float.parseFloat(seminarEventDTO.getAdditionalConfig().getHostPoint()) + evaluatePoint;
+            kpiPoint.setWeekendSeminarPoint(actualPointAdd);
+            kpiPoint.setYearMonthId(kpiYearMonthOptional.get().getId());
+            kpiPointRepo.save(kpiPoint);
+        } else {
+            if (memberPointOfSaturdaySeminar(eventUser) < PointValue.MAX_WEEKEND_SEMINAR_POINT.getValue()) {
+                if (PointValue.MAX_WEEKEND_SEMINAR_POINT.getValue() - memberPointOfSaturdaySeminar(eventUser) <
+                        Float.parseFloat(seminarEventDTO.getAdditionalConfig().getHostPoint())) {
+                    actualPointAdd = PointValue.MAX_WEEKEND_SEMINAR_POINT.getValue() - memberPointOfSaturdaySeminar(eventUser)
+                            + evaluatePoint;
+                    kpiPoint.setWeekendSeminarPoint(kpiPoint.getWeekendSeminarPoint() + actualPointAdd);
+                } else {
+                    actualPointAdd = Float.parseFloat(seminarEventDTO.getAdditionalConfig().getHostPoint()) + evaluatePoint;
+                    kpiPoint.setWeekendSeminarPoint(kpiPoint.getWeekendSeminarPoint() + actualPointAdd);
+                }
+                kpiPointRepo.save(kpiPoint);
+
+            }else{
+                actualPointAdd = evaluatePoint;
+                kpiPoint.setWeekendSeminarPoint(kpiPoint.getWeekendSeminarPoint() + actualPointAdd);
+            }
+        }
+
+        KpiPointDetail kpiPointDetail = new KpiPointDetail();
+        kpiPointDetail.setEvent(convertEventDTOToEntity(seminarEventDTO));
+        kpiPointDetail.setUser(kpiUserRepo.findByUserName(eventUser.getKpiEventUserPK().getUserName()));
+        kpiPointDetail.setPointType(PointType.SATURDAY_SEMINAR_POINT.getValue());
+        kpiPointDetail.setPoint(actualPointAdd);
+        kpiPointDetail.setYearMonthId(kpiYearMonthOptional.get().getId());
+        kpiPointDetailRepo.save(kpiPointDetail);
+    }
+
+    private void addMemberWeekendSeminarPoint(KpiEventUser eventUser, EventDTO<EventSeminarDetail> seminarEventDTO) throws IOException{
+        Float actualPointAdd;
+        Optional<KpiYearMonth> kpiYearMonthOptional = kpiMonthRepo.findByMonthCurrent();
+        KpiPoint kpiPoint = kpiPointRepo.findByRatedUsername(eventUser.getKpiEventUserPK().getUserName());
+        if (kpiPoint == null) {
+            kpiPoint.setRatedUser(kpiUserRepo.findByUserName(eventUser.getKpiEventUserPK().getUserName()));
+            actualPointAdd = Float.parseFloat(seminarEventDTO.getAdditionalConfig().getMemberPoint());
+            kpiPoint.setWeekendSeminarPoint(actualPointAdd);
+            kpiPoint.setYearMonthId(kpiYearMonthOptional.get().getId());
+            kpiPointRepo.save(kpiPoint);
+
+            KpiPointDetail kpiPointDetail = new KpiPointDetail();
+            kpiPointDetail.setEvent(convertEventDTOToEntity(seminarEventDTO));
+            kpiPointDetail.setUser(kpiUserRepo.findByUserName(eventUser.getKpiEventUserPK().getUserName()));
+            kpiPointDetail.setPointType(PointType.SATURDAY_SEMINAR_POINT.getValue());
+            kpiPointDetail.setPoint(actualPointAdd);
+            kpiPointDetail.setYearMonthId(kpiYearMonthOptional.get().getId());
+            kpiPointDetailRepo.save(kpiPointDetail);
+        } else {
+            if (memberPointOfSaturdaySeminar(eventUser) < PointValue.MAX_WEEKEND_SEMINAR_POINT.getValue()) {
+                if (PointValue.MAX_WEEKEND_SEMINAR_POINT.getValue() - memberPointOfSaturdaySeminar(eventUser) <
+                        Float.parseFloat(seminarEventDTO.getAdditionalConfig().getMemberPoint())) {
+                    actualPointAdd = PointValue.MAX_WEEKEND_SEMINAR_POINT.getValue() - memberPointOfSaturdaySeminar(eventUser);
+                    kpiPoint.setWeekendSeminarPoint(kpiPoint.getWeekendSeminarPoint() + actualPointAdd);
+                } else {
+                    actualPointAdd = Float.parseFloat(seminarEventDTO.getAdditionalConfig().getMemberPoint());
+                    kpiPoint.setWeekendSeminarPoint(kpiPoint.getWeekendSeminarPoint() + actualPointAdd);
+                }
+                kpiPointRepo.save(kpiPoint);
+
+                KpiPointDetail kpiPointDetail = new KpiPointDetail();
+                kpiPointDetail.setEvent(convertEventDTOToEntity(seminarEventDTO));
+                kpiPointDetail.setUser(kpiUserRepo.findByUserName(eventUser.getKpiEventUserPK().getUserName()));
+                kpiPointDetail.setPointType(PointType.SATURDAY_SEMINAR_POINT.getValue());
+                kpiPointDetail.setPoint(actualPointAdd);
+                kpiPointDetail.setYearMonthId(kpiYearMonthOptional.get().getId());
+                kpiPointDetailRepo.save(kpiPointDetail);
             }
         }
     }
