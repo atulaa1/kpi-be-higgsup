@@ -13,6 +13,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -1819,4 +1820,19 @@ public class EventServiceImpl extends BaseService implements EventService {
         return true;
     }
 
+    @Scheduled(cron = "00 00 16 10 * ?")
+    private void cancelUnconfirmedClubAndSupportEvent(){
+        List<KpiEvent> eventList = kpiEventRepo.findClubAndSupportEvent();
+
+        for(KpiEvent kpiEvent : eventList){
+            System.out.println(kpiEvent.getCreatedDate().getMonth());
+            System.out.println(Calendar.getInstance().get(Calendar.MONTH));
+            if(kpiEvent.getCreatedDate().getMonth() + 1 == Calendar.getInstance().get(Calendar.MONTH) &&
+                    kpiEvent.getStatus().equals(StatusEvent.WAITING.getValue()) ){
+                kpiEvent.setStatus(StatusEvent.CANCEL.getValue());
+                kpiEventRepo.save(kpiEvent);
+            }
+        }
+    }
 }
+

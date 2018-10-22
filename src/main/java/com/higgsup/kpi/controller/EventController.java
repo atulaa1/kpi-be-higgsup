@@ -46,7 +46,7 @@ public class EventController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/club-support")
-    public Response getAllEvent() {
+    public Response getAllClubAndSupportEvent() {
         Response<List<EventDTO>> response = new Response<>(HttpStatus.OK.value());
         try {
             List<EventDTO> eventDTOS = eventService.getAllClubAndSupportEvent();
