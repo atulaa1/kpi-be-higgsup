@@ -13,5 +13,7 @@ public interface PointService {
     void addSeminarPoint(List<KpiEventUser> eventUsers, EventDTO<EventSeminarDetail> seminarEventDTO) throws IOException;
 
     void calculateTeambuildingPoint(EventDTO<EventTeamBuildingDetail> teamBuildingDTO);
+
+    List<PointDTO> getFamePointOfEmployee(String username);
 }
 

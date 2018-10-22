@@ -15,8 +15,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.higgsup.kpi.glossary.EventUserType.ORGANIZER;
@@ -58,6 +60,9 @@ public class PointServiceImpl extends BaseService implements PointService {
 
     @Autowired
     KpiGroupTypeRepo kpiGroupTypeRepo;
+
+    @Autowired
+    private KpiFamePointRepo kpiFamePointRepo;
 
     @Scheduled(cron = "0 0 16 10 * ?")
     public void calculateRulePoint() {
@@ -565,5 +570,38 @@ public class PointServiceImpl extends BaseService implements PointService {
             event.setKpiEventUserList(kpiEventUsers);
         }
         return kpiEventService.convertSeminarEventEntityToDTO(kpiEvents);
+    }
+
+    @Scheduled(cron = "00 00 16 10 * ?")
+    private void calculateFamePoint(){
+        int year = Calendar.getInstance().get(Calendar.YEAR);
+        List<KpiPoint> kpiPointList = kpiPointRepo.getAllPoint();
+        for(KpiPoint kpiPoint: kpiPointList){
+            kpiPoint.setFamedPoint((kpiPoint.getTotalPoint() - 50) / 100);
+            KpiFamePoint kpiFamePoint = kpiFamePointRepo.findByUsernameAndYear(year, kpiPoint.getRatedUser().getUserName());
+            if(kpiFamePoint == null){
+                kpiFamePoint.setUser(kpiUserRepo.findByUserName(kpiPoint.getRatedUser().getUserName()));
+                kpiFamePoint.setFamePoint((kpiPoint.getTotalPoint() - 50) / 100);
+                kpiFamePoint.setYear(year);
+            }else{
+                kpiFamePoint.setFamePoint(kpiFamePoint.getFamePoint() + (kpiPoint.getTotalPoint() - 50) / 100);
+            }
+            kpiFamePointRepo.save(kpiFamePoint);
+        }
+    }
+
+    @Override
+    public List<PointDTO> getFamePointOfEmployee(String username) {
+        List<KpiPoint> famePoint = kpiPointRepo.getFamedPointOfEmployee(username);
+        List<PointDTO> pointDTOs = new ArrayList<>();
+
+        for(KpiPoint kpiPoint : famePoint){
+            PointDTO pointDTO = new PointDTO();
+            pointDTO.setFamedPoint(kpiPoint.getFamedPoint());
+            pointDTO.setYearMonth(kpiPoint.getYearMonthId());
+            pointDTOs.add(pointDTO);
+        }
+
+        return pointDTOs;
     }
 }
