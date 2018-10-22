@@ -11111,7 +11111,7 @@
         }
       }
     },
-    "/api/point-detail":{
+    "/api/point/point-detail":{
       "get":{
         "tags":[
           "point-controller"

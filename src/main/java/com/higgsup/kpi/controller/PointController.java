@@ -21,7 +21,7 @@ import java.io.IOException;
 
 
 @RestController
-@RequestMapping(BaseConfiguration.BASE_API_URL)
+@RequestMapping(BaseConfiguration.BASE_API_URL + "/point")
 public class PointController {
 
     @Autowired
