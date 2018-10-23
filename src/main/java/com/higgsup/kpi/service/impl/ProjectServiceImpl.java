@@ -1,5 +1,6 @@
 package com.higgsup.kpi.service.impl;
 
+import com.google.common.collect.Lists;
 import com.higgsup.kpi.dto.ProjectDTO;
 import com.higgsup.kpi.dto.ProjectUserDTO;
 import com.higgsup.kpi.dto.UserDTO;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.sql.Array;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,27 +47,26 @@ public class ProjectServiceImpl implements ProjectService {
         return projectDTOS;
     }
 
-    public List<ProjectDTO> getProjectsInMonth(){
+    public List<ProjectDTO> getProjectsInMonth() {
         List<KpiProject> projectsInMonth = kpiProjectRepo.findAllProjectsInMonth();
         return convertKpiProjectEntityToDTO(projectsInMonth);
     }
 
     @Override
     public ProjectDTO updateProject(ProjectDTO projectDTO) {
-        kpiProjectUserRepo.deleteByProjectId(projectDTO.getId());
         ProjectDTO validateProjectDTO = new ProjectDTO();
         //check name is null then not update
         if (Objects.nonNull(projectDTO.getName())) {
             Optional<KpiProject> kpiProjectOptional = kpiProjectRepo.findById(projectDTO.getId());
             if (kpiProjectOptional.isPresent()) {
                 KpiProject kpiProject = kpiProjectOptional.get();
-
-                //check if same
-                KpiProject kpiProjectInDB = kpiProjectRepo.findByName(projectDTO.getName());
-                if (!(Objects.nonNull(kpiProjectInDB) && !Objects.equals(projectDTO.getId(), kpiProjectInDB.getId()))) {
+                if (Objects.equals(kpiProject.getActive(), projectDTO.getActive())) {
+                    kpiProjectUserRepo.deleteByProjectId(projectDTO.getId());
+                    //check if same
+                    KpiProject kpiProjectInDB = kpiProjectRepo.findByName(projectDTO.getName());
+                    if (!(Objects.nonNull(kpiProjectInDB) && !Objects.equals(projectDTO.getId(), kpiProjectInDB.getId()))) {
                         kpiProject.setName(projectDTO.getName());
                         kpiProject.setActive(projectDTO.getActive());
-                        kpiProject.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
 
                         List<KpiProjectUser> kpiProjectUsers = new ArrayList<>();
                         for (ProjectUserDTO projectUserDTO : projectDTO.getProjectUserList()) {
@@ -78,16 +79,24 @@ public class ProjectServiceImpl implements ProjectService {
 
                         kpiProject.setProjectUserList(kpiProjectUsers);
                         kpiProjectRepo.save(kpiProject);
-                    validateProjectDTO.setId(kpiProject.getId());
+                        validateProjectDTO.setId(kpiProject.getId());
                         validateProjectDTO.setName(kpiProject.getName());
                         validateProjectDTO.setActive(kpiProject.getActive());
                         validateProjectDTO.setUpdatedDate(kpiProject.getUpdatedDate());
-                    validateProjectDTO.setCreatedDate(kpiProject.getCreatedDate());
+                        validateProjectDTO.setCreatedDate(kpiProject.getCreatedDate());
                         validateProjectDTO.setProjectUserList(convertListUserEntityToDTO(kpiProjectUsers));
+                    } else {
+                        validateProjectDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+                        validateProjectDTO.setMessage(ErrorMessage.PARAMETERS_NAME_PROJECT_EXISTS);
+                    }
                 } else {
-                    validateProjectDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
-                    validateProjectDTO.setMessage(ErrorMessage.PARAMETERS_NAME_PROJECT_EXISTS);
+                    kpiProject.setActive(projectDTO.getActive());
+                    kpiProject.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
+                    kpiProject = kpiProjectRepo.save(kpiProject);
+                    validateProjectDTO = convertKpiProjectEntityToDTO(Lists.newArrayList(kpiProject)).get(0);
+
                 }
+
 
             } else {
                 validateProjectDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());

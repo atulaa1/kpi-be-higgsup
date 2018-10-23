@@ -427,7 +427,7 @@ public class EventServiceImpl extends BaseService implements EventService {
                     KpiUser kpiUser = kpiUserRepo.findByUserName(eventUserDTO.getUser().getUsername());
                     UserDTO userDTO = convertUserEntityToDTO(kpiUser);
                     eventUserDTO.setUser(userDTO);
-                    eventUserDTO.setType(EvaluatingStatus.UNFINISHED.getValue());
+                    eventUserDTO.setStatus(EvaluatingStatus.UNFINISHED.getValue());
                 }
 
                 validateSeminarDTO.setEventUserList(eventDTO.getEventUserList());
