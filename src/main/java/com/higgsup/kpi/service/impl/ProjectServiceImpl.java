@@ -78,13 +78,9 @@ public class ProjectServiceImpl implements ProjectService {
                         }
 
                         kpiProject.setProjectUserList(kpiProjectUsers);
-                        kpiProjectRepo.save(kpiProject);
-                        validateProjectDTO.setId(kpiProject.getId());
-                        validateProjectDTO.setName(kpiProject.getName());
-                        validateProjectDTO.setActive(kpiProject.getActive());
-                        validateProjectDTO.setUpdatedDate(kpiProject.getUpdatedDate());
-                        validateProjectDTO.setCreatedDate(kpiProject.getCreatedDate());
-                        validateProjectDTO.setProjectUserList(convertListUserEntityToDTO(kpiProjectUsers));
+                        kpiProject = kpiProjectRepo.save(kpiProject);
+                        validateProjectDTO = convertKpiProjectEntityToDTO(Lists.newArrayList(kpiProject)).get(0);
+
                     } else {
                         validateProjectDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
                         validateProjectDTO.setMessage(ErrorMessage.PARAMETERS_NAME_PROJECT_EXISTS);
