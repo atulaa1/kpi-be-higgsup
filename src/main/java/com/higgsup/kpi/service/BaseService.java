@@ -26,8 +26,10 @@ public abstract class BaseService {
     EventServiceImpl kpiEventService;
 
     @Autowired
-    KpiPointDetailRepo kpiPointDetailRepo;
+    UserService userService;
 
+    @Autowired
+    KpiPointDetailRepo kpiPointDetailRepo;
 
     protected void addClubPoint(KpiUser kpiUser, Float point, KpiEvent event) {
         Optional<KpiYearMonth> kpiYearMonthOptional = kpiMonthRepo.findByMonthCurrent();
@@ -68,9 +70,7 @@ public abstract class BaseService {
                 kpiPointDetail.setYearMonthId(kpiYearMonthOptional.get().getId());
                 kpiPointDetailRepo.save(kpiPointDetail);
             }
-
         }
-
     }
 
     protected void addSupportPoint(KpiUser kpiUser, Float point, KpiEvent event) {
