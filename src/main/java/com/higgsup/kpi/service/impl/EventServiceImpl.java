@@ -961,7 +961,10 @@ public class EventServiceImpl extends BaseService implements EventService {
         Float point = setHistorySupportAndGetAllPointNewSupport(kpiEvent);
         //ad point
         if (Objects.equals(kpiEvent.getStatus(), StatusEvent.CONFIRMED.getValue())) {
-            addSupportPoint(kpiEvent.getKpiEventUserList().get(0).getKpiUser(), point, kpiEvent);
+            List<UserDTO> employee = userService.getAllEmployee();
+            if(isEmployee(kpiEvent.getKpiEventUserList().get(0).getKpiUser(), employee)){
+                addSupportPoint(kpiEvent.getKpiEventUserList().get(0).getKpiUser(), point, kpiEvent);
+            }
         }
         kpiEvent = kpiEventRepo.save(kpiEvent);
         eventDTO = convertNewSupportEntityToDTO(kpiEvent);
