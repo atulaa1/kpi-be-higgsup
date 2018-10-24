@@ -133,6 +133,7 @@ public class EventServiceImpl extends BaseService implements EventService {
         return eventDTOS;
     }
 
+
     public List<EventDTO<EventSeminarDetail>> convertSeminarEventEntityToDTO(List<KpiEvent> kpiEventEntities) throws IOException{
         List<EventDTO<EventSeminarDetail>> eventDTOS = new ArrayList<>();
         if (!CollectionUtils.isEmpty(kpiEventEntities))
@@ -899,14 +900,13 @@ public class EventServiceImpl extends BaseService implements EventService {
         GroupClubDetail groupClubDetail = mapper.readValue(kpiEvent.getGroup().getAdditionalConfig(),
                 GroupClubDetail.class);
         for (KpiEventUser kpiEventUser : kpiEvent.getKpiEventUserList()) {
-            addClubPoint(kpiEventUser.getKpiUser(), groupClubDetail.getParticipationPoint());
+            addClubPoint(kpiEventUser.getKpiUser(), groupClubDetail.getParticipationPoint(), kpiEvent);
         }
     }
 
     private boolean validateYearMonth(java.util.Date yearMonth) {
         //is true if in month old , is false if la new
         Timestamp dateCun = new Timestamp(System.currentTimeMillis());
-
         if (dateCun.getYear() + 1900 == yearMonth.getYear() + 1900
                 && dateCun.getMonth() + 1 == yearMonth.getMonth() + 1
                 ) {
@@ -935,7 +935,7 @@ public class EventServiceImpl extends BaseService implements EventService {
         Float point = setHistorySupportAndGetAllPoint(kpiEvent);
         //ad point
         if (Objects.equals(kpiEvent.getStatus(), StatusEvent.CONFIRMED.getValue())) {
-            addSupportPoint(kpiEvent.getKpiEventUserList().get(0).getKpiUser(), point);
+            addSupportPoint(kpiEvent.getKpiEventUserList().get(0).getKpiUser(), point, kpiEvent);
         }
         kpiEvent = kpiEventRepo.save(kpiEvent);
         eventDTO = convertSupportEntiyToDTO(kpiEvent);
@@ -953,7 +953,7 @@ public class EventServiceImpl extends BaseService implements EventService {
         Float point = setHistorySupportAndGetAllPointNewSupport(kpiEvent);
         //ad point
         if (Objects.equals(kpiEvent.getStatus(), StatusEvent.CONFIRMED.getValue())) {
-            addSupportPoint(kpiEvent.getKpiEventUserList().get(0).getKpiUser(), point);
+            addSupportPoint(kpiEvent.getKpiEventUserList().get(0).getKpiUser(), point, kpiEvent);
         }
         kpiEvent = kpiEventRepo.save(kpiEvent);
         eventDTO = convertNewSupportEntityToDTO(kpiEvent);

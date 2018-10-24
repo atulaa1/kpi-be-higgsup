@@ -1,10 +1,12 @@
 package com.higgsup.kpi.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.sql.Timestamp;
 import java.util.List;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class EventDTO<T> extends BaseDTO {
     private Integer id;
 
