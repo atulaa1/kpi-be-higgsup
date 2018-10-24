@@ -1,7 +1,10 @@
 package com.higgsup.kpi.service.impl;
 
 import com.higgsup.kpi.dto.*;
+import com.higgsup.kpi.entity.KpiYearMonth;
+import com.higgsup.kpi.repository.KpiMonthRepo;
 import com.higgsup.kpi.repository.KpiPersonalSurveyRepo;
+import com.higgsup.kpi.repository.KpiProjectLogRepo;
 import com.higgsup.kpi.service.EvaluationService;
 import com.higgsup.kpi.service.ProjectService;
 import com.higgsup.kpi.service.SurveyService;
@@ -11,8 +14,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.higgsup.kpi.glossary.ErrorCode.MUST_ANSWER_ALL_REQUIRED_QUESTIONS;
+import static com.higgsup.kpi.glossary.ManInfo.NUMBER_OF_MAN;
 import static com.higgsup.kpi.glossary.SurveyQuestion.QUESTION4;
 import static com.higgsup.kpi.glossary.SurveyQuestion.REQUIRED_QUESTIONS;
 
@@ -30,6 +35,12 @@ public class EvaluationServiceImpl implements EvaluationService {
 
     @Autowired
     private KpiPersonalSurveyRepo kpiPersonalSurveyRepo;
+
+    @Autowired
+    private KpiProjectLogRepo kpiProjectLogRepo;
+
+    @Autowired
+    private KpiMonthRepo kpiMonthRepo;
 
     @Override
     public EvaluationInfoDTO getAllEvaluationInfo() {
@@ -76,10 +87,22 @@ public class EvaluationServiceImpl implements EvaluationService {
                 }
             }
         }
-        //validate the evaluation of a last man:
+        //validate the project evaluation of a last man:
+        Optional<KpiYearMonth> kpiYearMonthOptional = kpiMonthRepo.findByMonthCurrent();
+        if(kpiYearMonthOptional.isPresent()){
+            if (kpiProjectLogRepo.countTheNumberOfManEvaluatingProject(kpiYearMonthOptional.get().getId())
+                    == (NUMBER_OF_MAN.getValue() - 1)){
 
+            }
+        }
 
+        //validate the personal evaluation of a last man:
+        if(kpiYearMonthOptional.isPresent()){
+            if (kpiPersonalSurveyRepo.countTheNumberOfManEvaluatingEmployee(kpiYearMonthOptional.get().getId())
+                    == (NUMBER_OF_MAN.getValue() - 1)){
 
+            }
+        }
 
         return errors;
     }
