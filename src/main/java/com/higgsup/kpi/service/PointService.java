@@ -2,7 +2,6 @@ package com.higgsup.kpi.service;
 
 import com.higgsup.kpi.dto.*;
 import com.higgsup.kpi.entity.KpiEventUser;
-import com.higgsup.kpi.entity.KpiUser;
 
 import java.io.IOException;
 import java.util.List;
@@ -13,6 +12,8 @@ public interface PointService {
     void addSeminarPoint(List<KpiEventUser> eventUsers, EventDTO<EventSeminarDetail> seminarEventDTO) throws IOException;
 
     void calculateTeambuildingPoint(EventDTO<EventTeamBuildingDetail> teamBuildingDTO);
+
+    EmployeePointDetailDTO getPointDetailByUser(String username) throws IOException;
 
     List<PointDTO> getFamePointOfEmployee(String username);
 }

@@ -27,9 +27,12 @@ public class PointDTO extends BaseDTO {
 
     private Float totalPoint;
 
+    private Integer yearMonthId;
+
+    private Integer title;
+
     private Float famedPoint;
 
-    private Integer yearMonthId;
 
     public Integer getId() {
         return id;
@@ -119,12 +122,20 @@ public class PointDTO extends BaseDTO {
         this.totalPoint = totalPoint;
     }
 
-    public Integer getYearMonth() {
+    public Integer getYearMonthId() {
         return yearMonthId;
     }
 
-    public void setYearMonth(Integer yearMonth) {
-        this.yearMonthId = yearMonth;
+    public void setYearMonthId(Integer yearMonthId) {
+        this.yearMonthId = yearMonthId;
+    }
+
+    public Integer getTitle() {
+        return title;
+    }
+
+    public void setTitle(Integer title) {
+        this.title = title;
     }
 
     public Float getFamedPoint() {
