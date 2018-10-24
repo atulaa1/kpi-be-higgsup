@@ -71,9 +71,7 @@ public abstract class BaseService {
                 kpiPointDetail.setYearMonthId(kpiYearMonthOptional.get().getId());
                 kpiPointDetailRepo.save(kpiPointDetail);
             }
-
         }
-
     }
 
     protected void addSupportPoint(KpiUser kpiUser, Float point, KpiEvent event) {

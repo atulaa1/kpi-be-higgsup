@@ -271,11 +271,11 @@ public class PointServiceImpl extends BaseService implements PointService {
         List<KpiEventUser> kpiEventUserList = kpiEventUserRepo.findByKpiEventId(teamBuildingDTO.getId());
 
         List<KpiEventUser> eventUserWithoutMan = kpiEventUserList.stream()
-                .filter(u -> isEmployee(u.getKpiUser(), employee))
+                .filter(u -> isEmployee(u.getKpiEventUserPK().getUserName(), employee))
                 .collect(Collectors.toList());
 
         List<KpiEventUser> participants = eventUserWithoutMan.stream()
-                .filter(u -> !u.getType().equals(ORGANIZER.getValue()) && isEmployee(u.getKpiUser(), employee))
+                .filter(u -> !u.getType().equals(ORGANIZER.getValue()))
                 .collect(Collectors.toList());
 
         for (KpiEventUser participant : participants) {
@@ -348,42 +348,43 @@ public class PointServiceImpl extends BaseService implements PointService {
     @Scheduled(cron = "00 00 16 10 * ?")
     private void addEffectivePointForHost() throws IOException {
         Optional<KpiYearMonth> kpiYearMonthOptional = kpiMonthRepo.findByMonthCurrent();
-
         List<KpiGroup> allClub = kpiGroupRepo.findAllClub();
-
         List<GroupDTO<GroupClubDetail>> allClubDTO = convertClubGroupEntityToDTO(allClub);
-
         Long hostParticipate = 0L;
+        List<UserDTO> employee = userService.getAllEmployee();
+
         for(GroupDTO<GroupClubDetail> clubDTO:allClubDTO) {
             KpiUser clubOwner = kpiUserRepo.findByUserName(clubDTO.getAdditionalConfig().getHost());
-            List<KpiEvent> confirmClubEvents = kpiEventRepo.findConfirmedClubEventCreatedByHost(clubDTO.getAdditionalConfig().getHost());
-            if(confirmClubEvents != null){
-                for(KpiEvent event:confirmClubEvents){
-                    List<KpiEventUser> kpiEventUsers = kpiEventUserRepo.findByKpiEventId(event.getId());
-                    if(kpiEventUsers.stream().anyMatch(e -> e.getKpiEventUserPK().getUserName().equals(clubDTO.getAdditionalConfig().getHost()))){
-                        hostParticipate += 1;
+            if(isEmployee(clubOwner.getUserName(), employee)){
+                List<KpiEvent> confirmClubEvents = kpiEventRepo.findConfirmedClubEventCreatedByHost(clubDTO.getAdditionalConfig().getHost());
+                if(confirmClubEvents != null){
+                    for(KpiEvent event:confirmClubEvents){
+                        List<KpiEventUser> kpiEventUsers = kpiEventUserRepo.findByKpiEventId(event.getId());
+                        if(kpiEventUsers.stream().anyMatch(e -> e.getKpiEventUserPK().getUserName().equals(clubDTO.getAdditionalConfig().getHost()))){
+                            hostParticipate += 1;
+                        }
                     }
-                }
-                if(confirmClubEvents.size() >= clubDTO.getAdditionalConfig().getMinNumberOfSessions() / 2 &&
-                        hostParticipate >= (float)confirmClubEvents.size() * 3/4){
-                    if(kpiPointRepo.findByRatedUser(clubOwner) != null){
-                        KpiPoint kpiPoint = kpiPointRepo.findByRatedUser(clubOwner);
-                        kpiPoint.setClubPoint(kpiPoint.getClubPoint() + clubDTO.getAdditionalConfig().getEffectivePoint());
-                        kpiPointRepo.save(kpiPoint);
-                    }else{
-                        KpiPoint kpiPoint = new KpiPoint();
-                        kpiPoint.setRatedUser(clubOwner);
-                        kpiPoint.setClubPoint(clubDTO.getAdditionalConfig().getEffectivePoint());
-                        kpiPoint.setYearMonthId(kpiYearMonthOptional.get().getId());
-                        kpiPointRepo.save(kpiPoint);
+                    if(confirmClubEvents.size() >= clubDTO.getAdditionalConfig().getMinNumberOfSessions() / 2 &&
+                            hostParticipate >= (float)confirmClubEvents.size() * 3/4){
+                        if(kpiPointRepo.findByRatedUser(clubOwner) != null){
+                            KpiPoint kpiPoint = kpiPointRepo.findByRatedUser(clubOwner);
+                            kpiPoint.setClubPoint(kpiPoint.getClubPoint() + clubDTO.getAdditionalConfig().getEffectivePoint());
+                            kpiPointRepo.save(kpiPoint);
+                        }else{
+                            KpiPoint kpiPoint = new KpiPoint();
+                            kpiPoint.setRatedUser(clubOwner);
+                            kpiPoint.setClubPoint(clubDTO.getAdditionalConfig().getEffectivePoint());
+                            kpiPoint.setYearMonthId(kpiYearMonthOptional.get().getId());
+                            kpiPointRepo.save(kpiPoint);
+                        }
                     }
+                    KpiPointDetail kpiPointDetail = new KpiPointDetail();
+                    kpiPointDetail.setUser(clubOwner);
+                    kpiPointDetail.setPointType(PointType.CLUB_POINT.getValue());
+                    kpiPointDetail.setPoint(clubDTO.getAdditionalConfig().getEffectivePoint());
+                    kpiPointDetail.setYearMonthId(kpiYearMonthOptional.get().getId());
+                    kpiPointDetailRepo.save(kpiPointDetail);
                 }
-                KpiPointDetail kpiPointDetail = new KpiPointDetail();
-                kpiPointDetail.setUser(kpiUserRepo.findByUserName(clubDTO.getAdditionalConfig().getHost()));
-                kpiPointDetail.setPointType(PointType.CLUB_POINT.getValue());
-                kpiPointDetail.setPoint(clubDTO.getAdditionalConfig().getEffectivePoint());
-                kpiPointDetail.setYearMonthId(kpiYearMonthOptional.get().getId());
-                kpiPointDetailRepo.save(kpiPointDetail);
             }
         }
     }
@@ -432,7 +433,7 @@ public class PointServiceImpl extends BaseService implements PointService {
     public void addSeminarPoint(List<KpiEventUser> eventUsers, EventDTO<EventSeminarDetail> seminarEventDTO) throws IOException {
         List<UserDTO> employee = userService.getAllEmployee();
         List<KpiEventUser> addPointUsers = eventUsers.stream()
-                .filter(e -> (isEmployee(e.getKpiUser(), employee)) &&
+                .filter(e -> (isEmployee(e.getKpiEventUserPK().getUserName(), employee)) &&
                         (e.getType().equals(EventUserType.HOST.getValue()) || (!e.getType().equals(EventUserType.HOST.getValue()) && e.getStatus().equals(EvaluatingStatus.FINISH.getValue()))))
                 .collect(Collectors.toList());
         Calendar calendar = Calendar.getInstance();
@@ -763,11 +764,11 @@ public class PointServiceImpl extends BaseService implements PointService {
         return eventDTO;
     }
 
-    private boolean isEmployee(KpiUser kpiUser, List<UserDTO> userDTOs){
+    private boolean isEmployee(String username, List<UserDTO> userDTOs){
         Boolean isEmployee = false;
 
         for(UserDTO employee : userDTOs){
-            if(employee.getUsername().equals(kpiUser.getUserName())){
+            if(employee.getUsername().equals(username)){
                 isEmployee = true;
                 break;
             }
