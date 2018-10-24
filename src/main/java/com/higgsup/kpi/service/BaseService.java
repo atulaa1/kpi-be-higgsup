@@ -32,7 +32,7 @@ public abstract class BaseService {
     @Autowired
     KpiPointDetailRepo kpiPointDetailRepo;
 
-    protected void addClubPoint(KpiUser kpiUser, Float point) {
+    protected void addClubPoint(KpiUser kpiUser, Float point, KpiEvent event) {
         Optional<KpiYearMonth> kpiYearMonthOptional = kpiMonthRepo.findByMonthCurrent();
         if (kpiPointRepo.findByRatedUser(kpiUser) == null) {
             KpiPoint kpiPoint = new KpiPoint();
@@ -76,7 +76,7 @@ public abstract class BaseService {
 
     }
 
-    protected void addSupportPoint(KpiUser kpiUser, Float point) {
+    protected void addSupportPoint(KpiUser kpiUser, Float point, KpiEvent event) {
         Optional<KpiYearMonth> kpiYearMonthOptional = kpiMonthRepo.findByMonthCurrent();
         Float addedPoint;
         KpiPoint kpiPoint = new KpiPoint();

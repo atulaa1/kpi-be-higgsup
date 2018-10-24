@@ -10,6 +10,7 @@ import com.higgsup.kpi.glossary.PointValue;
 import com.higgsup.kpi.repository.*;
 import com.higgsup.kpi.service.BaseService;
 import com.higgsup.kpi.service.PointService;
+import com.higgsup.kpi.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -63,6 +64,8 @@ public class PointServiceImpl extends BaseService implements PointService {
     @Autowired
     KpiPointDetailRepo kpiPointDetailRepo;
 
+    @Autowired
+    UserService userService;
 
     @Scheduled(cron = "0 0 16 10 * ?")
     public void calculateRulePoint() {
@@ -262,12 +265,18 @@ public class PointServiceImpl extends BaseService implements PointService {
         Float secondPrizePoint = teamBuildingDTO.getAdditionalConfig().getSecondPrizePoint();
         Float thirdPrizePoint = teamBuildingDTO.getAdditionalConfig().getThirdPrizePoint();
         Optional<KpiYearMonth> kpiYearMonthOptional = kpiMonthRepo.findByMonthCurrent();
+        List<UserDTO> employee = userService.getAllEmployee();
         Float addedPoint = 0F;
 
         List<KpiEventUser> kpiEventUserList = kpiEventUserRepo.findByKpiEventId(teamBuildingDTO.getId());
 
-        List<KpiEventUser> participants = kpiEventUserList.stream().filter(u -> !u.getType()
-                .equals(ORGANIZER.getValue())).collect(Collectors.toList());
+        List<KpiEventUser> eventUserWithoutMan = kpiEventUserList.stream()
+                .filter(u -> isEmployee(u.getKpiUser(), employee))
+                .collect(Collectors.toList());
+
+        List<KpiEventUser> participants = eventUserWithoutMan.stream()
+                .filter(u -> !u.getType().equals(ORGANIZER.getValue()) && isEmployee(u.getKpiUser(), employee))
+                .collect(Collectors.toList());
 
         for (KpiEventUser participant : participants) {
             KpiUser UserParticipant = kpiUserRepo.findByUserName(participant.getKpiEventUserPK().getUserName());
@@ -333,7 +342,7 @@ public class PointServiceImpl extends BaseService implements PointService {
             kpiPointDetail.setYearMonthId(kpiYearMonthOptional.get().getId());
             kpiPointDetailRepo.save(kpiPointDetail);
         }
-        calculateOrganizerPoint(teamBuildingDTO, kpiEventUserList, participants);
+        calculateOrganizerPoint(teamBuildingDTO, eventUserWithoutMan, participants);
     }
 
     @Scheduled(cron = "00 00 16 10 * ?")
@@ -421,32 +430,35 @@ public class PointServiceImpl extends BaseService implements PointService {
 
     @Override
     public void addSeminarPoint(List<KpiEventUser> eventUsers, EventDTO<EventSeminarDetail> seminarEventDTO) throws IOException {
+        List<UserDTO> employee = userService.getAllEmployee();
         List<KpiEventUser> addPointUsers = eventUsers.stream()
-                .filter(e -> (e.getType().equals(EventUserType.HOST.getValue())) || ((e.getType().equals(EventUserType.MEMBER.getValue()) || e.getType().equals(EventUserType.LISTEN.getValue())) && e.getStatus().equals(EvaluatingStatus.FINISH.getValue()))).collect(Collectors.toList());
+                .filter(e -> (isEmployee(e.getKpiUser(), employee)) &&
+                        (e.getType().equals(EventUserType.HOST.getValue()) || (!e.getType().equals(EventUserType.HOST.getValue()) && e.getStatus().equals(EvaluatingStatus.FINISH.getValue()))))
+                .collect(Collectors.toList());
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(seminarEventDTO.getBeginDate().getTime());
         KpiEvent kpiEvent = convertEventDTOToEntity(seminarEventDTO);
         Optional<KpiYearMonth> kpiYearMonthOptional = kpiMonthRepo.findByMonthCurrent();
-        Float actualPointAdd;
+        Float actualPointAdd = 0F;
 
         if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
             for (KpiEventUser eventUser : addPointUsers) {
                 if (eventUser.getType().equals(EventUserType.HOST.getValue())) {
                     List<KpiSeminarSurvey> surveysEvaluateHost = kpiSeminarSurveyRepo.findByEvaluatedUsernameAndEvent
                             (kpiUserRepo.findByUserName(eventUser.getKpiEventUserPK().getUserName()), kpiEvent);
-                    Float evaluatePoint = 0F;
+
 
                     if (surveysEvaluateHost.size() == 0) {
-                        evaluatePoint += PointValue.DEFAULT_EFFECTIVE_POINT.getValue();
+                        actualPointAdd += PointValue.DEFAULT_EFFECTIVE_POINT.getValue();
                     } else {
                         Integer totalEvaluatePoint = surveysEvaluateHost.stream().mapToInt(KpiSeminarSurvey::getRating).sum();
-                        evaluatePoint = (float) totalEvaluatePoint / surveysEvaluateHost.size();
+                        actualPointAdd = (float) totalEvaluatePoint / surveysEvaluateHost.size();
                     }
 
                     if (kpiPointRepo.findByRatedUsername(eventUser.getKpiEventUserPK().getUserName()) == null) {
                         KpiPoint kpiPoint = new KpiPoint();
                         kpiPoint.setRatedUser(kpiUserRepo.findByUserName(eventUser.getKpiEventUserPK().getUserName()));
-                        actualPointAdd = Float.parseFloat(seminarEventDTO.getAdditionalConfig().getHostPoint()) + evaluatePoint;
+                        actualPointAdd += Float.parseFloat(seminarEventDTO.getAdditionalConfig().getHostPoint());
                         kpiPoint.setWeekendSeminarPoint(actualPointAdd);
                         kpiPoint.setYearMonthId(kpiYearMonthOptional.get().getId());
                         kpiPointRepo.save(kpiPoint);
@@ -455,17 +467,15 @@ public class PointServiceImpl extends BaseService implements PointService {
                         if (memberPointOfSaturdaySeminar(eventUser) < PointValue.MAX_WEEKEND_SEMINAR_POINT.getValue()) {
                             if (PointValue.MAX_WEEKEND_SEMINAR_POINT.getValue() - memberPointOfSaturdaySeminar(eventUser) <
                                     Float.parseFloat(seminarEventDTO.getAdditionalConfig().getHostPoint())) {
-                                actualPointAdd = PointValue.MAX_WEEKEND_SEMINAR_POINT.getValue() - memberPointOfSaturdaySeminar(eventUser)
-                                        + evaluatePoint;
+                                actualPointAdd += PointValue.MAX_WEEKEND_SEMINAR_POINT.getValue() - memberPointOfSaturdaySeminar(eventUser);
                                 kpiPoint.setWeekendSeminarPoint(kpiPoint.getWeekendSeminarPoint() + actualPointAdd);
                             } else {
-                                actualPointAdd = Float.parseFloat(seminarEventDTO.getAdditionalConfig().getHostPoint()) + evaluatePoint;
+                                actualPointAdd += Float.parseFloat(seminarEventDTO.getAdditionalConfig().getHostPoint());
                                 kpiPoint.setWeekendSeminarPoint(kpiPoint.getWeekendSeminarPoint() + actualPointAdd);
                             }
                             kpiPointRepo.save(kpiPoint);
 
                         }else{
-                            actualPointAdd = evaluatePoint;
                             kpiPoint.setWeekendSeminarPoint(kpiPoint.getWeekendSeminarPoint() + actualPointAdd);
                         }
                     }
@@ -751,5 +761,17 @@ public class PointServiceImpl extends BaseService implements PointService {
         eventDTO.setEndDate(kpiEvent.getEndDate());
 
         return eventDTO;
+    }
+
+    private boolean isEmployee(KpiUser kpiUser, List<UserDTO> userDTOs){
+        Boolean isEmployee = false;
+
+        for(UserDTO employee : userDTOs){
+            if(employee.getUsername().equals(kpiUser.getUserName())){
+                isEmployee = true;
+                break;
+            }
+        }
+        return isEmployee;
     }
 }
