@@ -1,6 +1,5 @@
 package com.higgsup.kpi.service;
 
-import com.higgsup.kpi.dto.UserDTO;
 import com.higgsup.kpi.entity.*;
 import com.higgsup.kpi.glossary.PointType;
 import com.higgsup.kpi.repository.*;
