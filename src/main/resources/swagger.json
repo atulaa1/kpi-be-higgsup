@@ -43,6 +43,10 @@
     {
       "name": "evaluation-controller",
       "description": "Evaluation of MANs at the end of month"
+    },
+    {
+      "name": "point-controller",
+      "description": "point-controller"
     }
   ],
   "security": [
@@ -11094,6 +11098,217 @@
           },
           "201": {
             "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/point/point-detail":{
+      "get":{
+        "tags":[
+          "point-controller"
+        ],
+        "summary": "getPointDetailByUser",
+        "operationId": "getPointDetailByUserUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "responses":{
+          "200": {
+            "description": "status_code : 200. Meaning: Thành công",
+            "schema":{
+              "type": "object",
+              "required": [
+               "pointDetail",
+               "status_code",
+               "point"
+              ],
+              "properties" : {
+                "pointDetail":{
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "event": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "number"
+                          },
+                          "name":{
+                            "type": "string"
+                          },
+                          "beginDate": {
+                            "type": "string"
+                          },
+                          "endDate": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "pointType":{
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "number"
+                          },
+                          "name": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "point": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                },
+                "point": {
+                  "type": "object",
+                  "properties": {
+                    "rulePoint": {
+                      "type": "number"
+                    },
+                    "clubPoint": {
+                      "type": "number"
+                    },
+                    "normalSeminarPoint": {
+                      "type": "number"
+                    },
+                    "weekendSeminarPoint": {
+                      "type": "number"
+                    },
+                    "supportPoint": {
+                      "type": "number"
+                    },
+                    "teambuildingPoint": {
+                      "type": "number"
+                    },
+                    "personalPoint": {
+                      "type": "number"
+                    },
+                    "projectPoint": {
+                      "type": "number"
+                    },
+                    "totalPoint": {
+                      "type": "number"
+                    },
+                    "yearMonthId": {
+                      "type": "number"
+                    },
+                    "title": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number"
+                        },
+                        "name": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "message": {
+                  "type": "string"
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "errorCode": {
+                        "type": "number"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "status_code": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "example": {
+                "data": {
+                  "pointDetailDTOs": [
+                    {
+                      "event": {
+                        "name": "support chung",
+                        "beginDate": "10-09-2018 11:00"
+                      },
+                      "point": 11,
+                      "pointType": {
+                        "id": 5,
+                        "name": "Điểm support chung"
+                      },
+                      "yearMonth": 2
+                    },
+                    {
+                      "event": {
+                        "name": "Blackjack thu 6",
+                        "beginDate": "15-10-2018 18:30",
+                        "endDate": "15-10-2018 20:30"
+                      },
+                      "point": 3,
+                      "pointType": {
+                        "id": 2,
+                        "name": "Điểm Câu lạc bộ"
+                      },
+                      "yearMonth": 2
+                    },
+                    {
+                      "event": {
+                        "name": "Poker thu 4",
+                        "beginDate": "15-09-2018 18:30",
+                        "endDate": "15-09-2018 20:30"
+                      },
+                      "point": 3,
+                      "pointType": {
+                        "id": 2,
+                        "name": "Điểm Câu lạc bộ"
+                      },
+                      "yearMonth": 2
+                    },
+                    {
+                      "event": null,
+                      "point": 24,
+                      "pointType": {
+                        "id": 1,
+                        "name": "Điểm nội quy"
+                      },
+                      "yearMonth": 2
+                    }
+                  ],
+                  "pointDTO": {
+                    "rulePoint": 0,
+                    "clubPoint": 9,
+                    "normalSeminarPoint": 12,
+                    "weekendSeminarPoint": 0,
+                    "supportPoint": 24,
+                    "teambuildingPoint": 0,
+                    "personalPoint": 0,
+                    "projectPoint": 0,
+                    "totalPoint": 0,
+                    "yearMonthId": 2,
+                    "title": {
+                      "id": 2,
+                      "name": "Nhan vien cua thang I"
+                    }
+                  }
+                },
+                "status_code": 200
+              }
+            }
           },
           "401": {
             "description": "Unauthorized"
