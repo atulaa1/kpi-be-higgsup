@@ -1,6 +1,9 @@
 package com.higgsup.kpi.entity;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "kpi_seminar_survey")
@@ -23,6 +26,11 @@ public class KpiSeminarSurvey {
     @JoinColumn(name = "event_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
     private KpiEvent event;
+
+    @Basic
+    @Column(name = "created_date")
+    @CreationTimestamp
+    private Timestamp createdDate;
 
     @Basic
     @Column(name = "rating")
@@ -70,5 +78,13 @@ public class KpiSeminarSurvey {
 
     public void setRating(Integer rating) {
         this.rating = rating;
+    }
+
+    public Timestamp getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Timestamp createdDate) {
+        this.createdDate = createdDate;
     }
 }
