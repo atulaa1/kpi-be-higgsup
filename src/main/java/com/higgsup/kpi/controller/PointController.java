@@ -1,6 +1,7 @@
 package com.higgsup.kpi.controller;
 
 import com.higgsup.kpi.configure.BaseConfiguration;
+import com.higgsup.kpi.dto.EmployeeFamePointDetailDTO;
 import com.higgsup.kpi.dto.EmployeePointDetailDTO;
 import com.higgsup.kpi.dto.PointDTO;
 import com.higgsup.kpi.dto.Response;
@@ -29,10 +30,10 @@ public class PointController {
     @PreAuthorize("hasRole('EMPLOYEE')")
     @GetMapping("/fame-point")
     public Response getFamePoint(){
-        Response<List<PointDTO>> response = new Response<>(HttpStatus.OK.value());
+        Response<EmployeeFamePointDetailDTO> response = new Response<>(HttpStatus.OK.value());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        List<PointDTO> pointDTOS = pointService.getFamePointOfEmployee(authentication.getPrincipal().toString());
-        response.setData(pointDTOS);
+        EmployeeFamePointDetailDTO employeeFamePointDetailDTO = pointService.getFamePointOfEmployee(authentication.getPrincipal().toString());
+        response.setData(employeeFamePointDetailDTO);
         return response;
     }
 

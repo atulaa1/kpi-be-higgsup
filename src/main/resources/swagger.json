@@ -11154,6 +11154,12 @@
                           }
                         }
                       },
+                      "yearMonth":{
+                        "type": "object",
+                        "properties": {
+                          "yearMonth": "number"
+                        }
+                      },
                       "pointType":{
                         "type": "object",
                         "properties": {
@@ -11172,46 +11178,49 @@
                   }
                 },
                 "point": {
-                  "type": "object",
-                  "properties": {
-                    "rulePoint": {
-                      "type": "number"
-                    },
-                    "clubPoint": {
-                      "type": "number"
-                    },
-                    "normalSeminarPoint": {
-                      "type": "number"
-                    },
-                    "weekendSeminarPoint": {
-                      "type": "number"
-                    },
-                    "supportPoint": {
-                      "type": "number"
-                    },
-                    "teambuildingPoint": {
-                      "type": "number"
-                    },
-                    "personalPoint": {
-                      "type": "number"
-                    },
-                    "projectPoint": {
-                      "type": "number"
-                    },
-                    "totalPoint": {
-                      "type": "number"
-                    },
-                    "yearMonthId": {
-                      "type": "number"
-                    },
-                    "title": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "number"
-                        },
-                        "name": {
-                          "type": "string"
+                  "type": "array",
+                  "item": {
+                    "type": "object",
+                    "properties": {
+                      "rulePoint": {
+                        "type": "number"
+                      },
+                      "clubPoint": {
+                        "type": "number"
+                      },
+                      "normalSeminarPoint": {
+                        "type": "number"
+                      },
+                      "weekendSeminarPoint": {
+                        "type": "number"
+                      },
+                      "supportPoint": {
+                        "type": "number"
+                      },
+                      "teambuildingPoint": {
+                        "type": "number"
+                      },
+                      "personalPoint": {
+                        "type": "number"
+                      },
+                      "projectPoint": {
+                        "type": "number"
+                      },
+                      "totalPoint": {
+                        "type": "number"
+                      },
+                      "yearMonthId": {
+                        "type": "number"
+                      },
+                      "title": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "number"
+                          },
+                          "name": {
+                            "type": "string"
+                          }
                         }
                       }
                     }
@@ -11338,11 +11347,29 @@
             "schema":{
               "type": "object",
               "required": [
-                "data",
+                "pointDTOs",
+                "famePointDTOs",
                 "status_code"
               ],
               "properties" : {
-                "data":{
+                "pointDTOs":{
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "famePoint": {
+                        "type": "number"
+                      },
+                      "yearMonth": {
+                        "type": "object",
+                        "properties":{
+                          "yearMonth": "number"
+                        }
+                      }
+                    }
+                  }
+                },
+                "famePointDTOs":{
                   "type": "array",
                   "items": {
                     "type": "object",
@@ -11378,16 +11405,27 @@
                 }
               },
               "example": {
-                "data": [
-                  {
-                    "famePoint": 10,
-                    "yearMonthId": 2
-                  },
-                  {
-                    "famePoint": 5,
-                    "yearMonthId": 3
-                  }
-                ],
+                "data": {
+                  "famePointDTOs": [
+                    {
+                      "famePoint": 10,
+                      "year": 2018
+                    }
+                  ],
+                  "pointDTOs": [
+                    {
+                      "yearMonth": {
+                        "yearMonth": 201810
+                      },
+                      "famedPoint": 2
+                    },
+                    {
+                      "yearMonth": {
+                        "yearMonth": 201809
+                      }
+                    }
+                  ]
+                },
                 "status_code": 200
               }
             }

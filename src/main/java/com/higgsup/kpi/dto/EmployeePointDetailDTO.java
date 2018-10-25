@@ -5,7 +5,7 @@ import java.util.List;
 public class EmployeePointDetailDTO {
     private List<PointDetailDTO> pointDetailDTOs;
 
-    private PointDTO pointDTO;
+    private List<PointDTO> pointDTO;
 
     public List<PointDetailDTO> getPointDetailDTOs() {
         return pointDetailDTOs;
@@ -15,11 +15,11 @@ public class EmployeePointDetailDTO {
         this.pointDetailDTOs = pointDetailDTOs;
     }
 
-    public PointDTO getPointDTO() {
+    public List<PointDTO> getPointDTO() {
         return pointDTO;
     }
 
-    public void setPointDTO(PointDTO pointDTO) {
+    public void setPointDTO(List<PointDTO> pointDTO) {
         this.pointDTO = pointDTO;
     }
 }

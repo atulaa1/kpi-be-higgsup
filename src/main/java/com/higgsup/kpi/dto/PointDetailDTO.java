@@ -3,7 +3,7 @@ package com.higgsup.kpi.dto;
 public class PointDetailDTO {
     private EventDTO event;
 
-    private Integer yearMonth;
+    private YearMonthDTO yearMonth;
 
     private Float point;
 
@@ -17,11 +17,11 @@ public class PointDetailDTO {
         this.event = event;
     }
 
-    public Integer getYearMonth() {
+    public YearMonthDTO getYearMonth() {
         return yearMonth;
     }
 
-    public void setYearMonth(Integer yearMonth) {
+    public void setYearMonth(YearMonthDTO yearMonth) {
         this.yearMonth = yearMonth;
     }
 

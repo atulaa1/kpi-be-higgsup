@@ -23,8 +23,14 @@ public interface KpiPointRepo extends CrudRepository<KpiPoint, Integer> {
     List<KpiPoint> getFamedPointRanking(@Param("offset") Integer offset, @Param("limitRows") Integer limitRows);
 
     @Query(value = "Select * from kpi_point p where p.rated_username = :username", nativeQuery = true)
-    List<KpiPoint> getFamedPointOfEmployee(@Param("username") String username);
+    List<KpiPoint> getPointOfEmployee(@Param("username") String username);
 
     @Query(value = "select * from kpi_point p where p.year_month_id = :id", nativeQuery = true)
     List<KpiPoint> getAllPointInMonth(@Param("id")Integer yearMonthId);
+
+    @Query(value = "select * from kpi_point as p join kpi_fame_point as f on p.rated_username = f.username " +
+            "where p.total_point >= 120 and p.year_month_id = :id and f.year = :year " +
+            "order by total_point desc, (p.rule_point + p.club_point + p.normal_seminar_point + p.weekend_seminar_point + p.support_point + p.teambuilding_point) desc, " +
+            "f.fame_point desc limit 3", nativeQuery = true)
+    List<KpiPoint> getTop3EmployeeInMonth(@Param("id") Integer yearMonthId, @Param("year") Integer fameYear);
 }
