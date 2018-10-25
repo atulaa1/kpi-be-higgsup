@@ -775,8 +775,8 @@ public class PointServiceImpl extends BaseService implements PointService {
     @Scheduled(cron = "00 05 16 10 * ?")
     private void calculateFamePoint(){
         int year = Calendar.getInstance().get(Calendar.YEAR);
-        Optional<KpiYearMonth> kpiYearMonth = kpiMonthRepo.findByMonthCurrent();
-        List<KpiPoint> kpiPointList = kpiPointRepo.getAllPointInMonth(kpiYearMonth.get().getId());
+        KpiYearMonth kpiYearMonth = kpiMonthRepo.findByLastMonth();
+        List<KpiPoint> kpiPointList = kpiPointRepo.getAllPointInMonth(kpiYearMonth.getId());
         Float famePoint;
         for(KpiPoint kpiPoint: kpiPointList){
             if(kpiPoint.getTitle().equals(Title.BEST_EMPLOYEE_OF_THE_MONTH.getValue())){
