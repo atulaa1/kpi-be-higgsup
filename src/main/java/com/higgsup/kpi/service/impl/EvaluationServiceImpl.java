@@ -1,16 +1,18 @@
 package com.higgsup.kpi.service.impl;
 
 import com.higgsup.kpi.dto.*;
-import com.higgsup.kpi.entity.KpiYearMonth;
-import com.higgsup.kpi.repository.KpiMonthRepo;
-import com.higgsup.kpi.repository.KpiPersonalSurveyRepo;
-import com.higgsup.kpi.repository.KpiProjectLogRepo;
+import com.higgsup.kpi.entity.*;
+import com.higgsup.kpi.repository.*;
 import com.higgsup.kpi.service.EvaluationService;
 import com.higgsup.kpi.service.ProjectService;
 import com.higgsup.kpi.service.SurveyService;
 import com.higgsup.kpi.service.UserService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,7 @@ import java.util.Optional;
 
 import static com.higgsup.kpi.glossary.ErrorCode.MUST_ANSWER_ALL_REQUIRED_QUESTIONS;
 import static com.higgsup.kpi.glossary.ManInfo.NUMBER_OF_MAN;
+import static com.higgsup.kpi.glossary.ProjectStatus.EVALUATED;
 import static com.higgsup.kpi.glossary.SurveyQuestion.QUESTION4;
 import static com.higgsup.kpi.glossary.SurveyQuestion.REQUIRED_QUESTIONS;
 
@@ -42,6 +45,12 @@ public class EvaluationServiceImpl implements EvaluationService {
     @Autowired
     private KpiMonthRepo kpiMonthRepo;
 
+    @Autowired
+    private KpiUserRepo kpiUserRepo;
+
+    @Autowired
+    private KpiProjectRepo kpiProjectRepo;
+
     @Override
     public EvaluationInfoDTO getAllEvaluationInfo() {
         List<UserDTO> employee = userService.getAllEmployee();
@@ -58,8 +67,55 @@ public class EvaluationServiceImpl implements EvaluationService {
 
     @Override
     public EmployeeEvaluationDTO createEmployeeEvaluation(EmployeeEvaluationDTO employeeEvaluationDTO) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String loginUsername = authentication.getPrincipal().toString();
 
-        return employeeEvaluationDTO;
+        List<ErrorDTO> validates = validateEvaluation(employeeEvaluationDTO);
+
+        KpiProjectLog kpiProjectLog = new KpiProjectLog();
+        KpiPersonalSurvey kpiPersonalSurvey = new KpiPersonalSurvey();
+
+        Optional<KpiYearMonth> kpiYearMonthOptional = kpiMonthRepo.findByMonthCurrent();
+
+        KpiProjectLog finalKpiProjectLog = kpiProjectLog;
+
+        kpiYearMonthOptional.ifPresent(kpiYearMonth -> finalKpiProjectLog.setYearMonth(kpiYearMonth.getId()));
+
+        List<ProjectEvaluationDTO> projectEvaluationDTOS = employeeEvaluationDTO.getProjectEvaluations();
+        List<PersonalEvaluationDTO> personalEvaluationDTOS = employeeEvaluationDTO.getPersonalEvaluationDTOList();
+
+        EmployeeEvaluationDTO validatedEmployeeEvaluationDTO = new EmployeeEvaluationDTO();
+
+        if (CollectionUtils.isEmpty(validates)) {
+            for (ProjectEvaluationDTO projectEvaluationDTO : projectEvaluationDTOS) {
+                kpiProjectLog.setProject(convertProjectDTOToEntity(projectEvaluationDTO.getProject()));
+                kpiProjectLog.setProjectPoint(Float.valueOf(projectEvaluationDTO.getRating()));
+                kpiProjectLog.setManUsername(kpiUserRepo.findByUserName(loginUsername));
+                List<KpiProjectUser> kpiProjectUserList = kpiProjectLog.getProject().getProjectUserList();
+
+                for(KpiProjectUser kpiProjectUser: kpiProjectUserList){
+                    kpiProjectLog.setRatedUsername(kpiProjectUser);
+                    //kpiProjectLog = kpiProjectLogRepo.save(kpiProjectLog);
+                }
+
+                ProjectDTO projectDTO = projectEvaluationDTO.getProject();
+                projectDTO.setEvaluation(EVALUATED.getValue());
+
+                List<ProjectUserDTO> projectUserDTOS = projectDTO.getProjectUserList();
+
+                for(ProjectUserDTO projectUserDTO: projectUserDTOS){
+                    UserDTO userDTO = projectUserDTO.getProjectUser();
+                    userDTO.setEvaluation(1);
+                }
+            }
+        } else {
+            validatedEmployeeEvaluationDTO.setErrorCode(validates.get(0).getErrorCode());
+            validatedEmployeeEvaluationDTO.setMessage(validates.get(0).getMessage());
+            validatedEmployeeEvaluationDTO.setErrorDTOS(validates);
+        }
+        BeanUtils.copyProperties(employeeEvaluationDTO, validatedEmployeeEvaluationDTO);
+
+        return validatedEmployeeEvaluationDTO;
     }
 
     private List<ErrorDTO> validateEvaluation(EmployeeEvaluationDTO employeeEvaluationDTO) {
@@ -106,4 +162,37 @@ public class EvaluationServiceImpl implements EvaluationService {
 
         return errors;
     }
-}
+
+
+    private KpiProject convertProjectDTOToEntity(ProjectDTO projectDTO) {
+        KpiProject kpiProject = new KpiProject();
+
+        kpiProject.setId(projectDTO.getId());
+        kpiProject.setActive(projectDTO.getActive());
+        kpiProject.setCreatedDate(projectDTO.getCreatedDate());
+        kpiProject.setUpdatedDate(projectDTO.getUpdatedDate());
+        kpiProject.setProjectUserList(convertUserListDTOToEntity(projectDTO.getProjectUserList()));
+
+        return kpiProject;
+    }
+
+    private List<KpiProjectUser> convertUserListDTOToEntity(List<ProjectUserDTO> projectUserDTOS) {
+        List<KpiProjectUser> kpiProjectUserList = new ArrayList<>();
+        for (ProjectUserDTO projectUserDTO : projectUserDTOS) {
+            KpiProjectUser kpiProjectUser = new KpiProjectUser();
+            kpiProjectUser.setProjectUser(convertUserDTOToEntity(projectUserDTO.getProjectUser()));
+            kpiProjectUserList.add(kpiProjectUser);
+        }
+        return kpiProjectUserList;
+    }
+
+    private KpiUser convertUserDTOToEntity(UserDTO userDTO) {
+        KpiUser kpiUser = new KpiUser();
+        kpiUser.setUserName(userDTO.getUsername());
+        String username = kpiUser.getUserName();
+        kpiUser.setFullName(kpiUserRepo.findFullName(username));
+        kpiUser.setAvatar(kpiUserRepo.findAvatar(username));
+        return kpiUser;
+    }
+
+    }

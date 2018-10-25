@@ -1479,8 +1479,8 @@ public class EventServiceImpl extends BaseService implements EventService {
         List<ErrorDTO> validates = validateClub(eventDTO);
 
         String loginUsername = eventDTO.getCreator().getUsername();
-
         if (CollectionUtils.isEmpty(validates)) {
+
             String clubJson = mapper.writeValueAsString(eventDTO.getAdditionalConfig());
             BeanUtils.copyProperties(eventDTO, kpiEvent);
 

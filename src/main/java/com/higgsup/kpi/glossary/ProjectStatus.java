@@ -2,7 +2,8 @@ package com.higgsup.kpi.glossary;
 
 public enum ProjectStatus {
     ACTIVE(1, "active"),
-    DEACTIVE(2, "deactive");
+    DEACTIVE(2, "deactive"),
+    EVALUATED(3, "evaluated");
 
     private Integer value;
     private String content;
