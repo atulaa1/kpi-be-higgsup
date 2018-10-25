@@ -725,6 +725,7 @@ public class EventServiceImpl extends BaseService implements EventService {
 
         Optional<KpiEvent> kpiEventOptional = kpiEventRepo.findById(seminarSurveyDTO.getId());
         List<KpiEventUser> kpiEventHostList = kpiEventUserRepo.findByKpiEventId(seminarSurveyDTO.getId());
+        List<UserDTO> employee = userService.getAllEmployee();
 
         List<ErrorDTO> errors = new ArrayList<>();
 
@@ -777,6 +778,7 @@ public class EventServiceImpl extends BaseService implements EventService {
                             eventUserDTO.setSeminarSurveys(seminarSurveyDTOs);
                             seminarDetailEventDTO.setEventUserList(Lists.newArrayList(eventUserDTO));
                         }
+
                         if(kpiEventUsers.stream()
                                 .noneMatch(e -> (e.getType().equals(EventUserType.MEMBER.getValue()) || e.getType().equals(EventUserType.LISTEN.getValue()))
                                         && e.getStatus().equals(EvaluatingStatus.UNFINISHED.getValue()))){
@@ -898,8 +900,11 @@ public class EventServiceImpl extends BaseService implements EventService {
         ObjectMapper mapper = new ObjectMapper();
         GroupClubDetail groupClubDetail = mapper.readValue(kpiEvent.getGroup().getAdditionalConfig(),
                 GroupClubDetail.class);
+        List<UserDTO> employee = userService.getAllEmployee();
         for (KpiEventUser kpiEventUser : kpiEvent.getKpiEventUserList()) {
-            addClubPoint(kpiEventUser.getKpiUser(), groupClubDetail.getParticipationPoint());
+            if(isEmployee(kpiEventUser.getKpiUser(), employee)){
+                addClubPoint(kpiEventUser.getKpiUser(), groupClubDetail.getParticipationPoint(), kpiEvent);
+            }
         }
     }
 
@@ -935,7 +940,10 @@ public class EventServiceImpl extends BaseService implements EventService {
         Float point = setHistorySupportAndGetAllPoint(kpiEvent);
         //ad point
         if (Objects.equals(kpiEvent.getStatus(), StatusEvent.CONFIRMED.getValue())) {
-            addSupportPoint(kpiEvent.getKpiEventUserList().get(0).getKpiUser(), point);
+            List<UserDTO> employee = userService.getAllEmployee();
+            if(isEmployee(kpiEvent.getKpiEventUserList().get(0).getKpiUser(), employee)){
+                addSupportPoint(kpiEvent.getKpiEventUserList().get(0).getKpiUser(), point, kpiEvent);
+            }
         }
         kpiEvent = kpiEventRepo.save(kpiEvent);
         eventDTO = convertSupportEntiyToDTO(kpiEvent);
@@ -953,7 +961,10 @@ public class EventServiceImpl extends BaseService implements EventService {
         Float point = setHistorySupportAndGetAllPointNewSupport(kpiEvent);
         //ad point
         if (Objects.equals(kpiEvent.getStatus(), StatusEvent.CONFIRMED.getValue())) {
-            addSupportPoint(kpiEvent.getKpiEventUserList().get(0).getKpiUser(), point);
+            List<UserDTO> employee = userService.getAllEmployee();
+            if(isEmployee(kpiEvent.getKpiEventUserList().get(0).getKpiUser(), employee)){
+                addSupportPoint(kpiEvent.getKpiEventUserList().get(0).getKpiUser(), point, kpiEvent);
+            }
         }
         kpiEvent = kpiEventRepo.save(kpiEvent);
         eventDTO = convertNewSupportEntityToDTO(kpiEvent);
@@ -1819,4 +1830,15 @@ public class EventServiceImpl extends BaseService implements EventService {
         return true;
     }
 
+    private boolean isEmployee(KpiUser kpiUser, List<UserDTO> userDTOs){
+        Boolean isEmployee = false;
+
+        for(UserDTO employee : userDTOs){
+            if(employee.getUsername().equals(kpiUser.getUserName())){
+                isEmployee = true;
+                break;
+            }
+        }
+        return isEmployee;
+    }
 }
