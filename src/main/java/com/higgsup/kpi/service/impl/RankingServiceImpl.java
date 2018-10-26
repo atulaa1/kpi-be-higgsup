@@ -14,7 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class RankingServiceImpl implements RankingService {
@@ -41,7 +43,17 @@ public class RankingServiceImpl implements RankingService {
     }
 
     @Override
-    public List<BestPerformancesDTO> showBestPerformancesOfEachMonth() {
+    public List<PointDTO> showBestPerformancesOfEachMonth() {
+        List<Integer> listYearMonthId = kpiPointRepo.allOfYearMonthId();
+        List<PointDTO> bestPerformancesPointDTO = new ArrayList<>();
+        Map<Integer, List<KpiPoint>> bestPerformanceInMonth = new HashMap<>();
+
+        for (Integer yearMonthId : listYearMonthId) {
+            List<KpiPoint> kpiBestPerformancesPoint = kpiPointRepo.getBestPerformancesOfMonth(yearMonthId);
+            bestPerformanceInMonth.put(yearMonthId, kpiBestPerformancesPoint);
+        }
+        bestPerformanceInMonth.keySet();
+        bestPerformanceInMonth.values();
         return null;
     }
 

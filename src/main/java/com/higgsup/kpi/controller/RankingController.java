@@ -1,6 +1,7 @@
 package com.higgsup.kpi.controller;
 
 import com.higgsup.kpi.configure.BaseConfiguration;
+import com.higgsup.kpi.dto.PointDTO;
 import com.higgsup.kpi.dto.RankingDTO;
 import com.higgsup.kpi.dto.Response;
 import com.higgsup.kpi.service.RankingService;
@@ -35,6 +36,15 @@ public class RankingController {
         Response<List<RankingDTO>> response = new Response<>(HttpStatus.OK.value());
         List<RankingDTO> famedPointRanking = rankingService.showFamedPointRanking(currentPage);
         response.setData(famedPointRanking);
+        return response;
+    }
+
+    @PreAuthorize("hasRole('EMPLOYEE')")
+    @GetMapping("/ranking/best-performances-each-month")
+    public Response showBestPerformancesOfEachMonth() {
+        Response<List<PointDTO>> response = new Response<>(HttpStatus.OK.value());
+        List<PointDTO> bestPerformancesOfEachMonth = rankingService.showBestPerformancesOfEachMonth();
+        response.setData(bestPerformancesOfEachMonth);
         return response;
     }
 }

@@ -22,6 +22,9 @@ public interface KpiPointRepo extends CrudRepository<KpiPoint, Integer> {
     @Query(value = "SELECT * FROM kpi_point ORDER BY famed_point DESC, rated_username ASC  LIMIT :offset ,:limitRows", nativeQuery = true)
     List<KpiPoint> getFamedPointRanking(@Param("offset") Integer offset, @Param("limitRows") Integer limitRows);
 
-    @Query(value = "SELECT * from kpi_point WHERE total_point = (SELECT MAX(total_point) from kpi_point where year_month_id = 2)", nativeQuery = true)
-    List<KpiPoint> getPerformancesOfMonth(@Param("offset") Integer offset);
+    @Query(value = "SELECT * from kpi_point WHERE total_point = (SELECT MAX(total_point) from kpi_point where year_month_id =:yearMonthId)", nativeQuery = true)
+    List<KpiPoint> getBestPerformancesOfMonth(@Param("yearMonthId") Integer yearMonthId);
+
+    @Query(value = "SELECT DISTINCT year_month_id FROM kpi_point", nativeQuery = true)
+    List<Integer> allOfYearMonthId();
 }
