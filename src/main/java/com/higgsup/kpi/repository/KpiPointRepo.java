@@ -14,11 +14,15 @@ public interface KpiPointRepo extends CrudRepository<KpiPoint, Integer> {
     KpiPoint findByRatedUser(KpiUser kpiUser);
 
     @Query(value = "select * from kpi_point p where p.rated_username = :username", nativeQuery = true)
-    KpiPoint findByRatedUsername(@Param("username") String username);
+    List<KpiPoint> findByRatedUsername(@Param("username") String username);
 
     @Query(value = "SELECT * FROM kpi_point ORDER BY total_point DESC, rated_username ASC  LIMIT :offset ,:limitRows", nativeQuery = true)
     List<KpiPoint> getNomalPointRanking(@Param("offset") Integer offset, @Param("limitRows") Integer limitRows);
 
     @Query(value = "SELECT * FROM kpi_point ORDER BY famed_point DESC, rated_username ASC  LIMIT :offset ,:limitRows", nativeQuery = true)
     List<KpiPoint> getFamedPointRanking(@Param("offset") Integer offset, @Param("limitRows") Integer limitRows);
+
+    @Query(value = "select * from kpi_point p where p.rated_username = :username" +
+            " and p.year_month_id = :id", nativeQuery = true)
+    KpiPoint findByRatedUsernameAndMonth(@Param("username") String username, @Param("id") Integer yearMonthId);
 }
