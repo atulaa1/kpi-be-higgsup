@@ -13,7 +13,7 @@ public interface PointService {
 
     void calculateTeambuildingPoint(EventDTO<EventTeamBuildingDetail> teamBuildingDTO);
 
-    EmployeePointDetailDTO getPointDetailByUser(String username) throws IOException;
+    List<EmployeePointDetailDTO> getPointDetailByUser(String username) throws IOException;
 
     EmployeeFamePointDetailDTO getFamePointOfEmployee(String username);
 }

@@ -3,23 +3,33 @@ package com.higgsup.kpi.dto;
 import java.util.List;
 
 public class EmployeePointDetailDTO {
-    private List<PointDetailDTO> pointDetailDTOs;
+    private List<PointDetailDTO> pointDetailList;
 
-    private List<PointDTO> pointDTO;
+    private PointDTO pointTotal;
 
-    public List<PointDetailDTO> getPointDetailDTOs() {
-        return pointDetailDTOs;
+    private YearMonthDTO yearMonth;
+
+    public List<PointDetailDTO> getPointDetailList() {
+        return pointDetailList;
     }
 
-    public void setPointDetailDTOs(List<PointDetailDTO> pointDetailDTOs) {
-        this.pointDetailDTOs = pointDetailDTOs;
+    public void setPointDetailList(List<PointDetailDTO> pointDetailList) {
+        this.pointDetailList = pointDetailList;
     }
 
-    public List<PointDTO> getPointDTO() {
-        return pointDTO;
+    public PointDTO getPointTotal() {
+        return pointTotal;
     }
 
-    public void setPointDTO(List<PointDTO> pointDTO) {
-        this.pointDTO = pointDTO;
+    public void setPointTotal(PointDTO pointTotal) {
+        this.pointTotal = pointTotal;
+    }
+
+    public YearMonthDTO getYearMonth() {
+        return yearMonth;
+    }
+
+    public void setYearMonth(YearMonthDTO yearMonth) {
+        this.yearMonth = yearMonth;
     }
 }
