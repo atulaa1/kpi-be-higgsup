@@ -84,6 +84,8 @@ public class EvaluationServiceImpl implements EvaluationService {
         List<ProjectEvaluationDTO> projectEvaluationDTOS = employeeEvaluationDTO.getProjectEvaluations();
         List<PersonalEvaluationDTO> personalEvaluationDTOS = employeeEvaluationDTO.getPersonalEvaluationDTOList();
 
+        List<ProjectEvaluationDTO> ResponseProjectEvaluationDTOS = new ArrayList<>();
+
         EmployeeEvaluationDTO validatedEmployeeEvaluationDTO = new EmployeeEvaluationDTO();
 
         if (CollectionUtils.isEmpty(validates)) {
@@ -95,7 +97,7 @@ public class EvaluationServiceImpl implements EvaluationService {
 
                 for(KpiProjectUser kpiProjectUser: kpiProjectUserList){
                     kpiProjectLog.setRatedUsername(kpiProjectUser);
-                    //kpiProjectLog = kpiProjectLogRepo.save(kpiProjectLog);
+                    kpiProjectLog = kpiProjectLogRepo.save(kpiProjectLog);
                 }
 
                 ProjectDTO projectDTO = projectEvaluationDTO.getProject();
@@ -107,6 +109,12 @@ public class EvaluationServiceImpl implements EvaluationService {
                     UserDTO userDTO = projectUserDTO.getProjectUser();
                     userDTO.setEvaluation(1);
                 }
+
+                ProjectEvaluationDTO RPProjectEvaluationDTO = new ProjectEvaluationDTO();
+
+                RPProjectEvaluationDTO.setProject(projectDTO);
+                ResponseProjectEvaluationDTOS.add(RPProjectEvaluationDTO);
+
             }
         } else {
             validatedEmployeeEvaluationDTO.setErrorCode(validates.get(0).getErrorCode());
@@ -114,6 +122,8 @@ public class EvaluationServiceImpl implements EvaluationService {
             validatedEmployeeEvaluationDTO.setErrorDTOS(validates);
         }
         BeanUtils.copyProperties(employeeEvaluationDTO, validatedEmployeeEvaluationDTO);
+
+        validatedEmployeeEvaluationDTO.setProjectEvaluations(ResponseProjectEvaluationDTOS);
 
         return validatedEmployeeEvaluationDTO;
     }
