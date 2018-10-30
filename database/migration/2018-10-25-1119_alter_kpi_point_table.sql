@@ -4,7 +4,7 @@ author: hiepnnt
 purpose: alter table kpi_point and modify data type kpi_point_detail
 **/
 
-ALTER TABLE `higgsup_kpi`.`kpi_point`
+ALTER TABLE `kpi_point`
   ALTER `rule_point`           SET  DEFAULT 0,
   ALTER`club_point`            SET  DEFAULT 0,
   ALTER`normal_seminar_point`  SET  DEFAULT 0,
@@ -17,5 +17,5 @@ ALTER TABLE `higgsup_kpi`.`kpi_point`
   ALTER`famed_point`           SET  DEFAULT 0,
   ALTER`title`                 SET  DEFAULT 0;
 
-ALTER TABLE `higgsup_kpi`.`kpi_point_detail`
+ALTER TABLE `kpi_point_detail`
   MODIFY COLUMN `point` FLOAT;
