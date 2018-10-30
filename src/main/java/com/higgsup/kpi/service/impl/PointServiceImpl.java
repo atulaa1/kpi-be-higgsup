@@ -702,7 +702,7 @@ public class PointServiceImpl extends BaseService implements PointService {
 
     @Scheduled(cron = "00 05 16 10 * ?")
     private void calculateFamePoint(){
-        int year = Calendar.getInstance().get(Calendar.YEAR);
+        Integer year = LocalDate.now().getYear();
         Optional<KpiYearMonth> kpiYearMonth = kpiMonthRepo.findByPreviousMonth();
         if(kpiYearMonth.isPresent()){
             List<KpiPoint> kpiPointList = kpiPointRepo.getAllPointInMonth(kpiYearMonth.get().getId());
@@ -719,6 +719,7 @@ public class PointServiceImpl extends BaseService implements PointService {
                 }
                 kpiPoint.setFamedPoint(famePoint);
                 kpiPointRepo.save(kpiPoint);
+
                 KpiFamePoint kpiFamePoint = kpiFamePointRepo.findByUsernameAndYear(year, kpiPoint.getRatedUser().getUserName());
                 if(kpiFamePoint == null){
                     kpiFamePoint = new KpiFamePoint();
@@ -758,33 +759,31 @@ public class PointServiceImpl extends BaseService implements PointService {
     }
 
     @Override
-    public EmployeeFamePointDetailDTO getFamePointOfEmployee(String username) {
-        List<KpiPoint> famePointInMonth = kpiPointRepo.getPointOfEmployee(username);
-        List<PointDTO> pointDTOs = new ArrayList<>();
+    public List<EmployeeFamePointDetailDTO> getFamePointOfEmployee(String username) {
+        List<EmployeeFamePointDetailDTO> listEmployeeFamePoint = new ArrayList<>();
 
-        List<KpiFamePoint> famePointInYear = kpiFamePointRepo.findByUsername(username);
-        List<FamePointDTO> famePointDTOs = new ArrayList<>();
+        List<KpiFamePoint> listFamePointOfEmployee = kpiFamePointRepo.findByUsername(username);
+        for(KpiFamePoint kpiFamePoint : listFamePointOfEmployee){
+            EmployeeFamePointDetailDTO employeeFamePointDetailDTO = new EmployeeFamePointDetailDTO();
+            List<PointDTO> pointDTOs = new ArrayList<>();
+            Integer year = kpiFamePoint.getYear();
 
-        for(KpiPoint kpiPoint : famePointInMonth){
-            PointDTO pointDTO = new PointDTO();
-            pointDTO.setFamedPoint(kpiPoint.getFamedPoint());
-            KpiYearMonth kpiYearMonth = kpiMonthRepo.findById(kpiPoint.getYearMonthId()).get();
-            YearMonthDTO yearMonthDTO = new YearMonthDTO();
-            yearMonthDTO.setYearMonth(kpiYearMonth.getYearMonth());
-            pointDTO.setYearMonth(yearMonthDTO);
-            pointDTOs.add(pointDTO);
-        }
-
-        for(KpiFamePoint kpiFamePoint: famePointInYear){
+            List<KpiPoint> famePointInYear = kpiPointRepo.getFamePointOfEmployeeInYear(username, year * 100, year * 100 + 13);
+            for(KpiPoint kpiPoint : famePointInYear){
+                PointDTO pointDTO = new PointDTO();
+                pointDTO.setFamedPoint(kpiPoint.getFamedPoint());
+                KpiYearMonth kpiYearMonth = kpiMonthRepo.findById(kpiPoint.getYearMonthId()).get();
+                YearMonthDTO yearMonthDTO = new YearMonthDTO();
+                yearMonthDTO.setYearMonth(kpiYearMonth.getYearMonth());
+                pointDTO.setYearMonth(yearMonthDTO);
+                pointDTOs.add(pointDTO);
+            }
             FamePointDTO famePointDTO = convertFamePointEntityToDTO(kpiFamePoint);
-            famePointDTOs.add(famePointDTO);
+            employeeFamePointDetailDTO.setFamePoint(famePointDTO);
+            employeeFamePointDetailDTO.setListFamePointInYear(pointDTOs);
+            listEmployeeFamePoint.add(employeeFamePointDetailDTO);
         }
-
-        EmployeeFamePointDetailDTO employeeFamePointDetailDTO = new EmployeeFamePointDetailDTO();
-        employeeFamePointDetailDTO.setPointDTOs(pointDTOs);
-        employeeFamePointDetailDTO.setFamePointDTOs(famePointDTOs);
-
-        return employeeFamePointDetailDTO;
+        return listEmployeeFamePoint;
     }
 
     private FamePointDTO convertFamePointEntityToDTO(KpiFamePoint kpiFamePoint){

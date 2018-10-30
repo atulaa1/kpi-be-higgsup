@@ -15,6 +15,6 @@ public interface PointService {
 
     List<EmployeePointDetailDTO> getPointDetailByUser(String username) throws IOException;
 
-    EmployeeFamePointDetailDTO getFamePointOfEmployee(String username);
+    List<EmployeeFamePointDetailDTO> getFamePointOfEmployee(String username);
 }
 

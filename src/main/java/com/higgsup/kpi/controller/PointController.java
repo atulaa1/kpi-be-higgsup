@@ -30,9 +30,9 @@ public class PointController {
     @PreAuthorize("hasRole('EMPLOYEE')")
     @GetMapping("/fame-point")
     public Response getFamePoint(){
-        Response<EmployeeFamePointDetailDTO> response = new Response<>(HttpStatus.OK.value());
+        Response<List<EmployeeFamePointDetailDTO>> response = new Response<>(HttpStatus.OK.value());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        EmployeeFamePointDetailDTO employeeFamePointDetailDTO = pointService.getFamePointOfEmployee(authentication.getPrincipal().toString());
+        List<EmployeeFamePointDetailDTO> employeeFamePointDetailDTO = pointService.getFamePointOfEmployee(authentication.getPrincipal().toString());
         response.setData(employeeFamePointDetailDTO);
         return response;
     }

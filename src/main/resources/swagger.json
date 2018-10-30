@@ -11300,38 +11300,39 @@
             "schema":{
               "type": "object",
               "required": [
-                "pointDTOs",
-                "famePointDTOs",
+                "data",
                 "status_code"
               ],
               "properties" : {
-                "pointDTOs":{
+                "data":{
                   "type": "array",
                   "items": {
                     "type": "object",
                     "properties": {
                       "famePoint": {
-                        "type": "number"
-                      },
-                      "yearMonth": {
                         "type": "object",
                         "properties":{
-                          "yearMonth": "number"
+                          "famePoint": {
+                            "type": "number"
+                          },
+                          "year": {
+                            "type": "number"
+                          }
                         }
-                      }
-                    }
-                  }
-                },
-                "famePointDTOs":{
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "famePoint": {
-                        "type": "number"
                       },
-                      "yearMonth": {
-                        "type": "number"
+                      "listFamePointInYear":{
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "famePoint": {
+                              "type": "number"
+                            },
+                            "yearMonth": {
+                              "type": "number"
+                            }
+                          }
+                        }
                       }
                     }
                   }
