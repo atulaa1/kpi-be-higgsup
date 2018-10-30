@@ -13,8 +13,5 @@ public interface KpiMonthRepo extends CrudRepository<KpiYearMonth, Integer> {
     Optional<KpiYearMonth> findById(Integer id);
 
     @Query(value = "SELECT * FROM kpi_year_month ORDER BY year_and_month DESC LIMIT 1 OFFSET 1", nativeQuery = true)
-    KpiYearMonth findByLastMonth();
-
-    @Query(value = "SELECT * FROM kpi_year_month ORDER BY year_and_month DESC LIMIT 1 OFFSET 1", nativeQuery = true)
     Optional<KpiYearMonth> findByPreviousMonth();
 }
