@@ -1,7 +1,7 @@
 /**
-date: 2018-10-22 11:39
+date: 2018-10-30 08:26
 author: hiepnnt
-purpose: add table kpi_fame_point and change year_month_id column in kpi_point into not null
+purpose: add table kpi_fame_point
 
 **/
 
@@ -201,19 +201,34 @@ CREATE TABLE `kpi_point` (
   `id`                    INT(10) PRIMARY KEY AUTO_INCREMENT,
   `rated_username`        VARCHAR(50)
                           CHARACTER SET utf8 NOT NULL,
-  `rule_point`            FLOAT              NULL,
-  `club_point`            FLOAT              NULL,
-  `normal_seminar_point`  FLOAT              NULL,
-  `weekend_seminar_point` FLOAT              NULL,
-  `support_point`         FLOAT              NULL,
-  `teambuilding_point`    FLOAT              NULL,
-  `personal_point`        FLOAT              NULL,
-  `project_point`         FLOAT              NULL,
-  `total_point`           FLOAT              NULL,
-  `year_month_id`         INT(11)            NULL,
-  `famed_point`           FLOAT              DEFAULT NULL,
+  `rule_point`            FLOAT              DEFAULT 0,
+  `club_point`            FLOAT              DEFAULT 0,
+  `normal_seminar_point`  FLOAT              DEFAULT 0,
+  `weekend_seminar_point` FLOAT              DEFAULT 0,
+  `support_point`         FLOAT              DEFAULT 0,
+  `teambuilding_point`    FLOAT              DEFAULT 0,
+  `personal_point`        FLOAT              DEFAULT 0,
+  `project_point`         FLOAT              DEFAULT 0,
+  `total_point`           FLOAT              DEFAULT 0,
+  `year_month_id`         INT(11)            NOT NULL,
+  `famed_point`           FLOAT              DEFAULT 0,
   `title`                 INT(11)            DEFAULT 0
   FOREIGN KEY (rated_username) REFERENCES kpi_user (user_name),
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
+CREATE TABLE `kpi_point_detail` (
+  `id`                    INT(11) PRIMARY KEY AUTO_INCREMENT,
+  `event_id`              INT(11)            NULL,
+  `user_name`             VARCHAR(50)
+                          CHARACTER SET utf8 NOT NULL,
+  `point_type`            INT(11)            NOT NULL,
+  `point`                 FLOAT              NOT NULL,
+  `year_month_id`         INT(11)            NULL,
+  FOREIGN KEY (event_id) REFERENCES kpi_event (id),
+  FOREIGN KEY (user_name) REFERENCES kpi_user (user_name),
+  FOREIGN KEY (year_month_id) REFERENCES kpi_year_month(id),
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;

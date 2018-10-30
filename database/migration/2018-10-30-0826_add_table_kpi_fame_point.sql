@@ -10,7 +10,7 @@ CREATE TABLE `kpi_fame_point` (
   `username`              VARCHAR(50)
                           CHARACTER SET utf8 NOT NULL,
   `fame_point`            FLOAT              NOT NULL,
-  `year`                  INT(11)              NULL,
+  `year`                  INT(11)            NOT NULL,
   FOREIGN KEY (username) REFERENCES kpi_user (user_name)
 )
   ENGINE = InnoDB
