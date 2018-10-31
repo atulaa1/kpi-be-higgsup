@@ -14,8 +14,6 @@ public enum PointValue {
     EMPLOYEE_OF_THE_MONTH_II_FAME_POINT(5, "employee of the month II"),
     FULL_RULE_POINT(24, "full rule point");
 
-
-
     private Integer value;
 
     private String content;
