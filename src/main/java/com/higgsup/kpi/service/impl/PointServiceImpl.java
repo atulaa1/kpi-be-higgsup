@@ -69,7 +69,6 @@ public class PointServiceImpl extends BaseService implements PointService {
     @Autowired
     private KpiFamePointRepo kpiFamePointRepo;
 
-    @Scheduled(cron = "00 00 16 10 * ?")
     public void calculateRulePoint() {
         Optional<KpiYearMonth> kpiYearMonthOptional = kpiMonthRepo.findByPreviousMonth();
 
@@ -269,7 +268,6 @@ public class PointServiceImpl extends BaseService implements PointService {
         return addedPoint;
     }
 
-    @Scheduled(cron = "10 00 16 10 * ?")
     private void addEffectivePointForHost() throws IOException {
         Optional<KpiYearMonth> kpiYearMonthOptional = kpiMonthRepo.findByPreviousMonth();
         if(kpiYearMonthOptional.isPresent()){
@@ -318,7 +316,6 @@ public class PointServiceImpl extends BaseService implements PointService {
         }
     }
 
-    @Scheduled(cron = "20 00 16 10 * ?")
     private void addUnfinishedSurveySeminarPoint() throws IOException{
         Optional<KpiYearMonth> kpiYearMonthOptional = kpiMonthRepo.findByPreviousMonth();
         if(kpiYearMonthOptional.isPresent()){
@@ -701,7 +698,6 @@ public class PointServiceImpl extends BaseService implements PointService {
         kpiMonthRepo.save(newYearMonth);
     }
 
-    @Scheduled(cron = "30 00 16 10 * ?")
     private void setTitleForEmployeeInMonth(){
         int year = Calendar.getInstance().get(Calendar.YEAR);
         Optional<KpiYearMonth> kpiYearMonth = kpiMonthRepo.findByPreviousMonth();
@@ -725,7 +721,6 @@ public class PointServiceImpl extends BaseService implements PointService {
         }
     }
 
-    @Scheduled(cron = "40 00 16 10 * ?")
     private void calculateFamePoint(){
         Integer year = LocalDate.now().getYear();
         Optional<KpiYearMonth> kpiYearMonth = kpiMonthRepo.findByPreviousMonth();
@@ -791,5 +786,15 @@ public class PointServiceImpl extends BaseService implements PointService {
         FamePointDTO famePointDTO = new FamePointDTO();
         BeanUtils.copyProperties(kpiFamePoint, famePointDTO, "id");
         return famePointDTO;
+    }
+
+    @Scheduled(cron = "00 00 16 10 * ?")
+    private void pointSchedule() throws IOException{
+        kpiEventService.cancelUnconfirmedClubAndSupportEvent();
+        calculateRulePoint();
+        addEffectivePointForHost();
+        addUnfinishedSurveySeminarPoint();
+        setTitleForEmployeeInMonth();
+        calculateFamePoint();
     }
 }
