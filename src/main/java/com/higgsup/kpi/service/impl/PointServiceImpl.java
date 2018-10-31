@@ -144,6 +144,7 @@ public class PointServiceImpl extends BaseService implements PointService {
                     addedPoint = organizerPoint;
                     kpiPoint.setTeambuildingPoint(addedPoint);
                     kpiPoint.setTotalPoint(addedPoint);
+                    kpiPoint.setYearMonthId(kpiYearMonthOptional.get().getId());
                 } else {
                     for (KpiEventUser gamingOrganizer : gamingOrganizers) {
                         EventUserType eventUserType = EventUserType.getEventUserType(gamingOrganizer.getType());

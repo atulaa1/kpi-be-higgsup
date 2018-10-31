@@ -13,7 +13,8 @@ public interface KpiPointRepo extends CrudRepository<KpiPoint, Integer> {
 
     KpiPoint findByRatedUser(KpiUser kpiUser);
 
-    @Query(value = "select * from kpi_point p where p.rated_username = :username", nativeQuery = true)
+    @Query(value = "select * from kpi_point p join kpi_year_month y on p.year_month_id = y.id " +
+            "where p.rated_username = :username order by y.year_and_month desc", nativeQuery = true)
     List<KpiPoint> findByRatedUsername(@Param("username") String username);
 
     @Query(value = "SELECT * FROM kpi_point ORDER BY total_point DESC, rated_username ASC  LIMIT :offset ,:limitRows", nativeQuery = true)
@@ -27,7 +28,8 @@ public interface KpiPointRepo extends CrudRepository<KpiPoint, Integer> {
     KpiPoint findByRatedUsernameAndMonth(@Param("username") String username, @Param("id") Integer yearMonthId);
 
     @Query(value = "Select * from kpi_point p join kpi_year_month y on p.year_month_id = y.id " +
-                   "where p.rated_username = :username and y.year_and_month between :l and :r", nativeQuery = true)
+                   "where p.rated_username = :username and y.year_and_month between :l and :r " +
+                   "order by y.year_and_month asc", nativeQuery = true)
     List<KpiPoint> getFamePointOfEmployeeInYear(@Param("username") String username,
                                                 @Param("l") Integer left, @Param("r") Integer right);
 

@@ -13,6 +13,6 @@ public interface KpiFamePointRepo extends CrudRepository< KpiFamePoint, Integer>
             "and f.year = :year", nativeQuery = true)
     KpiFamePoint findByUsernameAndYear(@Param("year") Integer year, @Param("username") String username);
 
-    @Query(value = "select * from kpi_fame_point f where f.username = :username ", nativeQuery = true)
+    @Query(value = "select * from kpi_fame_point f where f.username = :username order by f.year desc", nativeQuery = true)
     List<KpiFamePoint> findByUsername(@Param("username") String username);
 }
