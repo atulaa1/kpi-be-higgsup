@@ -3,7 +3,6 @@ package com.higgsup.kpi.controller;
 import com.higgsup.kpi.configure.BaseConfiguration;
 import com.higgsup.kpi.dto.EmployeeFamePointDetailDTO;
 import com.higgsup.kpi.dto.EmployeePointDetailDTO;
-import com.higgsup.kpi.dto.PointDTO;
 import com.higgsup.kpi.dto.Response;
 import com.higgsup.kpi.glossary.ErrorCode;
 import com.higgsup.kpi.glossary.ErrorMessage;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping(BaseConfiguration.BASE_API_URL + "/point")

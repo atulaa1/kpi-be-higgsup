@@ -13,7 +13,7 @@ public class KpiFamePoint {
     private Integer id;
 
     @JoinColumn(name = "username", referencedColumnName = "user_name")
-    @OneToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private KpiUser user;
 
     @Basic
