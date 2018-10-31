@@ -4,23 +4,23 @@ import java.util.List;
 
 public class EmployeeFamePointDetailDTO {
 
-    private List<FamePointDTO> famePointDTOs;
+    private FamePointDTO famePoint;
 
-    private List<PointDTO> pointDTOs;
+    private List<PointDTO> listFamePointInYear;
 
-    public List<FamePointDTO> getFamePointDTOs() {
-        return famePointDTOs;
+    public FamePointDTO getFamePoint() {
+        return famePoint;
     }
 
-    public void setFamePointDTOs(List<FamePointDTO> famePointDTOs) {
-        this.famePointDTOs = famePointDTOs;
+    public void setFamePoint(FamePointDTO famePoint) {
+        this.famePoint = famePoint;
     }
 
-    public List<PointDTO> getPointDTOs() {
-        return pointDTOs;
+    public List<PointDTO> getListFamePointInYear() {
+        return listFamePointInYear;
     }
 
-    public void setPointDTOs(List<PointDTO> pointDTOs) {
-        this.pointDTOs = pointDTOs;
+    public void setListFamePointInYear(List<PointDTO> listFamePointInYear) {
+        this.listFamePointInYear = listFamePointInYear;
     }
 }

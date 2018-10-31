@@ -11283,6 +11283,118 @@
           }
         }
       }
+    },
+    "/api/point/fame-point":{
+      "get":{
+        "tags":[
+          "point-controller"
+        ],
+        "summary": "getFamePointByUser",
+        "operationId": "getFamePointByUserUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "responses":{
+          "200": {
+            "description": "status_code : 200. Meaning: Thành công",
+            "schema":{
+              "type": "object",
+              "required": [
+                "data",
+                "status_code"
+              ],
+              "properties" : {
+                "data":{
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "famePoint": {
+                        "type": "object",
+                        "properties":{
+                          "famePoint": {
+                            "type": "number"
+                          },
+                          "year": {
+                            "type": "number"
+                          }
+                        }
+                      },
+                      "listFamePointInYear":{
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "famePoint": {
+                              "type": "number"
+                            },
+                            "yearMonth": {
+                              "type": "number"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "message": {
+                  "type": "string"
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "errorCode": {
+                        "type": "number"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "status_code": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "example": {
+                "data": {
+                  "famePointDTOs": [
+                    {
+                      "famePoint": 10,
+                      "year": 2018
+                    }
+                  ],
+                  "pointDTOs": [
+                    {
+                      "yearMonth": {
+                        "yearMonth": 201810
+                      },
+                      "famedPoint": 2
+                    },
+                    {
+                      "yearMonth": {
+                        "yearMonth": 201809
+                      }
+                    }
+                  ]
+                },
+                "status_code": 200
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
     }
   },
   "definitions": {

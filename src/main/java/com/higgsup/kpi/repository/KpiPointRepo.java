@@ -26,8 +26,10 @@ public interface KpiPointRepo extends CrudRepository<KpiPoint, Integer> {
             " and p.year_month_id = :id", nativeQuery = true)
     KpiPoint findByRatedUsernameAndMonth(@Param("username") String username, @Param("id") Integer yearMonthId);
 
-    @Query(value = "Select * from kpi_point p where p.rated_username = :username", nativeQuery = true)
-    List<KpiPoint> getPointOfEmployee(@Param("username") String username);
+    @Query(value = "Select * from kpi_point p join kpi_year_month y on p.year_month_id = y.id " +
+                   "where p.rated_username = :username and y.year_and_month between :l and :r", nativeQuery = true)
+    List<KpiPoint> getFamePointOfEmployeeInYear(@Param("username") String username,
+                                                @Param("l") Integer left, @Param("r") Integer right);
 
     @Query(value = "select * from kpi_point p where p.year_month_id = :id", nativeQuery = true)
     List<KpiPoint> getAllPointInMonth(@Param("id")Integer yearMonthId);

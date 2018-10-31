@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
-import java.util.List;
 
 @RestController
 @RequestMapping(BaseConfiguration.BASE_API_URL + "/point")
@@ -29,9 +28,9 @@ public class PointController {
     @PreAuthorize("hasRole('EMPLOYEE')")
     @GetMapping("/fame-point")
     public Response getFamePoint(){
-        Response<EmployeeFamePointDetailDTO> response = new Response<>(HttpStatus.OK.value());
+        Response<List<EmployeeFamePointDetailDTO>> response = new Response<>(HttpStatus.OK.value());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        EmployeeFamePointDetailDTO employeeFamePointDetailDTO = pointService.getFamePointOfEmployee(authentication.getPrincipal().toString());
+        List<EmployeeFamePointDetailDTO> employeeFamePointDetailDTO = pointService.getFamePointOfEmployee(authentication.getPrincipal().toString());
         response.setData(employeeFamePointDetailDTO);
         return response;
     }
