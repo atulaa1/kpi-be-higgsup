@@ -11320,7 +11320,7 @@
                           }
                         }
                       },
-                      "listFamePointInYear":{
+                      "famePointInMonth":{
                         "type": "array",
                         "items": {
                           "type": "object",
@@ -11359,27 +11359,29 @@
                 }
               },
               "example": {
-                "data": {
-                  "famePointDTOs": [
+                "data": [
+                  {
+                    "famePoint":
                     {
                       "famePoint": 10,
                       "year": 2018
-                    }
-                  ],
-                  "pointDTOs": [
-                    {
-                      "yearMonth": {
-                        "yearMonth": 201810
-                      },
-                      "famedPoint": 2
                     },
-                    {
-                      "yearMonth": {
-                        "yearMonth": 201809
+                    "famePointInMonth": [
+                      {
+                        "yearMonth": {
+                          "yearMonth": 201810
+                        },
+                        "famedPoint": 2
+                      },
+                      {
+                        "yearMonth": {
+                          "yearMonth": 201809
+                        },
+                        "famedPoint": 3
                       }
-                    }
-                  ]
-                },
+                    ]
+                  }
+                ],
                 "status_code": 200
               }
             }
