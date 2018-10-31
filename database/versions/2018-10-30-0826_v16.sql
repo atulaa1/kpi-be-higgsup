@@ -212,8 +212,8 @@ CREATE TABLE `kpi_point` (
   `total_point`           FLOAT              DEFAULT 0,
   `year_month_id`         INT(11)            NOT NULL,
   `famed_point`           FLOAT              DEFAULT 0,
-  `title`                 INT(11)            DEFAULT 0
-  FOREIGN KEY (rated_username) REFERENCES kpi_user (user_name),
+  `title`                 INT(11)            DEFAULT 0,
+  FOREIGN KEY (rated_username) REFERENCES kpi_user (user_name)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;

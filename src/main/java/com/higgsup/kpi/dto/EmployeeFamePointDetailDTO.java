@@ -6,7 +6,7 @@ public class EmployeeFamePointDetailDTO {
 
     private FamePointDTO famePoint;
 
-    private List<PointDTO> listFamePointInYear;
+    private List<PointDTO> listFamePointInMonth;
 
     public FamePointDTO getFamePoint() {
         return famePoint;
@@ -16,11 +16,11 @@ public class EmployeeFamePointDetailDTO {
         this.famePoint = famePoint;
     }
 
-    public List<PointDTO> getListFamePointInYear() {
-        return listFamePointInYear;
+    public List<PointDTO> getListFamePointInMonth() {
+        return listFamePointInMonth;
     }
 
-    public void setListFamePointInYear(List<PointDTO> listFamePointInYear) {
-        this.listFamePointInYear = listFamePointInYear;
+    public void setListFamePointInMonth(List<PointDTO> listFamePointInMonth) {
+        this.listFamePointInMonth = listFamePointInMonth;
     }
 }

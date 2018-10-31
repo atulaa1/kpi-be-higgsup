@@ -11329,7 +11329,12 @@
                               "type": "number"
                             },
                             "yearMonth": {
-                              "type": "number"
+                              "type": "object",
+                              "properties":{
+                                "yearMonth":{
+                                  "type": "number"
+                                }
+                              }
                             }
                           }
                         }
@@ -11361,23 +11366,30 @@
               "example": {
                 "data": [
                   {
-                    "famePoint":
-                    {
-                      "famePoint": 10,
+                    "famePoint": {
+                      "famePoint": 6.8,
                       "year": 2018
                     },
-                    "famePointInMonth": [
+                    "listFamePointInMonth": [
                       {
                         "yearMonth": {
                           "yearMonth": 201810
                         },
-                        "famedPoint": 2
-                      },
+                        "famedPoint": 6.8
+                      }
+                    ]
+                  },
+                  {
+                    "famePoint": {
+                      "famePoint": 13,
+                      "year": 2017
+                    },
+                    "listFamePointInMonth": [
                       {
                         "yearMonth": {
-                          "yearMonth": 201809
+                          "yearMonth": 201709
                         },
-                        "famedPoint": 3
+                        "famedPoint": 6.5
                       }
                     ]
                   }
