@@ -17,14 +17,17 @@ import java.util.List;
 @RestController
 @RequestMapping(BaseConfiguration.BASE_API_URL)
 public class RankingController {
+
     @Autowired
     private RankingService rankingService;
 
     @PreAuthorize("hasRole('EMPLOYEE')")
-    @GetMapping("/ranking/normal-point/page={currentPage}")
-    public Response showNormalPointRanking(@PathVariable("currentPage") Integer currentPage) {
+    @GetMapping("/ranking/normal-point/year={year}/month={month}/page={currentPage}")
+    public Response showNormalPointRanking(@PathVariable("year") Integer year,
+                                           @PathVariable("month") Integer month,
+                                           @PathVariable("currentPage") Integer currentPage) {
         Response<List<RankingDTO>> response = new Response<>(HttpStatus.OK.value());
-        List<RankingDTO> normalPointRanking = rankingService.showNormalPointRanking(currentPage);
+        List<RankingDTO> normalPointRanking = rankingService.showNormalPointRanking(year, month, currentPage);
         response.setData(normalPointRanking);
         return response;
     }

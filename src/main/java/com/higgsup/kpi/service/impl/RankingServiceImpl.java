@@ -28,8 +28,8 @@ public class RankingServiceImpl implements RankingService {
     private KpiFamePointRepo kpiFamePointRepo;
 
     @Override
-    public List<RankingDTO> showNormalPointRanking(Integer currentPage) {
-        List<KpiPoint> kpiNormalPointRanking = getNormalPointRanking(currentPage);
+    public List<RankingDTO> showNormalPointRanking(Integer year, Integer month, Integer currentPage) {
+        List<KpiPoint> kpiNormalPointRanking = getNormalPointRanking(year, month, currentPage);
         return convertNormalPointEntityToDTO(kpiNormalPointRanking);
     }
 
@@ -39,9 +39,10 @@ public class RankingServiceImpl implements RankingService {
         return convertFamePointEntityToDTO(kpiFamePointRanking);
     }
 
-    private List<KpiPoint> getNormalPointRanking(Integer currentPage) {
+    private List<KpiPoint> getNormalPointRanking(Integer year, Integer month, Integer currentPage) {
         Integer rows = rowsReturn(currentPage);
-        return kpiPointRepo.getNormalPointRanking(rows);
+        Integer yearMonth = Integer.valueOf(String.valueOf(year).concat(String.valueOf(month)));
+        return kpiPointRepo.getNormalPointRanking(yearMonth, rows);
     }
 
     private List<KpiFamePoint> getFamePointRanking(Integer year, Integer currentPage) {
