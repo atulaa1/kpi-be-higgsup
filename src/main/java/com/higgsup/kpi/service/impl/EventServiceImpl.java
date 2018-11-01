@@ -1848,8 +1848,7 @@ public class EventServiceImpl extends BaseService implements EventService {
         return isEmployee;
     }
 
-    @Scheduled(cron = "00 00 16 10 * ?")
-    private void cancelUnconfirmedClubAndSupportEvent(){
+    public void cancelUnconfirmedClubAndSupportEvent(){
         List<KpiEvent> eventList = kpiEventRepo.findClubAndSupportEvent();
         Integer previousMonth = LocalDate.now().getMonthValue() - 1;
 

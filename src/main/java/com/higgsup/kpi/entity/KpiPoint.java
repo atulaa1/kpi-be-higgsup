@@ -61,7 +61,7 @@ public class KpiPoint {
     private Integer yearMonthId;
 
     @Column(name = "title")
-    private Integer title;
+    private Integer title = 0;
 
     public Integer getId() {
         return id;

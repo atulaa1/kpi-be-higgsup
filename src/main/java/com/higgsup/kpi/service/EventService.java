@@ -1,6 +1,7 @@
 package com.higgsup.kpi.service;
 
 import com.higgsup.kpi.dto.*;
+import com.higgsup.kpi.entity.KpiEvent;
 
 import java.io.IOException;
 import java.util.List;
@@ -39,4 +40,10 @@ public interface EventService {
     EventDTO createTeamBuildingEvent(EventDTO<EventTeamBuildingDetail> eventDTO) throws IOException;
 
     EventDTO createSeminarSurvey(EventDTO<List<SeminarSurveyDTO>> seminarSurveyDTO) throws IOException;
+
+    List<EventDTO<EventSeminarDetail>> convertSeminarEventEntityToDTO(List<KpiEvent> kpiEventEntities) throws IOException;
+
+    EventDTO<EventSeminarDetail> convertSeminarEntityToDTO(KpiEvent kpiEvent) throws IOException;
+
+    void cancelUnconfirmedClubAndSupportEvent();
 }

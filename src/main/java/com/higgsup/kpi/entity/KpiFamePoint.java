@@ -1,5 +1,7 @@
 package com.higgsup.kpi.entity;
+
 import javax.persistence.*;
+
 @Entity
 @Table(name = "kpi_fame_point")
 public class KpiFamePoint {
