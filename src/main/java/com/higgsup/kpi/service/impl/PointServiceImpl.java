@@ -9,8 +9,6 @@ import com.higgsup.kpi.service.BaseService;
 import com.higgsup.kpi.service.EventService;
 import com.higgsup.kpi.service.PointService;
 import com.higgsup.kpi.service.UserService;
-import com.higgsup.kpi.util.UtilsConvert;
-import org.apache.tomcat.jni.Local;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -19,7 +17,6 @@ import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.Year;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
