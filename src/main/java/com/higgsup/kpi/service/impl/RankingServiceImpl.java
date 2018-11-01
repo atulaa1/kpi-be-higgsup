@@ -1,11 +1,11 @@
 package com.higgsup.kpi.service.impl;
 
-import com.higgsup.kpi.dto.PointDTO;
 import com.higgsup.kpi.dto.RankingDTO;
 import com.higgsup.kpi.dto.UserDTO;
+import com.higgsup.kpi.entity.KpiFamePoint;
 import com.higgsup.kpi.entity.KpiPoint;
 import com.higgsup.kpi.entity.KpiUser;
-import com.higgsup.kpi.glossary.RankingType;
+import com.higgsup.kpi.repository.KpiFamePointRepo;
 import com.higgsup.kpi.repository.KpiPointRepo;
 import com.higgsup.kpi.repository.KpiUserRepo;
 import com.higgsup.kpi.service.RankingService;
@@ -17,31 +17,39 @@ import java.util.List;
 
 @Service
 public class RankingServiceImpl implements RankingService {
+
     @Autowired
     private KpiPointRepo kpiPointRepo;
 
     @Autowired
     private KpiUserRepo kpiUserRepo;
 
+    @Autowired
+    private KpiFamePointRepo kpiFamePointRepo;
+
     @Override
     public List<RankingDTO> showNormalPointRanking(Integer currentPage) {
-        List<KpiPoint> kpiPointRanking = getListPointForRanking(RankingType.NORMAL_POINT_RANKING, currentPage);
-        List<RankingDTO> pointRankingDTO = convertPointEntityToDTO(kpiPointRanking);
-
-        return pointRankingDTO;
+        List<KpiPoint> kpiNormalPointRanking = getNormalPointRanking(currentPage);
+        return convertNormalPointEntityToDTO(kpiNormalPointRanking);
     }
 
     @Override
-    public List<RankingDTO> showFamedPointRanking(Integer currentPage) {
-        List<KpiPoint> kpiPointRanking = getListPointForRanking(RankingType.FAMED_POINT_RANKING, currentPage);
-        List<RankingDTO> pointRankingDTO = convertPointEntityToDTO(kpiPointRanking);
-
-        return pointRankingDTO;
+    public List<RankingDTO> showFamedPointRanking(Integer year, Integer currentPage) {
+        List<KpiFamePoint> kpiFamePointRanking = getFamePointRanking(year, currentPage);
+        return convertFamePointEntityToDTO(kpiFamePointRanking);
     }
 
-    private List<KpiPoint> getListPointForRanking(RankingType rankingType, Integer currentPage) {
-        List<KpiPoint> kpiPoints;
-        Integer offset = 0;
+    private List<KpiPoint> getNormalPointRanking(Integer currentPage) {
+        Integer rows = rowsReturn(currentPage);
+        return kpiPointRepo.getNormalPointRanking(rows);
+    }
+
+    private List<KpiFamePoint> getFamePointRanking(Integer year, Integer currentPage) {
+        Integer rows = rowsReturn(currentPage);
+        return kpiFamePointRepo.getFamePointRanking(year, rows);
+    }
+
+    private Integer rowsReturn(Integer currentPage){
         Integer rows = 0;
         switch (currentPage) {
             case 1: {
@@ -49,37 +57,38 @@ public class RankingServiceImpl implements RankingService {
                 break;
             }
             case 2: {
-                offset = 10;
-                rows = 10;
+                rows = 20;
                 break;
             }
             case 3: {
-                offset = 20;
-                rows = 30;
-                break;
-            }
-            case 4: {
-                offset = 50;
                 rows = 50;
                 break;
             }
+            case 4: {
+                rows = 100;
+                break;
+            }
         }
-
-        if (rankingType == RankingType.NORMAL_POINT_RANKING) {
-            kpiPoints = kpiPointRepo.getNomalPointRanking(offset, rows);
-        } else {
-            kpiPoints = kpiPointRepo.getFamedPointRanking(offset, rows);
-        }
-        return kpiPoints;
+        return rows;
     }
 
-    private List<RankingDTO> convertPointEntityToDTO(List<KpiPoint> kpiPointRanking) {
+    private List<RankingDTO> convertNormalPointEntityToDTO(List<KpiPoint> kpiPointRanking) {
         List<RankingDTO> pointRankingDTO = new ArrayList<>();
         for (KpiPoint kpiPoint : kpiPointRanking) {
             RankingDTO rankingDTO = new RankingDTO();
             rankingDTO.setEmployee(convertUserEntityToDTO(kpiPoint.getRatedUser()));
-            rankingDTO.setTotalPoint(kpiPoint.getTotalPoint());
-            rankingDTO.setFamedPoint(kpiPoint.getFamedPoint());
+            rankingDTO.setPoint(kpiPoint.getTotalPoint());
+            pointRankingDTO.add(rankingDTO);
+        }
+        return pointRankingDTO;
+    }
+
+    private List<RankingDTO> convertFamePointEntityToDTO(List<KpiFamePoint> kpiFamePointRanking) {
+        List<RankingDTO> pointRankingDTO = new ArrayList<>();
+        for (KpiFamePoint kpiFamePoint : kpiFamePointRanking) {
+            RankingDTO rankingDTO = new RankingDTO();
+            rankingDTO.setEmployee(convertUserEntityToDTO(kpiFamePoint.getUser()));
+            rankingDTO.setPoint(kpiFamePoint.getFamePoint());
             pointRankingDTO.add(rankingDTO);
         }
         return pointRankingDTO;

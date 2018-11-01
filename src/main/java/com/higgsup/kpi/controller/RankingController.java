@@ -30,10 +30,10 @@ public class RankingController {
     }
 
     @PreAuthorize("hasRole('EMPLOYEE')")
-    @GetMapping("/ranking/famed-point/page={currentPage}")
-    public Response showFamedPointRanking(@PathVariable("currentPage") Integer currentPage) {
+    @GetMapping("/ranking/famed-point/year={year}/page={currentPage}")
+    public Response showFamedPointRanking(@PathVariable("year")Integer year, @PathVariable("currentPage") Integer currentPage) {
         Response<List<RankingDTO>> response = new Response<>(HttpStatus.OK.value());
-        List<RankingDTO> famedPointRanking = rankingService.showFamedPointRanking(currentPage);
+        List<RankingDTO> famedPointRanking = rankingService.showFamedPointRanking(year, currentPage);
         response.setData(famedPointRanking);
         return response;
     }
