@@ -690,7 +690,7 @@ public class PointServiceImpl extends BaseService implements PointService {
         return isEmployee;
     }
 
-    @Scheduled(cron = "59 56 09 01 * ?")
+    @Scheduled(cron = "05 00 00 01 * ?")
     private void addNewYearMonth(){
         LocalDate localDate = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMM");
