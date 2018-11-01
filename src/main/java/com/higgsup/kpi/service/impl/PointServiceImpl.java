@@ -19,6 +19,8 @@ import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.Year;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.List;
@@ -765,8 +767,11 @@ public class PointServiceImpl extends BaseService implements PointService {
             EmployeeFamePointDetailDTO employeeFamePointDetailDTO = new EmployeeFamePointDetailDTO();
             List<PointDTO> pointDTOs = new ArrayList<>();
             Integer year = kpiFamePoint.getYear();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMM");
+            Integer firstYearMonth = Integer.valueOf(YearMonth.of(year, 1).format(formatter));
+            Integer lastYearMonth = Integer.valueOf(YearMonth.of(year, 12).format(formatter));
 
-            List<KpiPoint> famePointInYear = kpiPointRepo.getFamePointOfEmployeeInYear(username, year * 100, year * 100 + 13);
+            List<KpiPoint> famePointInYear = kpiPointRepo.getFamePointOfEmployeeInYear(username, firstYearMonth, lastYearMonth);
             for(KpiPoint kpiPoint : famePointInYear){
                 PointDTO pointDTO = new PointDTO();
                 pointDTO.setFamedPoint(kpiPoint.getFamedPoint());
