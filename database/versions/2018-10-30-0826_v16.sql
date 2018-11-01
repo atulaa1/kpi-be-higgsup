@@ -1,7 +1,8 @@
 /**
-date: 2018-10-18 18:34
+date: 2018-10-30 08:26
 author: hiepnnt
-purpose: change DB for new feature
+purpose: add table kpi_fame_point
+
 **/
 
 CREATE DATABASE higgsup_kpi;
@@ -196,7 +197,7 @@ CREATE TABLE `kpi_project_log` (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-CREATE TABLE `kpi_point` (
+CREATE TABLE `higgsup_kpi`.`kpi_point` (
   `id`                    INT(10) PRIMARY KEY AUTO_INCREMENT,
   `rated_username`        VARCHAR(50)
                           CHARACTER SET utf8 NOT NULL,
@@ -211,8 +212,9 @@ CREATE TABLE `kpi_point` (
   `total_point`           FLOAT              DEFAULT 0,
   `year_month_id`         INT(11)            NOT NULL,
   `famed_point`           FLOAT              DEFAULT 0,
-  `title`                 INT(11)            DEFAULT 0
+  `title`                 INT(11)            DEFAULT 0,
   FOREIGN KEY (rated_username) REFERENCES kpi_user (user_name),
+  FOREIGN KEY (year_month_id) REFERENCES kpi_year_month(id)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
@@ -223,13 +225,23 @@ CREATE TABLE `kpi_point_detail` (
   `user_name`             VARCHAR(50)
                           CHARACTER SET utf8 NOT NULL,
   `point_type`            INT(11)            NOT NULL,
-  `point`                 INT(11)            NOT NULL,
+  `point`                 FLOAT              NOT NULL,
   `year_month_id`         INT(11)            NULL,
   FOREIGN KEY (event_id) REFERENCES kpi_event (id),
   FOREIGN KEY (user_name) REFERENCES kpi_user (user_name),
-  FOREIGN KEY (year_month_id) REFERENCES kpi_year_month(id),
+  FOREIGN KEY (year_month_id) REFERENCES kpi_year_month(id)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
+CREATE TABLE `kpi_fame_point` (
+  `id`                    INT(10) PRIMARY KEY AUTO_INCREMENT,
+  `username`              VARCHAR(50)
+                          CHARACTER SET utf8 NOT NULL,
+  `fame_point`            FLOAT              NOT NULL,
+  `year`                  INT(11)            NOT NULL,
+  FOREIGN KEY (username) REFERENCES kpi_user (user_name)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
 

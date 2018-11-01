@@ -14,7 +14,7 @@ public class KpiPoint {
 
 
     @JoinColumn(name = "rated_username", referencedColumnName = "user_name")
-    @OneToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private KpiUser ratedUser;
 
     @Basic
@@ -61,7 +61,7 @@ public class KpiPoint {
     private Integer yearMonthId;
 
     @Column(name = "title")
-    private Integer title;
+    private Integer title = 0;
 
     public Integer getId() {
         return id;

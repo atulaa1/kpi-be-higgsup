@@ -14,7 +14,7 @@ public class KpiPointDetail {
     private Integer id;
 
     @JoinColumn(name = "user_name", referencedColumnName = "user_name")
-    @OneToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private KpiUser user;
 
     @JoinColumn(name = "event_id", referencedColumnName = "id")
