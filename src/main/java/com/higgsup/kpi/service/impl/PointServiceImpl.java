@@ -6,8 +6,11 @@ import com.higgsup.kpi.entity.*;
 import com.higgsup.kpi.glossary.*;
 import com.higgsup.kpi.repository.*;
 import com.higgsup.kpi.service.BaseService;
+import com.higgsup.kpi.service.EventService;
 import com.higgsup.kpi.service.PointService;
 import com.higgsup.kpi.service.UserService;
+import com.higgsup.kpi.util.UtilsConvert;
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -16,6 +19,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,7 +44,7 @@ public class PointServiceImpl extends BaseService implements PointService {
     private KpiProjectUserRepo kpiProjectUserRepo;
 
     @Autowired
-    EventServiceImpl kpiEventService;
+    private EventService eventService;
 
     @Autowired
     private KpiEventUserRepo kpiEventUserRepo;
@@ -55,21 +59,21 @@ public class PointServiceImpl extends BaseService implements PointService {
     private KpiEventRepo kpiEventRepo;
 
     @Autowired
-    KpiSeminarSurveyRepo kpiSeminarSurveyRepo;
+    private KpiSeminarSurveyRepo kpiSeminarSurveyRepo;
 
     @Autowired
-    KpiGroupTypeRepo kpiGroupTypeRepo;
+    private KpiGroupTypeRepo kpiGroupTypeRepo;
 
     @Autowired
-    KpiPointDetailRepo kpiPointDetailRepo;
+    private KpiPointDetailRepo kpiPointDetailRepo;
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Autowired
     private KpiFamePointRepo kpiFamePointRepo;
 
-    public void calculateRulePoint() {
+    private void calculateRulePoint() {
         Optional<KpiYearMonth> kpiYearMonthOptional = kpiMonthRepo.findByPreviousMonth();
 
         if (kpiYearMonthOptional.isPresent()) {
@@ -328,7 +332,7 @@ public class PointServiceImpl extends BaseService implements PointService {
                     event.getGroup().setGroupType(kpiGroupType);
                     List<KpiEventUser> kpiEventUsers = kpiEventUserRepo.findByKpiEventId(event.getId());
                     event.setKpiEventUserList(kpiEventUsers);
-                    EventDTO<EventSeminarDetail> seminarEventDTO = kpiEventService.convertSeminarEntityToDTO(event);
+                    EventDTO<EventSeminarDetail> seminarEventDTO = eventService.convertSeminarEntityToDTO(event);
                     addSeminarPoint(kpiEventUsers, seminarEventDTO);
                     event.setStatus(StatusEvent.CONFIRMED.getValue());
                     kpiEventRepo.save(event);
@@ -608,7 +612,7 @@ public class PointServiceImpl extends BaseService implements PointService {
             List<KpiEventUser> kpiEventUsers = kpiEventUserRepo.findByKpiEventId(event.getId());
             event.setKpiEventUserList(kpiEventUsers);
         }
-        return kpiEventService.convertSeminarEventEntityToDTO(kpiEvents);
+        return eventService.convertSeminarEventEntityToDTO(kpiEvents);
     }
 
     @Override
@@ -684,18 +688,16 @@ public class PointServiceImpl extends BaseService implements PointService {
         return isEmployee;
     }
 
-    @Scheduled(cron = "05 00 00 01 * ?")
+    @Scheduled(cron = "59 56 09 01 * ?")
     private void addNewYearMonth(){
-        Integer month = LocalDate.now().getMonthValue();
-        KpiYearMonth recentYearMonth = kpiMonthRepo.findByMonthCurrent().get();
-        KpiYearMonth newYearMonth = new KpiYearMonth();
+        LocalDate localDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMM");
+        String date = localDate.format(formatter);
+        Integer newYearMonth = Integer.valueOf(date);
 
-        if(month == 1){
-            newYearMonth.setYearMonth(recentYearMonth.getYearMonth() + 89);
-        }else{
-            newYearMonth.setYearMonth(recentYearMonth.getYearMonth() + 1);
-        }
-        kpiMonthRepo.save(newYearMonth);
+        KpiYearMonth kpiYearMonth = new KpiYearMonth();
+        kpiYearMonth.setYearMonth(newYearMonth);
+        kpiMonthRepo.save(kpiYearMonth);
     }
 
     private void setTitleForEmployeeInMonth(){
@@ -790,7 +792,7 @@ public class PointServiceImpl extends BaseService implements PointService {
 
     @Scheduled(cron = "00 00 16 10 * ?")
     private void pointSchedule() throws IOException{
-        kpiEventService.cancelUnconfirmedClubAndSupportEvent();
+        eventService.cancelUnconfirmedClubAndSupportEvent();
         calculateRulePoint();
         addEffectivePointForHost();
         addUnfinishedSurveySeminarPoint();
