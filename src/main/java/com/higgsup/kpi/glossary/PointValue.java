@@ -9,8 +9,10 @@ public enum PointValue {
     MAX_NORMAL_SEMINAR_POINT(24, "max normal seminar point"),
     MAX_SUPPORT_POINT(24, "max support point"),
     DEFAULT_EFFECTIVE_POINT(3, "default effective point"),
+    BEST_EMPLOYEE_OF_THE_MONTH_FAME_POINT(15, "best employee of the month fame point"),
+    EMPLOYEE_OF_THE_MONTH_I_FAME_POINT(10, "employee of the month I"),
+    EMPLOYEE_OF_THE_MONTH_II_FAME_POINT(5, "employee of the month II"),
     FULL_RULE_POINT(24, "full rule point");
-
 
     private Integer value;
 
