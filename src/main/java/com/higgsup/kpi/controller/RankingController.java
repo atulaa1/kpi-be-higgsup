@@ -21,7 +21,6 @@ public class RankingController {
     @Autowired
     private RankingService rankingService;
 
-    @PreAuthorize("hasRole('EMPLOYEE')")
     @GetMapping("/ranking/normal-point/year={year}/month={month}/page={currentPage}")
     public Response showNormalPointRanking(@PathVariable("year") Integer year,
                                            @PathVariable("month") Integer month,
@@ -32,7 +31,6 @@ public class RankingController {
         return response;
     }
 
-    @PreAuthorize("hasRole('EMPLOYEE')")
     @GetMapping("/ranking/famed-point/year={year}/page={currentPage}")
     public Response showFamedPointRanking(@PathVariable("year")Integer year, @PathVariable("currentPage") Integer currentPage) {
         Response<List<RankingDTO>> response = new Response<>(HttpStatus.OK.value());
