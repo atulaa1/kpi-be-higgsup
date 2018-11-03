@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.higgsup.kpi.glossary.ErrorCode.MUST_ANSWER_ALL_REQUIRED_QUESTIONS;
+import static com.higgsup.kpi.glossary.ErrorCode.MUST_EVALUATE_THE_OTHER_EMPLOYEES;
+import static com.higgsup.kpi.glossary.ErrorCode.MUST_EVALUATE_THE_OTHER_PROJECTS;
 import static com.higgsup.kpi.glossary.ManInfo.NUMBER_OF_MAN;
 import static com.higgsup.kpi.glossary.ProjectStatus.EVALUATED;
 import static com.higgsup.kpi.glossary.SurveyQuestion.QUESTION4;
@@ -77,25 +79,50 @@ public class EvaluationServiceImpl implements EvaluationService {
 
         Optional<KpiYearMonth> kpiYearMonthOptional = kpiMonthRepo.findByMonthCurrent();
 
-        KpiProjectLog finalKpiProjectLog = kpiProjectLog;
-
-        kpiYearMonthOptional.ifPresent(kpiYearMonth -> finalKpiProjectLog.setYearMonth(kpiYearMonth.getId()));
-
+        if (kpiYearMonthOptional.isPresent()) {
+            kpiPersonalSurvey.setYearMonthId(kpiYearMonthOptional.get().getId());
+            kpiProjectLog.setYearMonth(kpiYearMonthOptional.get().getId());
+        }
         List<ProjectEvaluationDTO> projectEvaluationDTOS = employeeEvaluationDTO.getProjectEvaluations();
         List<PersonalEvaluationDTO> personalEvaluationDTOS = employeeEvaluationDTO.getPersonalEvaluationDTOList();
 
+        UserDTO man = employeeEvaluationDTO.getEvaluator();
+
         List<ProjectEvaluationDTO> ResponseProjectEvaluationDTOS = new ArrayList<>();
+        List<PersonalEvaluationDTO> ResponsePersonalEvaluationDTOS = new ArrayList<>();
 
         EmployeeEvaluationDTO validatedEmployeeEvaluationDTO = new EmployeeEvaluationDTO();
 
         if (CollectionUtils.isEmpty(validates)) {
+            //personal evaluation
+            kpiPersonalSurvey.setEvaluator(convertUserDTOToEntity(man));
+            for (PersonalEvaluationDTO personalEvaluationDTO : personalEvaluationDTOS) {
+                kpiPersonalSurvey.setSurveyId(personalEvaluationDTO.getSurveyDTO().getId());
+                for (PointEvaluationDTO pointEvaluationDTO : personalEvaluationDTO.getPointEvaluations()) {
+                    kpiPersonalSurvey.setRatedUser(convertUserDTOToEntity(pointEvaluationDTO.getRatedUser()));
+                    kpiPersonalSurvey.setPersonalPoint(Float.valueOf(pointEvaluationDTO.getRating()));
+                    kpiPersonalSurveyRepo.save(kpiPersonalSurvey);
+                }
+                List<PointEvaluationDTO> ResponsePointEvaluationDTOS = personalEvaluationDTO.getPointEvaluations();
+
+                for (PointEvaluationDTO pointEvaluationDTO : ResponsePointEvaluationDTOS) {
+                    UserDTO ratedUserDTO = pointEvaluationDTO.getRatedUser();
+                    ratedUserDTO.setEvaluation(EVALUATED.getValue());
+                    pointEvaluationDTO.setRatedUser(ratedUserDTO);
+                    ResponsePointEvaluationDTOS.add(pointEvaluationDTO);
+                }
+                personalEvaluationDTO.setPointEvaluations(ResponsePointEvaluationDTOS);
+                ResponsePersonalEvaluationDTOS.add(personalEvaluationDTO);
+            }
+
+            //project evaluation
             for (ProjectEvaluationDTO projectEvaluationDTO : projectEvaluationDTOS) {
                 kpiProjectLog.setProject(convertProjectDTOToEntity(projectEvaluationDTO.getProject()));
                 kpiProjectLog.setProjectPoint(Float.valueOf(projectEvaluationDTO.getRating()));
                 kpiProjectLog.setManUsername(kpiUserRepo.findByUserName(loginUsername));
                 List<KpiProjectUser> kpiProjectUserList = kpiProjectLog.getProject().getProjectUserList();
 
-                for(KpiProjectUser kpiProjectUser: kpiProjectUserList){
+                for (KpiProjectUser kpiProjectUser : kpiProjectUserList) {
                     kpiProjectLog.setRatedUsername(kpiProjectUser);
                     kpiProjectLog = kpiProjectLogRepo.save(kpiProjectLog);
                 }
@@ -103,17 +130,8 @@ public class EvaluationServiceImpl implements EvaluationService {
                 ProjectDTO projectDTO = projectEvaluationDTO.getProject();
                 projectDTO.setEvaluation(EVALUATED.getValue());
 
-                List<ProjectUserDTO> projectUserDTOS = projectDTO.getProjectUserList();
-
-                for(ProjectUserDTO projectUserDTO: projectUserDTOS){
-                    UserDTO userDTO = projectUserDTO.getProjectUser();
-                    userDTO.setEvaluation(1);
-                }
-
-                ProjectEvaluationDTO RPProjectEvaluationDTO = new ProjectEvaluationDTO();
-
-                RPProjectEvaluationDTO.setProject(projectDTO);
-                ResponseProjectEvaluationDTOS.add(RPProjectEvaluationDTO);
+                projectEvaluationDTO.setProject(projectDTO);
+                ResponseProjectEvaluationDTOS.add(projectEvaluationDTO);
 
             }
         } else {
@@ -124,6 +142,7 @@ public class EvaluationServiceImpl implements EvaluationService {
         BeanUtils.copyProperties(employeeEvaluationDTO, validatedEmployeeEvaluationDTO);
 
         validatedEmployeeEvaluationDTO.setProjectEvaluations(ResponseProjectEvaluationDTOS);
+        validatedEmployeeEvaluationDTO.setPersonalEvaluationDTOList(ResponsePersonalEvaluationDTOS);
 
         return validatedEmployeeEvaluationDTO;
     }
@@ -131,9 +150,13 @@ public class EvaluationServiceImpl implements EvaluationService {
     private List<ErrorDTO> validateEvaluation(EmployeeEvaluationDTO employeeEvaluationDTO) {
         List<ErrorDTO> errors = new ArrayList<>();
 
+        Optional<KpiYearMonth> kpiYearMonthOptional = kpiMonthRepo.findByMonthCurrent();
+
         EvaluationInfoDTO evaluationInfoDTO = getAllEvaluationInfo();
 
         Integer projectQuantity = evaluationInfoDTO.getProjectList().size();
+
+        Integer employeeQuantity = evaluationInfoDTO.getEmployeeList().size();
 
         List<PersonalEvaluationDTO> personalEvaluationDTOList = employeeEvaluationDTO.getPersonalEvaluationDTOList();
 
@@ -153,26 +176,34 @@ public class EvaluationServiceImpl implements EvaluationService {
                 }
             }
         }
-        //validate the project evaluation of a last man:
-        Optional<KpiYearMonth> kpiYearMonthOptional = kpiMonthRepo.findByMonthCurrent();
-        if(kpiYearMonthOptional.isPresent()){
-            if (kpiProjectLogRepo.countTheNumberOfManEvaluatingProject(kpiYearMonthOptional.get().getId())
-                    == (NUMBER_OF_MAN.getValue() - 1)){
+
+        if (kpiYearMonthOptional.isPresent()) {
+            Integer yearMonthId = kpiYearMonthOptional.get().getId();
+            if (kpiProjectLogRepo.countTheNumberOfManEvaluatingProject(yearMonthId)
+                    == (NUMBER_OF_MAN.getValue() - 1) && kpiProjectLogRepo.countTheNumberOfProject(yearMonthId) < projectQuantity ) {
+
+                ErrorDTO errorDTO = new ErrorDTO();
+                errorDTO.setMessage(MUST_EVALUATE_THE_OTHER_PROJECTS.getDescription());
+                errorDTO.setErrorCode(MUST_EVALUATE_THE_OTHER_PROJECTS.getValue());
+                errors.add(errorDTO);
 
             }
         }
 
-        //validate the personal evaluation of a last man:
-        if(kpiYearMonthOptional.isPresent()){
-            if (kpiPersonalSurveyRepo.countTheNumberOfManEvaluatingEmployee(kpiYearMonthOptional.get().getId())
-                    == (NUMBER_OF_MAN.getValue() - 1)){
+        if (kpiYearMonthOptional.isPresent()) {
+            Integer yearMonthId = kpiYearMonthOptional.get().getId();
+            if (kpiPersonalSurveyRepo.countTheNumberOfManEvaluatingEmployee(yearMonthId)
+                    == (NUMBER_OF_MAN.getValue() - 1) && kpiPersonalSurveyRepo.countTheNumberOfEvaluatedEmployee(yearMonthId) < employeeQuantity   ) {
 
+                ErrorDTO errorDTO = new ErrorDTO();
+                errorDTO.setMessage(MUST_EVALUATE_THE_OTHER_EMPLOYEES.getDescription());
+                errorDTO.setErrorCode(MUST_EVALUATE_THE_OTHER_EMPLOYEES.getValue());
+                errors.add(errorDTO);
             }
         }
 
         return errors;
     }
-
 
     private KpiProject convertProjectDTOToEntity(ProjectDTO projectDTO) {
         KpiProject kpiProject = new KpiProject();
@@ -205,4 +236,4 @@ public class EvaluationServiceImpl implements EvaluationService {
         return kpiUser;
     }
 
-    }
+}

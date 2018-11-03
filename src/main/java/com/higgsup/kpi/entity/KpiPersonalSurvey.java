@@ -28,6 +28,10 @@ public class KpiPersonalSurvey {
     @Column(name = "year_month")
     private Integer yearMonthId;
 
+    @Basic
+    @Column(name = "survey_id")
+    private Integer surveyId;
+
     public Integer getId() {
         return id;
     }
@@ -66,5 +70,13 @@ public class KpiPersonalSurvey {
 
     public void setYearMonthId(Integer yearMonthId) {
         this.yearMonthId = yearMonthId;
+    }
+
+    public Integer getSurveyId() {
+        return surveyId;
+    }
+
+    public void setSurveyId(Integer surveyId) {
+        this.surveyId = surveyId;
     }
 }
