@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -49,9 +50,6 @@ public class EvaluationServiceImpl implements EvaluationService {
 
     @Autowired
     private KpiUserRepo kpiUserRepo;
-
-    @Autowired
-    private KpiProjectRepo kpiProjectRepo;
 
     @Override
     public EvaluationInfoDTO getAllEvaluationInfo() {
@@ -145,6 +143,23 @@ public class EvaluationServiceImpl implements EvaluationService {
         validatedEmployeeEvaluationDTO.setPersonalEvaluationDTOList(ResponsePersonalEvaluationDTOS);
 
         return validatedEmployeeEvaluationDTO;
+    }
+
+    @Override
+    public List<EmployeeEvaluationDTO> getAllPersonalEvaluation() throws IOException {
+        Optional<KpiYearMonth> kpiYearMonthOptional = kpiMonthRepo.findByMonthCurrent();
+
+        List<EmployeeEvaluationDTO> employeeEvaluationDTOS = new ArrayList<>();
+
+        EmployeeEvaluationDTO employeeEvaluationDTO = new EmployeeEvaluationDTO();
+
+        if (kpiYearMonthOptional.isPresent()){
+            Integer yearMonthId = kpiYearMonthOptional.get().getId();
+            List<KpiPersonalSurvey> kpiPersonalSurveyList = kpiPersonalSurveyRepo.findKpiPersonalSurveyByYearMonthId(yearMonthId);
+
+
+        }
+        return employeeEvaluationDTOS;
     }
 
     private List<ErrorDTO> validateEvaluation(EmployeeEvaluationDTO employeeEvaluationDTO) {

@@ -12,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 
 @RestController
@@ -43,6 +44,20 @@ public class EvaluationController {
             } else {
                 response.setData(employeeEvaluationDTOResponse);
             }
+        } catch (IOException e) {
+            response.setStatus(ErrorCode.SYSTEM_ERROR.getValue());
+            response.setMessage(ErrorCode.SYSTEM_ERROR.getDescription());
+        }
+        return response;
+    }
+
+    @PreAuthorize("hasRole('MAN')")
+    @GetMapping("/survey")
+    public Response getPersonalEvaluation() {
+        Response<List<EmployeeEvaluationDTO>> response = new Response<>(HttpStatus.OK.value());
+        try {
+            List<EmployeeEvaluationDTO> employeeEvaluationDTOResponseList = evaluationService.getAllPersonalEvaluation();
+            response.setData(employeeEvaluationDTOResponseList);
         } catch (IOException e) {
             response.setStatus(ErrorCode.SYSTEM_ERROR.getValue());
             response.setMessage(ErrorCode.SYSTEM_ERROR.getDescription());
