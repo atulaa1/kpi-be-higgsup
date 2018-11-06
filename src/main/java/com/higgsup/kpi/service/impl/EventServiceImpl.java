@@ -13,6 +13,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import org.springframework.util.CollectionUtils;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -725,7 +727,6 @@ public class EventServiceImpl extends BaseService implements EventService {
 
         Optional<KpiEvent> kpiEventOptional = kpiEventRepo.findById(seminarSurveyDTO.getId());
         List<KpiEventUser> kpiEventHostList = kpiEventUserRepo.findByKpiEventId(seminarSurveyDTO.getId());
-        List<UserDTO> employee = userService.getAllEmployee();
 
         List<ErrorDTO> errors = new ArrayList<>();
 
@@ -781,10 +782,10 @@ public class EventServiceImpl extends BaseService implements EventService {
 
                         if (kpiEventUsers.stream()
                                 .noneMatch(e -> (e.getType().equals(EventUserType.MEMBER.getValue()) || e.getType().equals(EventUserType.LISTEN.getValue()))
-                                        && e.getStatus().equals(EvaluatingStatus.UNFINISHED.getValue()))) {
+                                        && e.getStatus().equals(EvaluatingStatus.UNFINISHED.getValue()))){
+                            pointService.addSeminarPoint(kpiEventUsers, seminarDetailEventDTO);
                             kpiEvent.setStatus(StatusEvent.CONFIRMED.getValue());
                             kpiEventRepo.save(kpiEvent);
-                            pointService.addSeminarPoint(kpiEventUsers, seminarDetailEventDTO);
                         }
 
                     } else {
@@ -909,18 +910,23 @@ public class EventServiceImpl extends BaseService implements EventService {
         }
     }
 
-    private boolean validateYearMonth(java.util.Date yearMonth) {
-        //is true if in month old , is false if la new
+    private boolean validateYearMonth(Date yearMonth) {
         Timestamp dateCun = new Timestamp(System.currentTimeMillis());
-
         if (dateCun.getYear() + 1900 == yearMonth.getYear() + 1900
                 && dateCun.getMonth() + 1 == yearMonth.getMonth() + 1
                 ) {
             return true;
         }
         if (dateCun.getYear() + 1900 == yearMonth.getYear() + 1900
-                && (dateCun.getMonth() + 1) - (yearMonth.getMonth() + 1) == 1
-                && dateCun.getDate() > Integer.valueOf(
+                && (dateCun.getMonth() + 1 ) - (yearMonth.getMonth() + 1) == 1
+                && dateCun.getDate() < Integer.valueOf(
+                environment.getProperty("config.day.new.year.month"))
+                ) {
+            return true;
+        }
+        if (dateCun.getYear() + 1900 == yearMonth.getYear() + 1900
+                && (dateCun.getMonth() + 1 ) - (yearMonth.getMonth() + 1) == 1
+                && dateCun.getDate() == Integer.valueOf(
                 environment.getProperty("config.day.new.year.month"))
                 && dateCun.getHours() < Integer.valueOf(
                 environment.getProperty("config.hour.new.year.month"))
@@ -1842,5 +1848,20 @@ public class EventServiceImpl extends BaseService implements EventService {
             }
         }
         return isEmployee;
+    }
+
+    public void cancelUnconfirmedClubAndSupportEvent(){
+        List<KpiEvent> eventList = kpiEventRepo.findClubAndSupportEvent();
+        Integer previousMonth = LocalDate.now().getMonthValue() - 1;
+
+        for(KpiEvent kpiEvent : eventList){
+            System.out.println(kpiEvent.getCreatedDate().getMonth());
+            System.out.println(Calendar.getInstance().get(Calendar.MONTH));
+            if(kpiEvent.getCreatedDate().getMonth() + 1 == previousMonth &&
+                    kpiEvent.getStatus().equals(StatusEvent.WAITING.getValue()) ){
+                kpiEvent.setStatus(StatusEvent.CANCEL.getValue());
+                kpiEventRepo.save(kpiEvent);
+            }
+        }
     }
 }

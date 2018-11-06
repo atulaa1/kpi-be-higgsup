@@ -1,6 +1,7 @@
 package com.higgsup.kpi.glossary;
 
 public enum Title {
+    NOT_HAVE_TITLE(0, "not have title"),
     BEST_EMPLOYEE_OF_THE_MONTH(1, "best employee of the month"),
     EMPLOYEE_OF_THE_MONTH_I(2, "employee of the month I"),
     EMPLOYEE_OF_THE_MONTH_II(3, "employee of the month II"),
