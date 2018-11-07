@@ -70,7 +70,7 @@ public class EvaluationServiceImpl implements EvaluationService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String loginUsername = authentication.getPrincipal().toString();
 
-        List<ErrorDTO> validates = validateEvaluation(employeeEvaluationDTO);
+        //List<ErrorDTO> validates = validateEvaluation(employeeEvaluationDTO);
 
         KpiProjectLog kpiProjectLog = new KpiProjectLog();
         KpiPersonalSurvey kpiPersonalSurvey = new KpiPersonalSurvey();
@@ -91,7 +91,7 @@ public class EvaluationServiceImpl implements EvaluationService {
 
         EmployeeEvaluationDTO validatedEmployeeEvaluationDTO = new EmployeeEvaluationDTO();
 
-        if (CollectionUtils.isEmpty(validates)) {
+        //if (CollectionUtils.isEmpty(validates)) {
             //personal evaluation
             kpiPersonalSurvey.setEvaluator(convertUserDTOToEntity(man));
             for (PersonalEvaluationDTO personalEvaluationDTO : personalEvaluationDTOS) {
@@ -101,6 +101,7 @@ public class EvaluationServiceImpl implements EvaluationService {
                     kpiPersonalSurvey.setPersonalPoint(Float.valueOf(pointEvaluationDTO.getRating()));
                     kpiPersonalSurveyRepo.save(kpiPersonalSurvey);
                 }
+
                 List<PointEvaluationDTO> ResponsePointEvaluationDTOS = personalEvaluationDTO.getPointEvaluations();
 
                 for (PointEvaluationDTO pointEvaluationDTO : ResponsePointEvaluationDTOS) {
@@ -132,11 +133,11 @@ public class EvaluationServiceImpl implements EvaluationService {
                 ResponseProjectEvaluationDTOS.add(projectEvaluationDTO);
 
             }
-        } else {
+     /*   } else {
             validatedEmployeeEvaluationDTO.setErrorCode(validates.get(0).getErrorCode());
             validatedEmployeeEvaluationDTO.setMessage(validates.get(0).getMessage());
             validatedEmployeeEvaluationDTO.setErrorDTOS(validates);
-        }
+        }*/
         BeanUtils.copyProperties(employeeEvaluationDTO, validatedEmployeeEvaluationDTO);
 
         validatedEmployeeEvaluationDTO.setProjectEvaluations(ResponseProjectEvaluationDTOS);
@@ -156,7 +157,6 @@ public class EvaluationServiceImpl implements EvaluationService {
         if (kpiYearMonthOptional.isPresent()){
             Integer yearMonthId = kpiYearMonthOptional.get().getId();
             List<KpiPersonalSurvey> kpiPersonalSurveyList = kpiPersonalSurveyRepo.findKpiPersonalSurveyByYearMonthId(yearMonthId);
-
 
         }
         return employeeEvaluationDTOS;
