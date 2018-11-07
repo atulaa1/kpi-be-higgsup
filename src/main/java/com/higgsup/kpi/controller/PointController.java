@@ -51,7 +51,6 @@ public class PointController {
         return response;
     }
 
-    @PreAuthorize("hasRole('EMPLOYEE')")
     @GetMapping("/title-board")
     public Response getBestEmployeeOfMonths(){
         Response<List<PointDTO>> response = new Response<>(HttpStatus.OK.value());
