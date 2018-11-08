@@ -15,12 +15,12 @@ public interface KpiEventRepo extends CrudRepository<KpiEvent, Integer> {
             "order by e.status asc, e.created_date desc, e.updated_date asc", nativeQuery = true)
     List<KpiEvent> findClubAndSupportEvent();
 
-    @Query(value = "select distinct * from kpi_event as e " +
-            "join kpi_event_user as eu on e.id = eu.event_id " +
-            "join kpi_group as g on g.id = e.group_id " +
-            "where (eu.type = 1 and eu.user_name = :username) " +
-            "or (g.group_type_id = 4 and eu.user_name = :username) " +
-            "order by e.created_date desc, e.updated_date desc", nativeQuery = true)
+    @Query(value = "SELECT DISTINCT * FROM kpi_event AS e" +
+            " JOIN kpi_event_user AS eu ON e.id = eu.event_id JOIN kpi_group AS g ON g.id = e.group_id " +
+            "WHERE (eu.type = 1 AND eu.user_name = :username) OR (g.group_type_id = 4 AND eu.user_name = :username) " +
+            "or (g.group_type_id = 2 && position(:username   in g.additional_config)) " +
+            "GROUP BY e.id " +
+            "ORDER BY e.created_date DESC, e.updated_date DESC", nativeQuery = true)
     List<KpiEvent> findEventCreatedByUser(@Param("username") String username);
 
     @Query(value = "select * from kpi_event as e join kpi_group as g on e.group_id = g.id " +
