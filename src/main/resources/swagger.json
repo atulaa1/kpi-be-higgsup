@@ -8772,7 +8772,7 @@
         }
       }
     },
-    "/api/ranking/normal-point/page={currentPage}": {
+    "/api/ranking/normal-point/year={year}/month={month}/page={currentPage}": {
       "get": {
         "tags": [
           "ranking-controller"
@@ -8783,6 +8783,22 @@
           "*/*"
         ],
         "parameters": [
+          {
+            "name": "year",
+            "in": "path",
+            "description": "year",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "month",
+            "in": "path",
+            "description": "month",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
           {
             "name": "currentPage",
             "in": "path",
@@ -8798,8 +8814,8 @@
             "schema": {
               "type": "object",
               "required": [
-                "status_code",
-                "data"
+                "data",
+                "status_code"
               ],
               "properties": {
                 "data": {
@@ -8807,13 +8823,10 @@
                   "items": {
                     "type": "object",
                     "required": [
-                      "totalPoint",
-                      "employee"
+                      "employee",
+                      "point"
                     ],
                     "properties": {
-                      "totalPoint": {
-                        "type": "number"
-                      },
                       "employee": {
                         "type": "object",
                         "required": [
@@ -8832,6 +8845,9 @@
                             "type": "String"
                           }
                         }
+                      },
+                      "point": {
+                        "type": "number"
                       }
                     }
                   }
@@ -8858,25 +8874,25 @@
                 }
               },
               "example": {
-                "status_code": 200,
                 "data": [
                   {
-                    "totalPoint": 141,
                     "employee": {
-                      "username": "kpi.test15",
-                      "fullName": "kpi test. test15",
-                      "avatar": "avatar test15"
-                    }
+                      "username": "kpi.employee",
+                      "fullName": "kpi test. employee",
+                      "avatar": "rqrqwrqrerw"
+                    },
+                    "point": 121
                   },
                   {
-                    "totalPoint": 110,
                     "employee": {
-                      "username": "kpi.test14",
-                      "fullName": "kpi test. test14",
-                      "avatar": "avatar test14"
-                    }
+                      "username": "kpi.test",
+                      "fullName": "kpi test. test",
+                      "avatar": "qrqwrq"
+                    },
+                    "point": 118
                   }
-                ]
+                ],
+                "status_code": 200
               },
               "title": "Response"
             }
@@ -8893,7 +8909,7 @@
         }
       }
     },
-    "/api/ranking/famed-point/page={currentPage}": {
+    "/api/ranking/famed-point/year={year}/page={currentPage}": {
       "get": {
         "tags": [
           "ranking-controller"
@@ -8911,6 +8927,14 @@
             "required": true,
             "type": "integer",
             "format": "int32"
+          },
+          {
+            "name": "year",
+            "in": "path",
+            "description": "year",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
           }
         ],
         "responses": {
@@ -8928,13 +8952,10 @@
                   "items": {
                     "type": "object",
                     "required": [
-                      "famedPoint",
-                      "employee"
+                      "employee",
+                      "point"
                     ],
                     "properties": {
-                      "famedPoint": {
-                        "type": "number"
-                      },
                       "employee": {
                         "type": "object",
                         "required": [
@@ -8953,6 +8974,9 @@
                             "type": "String"
                           }
                         }
+                      },
+                      "point": {
+                        "type": "number"
                       }
                     }
                   }
@@ -8979,25 +9003,41 @@
                 }
               },
               "example": {
-                "status_code": 200,
                 "data": [
                   {
-                    "famedPoint": 141,
                     "employee": {
-                      "username": "kpi.test15",
-                      "fullName": "kpi test. test15",
-                      "avatar": "avatar test15"
-                    }
+                      "username": "kpi.employee",
+                      "fullName": "kpi test. employee",
+                      "avatar": "rqrqwrqrerw"
+                    },
+                    "point": 6.8
                   },
                   {
-                    "famedPoint": 110,
                     "employee": {
-                      "username": "kpi.test14",
-                      "fullName": "kpi test. test14",
-                      "avatar": "avatar test14"
-                    }
+                      "username": "kpi.test",
+                      "fullName": "kpi test. test",
+                      "avatar": "qrqwrq"
+                    },
+                    "point": 6.7
+                  },
+                  {
+                    "employee": {
+                      "username": "kpi.test01",
+                      "fullName": "kpi test. test01",
+                      "avatar": "qrqrwq"
+                    },
+                    "point": 6.6
+                  },
+                  {
+                    "employee": {
+                      "username": "kpi.test02",
+                      "fullName": "kpi test. test02",
+                      "avatar": "qrqwrqr"
+                    },
+                    "point": 6.5
                   }
-                ]
+                ],
+                "status_code": 200
               },
               "title": "Response"
             }

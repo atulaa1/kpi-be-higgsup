@@ -1,17 +1,8 @@
 package com.higgsup.kpi.dto;
 
 public class RankingDTO {
-    private Float totalPoint;
-    private Float famedPoint;
     private UserDTO employee;
-
-    public Float getTotalPoint() {
-        return totalPoint;
-    }
-
-    public void setTotalPoint(Float totalPoint) {
-        this.totalPoint = totalPoint;
-    }
+    private Float point;
 
     public UserDTO getEmployee() {
         return employee;
@@ -21,11 +12,11 @@ public class RankingDTO {
         this.employee = employee;
     }
 
-    public Float getFamedPoint() {
-        return famedPoint;
+    public Float getPoint() {
+        return point;
     }
 
-    public void setFamedPoint(Float famedPoint) {
-        this.famedPoint = famedPoint;
+    public void setPoint(Float point) {
+        this.point = point;
     }
 }
