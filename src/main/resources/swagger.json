@@ -11449,6 +11449,187 @@
           }
         }
       }
+    },
+    "/api/point/title-board": {
+      "get":{
+        "tags":[
+          "point-controller"
+        ],
+        "summary": "getTitleBoard",
+        "operationId": "getTitleBoardUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "responses":{
+          "200": {
+            "description": "status_code : 200. Meaning: Thành công",
+            "schema":{
+              "type": "object",
+              "required": [
+                "data",
+                "status_code"
+              ],
+              "properties" : {
+                "data":{
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "userDTO": {
+                        "type": "object",
+                        "properties":{
+                          "username": {
+                            "type": "string"
+                          },
+                          "lastName": {
+                            "type": "string"
+                          },
+                          "firstName": {
+                            "type": "number"
+                          },
+                          "fullName": {
+                            "type": "string"
+                          },
+                          "email": {
+                            "type": "string"
+                          },
+                          "userRole": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "avatar": {
+                            "type": "string"
+                          },
+                          "birthday": {
+                            "type": "date"
+                          },
+                          "numberPhone": {
+                            "type": "string"
+                          },
+                          "address": {
+                            "type": "string"
+                          },
+                          "gmail": {
+                            "type": "string"
+                          },
+                          "skype": {
+                            "type": "string"
+                          },
+                          "dateStartWork": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "message": {
+                  "type": "string"
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "errorCode": {
+                        "type": "number"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "status_code": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "example": {
+                "data": [
+                  {
+                    "ratedUser": {
+                      "username": "kpi.employee",
+                      "lastName": "kpi",
+                      "firstName": "employee",
+                      "fullName": "kpi test. employee",
+                      "email": "kpi.employee@higgsup.com",
+                      "userRole": null,
+                      "avatar": "rqrqwrqrerw",
+                      "birthday": null,
+                      "numberPhone": null,
+                      "address": null,
+                      "gmail": null,
+                      "skype": null,
+                      "dateStartWork": null,
+                      "evaluateQuestion": null
+                    },
+                    "yearMonth": {
+                      "id": null,
+                      "yearMonth": 201801
+                    }
+                  },
+                  {
+                    "ratedUser": {
+                      "username": "kpi.test02",
+                      "lastName": "kpi",
+                      "firstName": "test02",
+                      "fullName": "kpi test. test02",
+                      "email": "kpi.test02@higgsup.com",
+                      "userRole": null,
+                      "avatar": "qrqwrqr",
+                      "birthday": null,
+                      "numberPhone": null,
+                      "address": null,
+                      "gmail": null,
+                      "skype": null,
+                      "dateStartWork": null,
+                      "evaluateQuestion": null
+                    },
+                    "yearMonth": {
+                      "id": null,
+                      "yearMonth": 201802
+                    }
+                  },
+                  {
+                    "ratedUser": {
+                      "username": "kpi.test01",
+                      "lastName": "kpi",
+                      "firstName": "test01",
+                      "fullName": "kpi test. test01",
+                      "email": "kpi.test01@higgsup.com",
+                      "userRole": null,
+                      "avatar": "qrqrwq",
+                      "birthday": null,
+                      "numberPhone": null,
+                      "address": null,
+                      "gmail": null,
+                      "skype": null,
+                      "dateStartWork": null,
+                      "evaluateQuestion": null
+                    },
+                    "yearMonth": {
+                      "id": null,
+                      "yearMonth": 201804
+                    }
+                  }
+                ],
+                "status_code": 200
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
     }
   },
   "definitions": {

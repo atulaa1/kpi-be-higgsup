@@ -40,4 +40,8 @@ public interface KpiPointRepo extends CrudRepository<KpiPoint, Integer> {
             "order by total_point desc, (p.rule_point + p.club_point + p.normal_seminar_point + p.weekend_seminar_point + p.support_point + p.teambuilding_point) desc, " +
             "f.fame_point desc limit 3", nativeQuery = true)
     List<KpiPoint> getTop3EmployeeInMonth(@Param("id") Integer yearMonthId, @Param("year") Integer fameYear);
+
+    @Query(value = "select * from kpi_point p join kpi_year_month y on p.year_month_id = y.id " +
+                   "where p.title = 1 and y.year_and_month between :l and :r order by y.year_and_month asc", nativeQuery = true)
+    List<KpiPoint> getBestEmployeeOfMonths(@Param("l") Integer left, @Param("r") Integer right);
 }
