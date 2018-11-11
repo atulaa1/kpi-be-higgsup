@@ -642,6 +642,28 @@ public class PointServiceImpl extends BaseService implements PointService {
         return employeePointDetailDTOs;
     }
 
+    @Override
+    public List<PointDTO> getBestEmployeeOfMonths() {
+        Integer year = LocalDate.now().getYear();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMM");
+        Integer firstYearMonth = Integer.valueOf(YearMonth.of(year, 1).format(formatter));
+        Integer currentYearMonth = kpiMonthRepo.findByMonthCurrent().get().getYearMonth();
+        List<PointDTO> pointDTOs = new ArrayList<>();
+
+        List<KpiPoint> kpiPointList = kpiPointRepo.getBestEmployeeOfMonths(firstYearMonth, currentYearMonth);
+        for(KpiPoint kpiPoint : kpiPointList){
+            PointDTO pointDTO = new PointDTO();
+            YearMonthDTO yearMonthDTO = new YearMonthDTO();
+            yearMonthDTO.setYearMonth(kpiMonthRepo.findById(kpiPoint.getYearMonthId()).get().getYearMonth());
+            UserDTO userDTO = convertUserEntityToDTO(kpiUserRepo.findByUserName(kpiPoint.getRatedUser().getUserName()));
+            pointDTO.setRatedUser(userDTO);
+            pointDTO.setYearMonth(yearMonthDTO);
+            pointDTOs.add(pointDTO);
+        }
+
+        return pointDTOs;
+    }
+
     private EventDTO convertEventEntityToDTO(KpiEvent kpiEvent){
         EventDTO eventDTO = new EventDTO<>();
 
@@ -800,5 +822,12 @@ public class PointServiceImpl extends BaseService implements PointService {
         addUnfinishedSurveySeminarPoint();
         setTitleForEmployeeInMonth();
         calculateFamePoint();
+    }
+
+    private UserDTO convertUserEntityToDTO(KpiUser user) {
+        UserDTO userDTO = new UserDTO();
+        BeanUtils.copyProperties(user, userDTO);
+        userDTO.setUsername(user.getUserName());
+        return userDTO;
     }
 }

@@ -82,6 +82,9 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, BaseConfiguration.BASE_API_URL + "/login").permitAll()
+                .antMatchers(HttpMethod.GET, BaseConfiguration.BASE_API_URL + "/ranking/normal-point/year={year}/month={month}/page={currentPage}").permitAll()
+                .antMatchers(HttpMethod.GET, BaseConfiguration.BASE_API_URL + "/ranking/famed-point/year={year}/page={currentPage}").permitAll()
+                .antMatchers(HttpMethod.GET, BaseConfiguration.BASE_API_URL + "/point/title-board").permitAll()
                 .antMatchers(BaseConfiguration.BASE_API_URL + "/**").fullyAuthenticated()
                 .and()
                 .addFilterBefore(new JWTLoginFilter(BaseConfiguration.BASE_API_URL + "/login", authenticationManager()),
