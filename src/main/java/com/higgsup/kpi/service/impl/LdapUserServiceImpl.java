@@ -1,8 +1,10 @@
 package com.higgsup.kpi.service.impl;
 
 import com.higgsup.kpi.dto.UserDTO;
+import com.higgsup.kpi.entity.KpiLateTimeCheck;
 import com.higgsup.kpi.glossary.ErrorCode;
 import com.higgsup.kpi.glossary.ErrorMessage;
+import com.higgsup.kpi.repository.KpiLateTimeCheckRepo;
 import com.higgsup.kpi.service.LdapUserService;
 import com.higgsup.kpi.util.UserAttributesMapper;
 import com.higgsup.kpi.util.UtilsLdap;
@@ -30,6 +32,9 @@ public class LdapUserServiceImpl implements LdapUserService {
 
     @Autowired
     private LdapTemplate ldapTemplate;
+
+    @Autowired
+    private KpiLateTimeCheckRepo lateTimeCheckRepo;
 
     @Override
     public UserDTO getUserDetail(String username) {
@@ -88,6 +93,10 @@ public class LdapUserServiceImpl implements LdapUserService {
             ldapTemplate.modifyAttributes(context);
         }
         user.setUserRole(roles);
+
+        if(roles.contains("ROLE_MAN")){
+            lateTimeCheckRepo.deleteLateTimeCheck(username);
+        }
         return user;
     }
 
@@ -95,8 +104,7 @@ public class LdapUserServiceImpl implements LdapUserService {
     public List<UserDTO> findUsersByName(String name) {
         LdapQuery query = query().where("objectclass").is("user").and("roleForKpi").isPresent().and("displayName")
                 .like("*" + name + "*");
-        List<UserDTO> result = ldapTemplate.search(query, new UserAttributesMapper());
-        return result;
+        return ldapTemplate.search(query, new UserAttributesMapper());
     }
 
 }

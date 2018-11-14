@@ -687,6 +687,12 @@ public class GroupServiceImpl implements GroupService {
         return convertGroupsEntityToDTONewSupport(groupList);
     }
 
+    @Override
+    public List<GroupDTO> getGroupCanCreateEvent(String username) throws IOException {
+        List<KpiGroup> groupList = kpiGroupRepo.findGroupCanCreateEvent(username);
+        return convertGroupsEntityToDTONewSupport(groupList);
+    }
+
     private List<GroupDTO> convertGroupsEntityToDTO(List<KpiGroup> groupList) throws IOException {
         List<GroupDTO> groupDTOS = new ArrayList<>();
         if (!CollectionUtils.isEmpty(groupList)) {

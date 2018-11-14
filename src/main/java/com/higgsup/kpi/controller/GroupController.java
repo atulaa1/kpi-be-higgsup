@@ -10,6 +10,8 @@ import com.higgsup.kpi.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -266,6 +268,21 @@ public class GroupController {
         try {
             List<GroupDTO> groupDTOS = groupService.getAllGroupNewSupport();
             response.setData(groupDTOS);
+        } catch (IOException e) {
+            response.setStatus(ErrorCode.ERROR_IO_EXCEPTION.getValue());
+            response.setMessage(ErrorMessage.ERROR_IO_EXCEPTION);
+        }
+        return response;
+    }
+
+    @PreAuthorize("hasRole('EMPLOYEE')")
+    @RequestMapping(value = "/groups-create-event", method = RequestMethod.GET)
+    public Response getAllGroupCanCreateEvent() {
+        Response<List<GroupDTO>> response = new Response<>(HttpStatus.OK.value());
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            List<GroupDTO> groupDTOs = groupService.getGroupCanCreateEvent(authentication.getPrincipal().toString());
+            response.setData(groupDTOs);
         } catch (IOException e) {
             response.setStatus(ErrorCode.ERROR_IO_EXCEPTION.getValue());
             response.setMessage(ErrorMessage.ERROR_IO_EXCEPTION);
