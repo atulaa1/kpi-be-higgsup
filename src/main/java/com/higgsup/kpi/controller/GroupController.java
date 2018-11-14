@@ -247,7 +247,7 @@ public class GroupController {
         return response;
     }
 
-    @PreAuthorize("hasRole('EMPLOYEE')")
+    @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = "/groups", method = RequestMethod.GET)
     public Response getAllGroup() {
         Response<List<GroupDTO>> response = new Response<>(HttpStatus.OK.value());
@@ -261,7 +261,7 @@ public class GroupController {
         return response;
     }
 
-    @PreAuthorize("hasRole('EMPLOYEE')")
+    @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = "/groups-new-support", method = RequestMethod.GET)
     public Response getAllGroupNewSupport() {
         Response<List<GroupDTO>> response = new Response<>(HttpStatus.OK.value());

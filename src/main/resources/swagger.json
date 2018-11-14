@@ -6812,7 +6812,7 @@
         }
       }
     },
-    "/api/groups-create-events": {
+    "/api/groups-create-event": {
       "get": {
         "tags": [
           "group-controller"

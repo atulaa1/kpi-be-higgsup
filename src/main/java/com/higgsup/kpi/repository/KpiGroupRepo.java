@@ -28,5 +28,5 @@ public interface KpiGroupRepo extends CrudRepository<KpiGroup, Integer> {
 
     @Query(value = "SELECT * from kpi_group g where g.group_type_id = 1 or g.group_type_id = 4 or " +
             "(g.group_type_id = 2 and g.additional_config->\"$.host\" = :username)", nativeQuery = true)
-    List<KpiGroup> findGroupCanCreateEvent(String username);
+    List<KpiGroup> findGroupCanCreateEvent(@Param("username") String username);
 }
