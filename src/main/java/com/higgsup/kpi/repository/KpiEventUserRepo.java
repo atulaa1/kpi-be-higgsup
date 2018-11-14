@@ -17,10 +17,4 @@ public interface KpiEventUserRepo extends CrudRepository<KpiEventUser, KpiEventU
     @Transactional
     @Query(value = "DELETE FROM kpi_event_user WHERE event_id=:eventID", nativeQuery = true)
     void deleteByEventId(@Param("eventID") Integer eventID);
-
-    @Modifying
-    @Transactional
-    @Query(value = "DELETE FROM kpi_event_user WHERE event_id=:id " +
-            "and(type = 2 or type = 3) and status = 0", nativeQuery = true)
-    void deleteMemberOrListenerNotFinishSurvey(@Param("id") Integer eventId);
 }

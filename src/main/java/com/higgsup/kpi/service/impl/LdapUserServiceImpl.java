@@ -93,10 +93,6 @@ public class LdapUserServiceImpl implements LdapUserService {
             ldapTemplate.modifyAttributes(context);
         }
         user.setUserRole(roles);
-
-        if(roles.contains("ROLE_MAN")){
-            lateTimeCheckRepo.deleteLateTimeCheck(username);
-        }
         return user;
     }
 
@@ -104,7 +100,8 @@ public class LdapUserServiceImpl implements LdapUserService {
     public List<UserDTO> findUsersByName(String name) {
         LdapQuery query = query().where("objectclass").is("user").and("roleForKpi").isPresent().and("displayName")
                 .like("*" + name + "*");
-        return ldapTemplate.search(query, new UserAttributesMapper());
+        List<UserDTO> result = ldapTemplate.search(query, new UserAttributesMapper());
+        return result;
     }
 
 }

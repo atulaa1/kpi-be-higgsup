@@ -13,9 +13,4 @@ import java.util.List;
 public interface KpiLateTimeCheckRepo extends CrudRepository<KpiLateTimeCheck, Integer> {
     @Query(value = "SELECT g from KpiLateTimeCheck g where g.yearMonth=:yearMonth", nativeQuery = false)
     List<KpiLateTimeCheck> findByMonth(@Param("yearMonth") KpiYearMonth yearMonth);
-
-    @Modifying
-    @Transactional
-    @Query(value = "DELETE from kpi_latetime_check where user_name=:username", nativeQuery = true)
-    void deleteLateTimeCheck(@Param("username") String username);
 }
