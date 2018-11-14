@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -82,9 +81,7 @@ public class EvaluationServiceImpl implements EvaluationService {
             kpiProjectLog.setYearMonth(kpiYearMonthOptional.get().getId());
         }
         List<ProjectEvaluationDTO> projectEvaluationDTOS = employeeEvaluationDTO.getProjectEvaluations();
-        List<PersonalEvaluationDTO> personalEvaluationDTOS = employeeEvaluationDTO.getPersonalEvaluationDTOList();
-
-        UserDTO man = employeeEvaluationDTO.getEvaluator();
+        List<PersonalEvaluationDTO> personalEvaluationDTOS = employeeEvaluationDTO.getPersonalEvaluations();
 
         List<ProjectEvaluationDTO> ResponseProjectEvaluationDTOS = new ArrayList<>();
         List<PersonalEvaluationDTO> ResponsePersonalEvaluationDTOS = new ArrayList<>();
@@ -93,11 +90,11 @@ public class EvaluationServiceImpl implements EvaluationService {
 
         //if (CollectionUtils.isEmpty(validates)) {
             //personal evaluation
-            kpiPersonalSurvey.setEvaluator(convertUserDTOToEntity(man));
+            kpiPersonalSurvey.setManUsername(kpiUserRepo.findByUserName(loginUsername));
             for (PersonalEvaluationDTO personalEvaluationDTO : personalEvaluationDTOS) {
                 kpiPersonalSurvey.setSurveyId(personalEvaluationDTO.getSurveyDTO().getId());
                 for (PointEvaluationDTO pointEvaluationDTO : personalEvaluationDTO.getPointEvaluations()) {
-                    kpiPersonalSurvey.setRatedUser(convertUserDTOToEntity(pointEvaluationDTO.getRatedUser()));
+                    kpiPersonalSurvey.setRatedUsername(convertUserDTOToEntity(pointEvaluationDTO.getRatedUser()));
                     kpiPersonalSurvey.setPersonalPoint(Float.valueOf(pointEvaluationDTO.getRating()));
                     kpiPersonalSurveyRepo.save(kpiPersonalSurvey);
                 }
@@ -141,7 +138,7 @@ public class EvaluationServiceImpl implements EvaluationService {
         BeanUtils.copyProperties(employeeEvaluationDTO, validatedEmployeeEvaluationDTO);
 
         validatedEmployeeEvaluationDTO.setProjectEvaluations(ResponseProjectEvaluationDTOS);
-        validatedEmployeeEvaluationDTO.setPersonalEvaluationDTOList(ResponsePersonalEvaluationDTOS);
+        validatedEmployeeEvaluationDTO.setPersonalEvaluations(ResponsePersonalEvaluationDTOS);
 
         return validatedEmployeeEvaluationDTO;
     }
@@ -173,7 +170,7 @@ public class EvaluationServiceImpl implements EvaluationService {
 
         Integer employeeQuantity = evaluationInfoDTO.getEmployeeList().size();
 
-        List<PersonalEvaluationDTO> personalEvaluationDTOList = employeeEvaluationDTO.getPersonalEvaluationDTOList();
+        List<PersonalEvaluationDTO> personalEvaluationDTOList = employeeEvaluationDTO.getPersonalEvaluations();
 
         if (personalEvaluationDTOList.isEmpty() || personalEvaluationDTOList.size() < REQUIRED_QUESTIONS.getNumber()) {
             ErrorDTO errorDTO = new ErrorDTO();

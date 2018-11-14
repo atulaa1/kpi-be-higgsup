@@ -32,7 +32,7 @@ public class EvaluationController {
     }
 
     //Change role later!
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MAN')")
     @PostMapping("/survey")
     public Response createEmployeeEvaluation(@RequestBody EmployeeEvaluationDTO employeeEvaluationDTO) {
         Response<EmployeeEvaluationDTO> response = new Response<>(HttpStatus.OK.value());

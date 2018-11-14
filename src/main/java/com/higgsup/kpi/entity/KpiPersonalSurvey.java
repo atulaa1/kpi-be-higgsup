@@ -12,20 +12,20 @@ public class KpiPersonalSurvey {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
-    @JoinColumn(name = "rated_username", referencedColumnName = "user_name", insertable = false, updatable = false)
+    @JoinColumn(name = "rated_username", referencedColumnName = "user_name")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private KpiUser ratedUser;
+    private KpiUser ratedUsername;
 
-    @JoinColumn(name = "man_username", referencedColumnName = "user_name", insertable = false, updatable = false)
+    @JoinColumn(name = "man_username", referencedColumnName = "user_name")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private KpiUser evaluator;
+    private KpiUser manUsername;
 
     @Basic
     @Column(name = "personal_point")
     private Float personalPoint;
 
     @Basic
-    @Column(name = "year_month")
+    @Column(name = "year_month_id")
     private Integer yearMonthId;
 
     @Basic
@@ -40,20 +40,20 @@ public class KpiPersonalSurvey {
         this.id = id;
     }
 
-    public KpiUser getRatedUser() {
-        return ratedUser;
+    public KpiUser getRatedUsername() {
+        return ratedUsername;
     }
 
-    public void setRatedUser(KpiUser ratedUser) {
-        this.ratedUser = ratedUser;
+    public void setRatedUsername(KpiUser ratedUsername) {
+        this.ratedUsername = ratedUsername;
     }
 
-    public KpiUser getEvaluator() {
-        return evaluator;
+    public KpiUser getManUsername() {
+        return manUsername;
     }
 
-    public void setEvaluator(KpiUser evaluator) {
-        this.evaluator = evaluator;
+    public void setManUsername(KpiUser manUsername) {
+        this.manUsername = manUsername;
     }
 
     public Float getPersonalPoint() {

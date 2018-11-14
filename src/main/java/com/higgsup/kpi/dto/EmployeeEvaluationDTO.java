@@ -9,19 +9,9 @@ public class EmployeeEvaluationDTO extends BaseDTO {
 
     private Timestamp evaluatingTime;
 
-    private UserDTO evaluator;
-
     private List<ProjectEvaluationDTO> projectEvaluations;
 
-    private List<PersonalEvaluationDTO> personalEvaluationDTOList;
-
-    public UserDTO getEvaluator() {
-        return evaluator;
-    }
-
-    public void setEvaluator(UserDTO evaluator) {
-        this.evaluator = evaluator;
-    }
+    private List<PersonalEvaluationDTO> personalEvaluations;
 
     public List<ProjectEvaluationDTO> getProjectEvaluations() {
         return projectEvaluations;
@@ -31,12 +21,12 @@ public class EmployeeEvaluationDTO extends BaseDTO {
         this.projectEvaluations = projectEvaluations;
     }
 
-    public List<PersonalEvaluationDTO> getPersonalEvaluationDTOList() {
-        return personalEvaluationDTOList;
+    public List<PersonalEvaluationDTO> getPersonalEvaluations() {
+        return personalEvaluations;
     }
 
-    public void setPersonalEvaluationDTOList(List<PersonalEvaluationDTO> personalEvaluationDTOList) {
-        this.personalEvaluationDTOList = personalEvaluationDTOList;
+    public void setPersonalEvaluations(List<PersonalEvaluationDTO> personalEvaluations) {
+        this.personalEvaluations = personalEvaluations;
     }
 
     public Timestamp getEvaluatingTime() {
