@@ -64,7 +64,8 @@ public class EventServiceImpl extends BaseService implements EventService {
     @Override
     public List<EventDTO> getAllClubAndSupportEvent() throws IOException {
         List<KpiEvent> eventList = kpiEventRepo.findClubAndSupportEvent();
-        return convertEventEntityToDTO(eventList);
+        List<EventDTO> eventDTOS=convertEventEntityToDTO(eventList);
+        return eventDTOS;
     }
 
     public List<EventDTO> getTeamBuildingEvents() throws IOException {
@@ -160,10 +161,8 @@ public class EventServiceImpl extends BaseService implements EventService {
 
             KpiEventUser kpiEventUser = new KpiEventUser();
             kpiEventUser.setType(EventUserType.MEMBER.getValue());
-            KpiEventUserPK kpiEventUserPK = new KpiEventUserPK();
-            kpiEventUserPK.setUserName(kpiUser.getUserName());
-            kpiEventUserPK.setEventId(eventSupport.getId());
-            kpiEventUser.setKpiEventUserPK(kpiEventUserPK);
+            kpiEventUser.setKpiEvent(eventSupport);
+            kpiEventUser.setKpiUser(kpiUser);
 
             kpiEventUserRepo.save(kpiEventUser);
 
@@ -191,11 +190,9 @@ public class EventServiceImpl extends BaseService implements EventService {
 
             KpiEventUser kpiEventUser = new KpiEventUser();
             kpiEventUser.setType(EventUserType.MEMBER.getValue());
-            KpiEventUserPK kpiEventUserPK = new KpiEventUserPK();
-            kpiEventUserPK.setUserName(kpiUser.getUserName());
-            kpiEventUserPK.setEventId(eventSupport.getId());
-            kpiEventUser.setKpiEventUserPK(kpiEventUserPK);
 
+            kpiEventUser.setKpiEvent(eventSupport);
+            kpiEventUser.setKpiUser(kpiUser);
             kpiEventUserRepo.save(kpiEventUser);
 
             eventSupportRP = convertNewSupportEntityToDTO(eventSupport);
@@ -323,7 +320,7 @@ public class EventServiceImpl extends BaseService implements EventService {
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
                 List<KpiEventUser> kpiEventUsers = kpiEventUserRepo.findByKpiEventId(eventSupportDTO.getId());
                 if (!(kpiEventUsers.size() > 1)
-                        && !(kpiEventUsers.get(0).getKpiEventUserPK().getUserName().equals(
+                        && !(kpiEventUsers.get(0).getKpiUser().getUserName().equals(
                         authentication.getPrincipal()))) {
                     ErrorDTO errorDTO = new ErrorDTO();
 
@@ -347,8 +344,7 @@ public class EventServiceImpl extends BaseService implements EventService {
 
     @Override
     @Transactional
-    public EventDTO updateSupportEvent(EventDTO<List<EventSupportDetail>> supportDTO) throws IOException,
-            NoSuchFieldException {
+    public EventDTO updateSupportEvent(EventDTO<List<EventSupportDetail>> supportDTO) throws IOException {
         EventDTO<List<EventSupportDetail>> eventSupportDTO = new EventDTO<>();
         List<ErrorDTO> validates = validateSupportEvent(supportDTO);
         if (CollectionUtils.isEmpty(validates)) {
@@ -458,7 +454,7 @@ public class EventServiceImpl extends BaseService implements EventService {
             KpiEvent kpiEvent = kpiEventOptional.get();
             List<String> usernameFinishSurvey = kpiEvent.getKpiEventUserList().stream()
                     .filter(u -> u.getStatus() == 1)
-                    .map(u -> u.getKpiEventUserPK().getUserName())
+                    .map(u -> u.getKpiUser().getUserName())
                     .collect(Collectors.toList());
 
             if (Objects.equals(kpiEvent.getStatus(), StatusEvent.WAITING.getValue())) {
@@ -480,7 +476,7 @@ public class EventServiceImpl extends BaseService implements EventService {
 
                         for (KpiEventUser eventUser : eventUsers) {
                             if (usernameFinishSurvey.stream()
-                                    .anyMatch(u -> u.equals(eventUser.getKpiEventUserPK().getUserName()))) {
+                                    .anyMatch(u -> u.equals(eventUser.getKpiUser().getUserName()))) {
                                 eventUser.setStatus(EvaluatingStatus.FINISH.getValue());
                             }
                         }
@@ -1251,7 +1247,7 @@ public class EventServiceImpl extends BaseService implements EventService {
 
         if (!CollectionUtils.isEmpty(kpiEventUsers)) {
             List<String> namesUser = kpiEventUsers.stream().map(
-                    kpiEventUser -> kpiEventUser.getKpiEventUserPK().getUserName())
+                    kpiEventUser -> kpiEventUser.getKpiUser().getUserName())
                     .collect(Collectors.toList());
             List<KpiUser> usersEvent = (List<KpiUser>) kpiUserRepo.findAllById(namesUser);
             List<KpiSeminarSurvey> kpiSeminarSurveys = kpiseminarSurveyRepo.findByEvent(kpiEventUsers.get(0).getKpiEvent());
@@ -1260,7 +1256,7 @@ public class EventServiceImpl extends BaseService implements EventService {
                 EventUserDTO eventUserDTO = new EventUserDTO();
                 eventUserDTO.setType(kpiEventUser.getType());
                 Optional<KpiUser> kpiUser = usersEvent.stream().filter(
-                        kpiUserTemp -> kpiUserTemp.getUserName().equals(kpiEventUser.getKpiEventUserPK().getUserName()))
+                        kpiUserTemp -> kpiUserTemp.getUserName().equals(kpiEventUser.getKpiUser().getUserName()))
                         .findFirst();
                 if (kpiUser.isPresent()) {
                     UserDTO userDTO = new UserDTO();
@@ -1452,7 +1448,7 @@ public class EventServiceImpl extends BaseService implements EventService {
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
                 List<KpiEventUser> kpiEventUsers = kpiEventUserRepo.findByKpiEventId(supportDTO.getId());
                 if (!(kpiEventUsers.size() > 1)
-                        && !(kpiEventUsers.get(0).getKpiEventUserPK().getUserName().equals(
+                        && !(kpiEventUsers.get(0).getKpiUser().getUserName().equals(
                         authentication.getPrincipal()))) {
                     ErrorDTO errorDTO = new ErrorDTO();
 
@@ -1601,12 +1597,12 @@ public class EventServiceImpl extends BaseService implements EventService {
 
         for (EventUserDTO eventUserDTO : eventUserList) {
             KpiEventUser kpiEventUser = new KpiEventUser();
-            KpiEventUserPK kpiEventUserPK = new KpiEventUserPK();
             userService.registerUser(eventUserDTO.getUser().getUsername());
 
-            kpiEventUserPK.setEventId(kpiEvent.getId());
-            kpiEventUserPK.setUserName(eventUserDTO.getUser().getUsername());
-            kpiEventUser.setKpiEventUserPK(kpiEventUserPK);
+            KpiUser kpiUser=new KpiUser();
+            kpiUser.setUserName(eventUserDTO.getUser().getUsername());
+            kpiEventUser.setKpiEvent(kpiEvent);
+            kpiEventUser.setKpiUser(kpiUser);
 
             kpiEventUser.setType(eventUserDTO.getType());
             kpiEventUser.setStatus(EvaluatingStatus.UNFINISHED.getValue());
