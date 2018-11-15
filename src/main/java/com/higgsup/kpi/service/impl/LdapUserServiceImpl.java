@@ -33,9 +33,6 @@ public class LdapUserServiceImpl implements LdapUserService {
     @Autowired
     private LdapTemplate ldapTemplate;
 
-    @Autowired
-    private KpiLateTimeCheckRepo lateTimeCheckRepo;
-
     @Override
     public UserDTO getUserDetail(String username) {
         LdapQuery query = query().where("objectclass").is("user").and("sAMAccountName").is(username);
@@ -103,5 +100,4 @@ public class LdapUserServiceImpl implements LdapUserService {
         List<UserDTO> result = ldapTemplate.search(query, new UserAttributesMapper());
         return result;
     }
-
 }
