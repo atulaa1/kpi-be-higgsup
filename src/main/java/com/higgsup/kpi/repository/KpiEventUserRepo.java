@@ -1,7 +1,6 @@
 package com.higgsup.kpi.repository;
 
 import com.higgsup.kpi.entity.KpiEventUser;
-import com.higgsup.kpi.entity.KpiEventUserPK;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -10,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-public interface KpiEventUserRepo extends CrudRepository<KpiEventUser, KpiEventUserPK> {
+public interface KpiEventUserRepo extends CrudRepository<KpiEventUser, Integer> {
     List<KpiEventUser> findByKpiEventId(int eventId);
 
     @Modifying

@@ -8,14 +8,16 @@ import java.io.Serializable;
 public class KpiEventUser implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @EmbeddedId
-    protected KpiEventUserPK kpiEventUserPK;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", unique = true, nullable = false)
+    private Integer id;
 
-    @JoinColumn(name = "user_name", referencedColumnName = "user_name", insertable = false, updatable = false)
+    @JoinColumn(name = "user_name", referencedColumnName = "user_name")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private KpiUser kpiUser;
 
-    @JoinColumn(name = "event_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "event_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private KpiEvent kpiEvent;
 
@@ -25,12 +27,12 @@ public class KpiEventUser implements Serializable {
     @Column(name = "status")
     private Integer status;
 
-    public KpiEventUserPK getKpiEventUserPK() {
-        return kpiEventUserPK;
+    public Integer getId() {
+        return id;
     }
 
-    public void setKpiEventUserPK(KpiEventUserPK kpiEventUserPK) {
-        this.kpiEventUserPK = kpiEventUserPK;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public KpiUser getKpiUser() {
