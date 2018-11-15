@@ -197,6 +197,14 @@ public class LateTimeCheckServiceImpl implements LateTimeCheckService {
         List<KpiLateTimeCheck> lateTimeChecksInDB = kpiLateTimeCheckRepo.findByMonth(kpiYearMonth);
 
         List<UserDTO> userDTOSInLdap = ldapUserService.getAllEmployeeAndManUsers();
+        // delete user is man
+        List<KpiLateTimeCheck> listManForDelete;
+        List<UserDTO> listUserMan = userDTOSInLdap.parallelStream().filter(userDTO -> userDTO.getUserRole().indexOf("ROLE_MAN")!=-1).collect(Collectors.toList());
+        listManForDelete = lateTimeChecksInDB.parallelStream().filter(kpiLateTimeCheck -> listUserMan.parallelStream().anyMatch(userDTO -> userDTO.getUsername().equals(kpiLateTimeCheck.getUser().getUserName()))).collect(Collectors.toList());
+        kpiLateTimeCheckRepo.deleteAll(listManForDelete);
+        lateTimeChecksInDB.removeIf(kpiLateTimeCheck -> listManForDelete.stream().anyMatch(kpiLateTimeCheck1 -> kpiLateTimeCheck1.getUser().getUserName().equals(kpiLateTimeCheck.getUser().getUserName())));
+        // end delete user is man
+        
         List<KpiUser> kpiUsersInDB = (List<KpiUser>) kpiUserRepo.findAll();
         List<UserDTO> userDTOSInLdapClone = new ArrayList<>(userDTOSInLdap);
         //delete when has user in db
