@@ -35,9 +35,7 @@ public class UserDTO extends BaseDTO {
 
     private Date dateStartWork;
 
-    private Integer evaluation;
-
-    private List<SurveyDTO> evaluateQuestion;
+    private Integer evaluateStatus;
 
     public UserDTO() {
     }
@@ -165,19 +163,11 @@ public class UserDTO extends BaseDTO {
         this.dateStartWork = dateStartWork;
     }
 
-    public List<SurveyDTO> getEvaluateQuestion() {
-        return evaluateQuestion;
+    public Integer getEvaluateStatus() {
+        return evaluateStatus;
     }
 
-    public void setEvaluateQuestion(List<SurveyDTO> evaluateQuestion) {
-        this.evaluateQuestion = evaluateQuestion;
-    }
-
-    public Integer getEvaluation() {
-        return evaluation;
-    }
-
-    public void setEvaluation(Integer evaluation) {
-        this.evaluation = evaluation;
+    public void setEvaluateStatus(Integer evaluateStatus) {
+        this.evaluateStatus = evaluateStatus;
     }
 }

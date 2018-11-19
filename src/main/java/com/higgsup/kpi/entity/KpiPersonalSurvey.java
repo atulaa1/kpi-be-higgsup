@@ -16,21 +16,17 @@ public class KpiPersonalSurvey {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private KpiUser ratedUsername;
 
-    @JoinColumn(name = "man_username", referencedColumnName = "user_name")
+    @JoinColumn(name = "evaluation_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private KpiUser manUsername;
+    private KpiEvaluation evaluationId;
 
     @Basic
     @Column(name = "personal_point")
     private Float personalPoint;
 
-    @Basic
-    @Column(name = "year_month_id")
-    private Integer yearMonthId;
-
-    @Basic
-    @Column(name = "survey_id")
-    private Integer surveyId;
+    @JoinColumn(name = "question_id", referencedColumnName = "id")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private KpiSurvey question;
 
     public Integer getId() {
         return id;
@@ -48,12 +44,12 @@ public class KpiPersonalSurvey {
         this.ratedUsername = ratedUsername;
     }
 
-    public KpiUser getManUsername() {
-        return manUsername;
+    public KpiEvaluation getEvaluationId() {
+        return evaluationId;
     }
 
-    public void setManUsername(KpiUser manUsername) {
-        this.manUsername = manUsername;
+    public void setEvaluationId(KpiEvaluation evaluationId) {
+        this.evaluationId = evaluationId;
     }
 
     public Float getPersonalPoint() {
@@ -64,19 +60,11 @@ public class KpiPersonalSurvey {
         this.personalPoint = personalPoint;
     }
 
-    public Integer getYearMonthId() {
-        return yearMonthId;
+    public KpiSurvey getQuestion() {
+        return question;
     }
 
-    public void setYearMonthId(Integer yearMonthId) {
-        this.yearMonthId = yearMonthId;
-    }
-
-    public Integer getSurveyId() {
-        return surveyId;
-    }
-
-    public void setSurveyId(Integer surveyId) {
-        this.surveyId = surveyId;
+    public void setQuestion(KpiSurvey question) {
+        this.question = question;
     }
 }

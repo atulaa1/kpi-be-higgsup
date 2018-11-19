@@ -1,11 +1,9 @@
 package com.higgsup.kpi.glossary;
 
 public enum SurveyQuestion {
-    QUESTION1(1, "Question 1"),
-    QUESTION2(2, "Question 2"),
-    QUESTION3(3, "Question 3"),
-    QUESTION4(4, "Question 4"),
-    REQUIRED_QUESTIONS(3, "The number of required questions");
+    QUESTION1(1, "Required question 1"),
+    QUESTION2(2, "Required question 2"),
+    QUESTION3(3, "Required question 3");
 
     private Integer number;
 

@@ -27,8 +27,8 @@ public enum ErrorCode {
     HOST_CANNOT_CREATE_SEMINAR_SURVEY(918, "host cannot create any seminar survey"),
     NOT_ATTEND_EVENT(919, "not attend this event"),
     MUST_ANSWER_ALL_REQUIRED_QUESTIONS(920, "You must answer all required questions"),
-    MUST_EVALUATE_THE_OTHER_PROJECTS(922, "You must evaluate the other projects"),
-    MUST_EVALUATE_THE_OTHER_EMPLOYEES(923, "You must evaluate the other employees"),
+    MUST_EVALUATE_REMAINING_PROJECTS(922, "You are last man do evaluation of month. You must evaluate the other projects"),
+    MUST_EVALUATE_REMAINING_EMPLOYEES(923, "You are last man do evaluation of month. You must evaluate the other employees"),
     DO_NOT_COMPLETE_PROJECT_SURVEY_QUESTIONS(921, "You do not complete the project survey questions"),
     CANNOT_UPDATE(915, "cannot update");
 

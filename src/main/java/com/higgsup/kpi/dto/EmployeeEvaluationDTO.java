@@ -1,13 +1,8 @@
 package com.higgsup.kpi.dto;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 public class EmployeeEvaluationDTO extends BaseDTO {
-
-    private String surveyName;
-
-    private Timestamp evaluatingTime;
 
     private List<ProjectEvaluationDTO> projectEvaluations;
 
@@ -27,21 +22,5 @@ public class EmployeeEvaluationDTO extends BaseDTO {
 
     public void setPersonalEvaluations(List<PersonalEvaluationDTO> personalEvaluations) {
         this.personalEvaluations = personalEvaluations;
-    }
-
-    public Timestamp getEvaluatingTime() {
-        return evaluatingTime;
-    }
-
-    public void setEvaluatingTime(Timestamp evaluatingTime) {
-        this.evaluatingTime = evaluatingTime;
-    }
-
-    public String getSurveyName() {
-        return surveyName;
-    }
-
-    public void setSurveyName(String surveyName) {
-        this.surveyName = surveyName;
     }
 }

@@ -1,14 +1,23 @@
 package com.higgsup.kpi.repository;
 
+import com.higgsup.kpi.entity.KpiEvaluation;
 import com.higgsup.kpi.entity.KpiProjectLog;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
-public interface KpiProjectLogRepo extends CrudRepository<KpiProjectLog, Integer> {
-    @Query(value = "SELECT count(DISTINCT man_username) from kpi_project_log as l where l.year_month = :yearMonth;",  nativeQuery = true)
-    Integer countTheNumberOfManEvaluatingProject(@Param("yearMonth")Integer yearMonth);
+import java.util.List;
 
-    @Query(value = "SELECT count(DISTINCT project_id) from kpi_project_log as l where l.year_month = :yearMonth;",  nativeQuery = true)
-    Integer countTheNumberOfProject(@Param("yearMonth")Integer yearMonth);
+public interface KpiProjectLogRepo extends CrudRepository<KpiProjectLog, Integer> {
+    @Query(value = "SELECT distinct(project_id) from kpi_project_log " +
+            "join kpi_evaluation on evaluation_id = kpi_evaluation.id " +
+            "where kpi_evaluation.year_month_id =:yearMonth", nativeQuery = true)
+    List<Integer> getAllProjectEvaluated(@Param("yearMonth") Integer yearMonthId);
+
+    @Query(value = "select sum(project_point) / count(distinct evaluation_id) from kpi_project_log " +
+            "join kpi_evaluation on evaluation_id = kpi_evaluation.id "+
+            "where project_id = :id and year_month_id = :yearMonth", nativeQuery = true)
+    Float projectPoint(@Param("id") Integer projectId, @Param("yearMonth") Integer yearMonth);
+
+    List<KpiProjectLog> findByEvaluationId(KpiEvaluation kpiEvaluation);
 }

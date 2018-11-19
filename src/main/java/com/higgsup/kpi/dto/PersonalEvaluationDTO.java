@@ -3,23 +3,23 @@ package com.higgsup.kpi.dto;
 import java.util.List;
 
 public class PersonalEvaluationDTO {
-    private SurveyDTO surveyDTO;
+    private UserDTO ratedUser;
 
-    private List<PointEvaluationDTO> pointEvaluations;
+    private List<RatedQuestionDTO> ratedQuestionDTO;
 
-    public SurveyDTO getSurveyDTO() {
-        return surveyDTO;
+    public UserDTO getRatedUser() {
+        return ratedUser;
     }
 
-    public void setSurveyDTO(SurveyDTO surveyDTO) {
-        this.surveyDTO = surveyDTO;
+    public void setRatedUser(UserDTO ratedUser) {
+        this.ratedUser = ratedUser;
     }
 
-    public List<PointEvaluationDTO> getPointEvaluations() {
-        return pointEvaluations;
+    public List<RatedQuestionDTO> getRatedQuestionDTO() {
+        return ratedQuestionDTO;
     }
 
-    public void setPointEvaluations(List<PointEvaluationDTO> pointEvaluations) {
-        this.pointEvaluations = pointEvaluations;
+    public void setRatedQuestionDTO(List<RatedQuestionDTO> ratedQuestionDTO) {
+        this.ratedQuestionDTO = ratedQuestionDTO;
     }
 }

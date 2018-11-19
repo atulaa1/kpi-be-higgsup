@@ -1,35 +1,69 @@
 package com.higgsup.kpi.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.sql.Timestamp;
 import java.util.List;
 
-public class EvaluationDTO {
-    private List<UserDTO> employeeList;
+public class EvaluationDTO extends BaseDTO {
+    private Integer id;
 
-    private List<ProjectDTO> projectList;
+    private String evaluationName;
 
-    private UserDTO evaluator;
+    @JsonFormat(pattern = "dd-MM-yyy HH:mm")
+    private Timestamp createdDate;
 
-    public List<UserDTO> getEmployeeList() {
-        return employeeList;
+    private UserDTO manUser;
+
+    private YearMonthDTO yearMonth;
+
+    private EmployeeEvaluationDTO employeeEvaluationDTO;
+
+    public Integer getId() {
+        return id;
     }
 
-    public void setEmployeeList(List<UserDTO> employeeList) {
-        this.employeeList = employeeList;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public List<ProjectDTO> getProjectList() {
-        return projectList;
+    public String getEvaluationName() {
+        return evaluationName;
     }
 
-    public void setProjectList(List<ProjectDTO> projectList) {
-        this.projectList = projectList;
+    public void setEvaluationName(String evaluationName) {
+        this.evaluationName = evaluationName;
     }
 
-    public UserDTO getEvaluator() {
-        return evaluator;
+    public Timestamp getCreatedDate() {
+        return createdDate;
     }
 
-    public void setEvaluator(UserDTO evaluator) {
-        this.evaluator = evaluator;
+    public void setCreatedDate(Timestamp createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public UserDTO getManUser() {
+        return manUser;
+    }
+
+    public void setManUser(UserDTO manUser) {
+        this.manUser = manUser;
+    }
+
+    public YearMonthDTO getYearMonth() {
+        return yearMonth;
+    }
+
+    public void setYearMonth(YearMonthDTO yearMonth) {
+        this.yearMonth = yearMonth;
+    }
+
+    public EmployeeEvaluationDTO getEmployeeEvaluationDTO() {
+        return employeeEvaluationDTO;
+    }
+
+    public void setEmployeeEvaluationDTO(EmployeeEvaluationDTO employeeEvaluationDTO) {
+        this.employeeEvaluationDTO = employeeEvaluationDTO;
     }
 }

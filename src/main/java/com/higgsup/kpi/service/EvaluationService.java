@@ -1,7 +1,7 @@
 package com.higgsup.kpi.service;
 
 import com.higgsup.kpi.dto.EvaluationInfoDTO;
-import com.higgsup.kpi.dto.EmployeeEvaluationDTO;
+import com.higgsup.kpi.dto.EvaluationDTO;
 
 import java.io.IOException;
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.List;
 public interface EvaluationService {
     EvaluationInfoDTO getAllEvaluationInfo();
 
-    EmployeeEvaluationDTO createEmployeeEvaluation(EmployeeEvaluationDTO employeeEvaluationDTO) throws IOException;
+    EvaluationDTO createEvaluation(EvaluationDTO employeeEvaluationDTO) throws IOException;
 
-    List<EmployeeEvaluationDTO> getAllPersonalEvaluation() throws IOException;
+    List<EvaluationDTO> getAllEvaluation();
 }

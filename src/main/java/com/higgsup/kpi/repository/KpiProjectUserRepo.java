@@ -14,4 +14,10 @@ public interface KpiProjectUserRepo extends CrudRepository<KpiProjectUser, Integ
     @Transactional
     @Query(value = "DELETE FROM kpi_project_user WHERE project_id=:projectId", nativeQuery = true)
     void deleteByProjectId(@Param("projectId") Integer projectId);
+
+    @Query(value = "SELECT rated_username from kpi_project_user where project_id=:projectId", nativeQuery = true)
+    List<String> getAllUsernameInProject(@Param("projectId") Integer projectId);
+
+    @Query(value = "select count(project_id) from kpi_project_user where rated_username=:name", nativeQuery = true)
+    Integer projectParticipate(@Param("name") String username);
 }

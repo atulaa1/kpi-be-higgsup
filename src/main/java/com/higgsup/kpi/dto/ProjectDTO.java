@@ -20,7 +20,7 @@ public class ProjectDTO extends BaseDTO {
 
     private List<ProjectUserDTO> projectUserList;
 
-    private Integer Evaluation;
+    private Integer evaluateStatus;
 
     public Integer getId() {
         return id;
@@ -70,11 +70,11 @@ public class ProjectDTO extends BaseDTO {
         this.projectUserList = projectUserList;
     }
 
-    public Integer getEvaluation() {
-        return Evaluation;
+    public Integer getEvaluateStatus() {
+        return evaluateStatus;
     }
 
-    public void setEvaluation(Integer evaluation) {
-        Evaluation = evaluation;
+    public void setEvaluateStatus(Integer evaluateStatus) {
+        this.evaluateStatus = evaluateStatus;
     }
 }

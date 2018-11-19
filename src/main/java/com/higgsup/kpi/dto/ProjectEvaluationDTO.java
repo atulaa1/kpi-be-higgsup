@@ -4,7 +4,7 @@ public class ProjectEvaluationDTO {
 
     private ProjectDTO project;
 
-    private Integer rating;
+    private Float point;
 
     public ProjectDTO getProject() {
         return project;
@@ -14,11 +14,11 @@ public class ProjectEvaluationDTO {
         this.project = project;
     }
 
-    public Integer getRating() {
-        return rating;
+    public Float getPoint() {
+        return point;
     }
 
-    public void setRating(Integer rating) {
-        this.rating = rating;
+    public void setPoint(Float point) {
+        this.point = point;
     }
 }

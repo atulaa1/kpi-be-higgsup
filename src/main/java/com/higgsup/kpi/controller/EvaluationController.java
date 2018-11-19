@@ -1,8 +1,8 @@
 package com.higgsup.kpi.controller;
 
 import com.higgsup.kpi.configure.BaseConfiguration;
-import com.higgsup.kpi.dto.EmployeeEvaluationDTO;
 import com.higgsup.kpi.dto.EvaluationInfoDTO;
+import com.higgsup.kpi.dto.EvaluationDTO;
 import com.higgsup.kpi.dto.Response;
 import com.higgsup.kpi.glossary.ErrorCode;
 import com.higgsup.kpi.service.EvaluationService;
@@ -31,19 +31,18 @@ public class EvaluationController {
         return response;
     }
 
-    //Change role later!
     @PreAuthorize("hasRole('MAN')")
     @PostMapping("/survey")
-    public Response createEmployeeEvaluation(@RequestBody EmployeeEvaluationDTO employeeEvaluationDTO) {
-        Response<EmployeeEvaluationDTO> response = new Response<>(HttpStatus.OK.value());
+    public Response createEmployeeEvaluation(@RequestBody EvaluationDTO evaluationDTO) {
+        Response<EvaluationDTO> response = new Response<>(HttpStatus.OK.value());
         try {
-            EmployeeEvaluationDTO employeeEvaluationDTOResponse = evaluationService.createEmployeeEvaluation(employeeEvaluationDTO);
-            if (Objects.nonNull(employeeEvaluationDTOResponse.getErrorCode())) {
-                response.setStatus(employeeEvaluationDTOResponse.getErrorCode());
-                response.setMessage(employeeEvaluationDTOResponse.getMessage());
-                response.setErrors(employeeEvaluationDTOResponse.getErrorDTOS());
+            EvaluationDTO evaluationDTOResponse = evaluationService.createEvaluation(evaluationDTO);
+            if (Objects.nonNull(evaluationDTOResponse.getErrorCode())) {
+                response.setStatus(evaluationDTOResponse.getErrorCode());
+                response.setMessage(evaluationDTOResponse.getMessage());
+                response.setErrors(evaluationDTOResponse.getErrorDTOS());
             } else {
-                response.setData(employeeEvaluationDTOResponse);
+                response.setData(evaluationDTOResponse);
             }
         } catch (IOException e) {
             response.setStatus(ErrorCode.SYSTEM_ERROR.getValue());
@@ -55,14 +54,9 @@ public class EvaluationController {
     @PreAuthorize("hasRole('MAN')")
     @GetMapping("/survey")
     public Response getPersonalEvaluation() {
-        Response<List<EmployeeEvaluationDTO>> response = new Response<>(HttpStatus.OK.value());
-        try {
-            List<EmployeeEvaluationDTO> employeeEvaluationDTOResponseList = evaluationService.getAllPersonalEvaluation();
-            response.setData(employeeEvaluationDTOResponseList);
-        } catch (IOException e) {
-            response.setStatus(ErrorCode.SYSTEM_ERROR.getValue());
-            response.setMessage(ErrorCode.SYSTEM_ERROR.getDescription());
-        }
+        Response<List<EvaluationDTO>> response = new Response<>(HttpStatus.OK.value());
+        List<EvaluationDTO> evaluationDTOS = evaluationService.getAllEvaluation();
+        response.setData(evaluationDTOS);
         return response;
     }
 }
