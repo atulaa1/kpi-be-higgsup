@@ -174,15 +174,19 @@ public class PointServiceImpl extends BaseService implements PointService {
         List<KpiPoint> kpiPoints = kpiPointRepo.getAllPointInMonth(yearMonth);
         for(KpiPoint kpiPoint : kpiPoints){
             Integer projectParticipate = kpiProjectUserRepo.projectParticipate(kpiPoint.getRatedUser().getUserName());
-            if(projectParticipate > 0){
-                kpiPoint.setProjectPoint(kpiPoint.getProjectPoint() / projectParticipate);
-                kpiPoint.setTotalPoint(kpiPoint.getTotalPoint() + kpiPoint.getProjectPoint() / projectParticipate);
+            if(projectParticipate > 0) {
+                Float projectPoint = kpiPoint.getProjectPoint() / projectParticipate;
+                if (projectPoint > PointValue.MAX_PROJECT_POINT.getValue()) {
+                    projectPoint = (float) PointValue.MAX_PROJECT_POINT.getValue();
+                }
+                kpiPoint.setProjectPoint(projectPoint);
+                kpiPoint.setTotalPoint(kpiPoint.getTotalPoint() + projectPoint);
                 kpiPointRepo.save(kpiPoint);
 
                 KpiPointDetail kpiPointDetail = new KpiPointDetail();
                 kpiPointDetail.setYearMonthId(yearMonth);
                 kpiPointDetail.setUser(kpiPoint.getRatedUser());
-                kpiPointDetail.setPoint(kpiPoint.getProjectPoint() / projectParticipate);
+                kpiPointDetail.setPoint(projectPoint);
                 kpiPointDetail.setPointType(PointType.EVALUATE_POINT.getValue());
                 kpiPointDetailRepo.save(kpiPointDetail);
             }
