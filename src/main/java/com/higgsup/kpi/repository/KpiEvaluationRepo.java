@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface KpiEvaluationRepo extends CrudRepository<KpiEvaluation, Integer> {
-    @Query(value = "SELECT * from kpi_evaluation", nativeQuery = true)
+    @Query(value = "SELECT * from kpi_evaluation order by created_date desc", nativeQuery = true)
     List<KpiEvaluation> findAllEvaluation();
 
     @Query(value = "SELECT count(DISTINCT man_username) from kpi_evaluation where year_month_id = :yearMonth", nativeQuery = true)
