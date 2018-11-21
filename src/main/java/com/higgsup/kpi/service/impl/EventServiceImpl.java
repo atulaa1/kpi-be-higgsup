@@ -13,7 +13,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -562,7 +561,6 @@ public class EventServiceImpl extends BaseService implements EventService {
 
         if (CollectionUtils.isEmpty(validates)) {
             KpiEvent kpiEvent = new KpiEvent();
-
             BeanUtils.copyProperties(eventDTO, kpiEvent, "createdDate", "updatedDate");
 
             Optional<KpiGroup> kpiGroup = kpiGroupRepo.findById(eventDTO.getGroup().getId());
@@ -576,15 +574,12 @@ public class EventServiceImpl extends BaseService implements EventService {
                     List<KpiEventUser> eventUsers = convertEventUsersToEntity(kpiEvent, eventDTO.getEventUserList());
                     kpiEventUserRepo.saveAll(eventUsers);
 
-                    //add method calculateNormalSeminarPoint() at here
-
                     BeanUtils.copyProperties(kpiEvent, validateTeambuildingDTO);
                     validateTeambuildingDTO.setGroup(convertConfigEventToDTO(kpiEvent.getGroup()));
                     validateTeambuildingDTO.setEventUserList(eventDTO.getEventUserList());
                     validateTeambuildingDTO.setAdditionalConfig(convertAdditionalConfigToDTO(kpiEvent.getGroup()));
 
-                    pointService.calculateTeambuildingPoint(validateTeambuildingDTO);
-
+                    pointService.calculateTeamBuildingPoint(validateTeambuildingDTO);
 
                 } else {
                     validateTeambuildingDTO.setMessage(ErrorMessage.GROUP_TYPE_IS_INVALID);
@@ -595,13 +590,12 @@ public class EventServiceImpl extends BaseService implements EventService {
                 validateTeambuildingDTO.setMessage(ErrorMessage.NOT_FIND_GROUP_TYPE);
                 validateTeambuildingDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
             }
-        } else {
 
+        } else {
             validateTeambuildingDTO.setErrorCode(validates.get(0).getErrorCode());
             validateTeambuildingDTO.setMessage(validates.get(0).getMessage());
             validateTeambuildingDTO.setErrorDTOS(validates);
         }
-
         return validateTeambuildingDTO;
     }
 
