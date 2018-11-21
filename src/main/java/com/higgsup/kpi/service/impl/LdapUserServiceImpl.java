@@ -1,8 +1,10 @@
 package com.higgsup.kpi.service.impl;
 
 import com.higgsup.kpi.dto.UserDTO;
+import com.higgsup.kpi.entity.KpiLateTimeCheck;
 import com.higgsup.kpi.glossary.ErrorCode;
 import com.higgsup.kpi.glossary.ErrorMessage;
+import com.higgsup.kpi.repository.KpiLateTimeCheckRepo;
 import com.higgsup.kpi.service.LdapUserService;
 import com.higgsup.kpi.util.UserAttributesMapper;
 import com.higgsup.kpi.util.UtilsLdap;
@@ -98,5 +100,4 @@ public class LdapUserServiceImpl implements LdapUserService {
         List<UserDTO> result = ldapTemplate.search(query, new UserAttributesMapper());
         return result;
     }
-
 }
