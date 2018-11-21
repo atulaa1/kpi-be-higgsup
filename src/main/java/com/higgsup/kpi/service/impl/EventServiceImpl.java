@@ -13,7 +13,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -56,7 +55,7 @@ public class EventServiceImpl extends BaseService implements EventService {
     private KpiSupportRepo kpiSupportRepo;
 
     @Autowired
-    private KpiSeminarSurveyRepo kpiseminarSurveyRepo;
+    private KpiSeminarSurveyRepo kpiSeminarSurveyRepo;
 
     @Autowired
     private PointService pointService;
@@ -87,7 +86,16 @@ public class EventServiceImpl extends BaseService implements EventService {
 
     public List<EventDTO> getSeminarEventByUser(String username) throws IOException {
         List<KpiEvent> seminarEvents = kpiEventRepo.findSeminarEventByUser(username);
-        return convertEventEntityToDTO(seminarEvents);
+        KpiUser user = kpiUserRepo.findByUserName(username);
+        List<EventDTO> seminarEventsDTO = new ArrayList<>();
+        for(KpiEvent event : seminarEvents){
+            EventDTO eventDTO = convertSeminarEntityToDTO(event);
+            List<KpiSeminarSurvey> seminarSurveys = kpiSeminarSurveyRepo.findByEvaluatingUsernameAndEvent(user, event);
+            List<SeminarSurveyDTO> seminarSurveyDTOs = convertListSeminarSurveyEntityToDTO(seminarSurveys);
+            eventDTO.setListSurveys(seminarSurveyDTOs);
+            seminarEventsDTO.add(eventDTO);
+        }
+        return seminarEventsDTO;
     }
 
     private List<EventDTO> convertEventEntityToDTO(List<KpiEvent> kpiEventEntities) throws IOException {
@@ -459,7 +467,6 @@ public class EventServiceImpl extends BaseService implements EventService {
 
             if (Objects.equals(kpiEvent.getStatus(), StatusEvent.WAITING.getValue())) {
                 if (CollectionUtils.isEmpty(validates)) {
-
                     ObjectMapper mapper = new ObjectMapper();
 
                     String seminarEventConfig = mapper.writeValueAsString(eventDTO.getAdditionalConfig());
@@ -499,7 +506,6 @@ public class EventServiceImpl extends BaseService implements EventService {
                                 eventUserDTO.setStatus(EvaluatingStatus.UNFINISHED.getValue());
                             }
                         }
-
                         validateSeminarDTO.setEventUserList(eventDTO.getEventUserList());
 
                     } else {
@@ -562,7 +568,6 @@ public class EventServiceImpl extends BaseService implements EventService {
 
         if (CollectionUtils.isEmpty(validates)) {
             KpiEvent kpiEvent = new KpiEvent();
-
             BeanUtils.copyProperties(eventDTO, kpiEvent, "createdDate", "updatedDate");
 
             Optional<KpiGroup> kpiGroup = kpiGroupRepo.findById(eventDTO.getGroup().getId());
@@ -581,8 +586,7 @@ public class EventServiceImpl extends BaseService implements EventService {
                     validateTeambuildingDTO.setEventUserList(eventDTO.getEventUserList());
                     validateTeambuildingDTO.setAdditionalConfig(convertAdditionalConfigToDTO(kpiEvent.getGroup()));
 
-                    pointService.calculateTeambuildingPoint(validateTeambuildingDTO);
-
+                    pointService.calculateTeamBuildingPoint(validateTeambuildingDTO);
 
                 } else {
                     validateTeambuildingDTO.setMessage(ErrorMessage.GROUP_TYPE_IS_INVALID);
@@ -593,13 +597,12 @@ public class EventServiceImpl extends BaseService implements EventService {
                 validateTeambuildingDTO.setMessage(ErrorMessage.NOT_FIND_GROUP_TYPE);
                 validateTeambuildingDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
             }
-        } else {
 
+        } else {
             validateTeambuildingDTO.setErrorCode(validates.get(0).getErrorCode());
             validateTeambuildingDTO.setMessage(validates.get(0).getMessage());
             validateTeambuildingDTO.setErrorDTOS(validates);
         }
-
         return validateTeambuildingDTO;
     }
 
@@ -607,8 +610,6 @@ public class EventServiceImpl extends BaseService implements EventService {
         List<ErrorDTO> errors = new ArrayList<>();
 
         List<EventUserDTO> firstPlaces = new ArrayList<>();
-        List<EventUserDTO> secondPlaces = new ArrayList<>();
-        List<EventUserDTO> thirdPlaces = new ArrayList<>();
         List<EventUserDTO> organizer = new ArrayList<>();
 
         if (Objects.isNull(eventDTO)) {
@@ -660,13 +661,10 @@ public class EventServiceImpl extends BaseService implements EventService {
                     eventUserTypeError.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
                     errors.add(eventUserTypeError);
                 } else {
-                    if (eventUserDTO.getType() == EventUserType.FIRST_PLACE.getValue()) {
+                    if (eventUserDTO.getType().equals(EventUserType.FIRST_PLACE.getValue())) {
                         firstPlaces.add(eventUserDTO);
-                    } else if (eventUserDTO.getType() == EventUserType.SECOND_PLACE.getValue()) {
-                        secondPlaces.add(eventUserDTO);
-                    } else if (eventUserDTO.getType() == EventUserType.THIRD_PLACE.getValue()) {
-                        thirdPlaces.add(eventUserDTO);
-                    } else {
+                    }
+                    if (eventUserDTO.getType().equals(EventUserType.ORGANIZER.getValue())) {
                         organizer.add(eventUserDTO);
                     }
                 }
@@ -678,18 +676,6 @@ public class EventServiceImpl extends BaseService implements EventService {
             nullFirstPlaceError.setErrorCode(ErrorCode.NOT_NULL.getValue());
             nullFirstPlaceError.setMessage(ErrorMessage.FIRST_PLACE_CAN_NOT_NULL);
             errors.add(nullFirstPlaceError);
-        }
-        if (secondPlaces.size() == 0) {
-            ErrorDTO nullSecondPlaceError = new ErrorDTO();
-            nullSecondPlaceError.setErrorCode(ErrorCode.NOT_NULL.getValue());
-            nullSecondPlaceError.setMessage(ErrorMessage.SECOND_PLACE_CAN_NOT_NULL);
-            errors.add(nullSecondPlaceError);
-        }
-        if (thirdPlaces.size() == 0) {
-            ErrorDTO nullThirdPlaceError = new ErrorDTO();
-            nullThirdPlaceError.setErrorCode(ErrorCode.NOT_NULL.getValue());
-            nullThirdPlaceError.setMessage(ErrorMessage.THIRD_PLACE_CAN_NOT_NULL);
-            errors.add(nullThirdPlaceError);
         }
         if (organizer.size() == 0) {
             ErrorDTO nullOrganizer = new ErrorDTO();
@@ -766,7 +752,7 @@ public class EventServiceImpl extends BaseService implements EventService {
                         }
                         if (CollectionUtils.isEmpty(errors)) {
                             List<SeminarSurveyDTO> seminarSurveyDTOs = convertListSeminarSurveyEntityToDTO
-                                    ((List<KpiSeminarSurvey>) kpiseminarSurveyRepo.saveAll(kpiSeminarSurveys));
+                                    ((List<KpiSeminarSurvey>) kpiSeminarSurveyRepo.saveAll(kpiSeminarSurveys));
                             kpiEventUser.setStatus(EvaluatingStatus.FINISH.getValue());
                             kpiEventUserRepo.save(kpiEventUser);
                             EventUserDTO eventUserDTO = convertEventUsersEntityToDTONotHaveEvent(kpiEventUser);
@@ -1248,7 +1234,7 @@ public class EventServiceImpl extends BaseService implements EventService {
                     kpiEventUser -> kpiEventUser.getKpiUser().getUserName())
                     .collect(Collectors.toList());
             List<KpiUser> usersEvent = (List<KpiUser>) kpiUserRepo.findAllById(namesUser);
-            List<KpiSeminarSurvey> kpiSeminarSurveys = kpiseminarSurveyRepo.findByEvent(kpiEventUsers.get(0).getKpiEvent());
+            List<KpiSeminarSurvey> kpiSeminarSurveys = kpiSeminarSurveyRepo.findByEvent(kpiEventUsers.get(0).getKpiEvent());
 
             for (KpiEventUser kpiEventUser : kpiEventUsers) {
                 EventUserDTO eventUserDTO = new EventUserDTO();

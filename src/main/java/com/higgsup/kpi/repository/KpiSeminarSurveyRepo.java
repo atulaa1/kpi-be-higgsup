@@ -11,4 +11,5 @@ import java.util.List;
 public interface KpiSeminarSurveyRepo extends CrudRepository<KpiSeminarSurvey, Integer> {
     List<KpiSeminarSurvey> findByEvaluatedUsernameAndEvent(KpiUser user, KpiEvent event);
     List<KpiSeminarSurvey> findByEvent(KpiEvent event);
+    List<KpiSeminarSurvey> findByEvaluatingUsernameAndEvent(KpiUser user, KpiEvent event);
 }

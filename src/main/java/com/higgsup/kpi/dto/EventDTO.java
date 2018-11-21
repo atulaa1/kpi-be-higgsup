@@ -38,6 +38,8 @@ public class EventDTO<T> extends BaseDTO {
 
     private UserDTO creator;
 
+    private List<SeminarSurveyDTO> listSurveys;
+
     public Integer getId() {
         return id;
     }
@@ -140,5 +142,13 @@ public class EventDTO<T> extends BaseDTO {
 
     public void setCreator(UserDTO creator) {
         this.creator = creator;
+    }
+
+    public List<SeminarSurveyDTO> getListSurveys() {
+        return listSurveys;
+    }
+
+    public void setListSurveys(List<SeminarSurveyDTO> listSurveys) {
+        this.listSurveys = listSurveys;
     }
 }

@@ -193,97 +193,38 @@ public class PointServiceImpl extends BaseService implements PointService {
         }
     }
 
-    private void calculateOrganizerPoint(EventDTO<EventTeamBuildingDetail> teamBuildingDTO, List<KpiEventUser> kpiEventUserList,
-                                         List<KpiEventUser> participants) {
-        Float organizerPoint = teamBuildingDTO.getAdditionalConfig().getOrganizerPoint();
-        Float addedPoint = 0F;
-        Optional<KpiYearMonth> kpiYearMonthOptional = kpiMonthRepo.findByMonthCurrent();
-
-        List<KpiEventUser> organizers = kpiEventUserList.stream().filter(u -> u.getType()
-                .equals(ORGANIZER.getValue())).collect(Collectors.toList());
-
-        for (KpiEventUser kpiEventUser : organizers) {
-            KpiUser kpiUserOrganizer = kpiUserRepo.findByUserName(kpiEventUser.getKpiUser().getUserName());
-            KpiPoint kpiPoint = kpiPointRepo.findByRatedUsernameAndMonth(kpiEventUser.getKpiUser().getUserName(), kpiYearMonthOptional.get().getId());
-            if (Objects.nonNull(kpiPoint)) {
-                List<KpiEventUser> gamingOrganizers = participants.stream()
-                        .filter(u -> kpiUserOrganizer.equals(u.getKpiUser())).collect(Collectors.toList());
-
-                if (gamingOrganizers.isEmpty()) {
-                    addedPoint = organizerPoint;
-                    kpiPoint.setTeambuildingPoint(kpiPoint.getTeambuildingPoint() + addedPoint);
-                    kpiPoint.setTotalPoint(kpiPoint.getTotalPoint() + addedPoint);
-
-                } else {
-                    for (KpiEventUser gamingOrganizer : gamingOrganizers) {
-                        EventUserType eventUserType = EventUserType.getEventUserType(gamingOrganizer.getType());
-                        addedPoint = calculateAddedPointForOrganizer(teamBuildingDTO, eventUserType);
-                        kpiPoint.setTeambuildingPoint(kpiPoint.getTeambuildingPoint() + addedPoint);
-                        kpiPoint.setTotalPoint(kpiPoint.getTotalPoint() + addedPoint);
-                    }
-                }
-
-            } else {
-                kpiPoint = new KpiPoint();
-                kpiPoint.setRatedUser(kpiUserOrganizer);
-                List<KpiEventUser> gamingOrganizers = participants.stream()
-                        .filter(u -> kpiUserOrganizer.equals(u.getKpiUser())).collect(Collectors.toList());
-                if (gamingOrganizers.isEmpty()) {
-                    addedPoint = organizerPoint;
-                    kpiPoint.setTeambuildingPoint(addedPoint);
-                    kpiPoint.setTotalPoint(addedPoint);
-                    kpiPoint.setYearMonthId(kpiYearMonthOptional.get().getId());
-                } else {
-                    for (KpiEventUser gamingOrganizer : gamingOrganizers) {
-                        EventUserType eventUserType = EventUserType.getEventUserType(gamingOrganizer.getType());
-                        addedPoint = calculateAddedPointForOrganizer(teamBuildingDTO, eventUserType);
-                        kpiPoint.setTeambuildingPoint(addedPoint);
-                        kpiPoint.setTotalPoint(addedPoint);
-                        kpiPoint.setYearMonthId(kpiYearMonthOptional.get().getId());
-                    }
-                }
-            }
-            kpiPointRepo.save(kpiPoint);
-
-            KpiPointDetail kpiPointDetail = new KpiPointDetail();
-            kpiPointDetail.setEvent(convertEventDTOToEntity(teamBuildingDTO));
-            kpiPointDetail.setUser(kpiUserRepo.findByUserName(kpiEventUser.getKpiUser().getUserName()));
-            kpiPointDetail.setPointType(PointType.TEAMBUILDING_POINT.getValue());
-            kpiPointDetail.setPoint(addedPoint);
-            kpiPointDetail.setYearMonthId(kpiYearMonthOptional.get().getId());
-            kpiPointDetailRepo.save(kpiPointDetail);
-        }
-    }
-
-    @Override
-    public void calculateTeambuildingPoint(EventDTO<EventTeamBuildingDetail> teamBuildingDTO) {
+    public void calculateTeamBuildingPoint(EventDTO<EventTeamBuildingDetail> teamBuildingDTO) {
         Optional<KpiYearMonth> kpiYearMonthOptional = kpiMonthRepo.findByMonthCurrent();
         List<UserDTO> employee = userService.getAllEmployee();
         Float addedPoint;
 
         List<KpiEventUser> kpiEventUserList = kpiEventUserRepo.findByKpiEventId(teamBuildingDTO.getId());
 
-        List<KpiEventUser> eventUserWithoutMan = kpiEventUserList.stream()
-                .filter(u -> isEmployee(u.getKpiUser().getUserName(), employee))
+        List<KpiEventUser> organizers = kpiEventUserList.stream()
+                .filter(u -> isEmployee(u.getKpiUser().getUserName(), employee) && u.getType().equals(ORGANIZER.getValue()))
                 .collect(Collectors.toList());
 
-        List<KpiEventUser> participants = eventUserWithoutMan.stream()
-                .filter(u -> !u.getType().equals(ORGANIZER.getValue()))
+        List<KpiEventUser> participants = kpiEventUserList.stream()
+                .filter(u -> isEmployee(u.getKpiUser().getUserName(), employee) && !u.getType().equals(ORGANIZER.getValue()))
                 .collect(Collectors.toList());
 
         for (KpiEventUser participant : participants) {
             KpiUser userParticipant = kpiUserRepo.findByUserName(participant.getKpiUser().getUserName());
             KpiPoint kpiPoint = kpiPointRepo.findByRatedUsernameAndMonth(userParticipant.getUserName(), kpiYearMonthOptional.get().getId());
-            if (Objects.nonNull(kpiPoint)) {
-                EventUserType eventUserType = EventUserType.getEventUserType(participant.getType());
+            EventUserType eventUserType = EventUserType.getEventUserType(participant.getType());
+
+            if(organizers.contains(participant)){
+                addedPoint = calculateAddedPointForOrganizer(teamBuildingDTO, eventUserType);
+            }else{
                 addedPoint = calculatePointForParticipants(teamBuildingDTO, eventUserType);
+            }
+
+            if (Objects.nonNull(kpiPoint)) {
                 kpiPoint.setTeambuildingPoint(kpiPoint.getTeambuildingPoint() + addedPoint);
                 kpiPoint.setTotalPoint(kpiPoint.getTotalPoint() + addedPoint);
             } else {
                 kpiPoint = new KpiPoint();
                 kpiPoint.setRatedUser(userParticipant);
-                EventUserType eventUserType = EventUserType.getEventUserType(participant.getType());
-                addedPoint = calculatePointForParticipants(teamBuildingDTO, eventUserType);
                 kpiPoint.setTeambuildingPoint(addedPoint);
                 kpiPoint.setTotalPoint(addedPoint);
                 kpiPoint.setYearMonthId(kpiYearMonthOptional.get().getId());
@@ -298,7 +239,6 @@ public class PointServiceImpl extends BaseService implements PointService {
             kpiPointDetail.setYearMonthId(kpiYearMonthOptional.get().getId());
             kpiPointDetailRepo.save(kpiPointDetail);
         }
-        calculateOrganizerPoint(teamBuildingDTO, eventUserWithoutMan, participants);
     }
 
     private Float calculateAddedPointForOrganizer(EventDTO<EventTeamBuildingDetail> teamBuildingDTO, EventUserType eventUserType){

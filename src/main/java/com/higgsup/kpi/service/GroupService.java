@@ -32,4 +32,6 @@ public interface GroupService {
     List<GroupDTO> getAllGroup() throws IOException;
 
     List<GroupDTO> getAllGroupNewSupport() throws IOException;
+
+    List<GroupDTO> getGroupCanCreateEvent(String username) throws IOException;
 }
