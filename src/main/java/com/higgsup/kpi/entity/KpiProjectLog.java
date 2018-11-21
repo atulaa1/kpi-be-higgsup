@@ -19,7 +19,7 @@ public class KpiProjectLog implements Serializable {
 
     @JoinColumn(name = "evaluation_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private KpiEvaluation evaluationId;
+    private KpiEvaluation evaluation;
 
     @Basic
     @Column(name = "project_point")
@@ -37,12 +37,12 @@ public class KpiProjectLog implements Serializable {
         return project;
     }
 
-    public KpiEvaluation getEvaluationId() {
-        return evaluationId;
+    public KpiEvaluation getEvaluation() {
+        return evaluation;
     }
 
-    public void setEvaluationId(KpiEvaluation evaluationId) {
-        this.evaluationId = evaluationId;
+    public void setEvaluation(KpiEvaluation evaluation) {
+        this.evaluation = evaluation;
     }
 
     public void setProject(KpiProject project) {

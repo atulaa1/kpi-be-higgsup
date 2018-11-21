@@ -19,5 +19,5 @@ public interface KpiProjectLogRepo extends CrudRepository<KpiProjectLog, Integer
             "where project_id = :id and year_month_id = :yearMonth", nativeQuery = true)
     Float projectPoint(@Param("id") Integer projectId, @Param("yearMonth") Integer yearMonth);
 
-    List<KpiProjectLog> findByEvaluationId(KpiEvaluation kpiEvaluation);
+    List<KpiProjectLog> findByEvaluation(KpiEvaluation kpiEvaluation);
 }

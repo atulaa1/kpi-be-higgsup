@@ -17,7 +17,13 @@ public class EvaluationDTO extends BaseDTO {
 
     private YearMonthDTO yearMonth;
 
-    private EmployeeEvaluationDTO employeeEvaluationDTO;
+    private List<ProjectEvaluationDTO> projectEvaluations;
+
+    private List<PersonalEvaluationDTO> personalEvaluations;
+
+    public List<ProjectEvaluationDTO> getProjectEvaluations() {
+        return projectEvaluations;
+    }
 
     public Integer getId() {
         return id;
@@ -59,11 +65,15 @@ public class EvaluationDTO extends BaseDTO {
         this.yearMonth = yearMonth;
     }
 
-    public EmployeeEvaluationDTO getEmployeeEvaluationDTO() {
-        return employeeEvaluationDTO;
+    public void setProjectEvaluations(List<ProjectEvaluationDTO> projectEvaluations) {
+        this.projectEvaluations = projectEvaluations;
     }
 
-    public void setEmployeeEvaluationDTO(EmployeeEvaluationDTO employeeEvaluationDTO) {
-        this.employeeEvaluationDTO = employeeEvaluationDTO;
+    public List<PersonalEvaluationDTO> getPersonalEvaluations() {
+        return personalEvaluations;
+    }
+
+    public void setPersonalEvaluations(List<PersonalEvaluationDTO> personalEvaluations) {
+        this.personalEvaluations = personalEvaluations;
     }
 }

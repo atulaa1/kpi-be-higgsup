@@ -10760,8 +10760,8 @@
         "parameters": [
           {
             "in": "body",
-            "name": "kpiEvaluationDTO",
-            "description": "kpiEvaluationDTO",
+            "name": "evaluationDTO",
+            "description": "evaluationDTO",
             "required": true,
             "schema": {
               "type": "object",
@@ -10772,58 +10772,53 @@
                 "createdDate": {
                   "type": "string"
                 },
-                "employeeEvaluationDTO":{
-                  "type": "object",
-                  "properties": {
-                    "projectEvaluations":{
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties":{
-                          "project": {
-                            "type": "object",
-                            "properties": {
-                              "name": {
-                                "type": "string"
-                              }
-                            }
-                          },
-                          "point": {
-                            "type": "number"
-                          }
-                        }
-                      }
-                    },
-                    "personalEvaluations": {
-                      "type": "array",
-                      "items": {
+                "projectEvaluations":{
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties":{
+                      "project": {
                         "type": "object",
                         "properties": {
-                          "ratedUser": {
-                            "type": "object",
-                            "properties": {
-                              "username": {
-                                "type": "string"
-                              }
-                            }
-                          },
-                          "ratedQuestionDTO": {
-                            "type": "array",
-                            "item": {
+                          "name": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "point": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                },
+                "personalEvaluations": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "ratedUser": {
+                        "type": "object",
+                        "properties": {
+                          "username": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "ratedQuestionDTO": {
+                        "type": "array",
+                        "item": {
+                          "type": "object",
+                          "properties": {
+                            "surveyDTO": {
                               "type": "object",
                               "properties": {
-                                "surveyDTO": {
-                                  "type": "object",
-                                  "properties": {
-                                    "number": {
-                                      "type": "number"
-                                    }
-                                  }
-                                },
-                                "point": {
+                                "number": {
                                   "type": "number"
                                 }
                               }
+                            },
+                            "point": {
+                              "type": "number"
                             }
                           }
                         }
@@ -10839,62 +10834,60 @@
                   "username": "kpi.test"
                 },
                 "createdDate": "23-08-2018 09:45",
-                "employeeEvaluationDTO":{
-                  "projectEvaluations":[
-                    {
-                      "project":{
-                        "id":1
-                      },
-                      "point":5
+                "projectEvaluations":[
+                  {
+                    "project":{
+                      "id":1
                     },
-                    {
-                      "project":{
-                        "id":2
-                      },
-                      "point":6
-                    }
-                  ],
-                  "personalEvaluations":[
-                    {
-                      "ratedUser": {
-                        "username": "kpi.test01"
-                      },
-                      "ratedQuestionDTO":[
-                        {
-                          "surveyDTO":{
-                            "number": 1
-                          },
-                          "point":10
-                        },
-                        {
-                          "surveyDTO":{
-                            "number": 2
-                          },
-                          "point":13
-                        }
-                      ]
+                    "point":5
+                  },
+                  {
+                    "project":{
+                      "id":2
                     },
-                    {
-                      "ratedUser": {
-                        "username": "kpi.test02"
-                      },
-                      "ratedQuestionDTO":[
-                        {
-                          "surveyDTO":{
-                            "number": 1
-                          },
-                          "point": 8
+                    "point":6
+                  }
+                ],
+                "personalEvaluations":[
+                  {
+                    "ratedUser": {
+                      "username": "kpi.test01"
+                    },
+                    "ratedQuestionDTO":[
+                      {
+                        "surveyDTO":{
+                          "number": 1
                         },
-                        {
-                          "surveyDTO":{
-                            "number": 2
-                          },
-                          "point": 7
-                        }
-                      ]
-                    }
-                  ]
-                }
+                        "point":10
+                      },
+                      {
+                        "surveyDTO":{
+                          "number": 2
+                        },
+                        "point":13
+                      }
+                    ]
+                  },
+                  {
+                    "ratedUser": {
+                      "username": "kpi.test02"
+                    },
+                    "ratedQuestionDTO":[
+                      {
+                        "surveyDTO":{
+                          "number": 1
+                        },
+                        "point": 8
+                      },
+                      {
+                        "surveyDTO":{
+                          "number": 2
+                        },
+                        "point": 7
+                      }
+                    ]
+                  }
+                ]
               }
             }
           }
@@ -10922,64 +10915,59 @@
                     }
                   }
                 },
-                "employeeEvaluationDTO":{
-                  "type": "object",
-                  "properties": {
-                    "projectEvaluations":{
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties":{
-                          "project": {
-                            "type": "object",
-                            "properties": {
-                              "name": {
-                                "type": "string"
-                              }
-                            }
-                          },
-                          "point": {
-                            "type": "number"
-                          }
-                        }
-                      }
-                    },
-                    "personalEvaluations": {
-                      "type": "array",
-                      "items": {
+                "projectEvaluations":{
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties":{
+                      "project": {
                         "type": "object",
                         "properties": {
-                          "ratedUser": {
-                            "type": "object",
-                            "properties": {
-                              "username": {
-                                "type": "string"
-                              }
-                            }
-                          },
-                          "ratedQuestionDTO": {
-                            "type": "array",
-                            "item": {
+                          "name": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "point": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                },
+                "personalEvaluations": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "ratedUser": {
+                        "type": "object",
+                        "properties": {
+                          "username": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "ratedQuestionDTO": {
+                        "type": "array",
+                        "item": {
+                          "type": "object",
+                          "properties": {
+                            "surveyDTO": {
                               "type": "object",
                               "properties": {
-                                "surveyDTO": {
-                                  "type": "object",
-                                  "properties": {
-                                    "id": {
-                                      "type": "number"
-                                    },
-                                    "number": {
-                                      "type": "number"
-                                    },
-                                    "question": {
-                                      "type": "string"
-                                    }
-                                  }
-                                },
-                                "point": {
+                                "id": {
                                   "type": "number"
+                                },
+                                "number": {
+                                  "type": "number"
+                                },
+                                "question": {
+                                  "type": "string"
                                 }
                               }
+                            },
+                            "point": {
+                              "type": "number"
                             }
                           }
                         }
@@ -10998,62 +10986,60 @@
                   "username": "kpi.test"
                 },
                 "createdDate": "23-08-2018 09:45",
-                "employeeEvaluationDTO":{
-                  "projectEvaluations":[
-                    {
-                      "project":{
-                        "id":1
-                      },
-                      "point":5
+                "projectEvaluations":[
+                  {
+                    "project":{
+                      "id":1
                     },
-                    {
-                      "project":{
-                        "id":2
-                      },
-                      "point":6
-                    }
-                  ],
-                  "personalEvaluations":[
-                    {
-                      "ratedUser": {
-                        "username": "kpi.test01"
-                      },
-                      "ratedQuestionDTO":[
-                        {
-                          "surveyDTO":{
-                            "number": 1
-                          },
-                          "point":10
-                        },
-                        {
-                          "surveyDTO":{
-                            "number": 2
-                          },
-                          "point":13
-                        }
-                      ]
+                    "point":5
+                  },
+                  {
+                    "project":{
+                      "id":2
                     },
-                    {
-                      "ratedUser": {
-                        "username": "kpi.test02"
-                      },
-                      "ratedQuestionDTO":[
-                        {
-                          "surveyDTO":{
-                            "number": 1
-                          },
-                          "point": 8
+                    "point":6
+                  }
+                ],
+                "personalEvaluations":[
+                  {
+                    "ratedUser": {
+                      "username": "kpi.test01"
+                    },
+                    "ratedQuestionDTO":[
+                      {
+                        "surveyDTO":{
+                          "number": 1
                         },
-                        {
-                          "surveyDTO":{
-                            "number": 2
-                          },
-                          "point": 7
-                        }
-                      ]
-                    }
-                  ]
-                },
+                        "point":10
+                      },
+                      {
+                        "surveyDTO":{
+                          "number": 2
+                        },
+                        "point":13
+                      }
+                    ]
+                  },
+                  {
+                    "ratedUser": {
+                      "username": "kpi.test02"
+                    },
+                    "ratedQuestionDTO":[
+                      {
+                        "surveyDTO":{
+                          "number": 1
+                        },
+                        "point": 8
+                      },
+                      {
+                        "surveyDTO":{
+                          "number": 2
+                        },
+                        "point": 7
+                      }
+                    ]
+                  }
+                ],
                 "yearMonthId": 201810
               }
             }
@@ -11076,7 +11062,7 @@
         "tags":[
           "evaluation-controller"
         ],
-        "summary": "getEvaluation",
+        "summary": "getAllEvaluationFromMANs",
         "operationId": "getEvaluation",
         "produces": [
           "*/*"
@@ -11104,64 +11090,59 @@
                     }
                   }
                 },
-                "employeeEvaluationDTO":{
-                  "type": "object",
-                  "properties": {
-                    "projectEvaluations":{
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties":{
-                          "project": {
-                            "type": "object",
-                            "properties": {
-                              "name": {
-                                "type": "string"
-                              }
-                            }
-                          },
-                          "point": {
-                            "type": "number"
-                          }
-                        }
-                      }
-                    },
-                    "personalEvaluations": {
-                      "type": "array",
-                      "items": {
+                "projectEvaluations":{
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties":{
+                      "project": {
                         "type": "object",
                         "properties": {
-                          "ratedUser": {
-                            "type": "object",
-                            "properties": {
-                              "username": {
-                                "type": "string"
-                              }
-                            }
-                          },
-                          "ratedQuestionDTO": {
-                            "type": "array",
-                            "item": {
+                          "name": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "point": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                },
+                "personalEvaluations": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "ratedUser": {
+                        "type": "object",
+                        "properties": {
+                          "username": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "ratedQuestionDTO": {
+                        "type": "array",
+                        "item": {
+                          "type": "object",
+                          "properties": {
+                            "surveyDTO": {
                               "type": "object",
                               "properties": {
-                                "surveyDTO": {
-                                  "type": "object",
-                                  "properties": {
-                                    "id": {
-                                      "type": "number"
-                                    },
-                                    "number": {
-                                      "type": "number"
-                                    },
-                                    "question": {
-                                      "type": "string"
-                                    }
-                                  }
-                                },
-                                "point": {
+                                "id": {
                                   "type": "number"
+                                },
+                                "number": {
+                                  "type": "number"
+                                },
+                                "question": {
+                                  "type": "string"
                                 }
                               }
+                            },
+                            "point": {
+                              "type": "number"
                             }
                           }
                         }
@@ -11169,8 +11150,11 @@
                     }
                   }
                 },
-                "yearMonthId": {
-                  "type": "number"
+                "yearMonth": {
+                  "type": "object",
+                  "properties": {
+                    "yearMonth": "number"
+                  }
                 }
               },
               "example": {
@@ -11185,54 +11169,52 @@
                     "yearMonth": {
                       "yearMonth": 201811
                     },
-                    "employeeEvaluationDTO": {
-                      "projectEvaluations": [
-                        {
-                          "project": {
-                            "id": 1,
-                            "name": "KPI"
-                          },
-                          "point": 5
+                    "projectEvaluations": [
+                      {
+                        "project": {
+                          "id": 1,
+                          "name": "KPI"
                         },
-                        {
-                          "project": {
-                            "id": 2,
-                            "name": "Aha"
-                          },
-                          "point": 6
-                        }
-                      ],
-                      "personalEvaluations": [
-                        {
-                          "ratedUser": {
-                            "username": "kpi.test01"
-                          },
-                          "ratedQuestionDTO": [
-                            {
-                              "surveyDTO": {
-                                "number": 1,
-                                "question": "Lam viec khong?"
-                              },
-                              "point": 10
+                        "point": 5
+                      },
+                      {
+                        "project": {
+                          "id": 2,
+                          "name": "Aha"
+                        },
+                        "point": 6
+                      }
+                    ],
+                    "personalEvaluations": [
+                      {
+                        "ratedUser": {
+                          "username": "kpi.test01"
+                        },
+                        "ratedQuestionDTO": [
+                          {
+                            "surveyDTO": {
+                              "number": 1,
+                              "question": "Lam viec khong?"
                             },
-                            {
-                              "surveyDTO": {
-                                "number": 2,
-                                "question": "Tot voi nhan vien khong?"
-                              },
-                              "point": 13
+                            "point": 10
+                          },
+                          {
+                            "surveyDTO": {
+                              "number": 2,
+                              "question": "Tot voi nhan vien khong?"
                             },
-                            {
-                              "surveyDTO":{
-                                "number": 3,
-                                "question": "Hieu qua khong"
-                              },
-                              "point": 9
-                            }
-                          ]
-                        }
-                      ]
-                    }
+                            "point": 13
+                          },
+                          {
+                            "surveyDTO":{
+                              "number": 3,
+                              "question": "Hieu qua khong"
+                            },
+                            "point": 9
+                          }
+                        ]
+                      }
+                    ]
                   }
                 ],
                 "status_code": 200

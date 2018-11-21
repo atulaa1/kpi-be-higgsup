@@ -104,7 +104,7 @@ public class EvaluationServiceImpl implements EvaluationService {
             kpiYearMonth = kpiMonthRepo.findByPreviousMonth();
         }
 
-        List<ErrorDTO> validateEvaluation = validateEvaluation(kpiEvaluationDTO.getEmployeeEvaluationDTO());
+        List<ErrorDTO> validateEvaluation = validateEvaluation(kpiEvaluationDTO);
         EvaluationDTO evaluationDTO = new EvaluationDTO();
         if(CollectionUtils.isEmpty(validateEvaluation)){
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -119,9 +119,8 @@ public class EvaluationServiceImpl implements EvaluationService {
             kpiEvaluation.setYearMonthId(kpiYearMonth.get().getId());
             kpiEvaluationRepo.save(kpiEvaluation);
 
-            EmployeeEvaluationDTO employeeEvaluationDTO = kpiEvaluationDTO.getEmployeeEvaluationDTO();
-            List<ProjectEvaluationDTO> projectEvaluationDTOS = employeeEvaluationDTO.getProjectEvaluations();
-            List<PersonalEvaluationDTO> personalEvaluationDTOS = employeeEvaluationDTO.getPersonalEvaluations();
+            List<ProjectEvaluationDTO> projectEvaluationDTOS = kpiEvaluationDTO.getProjectEvaluations();
+            List<PersonalEvaluationDTO> personalEvaluationDTOS = kpiEvaluationDTO.getPersonalEvaluations();
 
             for (PersonalEvaluationDTO personalEvaluationDTO : personalEvaluationDTOS) {
                 for (RatedQuestionDTO ratedQuestionDTO : personalEvaluationDTO.getRatedQuestionDTO()) {
@@ -140,7 +139,7 @@ public class EvaluationServiceImpl implements EvaluationService {
                 KpiProjectLog kpiProjectLog = new KpiProjectLog();
                 kpiProjectLog.setProject(convertProjectDTOToEntity(projectEvaluationDTO.getProject()));
                 kpiProjectLog.setProjectPoint(projectEvaluationDTO.getPoint());
-                kpiProjectLog.setEvaluationId(kpiEvaluation);
+                kpiProjectLog.setEvaluation(kpiEvaluation);
                 kpiProjectLogRepo.save(kpiProjectLog);
             }
 
@@ -159,7 +158,6 @@ public class EvaluationServiceImpl implements EvaluationService {
 
         for(KpiEvaluation kpiEvaluation : listEvaluation){
             EvaluationDTO evaluationDTO = convertEvaluationEntityToDTO(kpiEvaluation);
-            EmployeeEvaluationDTO employeeEvaluationDTO = new EmployeeEvaluationDTO();
             List<PersonalEvaluationDTO> personalEvaluationDTOs = new ArrayList<>();
             List<ProjectEvaluationDTO> projectEvaluationDTOs = new ArrayList<>();
 
@@ -182,7 +180,7 @@ public class EvaluationServiceImpl implements EvaluationService {
                 personalEvaluationDTOs.add(personalEvaluationDTO);
             }
 
-            List<KpiProjectLog> kpiProjectLogs = kpiProjectLogRepo.findByEvaluationId(kpiEvaluation);
+            List<KpiProjectLog> kpiProjectLogs = kpiProjectLogRepo.findByEvaluation(kpiEvaluation);
             for(KpiProjectLog kpiProjectLog : kpiProjectLogs){
                 ProjectEvaluationDTO projectEvaluationDTO = new ProjectEvaluationDTO();
                 projectEvaluationDTO.setPoint(kpiProjectLog.getProjectPoint());
@@ -191,15 +189,14 @@ public class EvaluationServiceImpl implements EvaluationService {
                 projectEvaluationDTOs.add(projectEvaluationDTO);
             }
 
-            employeeEvaluationDTO.setPersonalEvaluations(personalEvaluationDTOs);
-            employeeEvaluationDTO.setProjectEvaluations(projectEvaluationDTOs);
-            evaluationDTO.setEmployeeEvaluationDTO(employeeEvaluationDTO);
+            evaluationDTO.setPersonalEvaluations(personalEvaluationDTOs);
+            evaluationDTO.setProjectEvaluations(projectEvaluationDTOs);
             evaluationDTOS.add(evaluationDTO);
         }
         return evaluationDTOS;
     }
 
-    private List<ErrorDTO> validateEvaluation(EmployeeEvaluationDTO employeeEvaluationDTO) {
+    private List<ErrorDTO> validateEvaluation(EvaluationDTO evaluationDTO) {
         List<ErrorDTO> errors = new ArrayList<>();
         Optional<KpiYearMonth> kpiYearMonth;
         LocalDate currentDate = LocalDate.now();
@@ -210,7 +207,7 @@ public class EvaluationServiceImpl implements EvaluationService {
             kpiYearMonth = kpiMonthRepo.findByPreviousMonth();
         }
 
-        List<PersonalEvaluationDTO> personalEvaluationDTOList = employeeEvaluationDTO.getPersonalEvaluations();
+        List<PersonalEvaluationDTO> personalEvaluationDTOList = evaluationDTO.getPersonalEvaluations();
         for (PersonalEvaluationDTO personalEvaluationDTO : personalEvaluationDTOList) {
             List<RatedQuestionDTO> ratedQuestionDTO = personalEvaluationDTO.getRatedQuestionDTO();
             List<Integer> numberQuestion = ratedQuestionDTO.stream()
@@ -239,11 +236,11 @@ public class EvaluationServiceImpl implements EvaluationService {
                     .map(UserDTO::getUsername)
                     .collect(Collectors.toList());
 
-            List<Integer> projectEvaluationList = employeeEvaluationDTO.getProjectEvaluations()
+            List<Integer> projectEvaluationList = evaluationDTO.getProjectEvaluations()
                     .stream()
                     .map(p -> p.getProject().getId())
                     .collect(Collectors.toList());
-            List<String> userEvaluationList = employeeEvaluationDTO.getPersonalEvaluations()
+            List<String> userEvaluationList = evaluationDTO.getPersonalEvaluations()
                     .stream()
                     .map(u -> u.getRatedUser().getUsername())
                     .collect(Collectors.toList());
