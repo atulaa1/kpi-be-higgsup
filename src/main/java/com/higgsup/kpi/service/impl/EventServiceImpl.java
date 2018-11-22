@@ -1576,7 +1576,7 @@ public class EventServiceImpl extends BaseService implements EventService {
         return validatedEventDTO;
     }
 
-    public List<KpiEventUser> convertEventUsersToEntity(KpiEvent kpiEvent, List<EventUserDTO> eventUserList) {
+    private List<KpiEventUser> convertEventUsersToEntity(KpiEvent kpiEvent, List<EventUserDTO> eventUserList) {
         List<KpiEventUser> kpiEventUsers = new ArrayList<>();
 
         for (EventUserDTO eventUserDTO : eventUserList) {

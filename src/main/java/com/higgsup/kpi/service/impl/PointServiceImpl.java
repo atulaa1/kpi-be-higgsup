@@ -200,8 +200,9 @@ public class PointServiceImpl extends BaseService implements PointService {
 
         List<KpiEventUser> kpiEventUserList = kpiEventUserRepo.findByKpiEventId(teamBuildingDTO.getId());
 
-        List<KpiEventUser> organizers = kpiEventUserList.stream()
+        List<String> organizers = kpiEventUserList.stream()
                 .filter(u -> isEmployee(u.getKpiUser().getUserName(), employee) && u.getType().equals(ORGANIZER.getValue()))
+                .map(u -> u.getKpiUser().getUserName())
                 .collect(Collectors.toList());
 
         List<KpiEventUser> participants = kpiEventUserList.stream()
@@ -213,7 +214,7 @@ public class PointServiceImpl extends BaseService implements PointService {
             KpiPoint kpiPoint = kpiPointRepo.findByRatedUsernameAndMonth(userParticipant.getUserName(), kpiYearMonthOptional.get().getId());
             EventUserType eventUserType = EventUserType.getEventUserType(participant.getType());
 
-            if(organizers.contains(participant)){
+            if(organizers.contains(participant.getKpiUser().getUserName())){
                 addedPoint = calculateAddedPointForOrganizer(teamBuildingDTO, eventUserType);
             }else{
                 addedPoint = calculatePointForParticipants(teamBuildingDTO, eventUserType);
