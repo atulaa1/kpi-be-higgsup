@@ -217,7 +217,7 @@ public class EvaluationServiceImpl implements EvaluationService {
                     !numberQuestion.contains(SurveyQuestion.QUESTION2.getNumber()) ||
                     !numberQuestion.contains(SurveyQuestion.QUESTION3.getNumber())){
                 ErrorDTO errorDTO = new ErrorDTO();
-                errorDTO.setMessage(MUST_ANSWER_ALL_REQUIRED_QUESTIONS.getDescription());
+                errorDTO.setMessage(MUST_ANSWER_ALL_REQUIRED_QUESTIONS.getDescription() + " of " + personalEvaluationDTO.getRatedUser().getUsername());
                 errorDTO.setErrorCode(MUST_ANSWER_ALL_REQUIRED_QUESTIONS.getValue());
                 errors.add(errorDTO);
             }

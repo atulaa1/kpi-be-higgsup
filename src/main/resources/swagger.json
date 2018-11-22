@@ -10839,6 +10839,12 @@
                           "number": 2
                         },
                         "point":13
+                      },
+                      {
+                        "surveyDTO":{
+                          "number": 3
+                        },
+                        "point":11
                       }
                     ]
                   },
@@ -10858,6 +10864,12 @@
                           "number": 2
                         },
                         "point": 7
+                      },
+                      {
+                        "surveyDTO":{
+                          "number": 3
+                        },
+                        "point":6
                       }
                     ]
                   }
@@ -10868,7 +10880,7 @@
         ],
         "responses": {
           "200": {
-            "description": "status_code : 200. Meaning: Thành công \n status_code : 940. Message: Evaluation is not complete for employee. Meaning: Chưa hoàn thành khảo sát cho nhân viên. \n status_code : 941. Message: Evaluation is not complete for project. Meaning: Chưa hoàn thành khảo sát cho dự án. \n status_code : 942. Message: You are the last evaluator. Please evaluate all the remaining. Meaning: Bạn là người dùng khảo sát cuối. Vui lòng đánh giá những phần còn lại \n",
+            "description": "status_code : 200. Meaning: Thành công \n status_code : 920. Message: You must answer all required questions. Meaning: Chưa hoàn thành hết câu hỏi bắt buộc. \n status_code : 922. Message: You are last man do evaluation of month. You must evaluate the unevaluated projects. Meaning: MAN cuối làm khảo sát chưa đánh giá hết các dự án chưa được đánh giá. \n status_code : 923. Message: You are last man do evaluation of month. You must evaluate the unevaluated employees. Meaning: MAN cuối làm khảo sát chưa đánh giá hết các nhân viên chưa được đánh giá \n",
             "schema": {
               "type": "object",
               "properties": {
