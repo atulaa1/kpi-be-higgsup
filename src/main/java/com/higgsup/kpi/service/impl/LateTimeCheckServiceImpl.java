@@ -29,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.YearMonth;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -140,6 +141,9 @@ public class LateTimeCheckServiceImpl implements LateTimeCheckService {
     private boolean validateYearMonth(java.util.Date yearMonth) {
         //is true if in month old , is false if la new
         Timestamp dateCurrent = new Timestamp(System.currentTimeMillis());
+        if ((checkDateAndMoth())) {
+            return true;
+        }
         if (dateCurrent.getYear() + 1900 == yearMonth.getYear() + 1900
                 && dateCurrent.getMonth() + 1 == yearMonth.getMonth() + 1
                 && dateCurrent.getDate() >= Integer.valueOf(
@@ -232,24 +236,25 @@ public class LateTimeCheckServiceImpl implements LateTimeCheckService {
     }
 
     private KpiYearMonth getAndCreateNewMonth() {
+        Timestamp dateCun = new Timestamp(System.currentTimeMillis());
         KpiYearMonth kpiYearMonth = null;
-        Optional<KpiYearMonth> kpiMonthFromDB = kpiMonthRepo.findByMonthCurrent();
-        if (kpiMonthFromDB.isPresent()) {
-            kpiYearMonth = kpiMonthFromDB.get();
-            Timestamp dateCun = new Timestamp(System.currentTimeMillis());
-            java.util.Date date = UtilsConvert.convertYearMonthIntToDate(kpiYearMonth.getYearMonth());
-            if (!validateYearMonth(date)) {
-                KpiYearMonth kpiYearMonthCreate = new KpiYearMonth();
-                kpiYearMonthCreate.setYearMonth(UtilsConvert.convertDateToYearMonthInt(dateCun));
-                kpiYearMonth = kpiMonthRepo.save(kpiYearMonthCreate);
-            }
-        } else {
-            java.util.Date dateCun = new Date(System.currentTimeMillis());
+        if ((checkDateAndMoth())) {
+            dateCun.setMonth(dateCun.getMonth() - 1);
+        }
+        kpiYearMonth = kpiMonthRepo.findByYearMonth(UtilsConvert.convertDateToYearMonthInt(dateCun));
+        if (Objects.isNull(kpiYearMonth)) {
             KpiYearMonth kpiYearMonthCreate = new KpiYearMonth();
             kpiYearMonthCreate.setYearMonth(UtilsConvert.convertDateToYearMonthInt(dateCun));
-            kpiYearMonth = kpiMonthRepo.save(kpiYearMonthCreate);
+            return kpiMonthRepo.save(kpiYearMonthCreate);
         }
         return kpiYearMonth;
+    }
+
+    private boolean checkDateAndMoth() {
+        Timestamp dateCurrent = new Timestamp(System.currentTimeMillis());
+        return (dateCurrent.getDate() < 10) ||
+                (dateCurrent.getDate() == 10 && dateCurrent.getHours() < Integer.valueOf(
+                        environment.getProperty("config.hour.new.year.month")));
     }
 
     private List<ErrorDTO> validateExcelFile(MultipartFile excelDataFile) throws IOException {
@@ -283,7 +288,7 @@ public class LateTimeCheckServiceImpl implements LateTimeCheckService {
                 errorDTOS.add(errorDTO);
             }
 
-            if(errorDTOS.isEmpty()){
+            if (errorDTOS.isEmpty()) {
                 for (int i = 1; i < worksheet.getPhysicalNumberOfRows(); i++) {
                     XSSFRow row = worksheet.getRow(i);
                     if (row.getCell(1) == null ||
