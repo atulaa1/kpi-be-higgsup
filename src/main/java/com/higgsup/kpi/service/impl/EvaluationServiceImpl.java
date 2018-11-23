@@ -121,16 +121,19 @@ public class EvaluationServiceImpl implements EvaluationService {
 
             List<ProjectEvaluationDTO> projectEvaluationDTOS = kpiEvaluationDTO.getProjectEvaluations();
             List<PersonalEvaluationDTO> personalEvaluationDTOS = kpiEvaluationDTO.getPersonalEvaluations();
+            List<KpiSurvey> questions = kpiSurveyRepo.findQuestion();
 
             for (PersonalEvaluationDTO personalEvaluationDTO : personalEvaluationDTOS) {
                 for (RatedQuestionDTO ratedQuestionDTO : personalEvaluationDTO.getRatedQuestionDTO()) {
                     KpiPersonalSurvey kpiPersonalSurvey = new KpiPersonalSurvey();
                     kpiPersonalSurvey.setRatedUsername(convertUserDTOToEntity(personalEvaluationDTO.getRatedUser()));
                     kpiPersonalSurvey.setPersonalPoint(ratedQuestionDTO.getPoint());
-                    kpiPersonalSurvey.setEvaluationId(kpiEvaluation);
+                    kpiPersonalSurvey.setEvaluation(kpiEvaluation);
 
-                    KpiSurvey kpiSurvey = kpiSurveyRepo.findQuestionByNumber(ratedQuestionDTO.getSurveyDTO().getNumber());
-                    kpiPersonalSurvey.setQuestion(kpiSurvey);
+                    Optional<KpiSurvey> question = questions.stream()
+                            .filter(q -> q.getNumber().equals(ratedQuestionDTO.getSurveyDTO().getNumber()))
+                            .findFirst();
+                    kpiPersonalSurvey.setQuestion(question.get());
                     kpiPersonalSurveyRepo.save(kpiPersonalSurvey);
                 }
             }

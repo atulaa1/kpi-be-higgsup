@@ -18,7 +18,7 @@ public class KpiPersonalSurvey {
 
     @JoinColumn(name = "evaluation_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private KpiEvaluation evaluationId;
+    private KpiEvaluation evaluation;
 
     @Basic
     @Column(name = "personal_point")
@@ -44,12 +44,12 @@ public class KpiPersonalSurvey {
         this.ratedUsername = ratedUsername;
     }
 
-    public KpiEvaluation getEvaluationId() {
-        return evaluationId;
+    public KpiEvaluation getEvaluation() {
+        return evaluation;
     }
 
-    public void setEvaluationId(KpiEvaluation evaluationId) {
-        this.evaluationId = evaluationId;
+    public void setEvaluation(KpiEvaluation evaluation) {
+        this.evaluation = evaluation;
     }
 
     public Float getPersonalPoint() {
