@@ -76,4 +76,7 @@ public interface KpiEventRepo extends CrudRepository<KpiEvent, Integer> {
     @Query(value = "select e.* from kpi_event as e join kpi_group as g on g.id = e.group_id " +
             "where g.group_type_id = 1 and e.status = 1 and MONTH(e.created_date) = :m", nativeQuery = true)
     List<KpiEvent> findUnfinishedSurveySeminarEventInMonth(@Param("m") Integer month);
+
+  @Query(value = "select id from kpi_group where group_type_id = 3", nativeQuery = true)
+  List<Integer> listTeamBuildingGroupId();
 }
