@@ -568,26 +568,30 @@ public class EventServiceImpl extends BaseService implements EventService {
 
         if (CollectionUtils.isEmpty(validates)) {
             KpiEvent kpiEvent = new KpiEvent();
-            BeanUtils.copyProperties(eventDTO, kpiEvent, "createdDate", "updatedDate");
+            BeanUtils.copyProperties(eventDTO, kpiEvent, "createdDate", "updatedDate", "id");
 
             Optional<KpiGroup> kpiGroup = kpiGroupRepo.findById(eventDTO.getGroup().getId());
             if (kpiGroup.isPresent()) {
                 KpiGroup kpiGroup1 = kpiGroup.get();
                 kpiEvent.setGroup(kpiGroup1);
                 if (kpiEvent.getGroup().getGroupType().getId() == GroupType.TEAM_BUILDING.getId()) {
-                    kpiEvent.setAdditionalConfig(kpiGroup1.getAdditionalConfig());
-                    kpiEvent = kpiEventRepo.save(kpiEvent);
+                    if (kpiEventRepo.listTeamBuildingGroupId().contains(kpiEvent.getGroup().getId())) {
+                        kpiEvent.setAdditionalConfig(kpiGroup1.getAdditionalConfig());
+                        List<KpiEventUser> eventUsers = convertEventUsersToEntity(kpiEvent,
+                                eventDTO.getEventUserList());
+                        kpiEvent.setKpiEventUserList(eventUsers);
+                        kpiEvent = kpiEventRepo.save(kpiEvent);
 
-                    List<KpiEventUser> eventUsers = convertEventUsersToEntity(kpiEvent, eventDTO.getEventUserList());
-                    kpiEventUserRepo.saveAll(eventUsers);
+                        BeanUtils.copyProperties(kpiEvent, validateTeambuildingDTO);
+                        validateTeambuildingDTO.setGroup(convertConfigEventToDTO(kpiEvent.getGroup()));
+                        validateTeambuildingDTO.setEventUserList(eventDTO.getEventUserList());
+                        validateTeambuildingDTO.setAdditionalConfig(convertAdditionalConfigToDTO(kpiEvent.getGroup()));
 
-                    BeanUtils.copyProperties(kpiEvent, validateTeambuildingDTO);
-                    validateTeambuildingDTO.setGroup(convertConfigEventToDTO(kpiEvent.getGroup()));
-                    validateTeambuildingDTO.setEventUserList(eventDTO.getEventUserList());
-                    validateTeambuildingDTO.setAdditionalConfig(convertAdditionalConfigToDTO(kpiEvent.getGroup()));
-
-                    pointService.calculateTeamBuildingPoint(validateTeambuildingDTO);
-
+                        pointService.calculateTeamBuildingPoint(validateTeambuildingDTO);
+                    } else {
+                        validateTeambuildingDTO.setMessage(ErrorMessage.GROUP_ID_IS_INVALID);
+                        validateTeambuildingDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
+                    }
                 } else {
                     validateTeambuildingDTO.setMessage(ErrorMessage.GROUP_TYPE_IS_INVALID);
                     validateTeambuildingDTO.setErrorCode(ErrorCode.PARAMETERS_IS_NOT_VALID.getValue());
@@ -643,11 +647,11 @@ public class EventServiceImpl extends BaseService implements EventService {
                     userError.setMessage(ErrorMessage.USERNAME_CAN_NOT_NULL);
                     userError.setErrorCode(ErrorCode.NOT_NULL.getValue());
                     errors.add(userError);
-                } else if (!validateTeamBuildingUser(eventDTO)) {
-                    ErrorDTO userError = new ErrorDTO();
-                    userError.setErrorCode(ErrorCode.NOT_FIND.getValue());
-                    userError.setMessage(ErrorMessage.NOT_FIND_USER);
-                    errors.add(userError);
+//                } else if (!validateTeamBuildingUser(eventDTO)) {
+//                    ErrorDTO userError = new ErrorDTO();
+//                    userError.setErrorCode(ErrorCode.NOT_FIND.getValue());
+//                    userError.setMessage(ErrorMessage.NOT_FIND_USER);
+//                    errors.add(userError);
                 }
 
                 ErrorDTO eventUserTypeError = new ErrorDTO();
