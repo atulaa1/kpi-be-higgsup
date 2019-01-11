@@ -49,6 +49,8 @@ public final class ErrorMessage {
     public final static String QUANTITY_AT_INDEX_CAN_NOT_LESS_ONE = "quantity at index %s can not less one";
     public final static String GROUP_ID_NOT_IS_SUPPORT = "group ID  not is support";
     public final static String ID_NOT_INCORRECT = "id not incorrect";
+    public final static String ONLY_THE_CURRENT_MONTH_CAN_BE_EDITED = "only the current month can be edited";
     public final static String GROUP_WITH_ID_NOT_IS_SUPPORT = "group with id not is support";
+    public final static String LATE_TIME_CAN_NOT_BE_EMPTY = "late time can not be empty";
 
 }
