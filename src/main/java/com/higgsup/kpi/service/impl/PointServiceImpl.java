@@ -40,6 +40,15 @@ public class PointServiceImpl extends BaseService implements PointService {
     private KpiMonthRepo kpiMonthRepo;
 
     @Autowired
+    private KpiPersonalSurveyRepo kpiPersonalSurveyRepo;
+
+    @Autowired
+    private KpiProjectUserRepo kpiProjectUserRepo;
+
+    @Autowired
+    private KpiProjectLogRepo kpiProjectLogRepo;
+
+    @Autowired
     private EventService eventService;
 
     @Autowired
@@ -104,6 +113,86 @@ public class PointServiceImpl extends BaseService implements PointService {
         }
     }
 
+    private void calculatePersonalPoint() {
+        Optional<KpiYearMonth> previousMonth = kpiMonthRepo.findByPreviousMonth();
+        if(previousMonth.isPresent()){
+            List<String> evaluated = kpiPersonalSurveyRepo.evaluatedList(previousMonth.get().getId());
+            for(String username : evaluated){
+                KpiUser user = kpiUserRepo.findByUserName(username);
+                Float point = kpiPersonalSurveyRepo.point(username, previousMonth.get().getId());
+                if(point > PointValue.MAX_INDIVIDUAL_POINT.getValue()){
+                    point = (float)PointValue.MAX_INDIVIDUAL_POINT.getValue();
+                }
+                KpiPoint kpiPoint = kpiPointRepo.findByRatedUsernameAndMonth(username, previousMonth.get().getId());
+                if(Objects.nonNull(kpiPoint)){
+                    kpiPoint.setPersonalPoint(point);
+                    kpiPoint.setTotalPoint(kpiPoint.getTotalPoint() + point);
+                }else{
+                    kpiPoint = new KpiPoint();
+                    kpiPoint.setRatedUser(user);
+                    kpiPoint.setPersonalPoint(point);
+                    kpiPoint.setTotalPoint(point);
+                    kpiPoint.setYearMonthId(previousMonth.get().getId());
+                }
+                kpiPointRepo.save(kpiPoint);
+
+                KpiPointDetail kpiPointDetail = new KpiPointDetail();
+                kpiPointDetail.setUser(user);
+                kpiPointDetail.setPoint(point);
+                kpiPointDetail.setPointType(PointType.EVALUATE_POINT.getValue());
+                kpiPointDetail.setYearMonthId(previousMonth.get().getId());
+                kpiPointDetailRepo.save(kpiPointDetail);
+            }
+        }
+    }
+
+    private void saveProjectPoint() {
+        Optional<KpiYearMonth> previousMonth = kpiMonthRepo.findByPreviousMonth();
+        if(previousMonth.isPresent()){
+            List<Integer> projectEvaluateId = kpiProjectLogRepo.getAllProjectEvaluated(previousMonth.get().getId());
+            for(Integer id : projectEvaluateId){
+                Float projectPoint = kpiProjectLogRepo.projectPoint(id, previousMonth.get().getId());
+                List<String> projectUser = kpiProjectUserRepo.getAllUsernameInProject(id);
+                for(String username : projectUser){
+                    KpiPoint kpiPoint = kpiPointRepo.findByRatedUsernameAndMonth(username, previousMonth.get().getId());
+                    if(Objects.nonNull(kpiPoint)){
+                        kpiPoint.setProjectPoint(kpiPoint.getProjectPoint() + projectPoint);
+                    }else{
+                        kpiPoint = new KpiPoint();
+                        kpiPoint.setRatedUser(kpiUserRepo.findByUserName(username));
+                        kpiPoint.setProjectPoint(projectPoint);
+                        kpiPoint.setYearMonthId(previousMonth.get().getId());
+                    }
+                    kpiPointRepo.save(kpiPoint);
+                }
+            }
+            calculateProjectPoint(previousMonth.get().getId());
+        }
+    }
+
+    private void calculateProjectPoint(Integer yearMonth){
+        List<KpiPoint> kpiPoints = kpiPointRepo.getAllPointInMonth(yearMonth);
+        for(KpiPoint kpiPoint : kpiPoints){
+            Integer projectParticipate = kpiProjectUserRepo.projectParticipate(kpiPoint.getRatedUser().getUserName());
+            if(projectParticipate > 0) {
+                Float projectPoint = kpiPoint.getProjectPoint() / projectParticipate;
+                if (projectPoint > PointValue.MAX_PROJECT_POINT.getValue()) {
+                    projectPoint = (float) PointValue.MAX_PROJECT_POINT.getValue();
+                }
+                kpiPoint.setProjectPoint(projectPoint);
+                kpiPoint.setTotalPoint(kpiPoint.getTotalPoint() + projectPoint);
+                kpiPointRepo.save(kpiPoint);
+
+                KpiPointDetail kpiPointDetail = new KpiPointDetail();
+                kpiPointDetail.setYearMonthId(yearMonth);
+                kpiPointDetail.setUser(kpiPoint.getRatedUser());
+                kpiPointDetail.setPoint(projectPoint);
+                kpiPointDetail.setPointType(PointType.EVALUATE_POINT.getValue());
+                kpiPointDetailRepo.save(kpiPointDetail);
+            }
+        }
+    }
+
     public void calculateTeamBuildingPoint(EventDTO<EventTeamBuildingDetail> teamBuildingDTO) {
         Optional<KpiYearMonth> kpiYearMonthOptional = kpiMonthRepo.findByMonthCurrent();
         List<UserDTO> employee = userService.getAllEmployee();
@@ -111,8 +200,9 @@ public class PointServiceImpl extends BaseService implements PointService {
 
         List<KpiEventUser> kpiEventUserList = kpiEventUserRepo.findByKpiEventId(teamBuildingDTO.getId());
 
-        List<KpiEventUser> organizers = kpiEventUserList.stream()
+        List<String> organizers = kpiEventUserList.stream()
                 .filter(u -> isEmployee(u.getKpiUser().getUserName(), employee) && u.getType().equals(ORGANIZER.getValue()))
+                .map(u -> u.getKpiUser().getUserName())
                 .collect(Collectors.toList());
 
         List<KpiEventUser> participants = kpiEventUserList.stream()
@@ -124,7 +214,7 @@ public class PointServiceImpl extends BaseService implements PointService {
             KpiPoint kpiPoint = kpiPointRepo.findByRatedUsernameAndMonth(userParticipant.getUserName(), kpiYearMonthOptional.get().getId());
             EventUserType eventUserType = EventUserType.getEventUserType(participant.getType());
 
-            if(organizers.contains(participant)){
+            if(organizers.contains(participant.getKpiUser().getUserName())){
                 addedPoint = calculateAddedPointForOrganizer(teamBuildingDTO, eventUserType);
             }else{
                 addedPoint = calculatePointForParticipants(teamBuildingDTO, eventUserType);
@@ -757,6 +847,8 @@ public class PointServiceImpl extends BaseService implements PointService {
         calculateRulePoint();
         addEffectivePointForHost();
         addUnfinishedSurveySeminarPoint();
+        calculatePersonalPoint();
+        saveProjectPoint();
         setTitleForEmployeeInMonth();
         calculateFamePoint();
     }

@@ -57,7 +57,7 @@ public class KpiPoint {
     @Column(name = "famed_point")
     private Float famedPoint = 0f;
 
-    @JoinColumn(name = "year_month_id", referencedColumnName = "id", columnDefinition="int(10) default 0")
+    @JoinColumn(name = "year_month_id", referencedColumnName = "id")
     private Integer yearMonthId;
 
     @Column(name = "title")

@@ -10534,25 +10534,14 @@
                   "items": {
                     "type": "object",
                     "required": [
-                      "id",
                       "name",
-                      "active",
-                      "createdDate"
+                      "evaluateStatus"
                     ],
                     "properties": {
-                      "id": {
-                        "type": "number"
-                      },
                       "name": {
                         "type": "string"
                       },
-                      "active": {
-                        "type": "number"
-                      },
-                      "createdDate": {
-                        "type": "string"
-                      },
-                      "updatedDate": {
+                      "evaluateStatus": {
                         "type": "string"
                       }
                     }
@@ -10568,7 +10557,8 @@
                       "firstName",
                       "fullName",
                       "email",
-                      "userRole"
+                      "userRole",
+                      "evaluateStatus"
                     ],
                     "properties": {
                       "username": {
@@ -10609,6 +10599,9 @@
                       },
                       "dateStartWork": {
                         "type": "string"
+                      },
+                      "evaluateStatus":{
+                        "type": "number"
                       }
                     }
                   }
@@ -10725,8 +10718,7 @@
         }
       }
     },
-
-    "/api/evaluation":{
+    "/api/evaluation/survey":{
       "post": {
         "tags": [
           "evaluation-controller"
@@ -10747,70 +10739,57 @@
             "required": true,
             "schema": {
               "type": "object",
-              "required": [
-                "evaluator"
-              ],
               "properties": {
-                "employeeList": {
+                "evaluationName": {
+                  "type": "string"
+                },
+                "createdDate": {
+                  "type": "string"
+                },
+                "projectEvaluations":{
                   "type": "array",
                   "items": {
                     "type": "object",
-                    "required": [
-                    ],
-                    "properties": {
-                      "username": {
-                        "type": "string"
-                      },
-                      "lastName": {
-                        "type": "string"
-                      },
-                      "firstName": {
-                        "type": "string"
-                      },
-                      "fullName": {
-                        "type": "string"
-                      },
-                      "email": {
-                        "type": "string"
-                      },
-                      "userRole": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
+                    "properties":{
+                      "project": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          }
                         }
                       },
-                      "avatar": {
-                        "type": "string"
+                      "point": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                },
+                "personalEvaluations": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "ratedUser": {
+                        "type": "object",
+                        "properties": {
+                          "username": {
+                            "type": "string"
+                          }
+                        }
                       },
-                      "birthday": {
-                        "type": "date"
-                      },
-                      "numberPhone": {
-                        "type": "string"
-                      },
-                      "gmail": {
-                        "type": "string"
-                      },
-                      "skype": {
-                        "type": "string"
-                      },
-                      "dateStartWork": {
-                        "type": "string"
-                      },
-                      "evaluateQuestion": {
+                      "ratedQuestionDTO": {
                         "type": "array",
-                        "items": {
+                        "item": {
                           "type": "object",
-                          "required": [
-                            "question",
-                            "point"
-                          ],
                           "properties": {
-                            "number": {
-                              "type": "number"
-                            },
-                            "question": {
-                              "type": "string"
+                            "surveyDTO": {
+                              "type": "object",
+                              "properties": {
+                                "number": {
+                                  "type": "number"
+                                }
+                              }
                             },
                             "point": {
                               "type": "number"
@@ -10820,171 +10799,158 @@
                       }
                     }
                   }
-                },
-                "projectList": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "required": [
-                    ],
-                    "properties": {
-                      "name": {
-                        "type": "string"
-                      },
-                      "rating": {
-                        "type": "number"
-                      }
-                    }
-                  }
-                },
-                "evaluator": {
-                  "type": "object",
-                  "required": [
-                    "username",
-                    "fullName"
-                  ],
-                  "properties": {
-                    "username": {
-                      "type": "string"
-                    },
-                    "fullName": {
-                      "type": "string"
-                    }
-                  }
                 }
               },
               "example": {
-                "employeeList": [
+                "evaluationName": "Khao sat thang 11",
+                "manUsername":
+                {
+                  "username": "kpi.test"
+                },
+                "createdDate": "23-08-2018 09:45",
+                "projectEvaluations":[
                   {
-                    "username": "kpi.employee",
-                    "lastName": "kpi",
-                    "firstName": "employee",
-                    "fullName": "kpi test. employee",
-                    "email": "kpi.employee@higgsup.com",
-                    "userRole": [
-                      "ROLE_EMPLOYEE"
-                    ],
-                    "address": "null",
-                    "avatar": "null",
-                    "birthday": "null",
-                    "gmail": "null",
-                    "numberPhone": "null",
-                    "skype": "null",
-                    "dateStartWork": "2018-09-29",
-                    "evaluateQuestion":[
+                    "project":{
+                      "id":1
+                    },
+                    "point":5
+                  },
+                  {
+                    "project":{
+                      "id":2
+                    },
+                    "point":6
+                  }
+                ],
+                "personalEvaluations":[
+                  {
+                    "ratedUser": {
+                      "username": "kpi.test01"
+                    },
+                    "ratedQuestionDTO":[
                       {
-                        "question": "Nhân viên này có hoàn thành tốt công việc hàng ngày?",
-                        "point": 10
+                        "surveyDTO":{
+                          "number": 1
+                        },
+                        "point":10
                       },
                       {
-                        "question": "Thái độ chung trong công việc của nhân viên này?",
-                        "point": 10
+                        "surveyDTO":{
+                          "number": 2
+                        },
+                        "point":13
                       },
                       {
-                        "question": "Nhân viên này có quan tâm hoặc giúp đỡ đồng nghiệp",
-                        "point": 5
+                        "surveyDTO":{
+                          "number": 3
+                        },
+                        "point":11
+                      }
+                    ]
+                  },
+                  {
+                    "ratedUser": {
+                      "username": "kpi.test02"
+                    },
+                    "ratedQuestionDTO":[
+                      {
+                        "surveyDTO":{
+                          "number": 1
+                        },
+                        "point": 8
+                      },
+                      {
+                        "surveyDTO":{
+                          "number": 2
+                        },
+                        "point": 7
+                      },
+                      {
+                        "surveyDTO":{
+                          "number": 3
+                        },
+                        "point":6
                       }
                     ]
                   }
-                ],
-                "projectList": [
-                  {
-                    "name": "VNTrip",
-                    "rating": 10
-                  },
-                  {
-                    "name": "GMS",
-                    "rating": 5
-                  }
-                ],
-                "evaluator": {
-                  "username": "kpi.man",
-                  "fullName": "kpi test. man"
-                }
+                ]
               }
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "status_code : 200. Meaning: Thành công \n status_code : 940. Message: Evaluation is not complete for employee. Meaning: Chưa hoàn thành khảo sát cho nhân viên. \n status_code : 941. Message: Evaluation is not complete for project. Meaning: Chưa hoàn thành khảo sát cho dự án. \n status_code : 942. Message: You are the last evaluator. Please evaluate all the remaining. Meaning: Bạn là người dùng khảo sát cuối. Vui lòng đánh giá những phần còn lại \n",
+            "description": "status_code : 200. Meaning: Thành công \n status_code : 920. Message: You must answer all required questions. Meaning: Chưa hoàn thành hết câu hỏi bắt buộc. \n status_code : 922. Message: You are last man do evaluation of month. You must evaluate the unevaluated projects. Meaning: MAN cuối làm khảo sát chưa đánh giá hết các dự án chưa được đánh giá. \n status_code : 923. Message: You are last man do evaluation of month. You must evaluate the unevaluated employees. Meaning: MAN cuối làm khảo sát chưa đánh giá hết các nhân viên chưa được đánh giá \n",
             "schema": {
               "type": "object",
-              "required": [
-                "evaluator"
-              ],
               "properties": {
-                "employeeList": {
+                "evaluationName": {
+                  "type": "string"
+                },
+                "createdDate": {
+                  "type": "string"
+                },
+                "manUser": {
+                  "type": "object",
+                  "properties": {
+                    "username": {
+                      "type": "string"
+                    },
+                    "fullName": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "projectEvaluations":{
                   "type": "array",
                   "items": {
                     "type": "object",
-                    "required": [
-                      "username",
-                      "lastName",
-                      "firstName",
-                      "fullName",
-                      "email",
-                      "userRole",
-                      "isEvaluate",
-                      "evaluateQuestion"
-                    ],
-                    "properties": {
-                      "username": {
-                        "type": "string"
-                      },
-                      "lastName": {
-                        "type": "string"
-                      },
-                      "firstName": {
-                        "type": "string"
-                      },
-                      "fullName": {
-                        "type": "string"
-                      },
-                      "email": {
-                        "type": "string"
-                      },
-                      "userRole": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
+                    "properties":{
+                      "project": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          }
                         }
                       },
-                      "avatar": {
-                        "type": "string"
+                      "point": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                },
+                "personalEvaluations": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "ratedUser": {
+                        "type": "object",
+                        "properties": {
+                          "username": {
+                            "type": "string"
+                          }
+                        }
                       },
-                      "birthday": {
-                        "type": "date"
-                      },
-                      "numberPhone": {
-                        "type": "string"
-                      },
-                      "gmail": {
-                        "type": "string"
-                      },
-                      "skype": {
-                        "type": "string"
-                      },
-                      "dateStartWork": {
-                        "type": "string"
-                      },
-                      "isEvaluate":{
-                        "type": "boolean"
-                      },
-                      "evaluateQuestion": {
+                      "ratedQuestionDTO": {
                         "type": "array",
-                        "items": {
+                        "item": {
                           "type": "object",
-                          "required": [
-                            "question",
-                            "point"
-                          ],
                           "properties": {
-                            "number": {
-                              "type": "number"
-                            },
-                            "question": {
-                              "type": "string"
+                            "surveyDTO": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "number"
+                                },
+                                "number": {
+                                  "type": "number"
+                                },
+                                "question": {
+                                  "type": "string"
+                                }
+                              }
                             },
                             "point": {
                               "type": "number"
@@ -10995,123 +10961,251 @@
                     }
                   }
                 },
-                "projectList": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "required": [
-                    ],
-                    "properties": {
-                      "name": {
-                        "type": "string"
-                      },
-                      "rating": {
-                        "type": "number"
-                      },
-                      "isRated": {
-                        "type": "boolean"
-                      }
-                    }
-                  }
+                "yearMonthId": {
+                  "type": "number"
+                }
+              },
+              "example": {
+                "evaluationName": "Khao sat thang 11",
+                "manUsername":
+                {
+                  "username": "kpi.test"
                 },
-                "evaluator": {
+                "createdDate": "23-08-2018 09:45",
+                "projectEvaluations":[
+                  {
+                    "project":{
+                      "id":1
+                    },
+                    "point":5
+                  },
+                  {
+                    "project":{
+                      "id":2
+                    },
+                    "point":6
+                  }
+                ],
+                "personalEvaluations":[
+                  {
+                    "ratedUser": {
+                      "username": "kpi.test01"
+                    },
+                    "ratedQuestionDTO":[
+                      {
+                        "surveyDTO":{
+                          "number": 1
+                        },
+                        "point":10
+                      },
+                      {
+                        "surveyDTO":{
+                          "number": 2
+                        },
+                        "point":13
+                      }
+                    ]
+                  },
+                  {
+                    "ratedUser": {
+                      "username": "kpi.test02"
+                    },
+                    "ratedQuestionDTO":[
+                      {
+                        "surveyDTO":{
+                          "number": 1
+                        },
+                        "point": 8
+                      },
+                      {
+                        "surveyDTO":{
+                          "number": 2
+                        },
+                        "point": 7
+                      }
+                    ]
+                  }
+                ],
+                "yearMonthId": 201810
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "get":{
+        "tags":[
+          "evaluation-controller"
+        ],
+        "summary": "getAllEvaluationFromMANs",
+        "operationId": "getEvaluation",
+        "produces": [
+          "*/*"
+        ],
+        "responses":{
+          "200": {
+            "description": "status_code : 200. Meaning: Thành công",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "evaluationName": {
+                  "type": "string"
+                },
+                "createdDate": {
+                  "type": "string"
+                },
+                "manUser": {
                   "type": "object",
-                  "required": [
-                    "username",
-                    "fullName",
-                    "isLast"
-                  ],
                   "properties": {
                     "username": {
                       "type": "string"
                     },
                     "fullName": {
                       "type": "string"
-                    },
-                    "isLast": {
-                      "type": "boolean"
                     }
                   }
                 },
-                "message": {
-                  "type": "string"
-                },
-                "errors": {
+                "projectEvaluations":{
                   "type": "array",
                   "items": {
-                    "properties": {
-                      "errorCode": {
-                        "type": "number"
+                    "type": "object",
+                    "properties":{
+                      "project": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          }
+                        }
                       },
-                      "message": {
-                        "type": "string"
+                      "point": {
+                        "type": "number"
                       }
                     }
                   }
                 },
-                "status_code": {
-                  "type": "integer",
-                  "format": "int32"
+                "personalEvaluations": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "ratedUser": {
+                        "type": "object",
+                        "properties": {
+                          "username": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "ratedQuestionDTO": {
+                        "type": "array",
+                        "item": {
+                          "type": "object",
+                          "properties": {
+                            "surveyDTO": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "number"
+                                },
+                                "number": {
+                                  "type": "number"
+                                },
+                                "question": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "point": {
+                              "type": "number"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "yearMonth": {
+                  "type": "object",
+                  "properties": {
+                    "yearMonth": "number"
+                  }
                 }
               },
               "example": {
-                "employeeList": [
+                "data": [
                   {
-                    "username": "kpi.employee",
-                    "lastName": "kpi",
-                    "firstName": "employee",
-                    "fullName": "kpi test. employee",
-                    "email": "kpi.employee@higgsup.com",
-                    "userRole": [
-                      "ROLE_EMPLOYEE"
-                    ],
-                    "address": "null",
-                    "avatar": "null",
-                    "birthday": "null",
-                    "gmail": "null",
-                    "numberPhone": "null",
-                    "skype": "null",
-                    "dateStartWork": "2018-09-29",
-                    "evaluateQuestion":[
+                    "id": 10,
+                    "evaluationName": "Khao sat thang 11",
+                    "createdDate": "19-11-2018 16:22",
+                    "manUser": {
+                      "username": "kpi.man"
+                    },
+                    "yearMonth": {
+                      "yearMonth": 201811
+                    },
+                    "projectEvaluations": [
                       {
-                        "question": "Nhân viên này có hoàn thành tốt công việc hàng ngày?",
-                        "point": 10
-                      },
-                      {
-                        "question": "Thái độ chung trong công việc của nhân viên này?",
-                        "point": 10
-                      },
-                      {
-                        "question": "Nhân viên này có quan tâm hoặc giúp đỡ đồng nghiệp",
+                        "project": {
+                          "id": 1,
+                          "name": "KPI"
+                        },
                         "point": 5
+                      },
+                      {
+                        "project": {
+                          "id": 2,
+                          "name": "Aha"
+                        },
+                        "point": 6
                       }
                     ],
-                    "isEvaluate": true
+                    "personalEvaluations": [
+                      {
+                        "ratedUser": {
+                          "username": "kpi.test01"
+                        },
+                        "ratedQuestionDTO": [
+                          {
+                            "surveyDTO": {
+                              "number": 1,
+                              "question": "Lam viec khong?"
+                            },
+                            "point": 10
+                          },
+                          {
+                            "surveyDTO": {
+                              "number": 2,
+                              "question": "Tot voi nhan vien khong?"
+                            },
+                            "point": 13
+                          },
+                          {
+                            "surveyDTO":{
+                              "number": 3,
+                              "question": "Hieu qua khong"
+                            },
+                            "point": 9
+                          }
+                        ]
+                      }
+                    ]
                   }
                 ],
-                "projectList": [
-                  {
-                    "name": "VNTrip",
-                    "rating": 10,
-                    "isRated": true
-                  },
-                  {
-                    "name": "GMS",
-                    "rating": 5,
-                    "isRated": true
-                  }
-                ],
-                "evaluator": {
-                  "username": "kpi.man",
-                  "fullName": "kpi test. man",
-                  "isLast": false
-                },
                 "status_code": 200
               }
             }
-          },
-          "201": {
-            "description": "Created"
           },
           "401": {
             "description": "Unauthorized"

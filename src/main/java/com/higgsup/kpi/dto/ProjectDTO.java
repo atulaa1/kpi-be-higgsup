@@ -20,6 +20,8 @@ public class ProjectDTO extends BaseDTO {
 
     private List<ProjectUserDTO> projectUserList;
 
+    private Integer evaluateStatus;
+
     public Integer getId() {
         return id;
     }
@@ -66,5 +68,13 @@ public class ProjectDTO extends BaseDTO {
 
     public void setProjectUserList(List<ProjectUserDTO> projectUserList) {
         this.projectUserList = projectUserList;
+    }
+
+    public Integer getEvaluateStatus() {
+        return evaluateStatus;
+    }
+
+    public void setEvaluateStatus(Integer evaluateStatus) {
+        this.evaluateStatus = evaluateStatus;
     }
 }

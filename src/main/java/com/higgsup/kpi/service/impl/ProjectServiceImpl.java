@@ -33,12 +33,12 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Autowired
     private UserService userService;
+
     @Autowired
     private KpiUserRepo kpiUserRepo;
 
     @Autowired
     private KpiProjectUserRepo kpiProjectUserRepo;
-
 
     @Override
     public List<ProjectDTO> getAllProject() {
@@ -76,7 +76,6 @@ public class ProjectServiceImpl implements ProjectService {
                             kpiProjectUser.setProject(kpiProject);
                             kpiProjectUsers.add(kpiProjectUser);
                         }
-
                         kpiProject.setProjectUserList(kpiProjectUsers);
                         kpiProject = kpiProjectRepo.save(kpiProject);
                         validateProjectDTO = convertKpiProjectEntityToDTO(Lists.newArrayList(kpiProject)).get(0);
@@ -90,10 +89,7 @@ public class ProjectServiceImpl implements ProjectService {
                     kpiProject.setUpdatedDate(new Timestamp(System.currentTimeMillis()));
                     kpiProject = kpiProjectRepo.save(kpiProject);
                     validateProjectDTO = convertKpiProjectEntityToDTO(Lists.newArrayList(kpiProject)).get(0);
-
                 }
-
-
             } else {
                 validateProjectDTO.setErrorCode(ErrorCode.NOT_FIND.getValue());
                 validateProjectDTO.setMessage(ErrorMessage.NOT_FIND_PROJECT);
@@ -102,7 +98,6 @@ public class ProjectServiceImpl implements ProjectService {
             validateProjectDTO.setErrorCode(ErrorCode.NOT_NULL.getValue());
             validateProjectDTO.setMessage(ErrorMessage.NAME_DOES_NOT_ALLOW_NULL);
         }
-
         return validateProjectDTO;
     }
 
@@ -212,6 +207,4 @@ public class ProjectServiceImpl implements ProjectService {
         }
         return projectUserDTOList;
     }
-
-
 }
